@@ -39,6 +39,7 @@ import {
 } from '@meddl/shared/interfaces';
 
 import {
+    adoptEmbeddedMpvByDefault,
     DEFAULT_SETTINGS,
     scheduleEmbeddedMpvPrepare,
     SettingsStorageState,
@@ -108,6 +109,18 @@ export const SettingsStore = signalStore(
                                     error
                                 );
                             }
+                        );
+                    }
+                    const storedPlayer = (
+                        stored as Partial<Settings> | undefined
+                    )?.player;
+                    if (!storedPlayer) {
+                        adoptEmbeddedMpvByDefault(
+                            () => store.player() === DEFAULT_SETTINGS.player,
+                            () =>
+                                patchState(store, {
+                                    player: VideoPlayer.EmbeddedMpv,
+                                })
                         );
                     }
                     await epgSources

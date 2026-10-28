@@ -166,3 +166,49 @@ export function verifySavedEmbeddedMpvPlayer(
         );
     });
 }
+
+/**
+ * Desktop default player: where the bundled Embedded MPV works, a fresh
+ * install plays through it instead of the inline web player, because MPV
+ * decodes the Dolby Digital / DTS audio most IPTV movies and series carry
+ * (Chromium drops it silently). Only applies while no player was ever saved
+ * (`isDefault`), so an explicit choice always wins; an unsupported machine,
+ * a failed check or the PWA keep the inline default. The adoption is not
+ * persisted by itself: it is re-detected on every start until settings are
+ * saved, which then stores the player shown in the form.
+ */
+export function adoptEmbeddedMpvByDefault(
+    isDefault: () => boolean,
+    adopt: () => void
+): void {
+    const electron =
+        typeof window === 'undefined' ? undefined : window.electron;
+    if (!electron?.getEmbeddedMpvSupport) {
+        return;
+    }
+    let stop: (() => void) | undefined;
+    let answered = false;
+    stop = watchEmbeddedMpvSupport(
+        () => electron.getEmbeddedMpvSupport(),
+        (support) => {
+            if (support.inconclusive && isDefault()) {
+                return;
+            }
+            answered = true;
+            stop?.();
+            if (support.supported && isDefault()) {
+                adopt();
+                scheduleEmbeddedMpvPrepare();
+            }
+        },
+        (error) => {
+            console.warn(
+                'Could not check Embedded MPV support; keeping the inline player.',
+                error
+            );
+        }
+    );
+    if (answered) {
+        stop();
+    }
+}
