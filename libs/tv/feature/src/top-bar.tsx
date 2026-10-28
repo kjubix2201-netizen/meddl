@@ -14,8 +14,6 @@ const SECTIONS: [View, string][] = [
 const TOOLS: [View, string, string][] = [
     ['search', 'Search', 'search'],
     ['favorites', 'Favorites', 'star'],
-    ['sources', 'Sources', 'sources'],
-    ['settings', 'Settings', 'gear'],
 ];
 
 /**
@@ -32,9 +30,6 @@ function HomeBar({ tv }: { tv: TvModel }) {
                 data-focus="nav:search"
                 onClick={() => tv.navigate('search')}
             >
-                <span class="search-pill-icon" aria-hidden="true">
-                    <TvIcon name="mic" />
-                </span>
                 <span>{t('Search')}</span>
             </button>
             <div class="top-tools">
@@ -71,12 +66,8 @@ export function TopBar({ tv }: { tv: TvModel }) {
     if (current === 'home') return <HomeBar tv={tv} />;
     return (
         <header class="top-bar" hidden={tv.fullscreen || !tv.storageReady}>
-            <div class="wordmark">
-                <img class="wordmark-logo" src="icon.png" alt="" />
-                <span class="wordmark-text">
-                    meddl<small>TV</small>
-                </span>
-            </div>
+            <span class="home-wordmark">meddl</span>
+            <span class="home-divider" aria-hidden="true" />
             <nav class="top-tabs" aria-label={t('Main navigation')}>
                 {SECTIONS.map(([view, label]) => (
                     <button
@@ -102,6 +93,26 @@ export function TopBar({ tv }: { tv: TvModel }) {
                     </button>
                 ))}
                 <Clock />
+                <button
+                    class="round"
+                    data-focus="nav:settings"
+                    aria-label={t('Settings')}
+                    title={t('Settings')}
+                    aria-current={current === 'settings' ? 'page' : undefined}
+                    onClick={() => tv.navigate('settings')}
+                >
+                    <TvIcon name="gear" />
+                </button>
+                <button
+                    class="round avatar"
+                    data-focus="nav:sources"
+                    aria-label={t('Sources & profile')}
+                    title={t('Sources & profile')}
+                    aria-current={current === 'sources' ? 'page' : undefined}
+                    onClick={() => tv.navigate('sources')}
+                >
+                    <TvIcon name="user" />
+                </button>
             </div>
         </header>
     );

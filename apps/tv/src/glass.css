@@ -1,0 +1,345 @@
+/*
+ * meddl "glass" look for every screen, matching Home: slate-violet night
+ * background, frosted white surfaces with hairline borders, light Poppins
+ * and white focus. Loaded last; restyles only, layouts stay in the files
+ * before it. The personal portrait stays on Home (home-portrait.tsx).
+ */
+:root {
+    --tv-bg: #1f1d2b;
+    --tv-surface: rgba(255, 255, 255, 0.08);
+    --tv-surface-strong: rgba(255, 255, 255, 0.16);
+    --tv-surface-solid: #2d2b3c;
+    --tv-line: rgba(255, 255, 255, 0.14);
+    --tv-text: #ffffff;
+    --tv-muted: rgba(255, 255, 255, 0.64);
+    --tv-accent: #ffffff;
+    --tv-gradient: linear-gradient(180deg, #ffffff 0%, #ecebf2 100%);
+    --tv-focus-glass: rgba(255, 255, 255, 0.26);
+    --tv-glass: rgba(255, 255, 255, 0.08);
+    --tv-glass-strong: rgba(255, 255, 255, 0.16);
+    --tv-glass-line: rgba(255, 255, 255, 0.16);
+    --top-bar-height: 13vh;
+    background: var(--tv-bg);
+}
+.tv-app {
+    min-height: 100vh;
+    background:
+        radial-gradient(ellipse at 28% 35%, #34314a 0%, rgba(35, 33, 47, 0) 62%),
+        linear-gradient(180deg, #2a2839 0%, #1f1d2b 100%);
+}
+main {
+    padding-left: 5.6vw;
+    padding-right: 4.3vw;
+}
+/* TV screens scroll with the remote; scrollbars only add clutter. */
+main::-webkit-scrollbar,
+main *::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+main,
+main * {
+    scrollbar-width: none;
+}
+
+/* ---------- Type ---------- */
+h1 {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+h2 {
+    font-weight: 500;
+}
+.muted,
+small {
+    font-weight: 300;
+}
+
+/* ---------- Controls ---------- */
+button {
+    background: var(--tv-surface);
+    border: 1px solid var(--tv-line);
+    border-radius: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+button:hover {
+    background: var(--tv-surface-strong);
+}
+/* Focus = brighter glass with a white edge, like the focused Home tile. */
+button:focus,
+summary:focus,
+[data-tv-scroll]:focus {
+    outline: none;
+    background: var(--tv-focus-glass);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff, 0 1.6vh 3.6vh rgba(0, 0, 0, 0.35);
+}
+button[aria-pressed='true'] {
+    border-color: rgba(255, 255, 255, 0.55);
+    background: var(--tv-surface-strong);
+}
+button.primary {
+    background: #ffffff;
+    color: #1d1b29;
+    border-color: #ffffff;
+    font-weight: 500;
+}
+button.primary:hover,
+button.primary:focus {
+    background: #ffffff;
+    color: #1d1b29;
+}
+input,
+select,
+textarea {
+    background: var(--tv-surface-solid);
+    border: 1px solid var(--tv-line);
+    border-radius: 6px;
+    color: #ffffff;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px #ffffff;
+}
+input[type='checkbox'],
+input[type='range'] {
+    accent-color: #ffffff;
+}
+progress::-webkit-progress-value {
+    background: #ffffff;
+}
+
+/* Text-only pills (tabs, filters, transport): white fill on focus. */
+.top-tabs button:focus,
+.filters button:focus,
+.favorite-types button:focus,
+.programme-guide-days button:focus,
+.grid-toolbar button:focus,
+.drawer-toolbar button:focus,
+button.round:not(.avatar):focus {
+    background: #ffffff;
+    color: #1d1b29;
+    border-color: #ffffff;
+    box-shadow: 0 1.2vh 3vh rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Top bar (all screens except Home) ---------- */
+.top-bar:not(.home-bar) {
+    padding: 0 4.3vw 0 5.6vw;
+    background: linear-gradient(180deg, rgba(31, 29, 43, 0.92) 0%, rgba(31, 29, 43, 0.65) 65%, rgba(31, 29, 43, 0) 100%);
+}
+.top-bar:not(.home-bar) .home-wordmark {
+    font-size: 4vh;
+}
+.top-bar:not(.home-bar) .home-divider {
+    height: 4vh;
+    margin: 0 2.6vh;
+}
+.top-tabs button {
+    min-height: 0;
+    height: 6vh;
+    padding: 0 2.6vh;
+    margin-right: 0.6vh;
+    border: none;
+    border-radius: 3vh;
+    background: transparent;
+    font-size: 2.3vh;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.72);
+}
+.top-tabs button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+.top-tabs button[aria-current='page'] {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+}
+.top-tools .clock {
+    margin: 0 0.4vh 0 2.6vh;
+    font-size: 2.4vh;
+    font-weight: 300;
+}
+.top-bar:not(.home-bar) button.round {
+    width: 7vh;
+    height: 7vh;
+    min-height: 0;
+    margin-left: 1.6vh;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+}
+.top-bar:not(.home-bar) button.round svg {
+    width: 3.2vh;
+    height: 3.2vh;
+}
+.top-bar:not(.home-bar) button.round[aria-current='page'] {
+    background: rgba(255, 255, 255, 0.24);
+    color: #ffffff;
+}
+.top-bar:not(.home-bar) button.round.avatar {
+    width: 8.2vh;
+    height: 8.2vh;
+    background: radial-gradient(circle at 35% 30%, #ff5a5a 0%, #e0141f 70%, #b80d16 100%);
+    border: 0.3vh solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+.top-bar:not(.home-bar) button.round.avatar svg {
+    width: 4vh;
+    height: 4vh;
+}
+
+button.round.avatar:focus {
+    box-shadow: 0 0 0 0.4vh #ffffff, 0 1.2vh 3vh rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Page header and filters ---------- */
+.page-heading h1 {
+    font-size: 5vh;
+}
+.catalog-count {
+    font-weight: 300;
+    color: var(--tv-muted);
+}
+header select,
+.catalog-filters select,
+.catalog-filters input {
+    background: var(--tv-surface-solid);
+}
+
+/* ---------- Cards and lists ---------- */
+.poster-art,
+.resume-art,
+.episode-still,
+.detail-poster {
+    border-radius: 6px;
+    border: 1px solid var(--tv-line);
+    background: var(--tv-surface);
+}
+.poster-card,
+.resume-card,
+.channel-card,
+.episode,
+.person-chip {
+    background: transparent;
+    border-color: transparent;
+}
+.poster-card:focus,
+.resume-card:focus,
+.episode:focus,
+.person-chip:focus {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+.poster-card:focus .poster-art,
+.resume-card:focus .resume-art,
+.episode:focus .episode-still {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 3px #ffffff, 0 2vh 4vh rgba(0, 0, 0, 0.45);
+}
+.resume-card,
+.episode,
+.channel-card,
+.source-row button,
+.live-category,
+.channel,
+.channel-tile,
+.settings-categories button,
+.programme,
+.programme-guide-row,
+.grid-channel,
+.grid-program {
+    border: 1px solid var(--tv-line);
+    background: var(--tv-surface);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+}
+.live-category[aria-pressed='true'],
+.channel-tile[aria-pressed='true'],
+.channel[aria-pressed='true'],
+.settings-categories [aria-selected='true'],
+.programme-guide-row[aria-pressed='true'] {
+    background: var(--tv-surface-strong);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: #ffffff;
+}
+.live-category[aria-pressed='true'] strong,
+.settings-categories [aria-selected='true'] small {
+    color: #ffffff;
+}
+.channel.is-playing,
+.grid-channel.is-playing {
+    box-shadow: inset 0.5vh 0 0 #ffffff;
+}
+.badge {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/* ---------- Panels: forms, settings, sources, live information ---------- */
+.source-form,
+.backend-connection,
+.phone-setup,
+.tmdb-settings,
+.live-information,
+.empty,
+.settings-workspace > [role='tabpanel'],
+.preview-placeholder {
+    background: var(--tv-surface);
+    border: 1px solid var(--tv-line);
+    border-radius: 8px;
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+}
+.settings-workspace .source-form,
+.settings-workspace .backend-connection {
+    background: transparent;
+    border: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+.settings-categories small {
+    color: var(--tv-muted);
+}
+.live-overlay-panel,
+.phone-modal-backdrop > * {
+    background: rgba(31, 29, 43, 0.94);
+    border-color: var(--tv-line);
+}
+.error {
+    background: rgba(255, 80, 80, 0.12);
+    border: 1px solid rgba(255, 120, 120, 0.35);
+    border-radius: 8px;
+}
+
+/* ---------- Detail pages: dimmed title art like Home ---------- */
+.detail-page .backdrop-scrim {
+    background:
+        linear-gradient(0deg, #1f1d2b 0%, rgba(31, 29, 43, 0.9) 14%, rgba(31, 29, 43, 0) 62%),
+        linear-gradient(90deg, rgba(31, 29, 43, 0.97) 0%, rgba(31, 29, 43, 0.8) 34%, rgba(31, 29, 43, 0.25) 75%),
+        linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35));
+}
+.detail-page > .page-backdrop {
+    background: linear-gradient(180deg, #2a2839 0%, #1f1d2b 100%);
+}
+
+/* ---------- Player: transport in the Home style ---------- */
+.live-badge {
+    background: #ffffff;
+    color: #1d1b29;
+}
+.now-progress span,
+.player-seek::-webkit-slider-runnable-track {
+    background: #ffffff;
+}
+.transport-center .play-toggle {
+    background: #ffffff;
+    color: #1d1b29;
+}
+.transport-center .play-toggle:focus {
+    box-shadow: 0 0 0 0.6vh rgba(255, 255, 255, 0.35), 0 1.4vh 3vh rgba(0, 0, 0, 0.4);
+}

@@ -33,20 +33,25 @@
 .search-pill {
     display: flex;
     align-items: center;
-    padding: 0 2vh 0 0;
+    height: 7vh;
     min-height: 0;
+    padding: 0 3vh;
+    margin-left: -1vh;
     background: transparent;
     border: none;
-    border-radius: 6vh;
+    border-radius: 3.5vh;
     color: rgba(255, 255, 255, 0.78);
     font-size: 2.6vh;
+    transition: background 0.15s ease, color 0.15s ease;
 }
 .search-pill:hover {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 .search-pill:focus {
     outline: none;
-    color: #ffffff;
+    background: #ffffff;
+    color: #1d1b29;
 }
 .search-pill-icon {
     width: 8.6vh;
