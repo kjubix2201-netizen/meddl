@@ -33,6 +33,8 @@ export function useSoundFallback(tv: TvModel) {
     const latest = useRef(tv);
     latest.current = tv;
     const silentRef = useRef<() => void>(() => undefined);
+    // The app's own player went on to the next episode: it plays there too.
+    const sticky = useRef(false);
 
     const closed: NativeClosed = (positionMs, durationMs) => {
         const current = latest.current;
@@ -41,8 +43,15 @@ export function useSoundFallback(tv: TvModel) {
     };
     /** The desktop MPV player closed at this position (seconds). */
     const desktopClosed = (positionSeconds: number, durationSeconds: number) => {
+        sticky.current = false;
         setState((previous) => ({ id: previous.id, phase: 'done' }));
         closed(positionSeconds * 1000, durationSeconds * 1000);
+    };
+
+    /** The app's own player continues with the next episode. */
+    const desktopContinue = (positionSeconds: number, durationSeconds: number) => {
+        latest.current.player.current?.recordExternal(positionSeconds, durationSeconds);
+        sticky.current = true;
     };
 
     useEffect(() => {
@@ -65,7 +74,8 @@ export function useSoundFallback(tv: TvModel) {
     // Live channels start in the app's own engine right away, like other
     // IPTV players do: raw transport streams and Dolby/DTS are its strength.
     useEffect(() => {
-        if (item?.kind !== 'live' || !tv.fullscreen || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
+        const direct = (item?.kind === 'live' && tv.fullscreen) || (sticky.current && item?.kind === 'episode');
+        if (!item || !direct || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
         const id = item.id;
         let tries = 0;
         const timer = setInterval(() => {
@@ -117,5 +127,5 @@ export function useSoundFallback(tv: TvModel) {
         setState({ id: item.id, phase: 'native' });
     }
     silentRef.current = silent;
-    return { phase, silent, desktop, desktopClosed };
+    return { phase, silent, desktop, desktopClosed, desktopContinue };
 }

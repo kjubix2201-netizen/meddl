@@ -53,9 +53,18 @@ function surface(bar: HTMLElement | null, controls: boolean): DesktopMpvBounds {
 export function DesktopPlayer({
     playback,
     onClose,
+    next,
+    onEnded,
+    onNext,
+    onCancelNext,
 }: {
     playback: DesktopMpvPlayback;
     onClose: (positionSeconds: number, durationSeconds: number) => void;
+    /** The series' next episode and the autoplay countdown, if running. */
+    next?: { title: string; countdown: number | null };
+    onEnded?: (positionSeconds: number, durationSeconds: number) => void;
+    onNext?: (positionSeconds: number, durationSeconds: number) => void;
+    onCancelNext?: () => void;
 }) {
     const [state, setState] = useState<DesktopMpvState | null>(null);
     const [failure, setFailure] = useState('');
@@ -69,6 +78,9 @@ export function DesktopPlayer({
     const closed = useRef(false);
     const latestClose = useRef(onClose);
     latestClose.current = onClose;
+    const latestNext = useRef({ next, onEnded, onNext });
+    latestNext.current = { next, onEnded, onNext };
+    const countdown = next?.countdown != null;
 
     const close = () => {
         if (closed.current) return;
@@ -84,10 +96,16 @@ export function DesktopPlayer({
     };
 
     useEffect(() => {
-        const mpv = new DesktopMpvSession((next) => {
-            setState({ ...next });
-            if (next.status === 'ended') close();
-            if (next.status === 'error') setFailure(next.error || t('This stream could not be played.'));
+        const mpv = new DesktopMpvSession((update) => {
+            setState({ ...update });
+            if (update.status === 'ended') {
+                const { next: episode, onEnded: ended } = latestNext.current;
+                if (episode && ended) {
+                    ended(update.positionSeconds, update.durationSeconds ?? update.positionSeconds);
+                    setControls(true);
+                } else close();
+            }
+            if (update.status === 'error') setFailure(update.error || t('This stream could not be played.'));
         });
         session.current = mpv;
         mpv.start(surface(bar.current, true), playback).catch((error: unknown) =>
@@ -101,11 +119,11 @@ export function DesktopPlayer({
     }, []);
 
     useEffect(() => {
-        const sync = () => session.current?.setBounds(surface(bar.current, controls || !!failure));
+        const sync = () => session.current?.setBounds(surface(bar.current, controls || !!failure || countdown));
         sync();
         window.addEventListener('resize', sync);
         return () => window.removeEventListener('resize', sync);
-    }, [controls, failure]);
+    }, [controls, failure, countdown]);
 
     useEffect(() => {
         const keys = (event: KeyboardEvent) => {
@@ -116,6 +134,11 @@ export function DesktopPlayer({
             if (event.keyCode === 461 || BACK_KEYS.includes(event.key)) return close();
             reveal();
             if (!mpv) return;
+            const upcoming = latestNext.current;
+            if (event.key === 'Enter' && upcoming.next?.countdown != null && upcoming.onNext) {
+                const at = mpv.state;
+                return upcoming.onNext(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
+            }
             if (PAUSE_KEYS.includes(event.key) || [415, 19, 179].includes(event.keyCode)) mpv.togglePause();
             else if (event.key === 'ArrowLeft' && !playback.isLive) mpv.seekBy(-SEEK_SECONDS);
             else if (event.key === 'ArrowRight' && !playback.isLive) mpv.seekBy(SEEK_SECONDS);
@@ -161,7 +184,7 @@ export function DesktopPlayer({
     const audio = audioTracks.find((track) => track.id === state?.selectedAudioTrackId);
     const subtitle = subtitleTracks.find((track) => track.id === state?.selectedSubtitleTrackId);
     const seekable = !playback.isLive && !!duration && duration > 0;
-    const shown = controls || !!failure;
+    const shown = controls || !!failure || next?.countdown != null;
     return (
         <div class={`desktop-player ${shown ? '' : 'dormant'}`} data-tv-modal onMouseMove={reveal}>
             {status === 'loading' && !failure ? (
@@ -201,6 +224,15 @@ export function DesktopPlayer({
                                     : t('Dolby / DTS sound through the meddl player')}
                         </small>
                     </div>
+                    {next && onNext ? (
+                        <button
+                            class="desktop-player-pill"
+                            onClick={() => onNext(position, duration ?? position)}
+                            title={next.title}
+                        >
+                            {t('Next episode')}
+                        </button>
+                    ) : null}
                     {audioTracks.length > 1 ? (
                         <button class="desktop-player-pill" onClick={cycleAudio} title={t('Change audio track (A)')}>
                             {t('Audio')}: {audio ? trackName(audio) : '–'}
@@ -251,6 +283,15 @@ export function DesktopPlayer({
                             setScrub(null);
                         }}
                     />
+                ) : null}
+                {next && next.countdown !== null ? (
+                    <div class="next-banner desktop-next" role="status">
+                        <span>{t('Next episode in {seconds} s: {title}', { seconds: next.countdown, title: next.title })}</span>
+                        <button class="primary" onClick={() => onNext?.(position, duration ?? position)}>
+                            {t('Play now')}
+                        </button>
+                        <button onClick={onCancelNext}>{t('Cancel')}</button>
+                    </div>
                 ) : null}
                 <p class="desktop-player-keys muted">
                     {playback.isLive

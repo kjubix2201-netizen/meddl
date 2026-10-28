@@ -7,6 +7,7 @@ import { usePlayerControls } from './player-controls';
 import { PlayerOverlay } from './player-overlay';
 import { useSoundFallback } from './sound-fallback';
 import { DesktopPlayer } from './desktop-player';
+import { useNextEpisode } from './next-episode';
 import { TopBar } from './top-bar';
 import { useEffect, useRef } from 'preact/hooks';
 import { useTv } from './use-tv';
@@ -44,6 +45,7 @@ export function TvApp() {
     // Mounted for the live preview too: a channel the page cannot play
     // opens in the app's own player instead of an error.
     const sound = useSoundFallback(tv);
+    const nextEpisode = useNextEpisode(tv, video.current);
     useEffect(() => {
         const position = () => {
             const rect = document
@@ -224,11 +226,26 @@ export function TvApp() {
                         visible={controlsVisible}
                         seriesDetails={seriesDetails}
                         sound={sound}
+                        nextEpisode={nextEpisode}
                     />
                 ) : null}
             </div>
             {sound.desktop ? (
-                <DesktopPlayer key={current?.id} playback={sound.desktop} onClose={sound.desktopClosed} />
+                <DesktopPlayer
+                    key={current?.id}
+                    playback={sound.desktop}
+                    onClose={sound.desktopClosed}
+                    next={nextEpisode.next ? { title: nextEpisode.next.title, countdown: nextEpisode.countdown } : undefined}
+                    onEnded={(position, duration) => {
+                        sound.desktopContinue(position, duration);
+                        nextEpisode.begin();
+                    }}
+                    onNext={(position, duration) => {
+                        sound.desktopContinue(position, duration);
+                        nextEpisode.playNext();
+                    }}
+                    onCancelNext={nextEpisode.cancel}
+                />
             ) : null}
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />
             <LoadingOverlay tv={tv} />

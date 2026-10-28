@@ -74,5 +74,12 @@ export function useNextEpisode(tv: TvModel, video: HTMLVideoElement | null) {
         return () => clearTimeout(timer);
     }, [countdown]);
 
-    return { next, countdown, playNext, cancel: () => setCountdown(null) };
+    return {
+        next,
+        countdown,
+        playNext,
+        cancel: () => setCountdown(null),
+        /** The app's own player reached the end of the episode. */
+        begin: () => next && setCountdown(AUTOPLAY_SECONDS),
+    };
 }

@@ -136,7 +136,18 @@
 }
 .desktop-player-row {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+}
+/* Title and state on their own line above the controls. */
+.desktop-player-row > .desktop-player-title {
+    order: -1;
+    flex: 1 0 100%;
+    margin: 0 0 1.2vh;
+}
+.desktop-player-row > .desktop-player-time,
+.desktop-player-row > .live-badge {
+    margin-left: auto;
 }
 .desktop-player-row button.round {
     width: 6.4vh;
@@ -192,9 +203,18 @@
 .desktop-player-pill:hover {
     background: rgba(255, 255, 255, 0.2);
 }
+.desktop-player-bar input[type='range'] {
+    min-height: 0;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}
 .desktop-player-volume {
     flex: 0 0 auto;
-    width: 12vh;
+    width: 14vh;
+    max-width: 14vh;
     margin: 0 2.4vh 0 0;
     accent-color: #ffffff;
 }

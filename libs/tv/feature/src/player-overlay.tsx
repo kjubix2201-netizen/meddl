@@ -3,7 +3,7 @@ import { mediaTitle, t, tvLocale, type Media } from '@meddl/tv/util';
 import type { useLiveOverlay } from './live-overlay';
 import { AudioNotice } from './player-audio-notice';
 import type { useSoundFallback } from './sound-fallback';
-import { useNextEpisode } from './next-episode';
+import type { useNextEpisode } from './next-episode';
 import { useState } from 'preact/hooks';
 import { VolumeControl } from './player-volume';
 import type { TvModel } from './use-tv';
@@ -35,19 +35,20 @@ export function PlayerOverlay({
     visible,
     seriesDetails,
     sound,
+    nextEpisode,
 }: {
     tv: TvModel;
     overlay: ReturnType<typeof useLiveOverlay>;
     visible: boolean;
     seriesDetails: { busy: boolean; open: (item: Media) => Promise<void> };
     sound: ReturnType<typeof useSoundFallback>;
+    nextEpisode: ReturnType<typeof useNextEpisode>;
 }) {
     const current = tv.playing;
     const element = tv.player.current?.video ?? null;
     // Position and length of the title.
     const at = tv.player.current?.position ?? 0;
     const length = tv.player.current?.length ?? NaN;
-    const nextEpisode = useNextEpisode(tv, element);
     // Where the viewer is moving the seek bar to (applied on release).
     const [scrub, setScrub] = useState<number | null>(null);
     const shown = scrub ?? at;
