@@ -1,4 +1,4 @@
-import type { XtreamFavoriteCatalogStatus } from '@iptvnator/shared/interfaces';
+import type { XtreamFavoriteCatalogStatus } from '@meddl/shared/interfaces';
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -21,8 +21,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { SettingsStore } from '@iptvnator/services';
-import { applyChannelNameStrip } from '@iptvnator/shared/m3u-utils';
+import { SettingsStore } from '@meddl/services';
+import { applyChannelNameStrip } from '@meddl/shared/m3u-utils';
 import type { DashboardRemainingLabel } from './dashboard-playback.utils';
 
 export interface DashboardRailAction {
