@@ -101,3 +101,24 @@ test('Xtream scopes titles and search to all categories of a country and reports
     assert.deepEqual(search.items.map((m) => m.title), ['Tagesschau']);
     assert.equal(provider.capabilities.multiCategory, true);
 });
+
+test('Xtream asks again for an empty category list and reads object maps', async () => {
+    let categoryCalls = 0;
+    const provider = createProvider(
+        { id: 'm', name: 'mock', provider: 'xtream', url: 'https://provider.invalid' },
+        new Transport((p) => {
+            if (!String(p.action).endsWith('categories'))
+                return [{ stream_id: 1, name: 'Der Film', category_id: '2' }];
+            categoryCalls += 1;
+            return categoryCalls === 1
+                ? []
+                : { a: { category_id: '2', category_name: 'DE | Kino' }, b: { category_id: '', category_name: 'broken' } };
+        }),
+        async () => undefined
+    );
+    const movies = await provider.catalog('movie', '', 0, '', signal);
+    assert.equal(categoryCalls, 2);
+    assert.deepEqual(movies.categories, [{ id: '2', name: 'DE | Kino' }]);
+    await provider.catalog('movie', '', 0, '', signal);
+    assert.equal(categoryCalls, 2, 'a found list is kept for the session');
+});

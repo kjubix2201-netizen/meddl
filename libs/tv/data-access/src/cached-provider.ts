@@ -107,8 +107,9 @@ export class CachedProvider implements ProviderClient {
                     this.serial(() =>
                         this.inner.catalog(kind, category, page, query, this.owner.signal, sort)
                     ),
-                // Nothing at all (no titles, no categories) is not remembered.
-                (result) => result.total > 0 || result.categories.length > 0
+                // Lists without categories are not remembered: the next
+                // visit asks again (busy panels answer them empty).
+                (result) => result.categories.length > 0
             ),
             signal
         );

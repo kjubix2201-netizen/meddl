@@ -23,6 +23,18 @@ import {
 } from '@meddl/tv/util';
 import type { XtreamVodDetails } from '@meddl/shared/interfaces';
 import { ProviderTransport } from './transport';
+/** Xtream category rows from an array or an object map of rows. */
+function categoryRows(payload: unknown): Category[] {
+    const list = Array.isArray(payload)
+        ? payload
+        : payload && typeof payload === 'object'
+          ? Object.values(payload as Record<string, unknown>)
+          : [];
+    return rows(list)
+        .filter((r) => r.category_id != null && text(r.category_id) !== '')
+        .map((r) => ({ id: text(r.category_id), name: text(r.category_name) }));
+}
+
 export class XtreamProvider implements ProviderClient {
     readonly capabilities = {
         live: true,
@@ -94,12 +106,7 @@ export class XtreamProvider implements ProviderClient {
         }
         let categories = this.categoryLists.get(type);
         if (!categories) {
-            categories = rows(
-                await this.client.request(`get_${type}_categories`, {}, signal)
-            ).map((r) => ({
-                id: text(r.category_id),
-                name: text(r.category_name),
-            }));
+            categories = await this.loadCategories(type, signal);
             if (!signal.aborted && categories.length) this.categoryLists.set(type, categories);
         }
         const matchesTitle = catalogTitleMatcher(query);
@@ -118,6 +125,20 @@ export class XtreamProvider implements ProviderClient {
             categories,
             categoryCounts: countByCategory(all),
         };
+    }
+    /**
+     * Category list of one section. Some panels answer it as an object map
+     * instead of an array, and busy panels answer it empty right after a
+     * large stream list: such answers are asked again, up to three times.
+     */
+    private async loadCategories(type: string, signal: AbortSignal): Promise<Category[]> {
+        for (let attempt = 1; ; attempt++) {
+            const list = categoryRows(
+                await this.client.request(`get_${type}_categories`, {}, signal)
+            );
+            if (list.length || attempt >= 3 || signal.aborted) return list;
+            await new Promise((resolve) => setTimeout(resolve, 1200 * attempt));
+        }
     }
     async details(item: Media, signal: AbortSignal): Promise<Media> {
         if (item.kind === 'episode') return item;
