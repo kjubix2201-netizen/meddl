@@ -51,18 +51,23 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
     const open = tv.storageReady && phase !== 'idle';
     const panel = useRef<HTMLDivElement>(null);
     const previous = useRef('');
-    const [canSkip, setCanSkip] = useState(false);
+    const [seconds, setSeconds] = useState(0);
+    const canSkip = seconds * 1000 >= SKIP_AFTER_MS;
     useEffect(() => {
         if (!open) return;
         previous.current = focusKey();
-        setCanSkip(false);
+        setSeconds(0);
         panel.current?.focus();
-        const timer = setTimeout(() => setCanSkip(true), SKIP_AFTER_MS);
+        const started = Date.now();
+        const timer = setInterval(() => setSeconds(Math.floor((Date.now() - started) / 1000)), 1000);
         return () => {
-            clearTimeout(timer);
+            clearInterval(timer);
             restoreFocus(previous.current || 'launcher:live', 'launcher:live');
         };
     }, [open]);
+    useEffect(() => {
+        if (canSkip) restoreFocus('loading:skip');
+    }, [canSkip]);
     if (!open) return null;
     const done = steps.filter((s) => s.state === 'done' || s.state === 'failed').length;
     const share = steps.length ? done / steps.length : 0;
@@ -73,7 +78,11 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
                 <h2 id="loading-title">
                     {phase === 'connecting' ? t('Connecting to your source…') : t('Loading your channels…')}
                 </h2>
-                <p class="muted">{t('This happens once per start. Everything opens instantly afterwards.')}</p>
+                <p class="muted">
+                    {phase === 'connecting' && seconds >= 15
+                        ? t('Your provider is answering slowly ({seconds} s). Close meddl in other browsers and apps, so only one connection is open.', { seconds })
+                        : t('This happens once per start. Everything opens instantly afterwards.')}
+                </p>
                 {steps.length ? (
                     <>
                         <div class="loading-progress" aria-hidden="true">
