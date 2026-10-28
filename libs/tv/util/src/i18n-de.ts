@@ -513,4 +513,13 @@ export const DE: Readonly<Record<string, string>> = {
         'meddl läuft über die meddl-App auf deinem Computer im Heimnetz.',
     'This stream could not be played. Check codec, network and provider media headers. The API backend does not relay video.':
         'Dieser Stream konnte nicht abgespielt werden. Prüfe Codec, Netzwerk und die Medien-Header deines Anbieters. Der Server leitet kein Video weiter.',
+    'Track {number}': 'Spur {number}',
+    'Change audio track (A)': 'Tonspur wechseln (A)',
+    'Change subtitles (S)': 'Untertitel wechseln (S)',
+    'Audio': 'Ton',
+    'Subtitles': 'Untertitel',
+    'Off': 'Aus',
+    'Position': 'Position',
+    'Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back': 'Leertaste: Pause · ←→: 10 s · J/L: 1 Min. · ↑↓: Lautstärke · A: Ton · S: Untertitel · Esc: zurück',
+    'Space: pause · ↑↓: volume · A: audio · S: subtitles · Esc: back': 'Leertaste: Pause · ↑↓: Lautstärke · A: Ton · S: Untertitel · Esc: zurück',
 };

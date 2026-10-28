@@ -18,7 +18,18 @@ export interface DesktopMpvState {
     durationSeconds: number | null;
     /** 0 to 1. */
     volume: number;
+    audioTracks?: DesktopMpvTrack[];
+    selectedAudioTrackId?: number | null;
+    subtitleTracks?: DesktopMpvTrack[];
+    selectedSubtitleTrackId?: number | null;
     error?: string;
+}
+
+export interface DesktopMpvTrack {
+    id: number;
+    title?: string;
+    language?: string;
+    selected: boolean;
 }
 
 export interface DesktopMpvPlayback {
@@ -36,6 +47,9 @@ type Bridge = {
     loadEmbeddedMpvPlayback?: (id: string, playback: DesktopMpvPlayback) => Promise<unknown>;
     setEmbeddedMpvBounds?: (id: string, bounds: DesktopMpvBounds) => Promise<unknown>;
     setEmbeddedMpvPaused?: (id: string, paused: boolean) => Promise<DesktopMpvState | null>;
+    seekEmbeddedMpv?: (id: string, seconds: number) => Promise<DesktopMpvState | null>;
+    setEmbeddedMpvAudioTrack?: (id: string, trackId: number) => Promise<DesktopMpvState | null>;
+    setEmbeddedMpvSubtitleTrack?: (id: string, trackId: number) => Promise<DesktopMpvState | null>;
     seekEmbeddedMpvBy?: (id: string, seconds: number) => Promise<DesktopMpvState | null>;
     setEmbeddedMpvVolume?: (id: string, volume: number) => Promise<DesktopMpvState | null>;
     disposeEmbeddedMpvSession?: (id: string) => Promise<unknown>;
@@ -108,11 +122,29 @@ export class DesktopMpvSession {
         if (this.id) this.apply(bridge()?.seekEmbeddedMpvBy?.(this.id, seconds));
     }
 
+    /** Jumps to this position (seconds). */
+    seekTo(seconds: number) {
+        if (this.id) this.apply(bridge()?.seekEmbeddedMpv?.(this.id, Math.max(0, seconds)));
+    }
+
     /** Volume runs from 0 to 1. */
     changeVolume(step: number) {
-        if (!this.id || !this.state) return;
-        const volume = Math.max(0, Math.min(1, Math.round((this.state.volume + step) * 100) / 100));
-        this.apply(bridge()?.setEmbeddedMpvVolume?.(this.id, volume));
+        if (this.state) this.setVolume(this.state.volume + step);
+    }
+
+    setVolume(volume: number) {
+        if (!this.id) return;
+        const level = Math.max(0, Math.min(1, Math.round(volume * 100) / 100));
+        this.apply(bridge()?.setEmbeddedMpvVolume?.(this.id, level));
+    }
+
+    setAudioTrack(trackId: number) {
+        if (this.id) this.apply(bridge()?.setEmbeddedMpvAudioTrack?.(this.id, trackId));
+    }
+
+    /** -1 turns subtitles off. */
+    setSubtitleTrack(trackId: number) {
+        if (this.id) this.apply(bridge()?.setEmbeddedMpvSubtitleTrack?.(this.id, trackId));
     }
 
     async stop() {

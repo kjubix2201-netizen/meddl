@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { DesktopMpvSession, type DesktopMpvBounds, type DesktopMpvPlayback, type DesktopMpvState } from '@meddl/tv/data-access';
+import {
+    DesktopMpvSession,
+    type DesktopMpvBounds,
+    type DesktopMpvPlayback,
+    type DesktopMpvState,
+    type DesktopMpvTrack,
+} from '@meddl/tv/data-access';
 import { TvIcon } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
 
@@ -15,6 +21,19 @@ function clock(seconds: number | null | undefined) {
     const m = String(Math.floor((s % 3600) / 60)).padStart(h ? 2 : 1, '0');
     const sec = String(s % 60).padStart(2, '0');
     return h ? `${h}:${m}:${sec}` : `${m}:${sec}`;
+}
+
+function trackName(track: DesktopMpvTrack) {
+    const name = [track.title, track.language?.toUpperCase()].filter(Boolean).join(' · ');
+    return name || t('Track {number}', { number: track.id });
+}
+
+/** The track after the selected one; subtitles end with "off" (-1). */
+function nextTrack(tracks: DesktopMpvTrack[], selected: number | null | undefined, withOff: boolean) {
+    const ids = [...tracks.map((track) => track.id), ...(withOff ? [-1] : [])];
+    if (!ids.length) return null;
+    const at = ids.indexOf(selected ?? -1);
+    return ids[(at + 1) % ids.length];
 }
 
 /** The page area MPV may paint into: all of it, minus the bar while shown. */
@@ -41,6 +60,9 @@ export function DesktopPlayer({
     const [state, setState] = useState<DesktopMpvState | null>(null);
     const [failure, setFailure] = useState('');
     const [controls, setControls] = useState(true);
+    // Where the viewer drags the seek bar to (applied on release).
+    const [scrub, setScrub] = useState<number | null>(null);
+    const muted = useRef(1);
     const bar = useRef<HTMLDivElement>(null);
     const session = useRef<DesktopMpvSession | null>(null);
     const hideTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -87,6 +109,7 @@ export function DesktopPlayer({
 
     useEffect(() => {
         const keys = (event: KeyboardEvent) => {
+            // The seek and volume sliders keep their own arrow keys only for the mouse.
             event.preventDefault();
             event.stopImmediatePropagation();
             const mpv = session.current;
@@ -98,15 +121,46 @@ export function DesktopPlayer({
             else if (event.key === 'ArrowRight' && !playback.isLive) mpv.seekBy(SEEK_SECONDS);
             else if (event.key === 'ArrowUp' || event.key === 'AudioVolumeUp') mpv.changeVolume(0.1);
             else if (event.key === 'ArrowDown' || event.key === 'AudioVolumeDown') mpv.changeVolume(-0.1);
+            else if (event.key === 'm' || event.key === 'AudioVolumeMute') toggleMute();
+            else if (event.key === 'a') cycleAudio();
+            else if (event.key === 's' || event.key === 'c') cycleSubtitles();
+            else if (event.key === 'j' && !playback.isLive) mpv.seekBy(-60);
+            else if (event.key === 'l' && !playback.isLive) mpv.seekBy(60);
         };
         window.addEventListener('keydown', keys, true);
         return () => window.removeEventListener('keydown', keys, true);
     }, []);
 
+    function toggleMute() {
+        const mpv = session.current;
+        if (!mpv?.state) return;
+        if (mpv.state.volume > 0) {
+            muted.current = mpv.state.volume;
+            mpv.setVolume(0);
+        } else mpv.setVolume(muted.current || 1);
+    }
+    function cycleAudio() {
+        const mpv = session.current;
+        const next = nextTrack(mpv?.state?.audioTracks ?? [], mpv?.state?.selectedAudioTrackId, false);
+        if (mpv && next !== null) mpv.setAudioTrack(next);
+    }
+    function cycleSubtitles() {
+        const mpv = session.current;
+        const tracks = mpv?.state?.subtitleTracks ?? [];
+        const next = nextTrack(tracks, mpv?.state?.selectedSubtitleTrackId, true);
+        if (mpv && tracks.length && next !== null) mpv.setSubtitleTrack(next);
+    }
+
     const status = state?.status ?? 'loading';
     const duration = state?.durationSeconds ?? null;
     const position = state?.positionSeconds ?? 0;
-    const share = duration && duration > 0 ? Math.min(100, (position / duration) * 100) : 0;
+    const shownAt = scrub ?? position;
+    const volume = state?.volume ?? 1;
+    const audioTracks = state?.audioTracks ?? [];
+    const subtitleTracks = state?.subtitleTracks ?? [];
+    const audio = audioTracks.find((track) => track.id === state?.selectedAudioTrackId);
+    const subtitle = subtitleTracks.find((track) => track.id === state?.selectedSubtitleTrackId);
+    const seekable = !playback.isLive && !!duration && duration > 0;
     const shown = controls || !!failure;
     return (
         <div class={`desktop-player ${shown ? '' : 'dormant'}`} data-tv-modal onMouseMove={reveal}>
@@ -118,6 +172,11 @@ export function DesktopPlayer({
                     <button class="round" aria-label={t('Back')} onClick={close}>
                         <TvIcon name="back" />
                     </button>
+                    {playback.isLive ? null : (
+                        <button class="round" aria-label={t('Back 10 seconds')} onClick={() => session.current?.seekBy(-SEEK_SECONDS)}>
+                            <TvIcon name="rewind" />
+                        </button>
+                    )}
                     <button
                         class="round"
                         aria-label={status === 'paused' ? t('Play') : t('Pause')}
@@ -125,6 +184,11 @@ export function DesktopPlayer({
                     >
                         <TvIcon name={status === 'paused' ? 'play' : 'pause'} />
                     </button>
+                    {playback.isLive ? null : (
+                        <button class="round" aria-label={t('Forward 10 seconds')} onClick={() => session.current?.seekBy(SEEK_SECONDS)}>
+                            <TvIcon name="forward" />
+                        </button>
+                    )}
                     <div class="desktop-player-title">
                         <strong>{playback.title}</strong>
                         <small>
@@ -137,23 +201,61 @@ export function DesktopPlayer({
                                     : t('Dolby / DTS sound through the meddl player')}
                         </small>
                     </div>
+                    {audioTracks.length > 1 ? (
+                        <button class="desktop-player-pill" onClick={cycleAudio} title={t('Change audio track (A)')}>
+                            {t('Audio')}: {audio ? trackName(audio) : '–'}
+                        </button>
+                    ) : null}
+                    {subtitleTracks.length ? (
+                        <button class="desktop-player-pill" onClick={cycleSubtitles} title={t('Change subtitles (S)')}>
+                            {t('Subtitles')}: {subtitle ? trackName(subtitle) : t('Off')}
+                        </button>
+                    ) : null}
+                    <button class="round" aria-label={volume > 0 ? t('Mute') : t('Unmute')} onClick={toggleMute}>
+                        <TvIcon name={volume > 0 ? 'volume' : 'muted'} />
+                    </button>
+                    <input
+                        class="desktop-player-volume"
+                        type="range"
+                        min={0}
+                        max={100}
+                        step={5}
+                        value={Math.round(volume * 100)}
+                        aria-label={t('Volume')}
+                        onInput={(event) => session.current?.setVolume(Number(event.currentTarget.value) / 100)}
+                    />
                     {playback.isLive ? (
                         <span class="live-badge">{t('Live')}</span>
                     ) : (
                         <span class="desktop-player-time">
-                            {clock(position)} / {clock(duration)}
+                            {clock(shownAt)} / {clock(duration)}
                         </span>
                     )}
                 </div>
-                {playback.isLive ? null : (
-                    <div class="now-progress" aria-hidden="true">
-                        <span style={{ width: `${share}%` }} />
-                    </div>
-                )}
+                {seekable ? (
+                    <input
+                        class="desktop-player-seek"
+                        type="range"
+                        min={0}
+                        max={Math.floor(duration!)}
+                        step={1}
+                        value={Math.floor(shownAt)}
+                        aria-label={t('Position')}
+                        style={{ '--share': `${Math.min(100, (shownAt / duration!) * 100)}%` }}
+                        onInput={(event) => {
+                            reveal();
+                            setScrub(Number(event.currentTarget.value));
+                        }}
+                        onChange={(event) => {
+                            session.current?.seekTo(Number(event.currentTarget.value));
+                            setScrub(null);
+                        }}
+                    />
+                ) : null}
                 <p class="desktop-player-keys muted">
                     {playback.isLive
-                        ? t('Space: pause · ↑↓: volume · Esc: back')
-                        : t('Space: pause · ←→: 10 s · ↑↓: volume · Esc: back')}
+                        ? t('Space: pause · ↑↓: volume · A: audio · S: subtitles · Esc: back')
+                        : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back')}
                 </p>
             </div>
         </div>
