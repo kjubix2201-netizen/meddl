@@ -39,15 +39,18 @@ class Store<T> {
         private limit: number,
         private ttl = Infinity
     ) {}
-    get(key: string, load: () => Promise<T>): Promise<T> {
+    get(key: string, load: () => Promise<T>, keep: (value: T) => boolean = () => true): Promise<T> {
         const hit = this.entries.get(key);
         if (hit && Date.now() - hit.at < this.ttl) return hit.value;
         const value = load();
         this.entries.set(key, { value, at: Date.now() });
         // Failures are not kept: the next visit asks the provider again.
-        value.catch(() => {
+        const forget = () => {
             if (this.entries.get(key)?.value === value) this.entries.delete(key);
-        });
+        };
+        value.then((result) => {
+            if (!keep(result)) forget();
+        }, forget);
         while (this.entries.size > this.limit) {
             const oldest = this.entries.keys().next().value;
             if (oldest === undefined) break;
@@ -73,7 +76,15 @@ export class CachedProvider implements ProviderClient {
     private details_ = new Store<Media>(MAX_ITEMS);
     private episodes_ = new Store<Media[]>(MAX_ITEMS);
     private guide = new Store<Program[]>(MAX_ITEMS, EPG_MS);
+    // Catalog requests reach the provider one at a time: panels often throttle
+    // or answer empty when several large lists are requested at once.
+    private queue: Promise<unknown> = Promise.resolve();
     constructor(private inner: ProviderClient) {}
+    private serial<T>(work: () => Promise<T>): Promise<T> {
+        const run = this.queue.then(work, work);
+        this.queue = run.catch(() => undefined);
+        return run;
+    }
     get capabilities() {
         return this.inner.capabilities;
     }
@@ -90,8 +101,14 @@ export class CachedProvider implements ProviderClient {
     ): Promise<Catalog> {
         const key = JSON.stringify([kind, category, page, query.trim(), sort]);
         return race(
-            this.catalogs.get(key, () =>
-                this.inner.catalog(kind, category, page, query, this.owner.signal, sort)
+            this.catalogs.get(
+                key,
+                () =>
+                    this.serial(() =>
+                        this.inner.catalog(kind, category, page, query, this.owner.signal, sort)
+                    ),
+                // Nothing at all (no titles, no categories) is not remembered.
+                (result) => result.total > 0 || result.categories.length > 0
             ),
             signal
         );

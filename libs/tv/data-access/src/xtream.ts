@@ -89,7 +89,8 @@ export class XtreamProvider implements ProviderClient {
                     signal
                 )
             );
-            if (!signal.aborted) this.catalogs.set(key, data);
+            // An empty answer is often a busy or throttled panel: ask again later.
+            if (!signal.aborted && data.length) this.catalogs.set(key, data);
         }
         let categories = this.categoryLists.get(type);
         if (!categories) {
@@ -99,7 +100,7 @@ export class XtreamProvider implements ProviderClient {
                 id: text(r.category_id),
                 name: text(r.category_name),
             }));
-            if (!signal.aborted) this.categoryLists.set(type, categories);
+            if (!signal.aborted && categories.length) this.categoryLists.set(type, categories);
         }
         const matchesTitle = catalogTitleMatcher(query);
         const inCategory = categoryFilter(category);

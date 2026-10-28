@@ -45,10 +45,16 @@ function countLabel(group: CountryGroup, kind: Kind) {
  */
 export function CountryPicker({ tv }: { tv: TvModel }) {
     const route = tv.route;
-    const { categories, categoryCounts } = tv.catalog;
-    const groups = useMemo(
-        () => (categories.length ? countryGroups(categories, categoryCounts) : []),
-        [categories, categoryCounts]
+    const { categories, categoryCounts, total } = tv.catalog;
+    const groups = useMemo<CountryGroup[]>(
+        () =>
+            categories.length
+                ? countryGroups(categories, categoryCounts)
+                : // Titles without categories: everything under "all countries".
+                  total
+                  ? [{ code: ALL_COUNTRIES, categories: 0, titles: total }]
+                  : [],
+        [categories, categoryCounts, total]
     );
     const title =
         route.view === 'live'

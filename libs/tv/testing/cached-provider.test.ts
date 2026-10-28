@@ -6,6 +6,7 @@ import { CachedProvider } from '@meddl/tv/data-access';
 function fakeProvider() {
     const calls: string[] = [];
     let fail = false;
+    let empty = false;
     let gate: Promise<void> = Promise.resolve();
     const client: ProviderClient = {
         capabilities: { live: true, movies: true, series: false, epg: true },
@@ -14,7 +15,7 @@ function fakeProvider() {
             calls.push(`catalog:${kind}:${category}:${page}:${query}:${sort}`);
             await gate;
             if (fail) throw new Error('offline');
-            return { items: [], total: 0, page, categories: [] };
+            return { items: [], total: 0, page, categories: empty ? [] : [{ id: 'c', name: 'C' }] };
         },
         details: async (item) => {
             calls.push(`details:${item.id}`);
@@ -32,6 +33,7 @@ function fakeProvider() {
         client,
         calls,
         setFail: (value: boolean) => (fail = value),
+        setEmpty: (value: boolean) => (empty = value),
         hold: () => {
             let open = () => undefined as void;
             gate = new Promise<void>((resolve) => (open = resolve));
@@ -97,4 +99,31 @@ test('warming loads each supported section once', async () => {
     ]);
     cached.dispose();
     assert.equal(fake.calls.at(-1), 'dispose');
+});
+
+test('empty answers are asked again and catalog requests run one at a time', async () => {
+    const fake = fakeProvider();
+    const cached = new CachedProvider(fake.client);
+    fake.setEmpty(true);
+    await cached.catalog('movie', '', 0, '', live());
+    await cached.catalog('movie', '', 0, '', live());
+    assert.equal(fake.calls.length, 2);
+    const order: string[] = [];
+    const slow = fakeProvider();
+    let running = 0;
+    const inner = slow.client;
+    const original = inner.catalog.bind(inner);
+    inner.catalog = async (...args) => {
+        running += 1;
+        order.push(`start:${args[0]}:${running}`);
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        running -= 1;
+        return original(...args);
+    };
+    const queued = new CachedProvider(inner);
+    await Promise.all([
+        queued.catalog('live', '', 0, '', live()),
+        queued.catalog('movie', '', 0, '', live()),
+    ]);
+    assert.deepEqual(order, ['start:live:1', 'start:movie:1']);
 });

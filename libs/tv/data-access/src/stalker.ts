@@ -115,7 +115,7 @@ export class StalkerProvider implements ProviderClient {
                     )
                 )
             ).map((c) => ({ id: text(c.id), name: text(c.title ?? c.name) }));
-            if (!signal.aborted) this.categoryLists.set(type, categories);
+            if (!signal.aborted && categories.length) this.categoryLists.set(type, categories);
         }
         const response = await this.pages.load(
             {
