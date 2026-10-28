@@ -4,6 +4,8 @@ import { useHomeFeature } from './use-home-feature';
 import { PageHeader } from './page-header';
 import { Favorites } from './favorites';
 import { usePlayerControls } from './player-controls';
+import { VolumeControl } from './player-volume';
+import { AudioNotice } from './player-audio-notice';
 import { useEffect, useRef } from 'preact/hooks';
 import { useTv } from './use-tv';
 import type { View } from './navigation';
@@ -343,7 +345,9 @@ export function TvApp() {
                                 >
                                     ♡ Save
                                 </button>
+                                <VolumeControl video={element} />
                             </div>
+                            <AudioNotice video={element} />
                             {current?.kind !== 'live' ? (
                                 <label class="seek">
                                     Playback position
