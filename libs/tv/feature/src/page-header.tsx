@@ -1,6 +1,8 @@
 import { TvModel } from './use-tv';
 import { favoritesFor } from './favorites';
 import { t, tn } from '@meddl/tv/util';
+import { ALL_COUNTRIES, needsCountry } from './country-catalog';
+import { CountryFlag, countryLabel } from './country-picker';
 export function PageHeader({ tv }: { tv: TvModel }) {
     const view = tv.route.view;
     // Home is the full-screen launcher; sources are switched on Sources.
@@ -18,6 +20,12 @@ export function PageHeader({ tv }: { tv: TvModel }) {
         detail: '',
         person: '',
     }[view];
+    // The country picker shows its own heading.
+    const picking = needsCountry(tv.route);
+    const country =
+        !picking && view !== 'live' && tv.route.country && tv.route.country !== ALL_COUNTRIES
+            ? tv.route.country
+            : '';
     const count =
         view === 'favorites'
             ? favoritesFor(tv, tv.route.kind).length
@@ -37,8 +45,14 @@ export function PageHeader({ tv }: { tv: TvModel }) {
                 </button>
             ) : (
                 <div class="page-heading">
-                    {title ? <h1>{title}</h1> : null}
-                    {count !== undefined && view !== 'live' ? (
+                    {title && !picking ? <h1>{title}</h1> : null}
+                    {country ? (
+                        <span class="country-chip">
+                            <CountryFlag code={country} />
+                            {countryLabel(country)}
+                        </span>
+                    ) : null}
+                    {count !== undefined && view !== 'live' && !picking ? (
                         <span class="catalog-count">
                             {tv.route.kind === 'live'
                                 ? tn(count, '{count} channel', '{count} channels')

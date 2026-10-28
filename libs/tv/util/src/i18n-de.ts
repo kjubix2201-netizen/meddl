@@ -465,4 +465,11 @@ export const DE: Readonly<Record<string, string>> = {
     'Place not found.': 'Ort nicht gefunden.',
     'Location saved: {place}': 'Ort gespeichert: {place}',
     'The weather service is not reachable right now.': 'Der Wetterdienst ist gerade nicht erreichbar.',
+    'All countries': 'Alle Länder',
+    'More categories': 'Weitere Kategorien',
+    'Choose a country': 'Wähle ein Land',
+    'Loading countries…': 'Länder werden geladen …',
+    'This source has no categories here yet.': 'Diese Quelle hat hier noch keine Kategorien.',
+    '{count} category': '{count} Kategorie',
+    '{count} categories': '{count} Kategorien',
 };

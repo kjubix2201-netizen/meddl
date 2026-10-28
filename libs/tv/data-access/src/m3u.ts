@@ -4,6 +4,8 @@ import {
     CatalogSort,
     sortCatalog,
     catalogTitleMatcher,
+    categoryFilter,
+    countByCategory,
     Kind,
     Media,
     Source,
@@ -20,6 +22,7 @@ export class M3uProvider implements ProviderClient {
         movies: true,
         series: false,
         epg: false,
+        multiCategory: true,
     };
     private items: Media[] = [];
     constructor(
@@ -67,9 +70,9 @@ export class M3uProvider implements ProviderClient {
             new Set(all.map((i) => i.category ?? '').filter(Boolean))
         ).map((id) => ({ id, name: id }));
         const matchesTitle = catalogTitleMatcher(query);
+        const inCategory = categoryFilter(category);
         const items = all.filter(
-            (i) =>
-                (!category || i.category === category) && matchesTitle(i.title)
+            (i) => inCategory(i.category) && matchesTitle(i.title)
         );
         return {
             items: sortCatalog(
@@ -78,6 +81,7 @@ export class M3uProvider implements ProviderClient {
             ).slice(page * 60, (page + 1) * 60),
             total: items.length,
             categories,
+            categoryCounts: countByCategory(all),
             page,
         };
     }

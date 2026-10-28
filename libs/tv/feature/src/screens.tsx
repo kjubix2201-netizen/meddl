@@ -114,6 +114,7 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                 <label>
                     {t('Category')}
                     <select
+                        data-focus="catalog:category"
                         value={r.category}
                         onChange={(e) =>
                             tv.setRoute({

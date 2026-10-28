@@ -1,0 +1,121 @@
+/*
+ * Country picker (first step of Live TV, Movies and Series): a calm vertical
+ * list of round flags; the focused country grows, turns bold and shows its
+ * count, as on modern TV launchers.
+ */
+main.country-page {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.country-picker {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+.country-picker-header h1 {
+    margin-bottom: 0.6vh;
+    font-size: 5vh;
+}
+.country-picker-header p {
+    margin-bottom: 2.4vh;
+    font-size: 2.3vh;
+}
+.country-list {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 46vh;
+    overflow-y: auto;
+    padding: 1vh 2vh 8vh 0.6vh;
+}
+.country-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 0;
+    padding: 1.2vh 1.4vh;
+    margin: 0 0 0.4vh;
+    border: none;
+    border-radius: 1.2vh;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.country-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+.country-row:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    box-shadow: none;
+    color: #ffffff;
+}
+.country-row .flag {
+    width: 4.6vh;
+    height: 4.6vh;
+    margin-right: 2.2vh;
+    box-shadow: 0 0 0 0.25vh rgba(255, 255, 255, 0.16);
+    transition: width 0.15s ease, height 0.15s ease, box-shadow 0.15s ease;
+}
+.country-row:focus .flag {
+    width: 7.6vh;
+    height: 7.6vh;
+    box-shadow: 0 0 0 0.35vh #ffffff, 0 1vh 2.4vh rgba(0, 0, 0, 0.4);
+}
+.country-row .flag svg {
+    width: 100%;
+    height: 100%;
+}
+.country-row .flag-generic svg {
+    width: 55%;
+    height: 55%;
+}
+.country-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.country-copy strong {
+    font-size: 2.4vh;
+    font-weight: 400;
+    line-height: 1.2;
+}
+.country-row:focus .country-copy strong {
+    font-size: 3vh;
+    font-weight: 600;
+}
+.country-copy small {
+    display: none;
+    margin-top: 0.4vh;
+    font-size: 2vh;
+    color: rgba(255, 255, 255, 0.72);
+}
+.country-row:focus .country-copy small {
+    display: block;
+}
+
+/* Chosen country next to the page title and above the Live TV categories. */
+.country-chip {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 2vh;
+    padding: 0.6vh 1.6vh 0.6vh 0.6vh;
+    border-radius: 3vh;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    font-size: 2.2vh;
+    font-weight: 500;
+}
+.country-chip .flag,
+.category-column > h2 .flag {
+    width: 3.4vh;
+    height: 3.4vh;
+    margin-right: 1.2vh;
+}
+.category-column > h2 {
+    display: flex;
+    align-items: center;
+}

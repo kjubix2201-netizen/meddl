@@ -12,6 +12,8 @@ import { Sources } from './forms';
 import { Settings } from './settings';
 import type { SettingsMemory } from './settings-navigation';
 import { Home, CatalogScreen } from './screens';
+import { CountryPicker } from './country-picker';
+import { needsCountry } from './country-catalog';
 import { Detail } from './detail';
 import { useDetailSeason } from './use-detail-season';
 import { Live } from './live';
@@ -122,8 +124,10 @@ export function TvApp() {
             <main
                 hidden={tv.fullscreen || !tv.storageReady}
                 class={
-                    cinematic
-                        ? `cinematic-page ${r.view}-page`
+                    needsCountry(r)
+                        ? 'country-page'
+                        : cinematic
+                          ? `cinematic-page ${r.view}-page`
                         : r.view === 'settings'
                           ? 'settings-page'
                           : r.view === 'live'
@@ -161,7 +165,9 @@ export function TvApp() {
                         {t('Connecting to your source…')}
                     </div>
                 ) : null}
-                {r.view === 'home' ? (
+                {needsCountry(r) ? (
+                    <CountryPicker tv={tv} />
+                ) : r.view === 'home' ? (
                     <Home tv={display} history={feature.history} />
                 ) : r.view === 'sources' ? (
                     <Sources tv={tv} />

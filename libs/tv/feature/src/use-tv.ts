@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { useProvider } from './use-provider';
 import { useSourceNavigation } from './use-source-navigation';
 import { useTvRemote } from './use-tv-remote';
+import { favoriteToggle } from './use-favorite';
 import { LatestRequest, Media, Source, t } from '@meddl/tv/util';
 import { focusKey, platformBack, restoreFocus } from '@meddl/tv/ui';
 export function useTv(video: { current: HTMLVideoElement | null }) {
@@ -146,7 +147,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         playback.current.cancel();
         if (item.kind === 'live') {
             if (route.view !== 'live') {
-                setRoute({ ...firstRoute(), view: 'live', kind: 'live' });
+                setRoute({ ...firstRoute(), view: 'live', kind: 'live', country: 'all' });
             }
             setSelected(item);
             void play(item);
@@ -302,23 +303,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         fullscreen,
         player: player.current,
     });
-    async function favorite(item: Media) {
-        try {
-            await update((d) => ({
-                ...d,
-                favorites: d.favorites.some((m) => m.id === item.id)
-                    ? d.favorites.filter((m) => m.id !== item.id)
-                    : [...d.favorites, item],
-            }));
-            clearError(t('Retry saving favorite'));
-        } catch {
-            setError(
-                t('Favorite was not saved. Free TV storage and retry.'),
-                () => void favorite(item),
-                t('Retry saving favorite')
-            );
-        }
-    }
+    const favorite = favoriteToggle(update, setError, clearError);
     async function switchSource(activeId: string) {
         stop();
         try {
@@ -385,6 +370,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         setFullscreen,
         player,
         navigate,
+        visit,
         open,
         openPerson,
         play,

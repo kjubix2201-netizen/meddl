@@ -12,7 +12,7 @@ export function GridGuide({ tv, close }: { tv: TvModel; close: () => void }) {
     const client = useRef(tv.guideClient);
     client.current = tv.guideClient;
     const catalog = useCatalog(
-        { view: 'live', kind: 'live', category, page: 0, query: '' },
+        { view: 'live', kind: 'live', category, page: 0, query: '', country: tv.route.country },
         client,
         tv.ready,
         tv.data.activeId,

@@ -3,6 +3,8 @@ import { ChannelLogo, Empty, Flag, TvIcon, VirtualCollection } from '@meddl/tv/u
 import { channelBadges, t, tn } from '@meddl/tv/util';
 import { categoryKey, useLiveBrowse } from './use-live-browse';
 import type { TvModel } from './use-tv';
+import { ALL_COUNTRIES } from './country-catalog';
+import { CountryFlag, countryLabel } from './country-picker';
 
 /**
  * Live TV, first two columns: countries / categories with flags on the left,
@@ -22,7 +24,16 @@ export function LiveColumns({
     return (
         <>
             <section class="category-column" aria-label={t('Channel categories')}>
-                <h2>{t('Live TV')}</h2>
+                <h2>
+                    {tv.route.country && tv.route.country !== ALL_COUNTRIES ? (
+                        <>
+                            <CountryFlag code={tv.route.country} />
+                            {countryLabel(tv.route.country)}
+                        </>
+                    ) : (
+                        t('Live TV')
+                    )}
+                </h2>
                 <div class="channels category-list">
                     <VirtualCollection
                         layout="channels"

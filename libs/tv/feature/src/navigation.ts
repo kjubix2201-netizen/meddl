@@ -16,6 +16,9 @@ export interface Route {
     category: string;
     page: number;
     query: string;
+    /** Live TV / Movies / Series: chosen country (ISO code, 'all' or
+     * 'other'); '' shows the country picker first. */
+    country: string;
     item?: Media;
     person?: { tmdbId: number; name: string; sourceId: string };
 }
@@ -25,4 +28,5 @@ export const firstRoute = (): Route => ({
     category: '',
     page: 0,
     query: '',
+    country: '',
 });

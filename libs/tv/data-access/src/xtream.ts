@@ -8,6 +8,8 @@ import {
     CatalogSort,
     sortCatalog,
     catalogTitleMatcher,
+    categoryFilter,
+    countByCategory,
     Kind,
     Media,
     Source,
@@ -26,6 +28,7 @@ export class XtreamProvider implements ProviderClient {
         movies: true,
         series: true,
         epg: true,
+        multiCategory: true,
     };
     private client: XtreamClient;
     private catalogs = new Map<string, Record<string, unknown>[]>();
@@ -92,13 +95,11 @@ export class XtreamProvider implements ProviderClient {
             name: text(r.category_name),
         }));
         const matchesTitle = catalogTitleMatcher(query);
-        const items = data
-            .map((r) => this.media(r, kind))
-            .filter(
-                (m) =>
-                    (!category || m.category === category) &&
-                    matchesTitle(m.title)
-            );
+        const inCategory = categoryFilter(category);
+        const all = data.map((r) => this.media(r, kind));
+        const items = all.filter(
+            (m) => inCategory(m.category) && matchesTitle(m.title)
+        );
         return {
             items: sortCatalog(
                 items,
@@ -107,6 +108,7 @@ export class XtreamProvider implements ProviderClient {
             total: items.length,
             page,
             categories,
+            categoryCounts: countByCategory(all),
         };
     }
     async details(item: Media, signal: AbortSignal): Promise<Media> {

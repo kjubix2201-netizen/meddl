@@ -2,13 +2,19 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import {
     Catalog,
     CatalogSort,
+    Category,
     ProviderClient,
-    LatestRequest, t } from '@meddl/tv/util';
+    LatestRequest,
+    NO_CATEGORY,
+    joinCategories,
+    t,
+} from '@meddl/tv/util';
 import {
     DEFAULT_PREFERRED_REGION,
     orderPreferredRegionFirst,
 } from '@meddl/shared/m3u-utils';
 import { Route } from './navigation';
+import { ALL_COUNTRIES, categoriesOfCountry } from './country-catalog';
 const empty = (): Catalog => ({ items: [], total: 0, page: 0, categories: [] });
 /** One active query survives detail navigation; a new query cancels its append lane. */
 export function useCatalog(
@@ -26,6 +32,7 @@ export function useCatalog(
         route.kind,
         route.category,
         route.query,
+        route.country,
         sort,
         ready,
     ]);
@@ -40,6 +47,8 @@ export function useCatalog(
     const snapshot = useRef(state);
     snapshot.current = state;
     const request = useRef(false);
+    // Full category list per source and kind, to scope requests to a country.
+    const categoryCache = useRef(new Map<string, Category[]>());
     const latest = useRef({
         key,
         route,
@@ -49,6 +58,7 @@ export function useCatalog(
         finishFocus,
         sort,
         reportConnection,
+        source,
     });
     latest.current = {
         key,
@@ -59,6 +69,7 @@ export function useCatalog(
         finishFocus,
         sort,
         reportConnection,
+        source,
     };
     async function load(append: boolean) {
         const current = latest.current;
@@ -78,9 +89,32 @@ export function useCatalog(
         request.current = true;
         setState((s) => ({ ...s, busy: true, error: '' }));
         try {
-            const result = await current.provider.current.catalog(
-                current.route.kind,
-                current.route.category,
+            const client = current.provider.current;
+            const { kind, country } = current.route;
+            const cacheKey = `${current.source}|${current.ready}|${kind}`;
+            let category = current.route.category;
+            let scoped: Category[] | undefined;
+            if (country && country !== ALL_COUNTRIES) {
+                let all = categoryCache.current.get(cacheKey);
+                if (!all) {
+                    all = (
+                        await client.catalog(kind, '', 0, '', job.signal, current.sort)
+                    ).categories;
+                    categoryCache.current.set(cacheKey, all);
+                }
+                if (!lane.current.owns(job)) return;
+                scoped = categoriesOfCountry(all, country);
+                const ids = scoped.map((c) => c.id);
+                // Without multi-category support (Stalker) a country opens
+                // at its first category.
+                if (!category)
+                    category = client.capabilities.multiCategory
+                        ? joinCategories(ids)
+                        : (ids[0] ?? NO_CATEGORY);
+            }
+            const result = await client.catalog(
+                kind,
+                category,
                 page,
                 current.route.query,
                 job.signal,
@@ -88,6 +122,7 @@ export function useCatalog(
             );
             if (!lane.current.owns(job) || current.key !== latest.current.key)
                 return;
+            if (!scoped) categoryCache.current.set(cacheKey, result.categories);
             const items = page ? [...previous.catalog.items] : [];
             const seen = new Set(items.map((x) => x.id));
             result.items.forEach((item) => {
@@ -106,7 +141,7 @@ export function useCatalog(
                     // Categories of the viewer's region (Germany) come first,
                     // as in the desktop app's "Show my region first" setting.
                     categories: orderPreferredRegionFirst(
-                        result.categories,
+                        scoped ?? result.categories,
                         DEFAULT_PREFERRED_REGION,
                         (category) => category.name
                     ) as typeof result.categories,

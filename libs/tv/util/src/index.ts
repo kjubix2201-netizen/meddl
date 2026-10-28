@@ -76,6 +76,8 @@ export interface Catalog {
     page: number;
     pageSize?: number;
     categories: Category[];
+    /** Titles per category id, when the provider holds the full list. */
+    categoryCounts?: Record<string, number>;
 }
 export interface Program {
     title: string;
@@ -94,6 +96,8 @@ export interface ProviderClient {
         series: boolean;
         /** Stalker may also expose series inside its VOD catalog. */
         vodSeries?: boolean;
+        /** Accepts several category ids at once (see category-filter.ts). */
+        multiCategory?: boolean;
         epg: boolean;
     };
     connect(signal: AbortSignal): Promise<Source>;
@@ -247,3 +251,5 @@ export * from './programme-guide';
 export * from './grid-guide';
 export * from './i18n';
 export { channelBadges } from './channel-badges';
+export * from './category-filter';
+export { countryName } from './country-names';
