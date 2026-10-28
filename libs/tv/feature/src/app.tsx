@@ -5,6 +5,8 @@ import { PageHeader } from './page-header';
 import { Favorites } from './favorites';
 import { usePlayerControls } from './player-controls';
 import { PlayerOverlay } from './player-overlay';
+import { useSoundFallback } from './sound-fallback';
+import { DesktopPlayer } from './desktop-player';
 import { TopBar } from './top-bar';
 import { useEffect, useRef } from 'preact/hooks';
 import { useTv } from './use-tv';
@@ -39,6 +41,9 @@ export function TvApp() {
     useSeriesContext(tv);
     const browse = useLiveBrowse(tv);
     const overlay = useLiveOverlay(tv, browse);
+    // Mounted for the live preview too: a channel the page cannot play
+    // opens in the app's own player instead of an error.
+    const sound = useSoundFallback(tv);
     useEffect(() => {
         const position = () => {
             const rect = document
@@ -148,7 +153,7 @@ export function TvApp() {
                     ) : null}
                     {tv.error ? (
                         <div role="alert" class="error">
-                            <span>{tv.error}</span>
+                            <span>{t(tv.error)}</span>
                             {tv.errorRetry ? (
                                 <button onClick={tv.errorRetry}>
                                     {tv.errorRetryLabel}
@@ -218,9 +223,13 @@ export function TvApp() {
                         overlay={overlay}
                         visible={controlsVisible}
                         seriesDetails={seriesDetails}
+                        sound={sound}
                     />
                 ) : null}
             </div>
+            {sound.desktop ? (
+                <DesktopPlayer key={current?.id} playback={sound.desktop} onClose={sound.desktopClosed} />
+            ) : null}
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />
             <LoadingOverlay tv={tv} />
         </div>

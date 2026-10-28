@@ -65,7 +65,7 @@ export function useSoundFallback(tv: TvModel) {
     // Live channels start in the app's own engine right away, like other
     // IPTV players do: raw transport streams and Dolby/DTS are its strength.
     useEffect(() => {
-        if (item?.kind !== 'live' || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
+        if (item?.kind !== 'live' || !tv.fullscreen || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
         const id = item.id;
         let tries = 0;
         const timer = setInterval(() => {
@@ -76,7 +76,7 @@ export function useSoundFallback(tv: TvModel) {
             } else if (++tries > 40) clearInterval(timer);
         }, 150);
         return () => clearInterval(timer);
-    }, [item?.id, phase]);
+    }, [item?.id, phase, tv.fullscreen]);
 
     function silent() {
         const player = tv.player.current;
