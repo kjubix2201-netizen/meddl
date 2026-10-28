@@ -8,11 +8,13 @@ import {
     Source,
     Provider, t } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
+import { localServerAvailable } from '@meddl/tv/data-access';
 export function Sources({ tv }: { tv: TvModel }) {
     const [type, setType] = useState<Provider>('xtream');
     const [editing, setEditing] = useState<Source>();
     const [failure, setFailure] = useState('');
     const [saving, setSaving] = useState(false);
+    const local = localServerAvailable();
     function edit(source: Source) {
         setEditing(source);
         setType(source.provider);
@@ -57,7 +59,8 @@ export function Sources({ tv }: { tv: TvModel }) {
                     : {}),
             };
             setSaving(true);
-            await tv.saveSource(source, httpUrl(field('backend')));
+            // The meddl apps carry their own server: no address to enter.
+            await tv.saveSource(source, local ? '' : httpUrl(field('backend')));
         } catch {
             setFailure(
                 t('Check the URL fields. Use HTTP or HTTPS addresses without embedded login credentials.')
@@ -112,7 +115,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                     </div>
                 ))}
             </div>
-            <PhoneSetup tv={tv} />
+            {local ? null : <PhoneSetup tv={tv} />}
             <div class="filters">
                 {(['xtream', 'stalker', 'm3u'] as Provider[]).map((p) => (
                     <button
@@ -132,7 +135,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                 key={`${type}:${editing?.id ?? 'new'}`}
             >
                 <h2>{editing ? t('Edit source') : t('Add a source')}</h2>
-                <BackendConnection tv={tv} />
+                {local ? null : <BackendConnection tv={tv} />}
                 <label>
                     {t('Name')}
                     <input name="name" required defaultValue={editing?.name} />

@@ -63,7 +63,12 @@ class MainActivity : Activity() {
                 override fun shouldInterceptRequest(
                     view: WebView,
                     request: WebResourceRequest
-                ): WebResourceResponse? = assets.shouldInterceptRequest(request.url)
+                ): WebResourceResponse? =
+                    if (request.url.host == ASSET_HOST && request.url.path == DirectFetch.PATH) {
+                        DirectFetch.answer(request.url, request.method)
+                    } else {
+                        assets.shouldInterceptRequest(request.url)
+                    }
 
                 // The app never navigates away from its own page.
                 override fun shouldOverrideUrlLoading(
@@ -170,6 +175,10 @@ class MainActivity : Activity() {
 
         @JavascriptInterface
         fun version(): String = BuildConfig.VERSION_NAME
+
+        /** The page may reach providers through [DirectFetch] (built-in server). */
+        @JavascriptInterface
+        fun hasDirectFetch(): Boolean = true
 
         /**
          * Plays a stream in the native player (Dolby / DTS sound). The page

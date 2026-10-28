@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import {
     CachedProvider,
     createProvider,
+    LocalTransport,
+    localServerAvailable,
     ProviderTransport,
 } from '@meddl/tv/data-access';
 import type { Kind, ProviderClient, UserData } from '@meddl/tv/util';
@@ -55,13 +57,15 @@ export function useProvider(
               active.origin,
           ])
         : '';
-    const connectionKey = `${fingerprint}:${data.backend}:${data.backendToken}`;
+    // Inside the meddl apps the provider is reached directly (built-in server).
+    const local = localServerAvailable();
+    const connectionKey = `${fingerprint}:${local ? 'local' : `${data.backend}:${data.backendToken}`}`;
     useEffect(() => {
         setReady(0);
 
         callbacks.current.reset();
         provider.current?.dispose();
-        if (!storageReady || !active || !data.backend) {
+        if (!storageReady || !active || (!local && !data.backend)) {
             setBusy(false);
             setWarm(IDLE);
             return;
@@ -70,7 +74,7 @@ export function useProvider(
         const snapshot = { ...active };
         const client = new CachedProvider(createProvider(
             snapshot,
-            new ProviderTransport(data.backend, data.backendToken),
+            local ? new LocalTransport() : new ProviderTransport(data.backend, data.backendToken),
             (source) =>
                 callbacks.current.update((d) => ({
                     ...d,
@@ -147,6 +151,6 @@ export function useProvider(
         warm: owner.current === connectionKey ? warm : IDLE,
         skipWarm: () => setWarm(IDLE),
         connectionKey,
-        enabled: storageReady && !!active && !!data.backend,
+        enabled: storageReady && !!active && (local || !!data.backend),
     };
 }

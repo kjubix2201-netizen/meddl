@@ -487,4 +487,6 @@ export const DE: Readonly<Record<string, string>> = {
     'Your provider is answering slowly ({seconds} s). Close meddl in other browsers and apps, so only one connection is open.':
         'Dein Anbieter antwortet gerade sehr langsam ({seconds} s). Schließe meddl in anderen Browsern und Apps, damit nur eine Verbindung offen ist.',
     'Waiting for your phone · {time}': 'Warte auf dein Handy · {time}',
+    'Built-in server': 'Eingebauter Server',
+    'This app talks to your provider directly. No meddl server is needed.': 'Diese App spricht direkt mit deinem Anbieter. Ein meddl-Server wird nicht gebraucht.',
 };

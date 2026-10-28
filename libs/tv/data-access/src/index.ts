@@ -37,3 +37,5 @@ export * from './library';
 export * from './library-sources';
 export * from './weather';
 export { CachedProvider } from './cached-provider';
+export { LocalTransport } from './local-transport';
+export { directFetch, localServerAvailable } from './direct-fetch';

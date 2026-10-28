@@ -12,6 +12,7 @@ import { useProvider } from './use-provider';
 import { useSourceNavigation } from './use-source-navigation';
 import { useTvRemote } from './use-tv-remote';
 import { favoriteToggle } from './use-favorite';
+import { localServerAvailable } from '@meddl/tv/data-access';
 import { LatestRequest, Media, Source, t } from '@meddl/tv/util';
 import { focusKey, platformBack, restoreFocus } from '@meddl/tv/ui';
 export function useTv(video: { current: HTMLVideoElement | null }) {
@@ -320,7 +321,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
     }
     async function saveSource(source: Source, address: string) {
         try {
-            if (!(await backend.connect(address))) return;
+            if (!localServerAvailable() && !(await backend.connect(address))) return;
             await update((d) => ({
                 ...d,
                 sources: [

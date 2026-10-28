@@ -7,6 +7,7 @@ import { DirectAccessProbe } from './direct-probe';
 import { TmdbSettings } from './tmdb-settings';
 import { SettingsPreferences } from './settings-preferences';
 import { LanguageSetting } from './language-setting';
+import { localServerAvailable } from '@meddl/tv/data-access';
 import { WeatherSetting } from './weather-setting';
 import {
     settingsCategories,
@@ -33,14 +34,16 @@ export function Settings({
         >
             <div class="settings-toolbar">
                 <p class="muted">{t('Choose a category to adjust settings.')}</p>
-                <PhoneSetup
-                    tv={tv}
-                    purpose="settings"
-                    compact
-                    onSettingsApplied={() =>
-                        setPhoneRevision((value) => value + 1)
-                    }
-                />
+                {localServerAvailable() ? null : (
+                    <PhoneSetup
+                        tv={tv}
+                        purpose="settings"
+                        compact
+                        onSettingsApplied={() =>
+                            setPhoneRevision((value) => value + 1)
+                        }
+                    />
+                )}
             </div>
             <div class="settings-workspace">
                 <div
@@ -80,13 +83,22 @@ export function Settings({
                         }}
                     >
                         {id === 'connection' ? (
-                            <>
-                                <BackendConnection
-                                    tv={tv}
-                                    label={t('Backend URL')}
-                                />
-                                <DirectAccessProbe tv={tv} />
-                            </>
+                            localServerAvailable() ? (
+                                <>
+                                    <h2>{t('Built-in server')}</h2>
+                                    <p class="muted">
+                                        {t('This app talks to your provider directly. No meddl server is needed.')}
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <BackendConnection
+                                        tv={tv}
+                                        label={t('Backend URL')}
+                                    />
+                                    <DirectAccessProbe tv={tv} />
+                                </>
+                            )
                         ) : id === 'library' ? (
                             <LibrarySettings tv={tv} />
                         ) : id === 'appearance' ? (
