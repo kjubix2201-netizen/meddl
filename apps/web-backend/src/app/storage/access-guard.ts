@@ -1,6 +1,7 @@
 import { createHash, timingSafeEqual } from 'node:crypto';
 import type { RequestHandler } from 'express';
 import { SERVER_ACCESS_CHALLENGE } from '@meddl/shared/interfaces';
+import { TRANSCODE_STREAM_PREFIX } from '../transcode/transcode-router';
 
 /** Routes a browser must reach before it has a token. */
 const PUBLIC_PATHS = new Set(['/', '/health', '/config.js', '/v1/instance']);
@@ -14,7 +15,13 @@ export function createAccessGuard(token: string): RequestHandler {
     const expected = digest(token);
 
     return (req, res, next) => {
-        if (req.method === 'OPTIONS' || PUBLIC_PATHS.has(req.path)) {
+        // A <video> element cannot send a token: converted streams are opened
+        // by an unguessable id that only a guarded request can create.
+        if (
+            req.method === 'OPTIONS' ||
+            PUBLIC_PATHS.has(req.path) ||
+            req.path.startsWith(TRANSCODE_STREAM_PREFIX)
+        ) {
             next();
             return;
         }

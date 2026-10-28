@@ -39,6 +39,14 @@ docker compose -f docker/docker-compose.yml up --build -d
 Danach läuft meddl unter <http://localhost:4333>. Details:
 [`docker/README.md`](docker/README.md).
 
+### Ton bei Dolby / DTS (FFmpeg)
+
+Browser spielen Dolby Digital und DTS ohne Ton ab. Ist auf dem Rechner mit
+dem meddl-Server [FFmpeg](https://ffmpeg.org/) installiert, wandelt der
+Server den Ton solcher Streams automatisch in AAC um (Bild unverändert).
+Windows: `winget install Gyan.FFmpeg`, danach den Server neu starten. Ein
+anderer Pfad lässt sich mit `MEDDL_FFMPEG` / `MEDDL_FFPROBE` setzen.
+
 ## Entwicklung
 
 Voraussetzungen: Node.js 22 (siehe `.nvmrc`) und pnpm über Corepack.

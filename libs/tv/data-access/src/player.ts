@@ -13,6 +13,27 @@ export class NativePlayer {
         return !!this.restore && !this.restore.failed;
     }
     private confirmed = false;
+    /**
+     * Converted sound (meddl server, see transcode-router): the stream starts
+     * at `offset`, so a seek opens the stream again at the new position.
+     */
+    private converted?: {
+        build: (start: number) => string;
+        offset: number;
+        duration?: number;
+    };
+    get isConverted() {
+        return !!this.converted;
+    }
+    /** Position in the title, also while the sound is converted. */
+    get position() {
+        const local = Number.isFinite(this.video.currentTime) ? this.video.currentTime : 0;
+        return (this.converted?.offset ?? 0) + local;
+    }
+    get length() {
+        if (this.converted) return this.converted.duration ?? NaN;
+        return this.video.duration;
+    }
     private timer?: ReturnType<typeof setInterval>;
     private restore?: {
         target: number;
@@ -102,6 +123,31 @@ export class NativePlayer {
         }
         this.changed();
     }
+    /** Replays the current title through the server with converted sound. */
+    async playConverted(
+        item: Media,
+        build: (start: number) => string,
+        start: number,
+        duration?: number
+    ) {
+        this.stop();
+        const generation = ++this.generation;
+        this.item = item;
+        const offset = item.kind === 'live' ? 0 : Math.max(0, start);
+        this.converted = { build, offset, duration };
+        const url = build(offset);
+        this.lastPlayback = { sourceId: item.sourceId, url };
+        this.confirmed = false;
+        this.video.src = url;
+        this.video.load();
+        try {
+            await this.video.play();
+        } catch {
+            if (this.generation === generation)
+                this.failure('Playback with converted sound did not start. Press Play to retry.');
+        }
+        this.changed();
+    }
     private setSource(url: string) {
         let hls = false;
         try {
@@ -128,12 +174,8 @@ export class NativePlayer {
         const item = this.item;
         if (!item || !this.confirmed || this.restore || this.video.seeking)
             return;
-        const seconds = Number.isFinite(this.video.currentTime)
-            ? this.video.currentTime
-            : 0;
-        const duration = Number.isFinite(this.video.duration)
-            ? this.video.duration
-            : 0;
+        const seconds = this.position;
+        const duration = Number.isFinite(this.length) ? this.length : 0;
         const progress = { item, seconds, duration, updated: Date.now() };
         this.save(progress).catch(() =>
             this.saveFailure(
@@ -142,10 +184,19 @@ export class NativePlayer {
             )
         );
     }
+    /** Progress from a player outside the page (Android native player). */
+    recordExternal(seconds: number, duration: number) {
+        const item = this.item;
+        if (!item || item.kind === 'live' || !Number.isFinite(seconds)) return;
+        this.save({ item, seconds, duration: Number.isFinite(duration) ? duration : 0, updated: Date.now() }).catch(
+            () => undefined
+        );
+    }
     stop() {
         this.persist();
         this.cancelRestore();
         this.item = undefined;
+        this.converted = undefined;
         this.confirmed = false;
         this.generation++;
         this.video.pause();
@@ -169,7 +220,7 @@ export class NativePlayer {
         else this.pause();
     }
     seek(delta: number) {
-        this.seekTo(this.video.currentTime + delta);
+        this.seekTo(this.position + delta);
     }
     seekTo(seconds: number) {
         if (
@@ -178,13 +229,19 @@ export class NativePlayer {
             !Number.isFinite(seconds)
         )
             return;
+        const length = this.length;
         const target = Math.max(
             0,
-            Number.isFinite(this.video.duration) && this.video.duration > 0
-                ? Math.min(this.video.duration, seconds)
-                : seconds
+            Number.isFinite(length) && length > 0 ? Math.min(length, seconds) : seconds
         );
-        if (target > 0) {
+        if (this.converted) {
+            // The converted stream is not seekable: open it at the target.
+            this.converted.offset = target;
+            this.confirmed = false;
+            this.video.src = this.converted.build(target);
+            this.video.load();
+            this.video.play().catch(() => this.failure('Playback could not resume.'));
+        } else if (target > 0) {
             this.startRestore(target);
             this.tryRestore();
         } else {

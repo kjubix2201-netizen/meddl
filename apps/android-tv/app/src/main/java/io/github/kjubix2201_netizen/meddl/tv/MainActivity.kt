@@ -2,6 +2,7 @@ package io.github.kjubix2201_netizen.meddl.tv
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewClientCompat
+import org.json.JSONObject
 
 /**
  * Hosts the meddl TV client (apps/tv, built into assets/www) full screen.
@@ -103,6 +105,18 @@ class MainActivity : Activity() {
         super.onDestroy()
     }
 
+    @Deprecated("Activity result API needs androidx.activity; plain Activity keeps the shell small.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode != NATIVE_PLAYER_REQUEST) return
+        val position = data?.getLongExtra(PlayerActivity.EXTRA_POSITION_MS, 0L) ?: 0L
+        val duration = data?.getLongExtra(PlayerActivity.EXTRA_DURATION_MS, 0L) ?: 0L
+        web.evaluateJavascript(
+            "window.meddlNativeClosed&&window.meddlNativeClosed($position,$duration);",
+            null
+        )
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) hideSystemBars()
@@ -156,6 +170,31 @@ class MainActivity : Activity() {
 
         @JavascriptInterface
         fun version(): String = BuildConfig.VERSION_NAME
+
+        /**
+         * Plays a stream in the native player (Dolby / DTS sound). The page
+         * calls this when its own playback stays silent; `request` is JSON
+         * with url, title, startMs, live and userAgent.
+         */
+        @JavascriptInterface
+        fun playNative(request: String) {
+            val json = runCatching { JSONObject(request) }.getOrNull() ?: return
+            val url = json.optString("url")
+            val scheme = Uri.parse(url).scheme?.lowercase()
+            if (scheme != "http" && scheme != "https") return
+            runOnUiThread {
+                @Suppress("DEPRECATION")
+                startActivityForResult(
+                    Intent(this@MainActivity, PlayerActivity::class.java)
+                        .putExtra(PlayerActivity.EXTRA_URL, url)
+                        .putExtra(PlayerActivity.EXTRA_TITLE, json.optString("title"))
+                        .putExtra(PlayerActivity.EXTRA_START_MS, json.optLong("startMs", 0L))
+                        .putExtra(PlayerActivity.EXTRA_LIVE, json.optBoolean("live", false))
+                        .putExtra(PlayerActivity.EXTRA_USER_AGENT, json.optString("userAgent")),
+                    NATIVE_PLAYER_REQUEST
+                )
+            }
+        }
     }
 
     private fun isFireTv(): Boolean =
@@ -163,6 +202,7 @@ class MainActivity : Activity() {
 
     companion object {
         private const val ASSET_HOST = "appassets.androidplatform.net"
+        private const val NATIVE_PLAYER_REQUEST = 41
         private val START_URL = Uri.Builder()
             .scheme("https")
             .authority(ASSET_HOST)

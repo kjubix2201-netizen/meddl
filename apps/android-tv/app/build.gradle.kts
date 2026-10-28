@@ -67,6 +67,15 @@ android {
     }
 }
 
+val media3 = "1.5.0"
+
 dependencies {
     implementation("androidx.webkit:webkit:1.12.1")
+    // Native player for streams the WebView plays silently (Dolby / DTS).
+    implementation("androidx.media3:media3-exoplayer:$media3")
+    implementation("androidx.media3:media3-exoplayer-hls:$media3")
+    implementation("androidx.media3:media3-ui:$media3")
+    // FFmpeg audio decoder built by Jellyfin for this Media3 release:
+    // AC-3, E-AC-3, DTS, TrueHD and more, decoded in software.
+    implementation("org.jellyfin.media3:media3-ffmpeg-decoder:$media3+1")
 }

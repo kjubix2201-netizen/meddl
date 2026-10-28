@@ -53,3 +53,15 @@ Signing: see [signing/README.md](signing/README.md).
 
 On Android / Google TV: install via a file manager, `adb install`, or the
 "Send files to TV" app.
+
+## Dolby / DTS sound
+
+The WebView drops Dolby Digital (AC-3), Dolby Digital Plus (E-AC-3), DTS and
+TrueHD on many boxes. When the TV client detects silent playback it calls
+`MeddlAndroid.playNative(json)`, which opens `PlayerActivity`: ExoPlayer
+(Media3) with Jellyfin's FFmpeg audio decoder
+(`org.jellyfin.media3:media3-ffmpeg-decoder`), which decodes these formats
+in software. Back returns the position to the page
+(`window.meddlNativeClosed(positionMs, durationMs)`), which saves it as
+viewing progress. Keep the decoder version in step with `media3` in
+`app/build.gradle.kts` (`<media3 version>+N`).

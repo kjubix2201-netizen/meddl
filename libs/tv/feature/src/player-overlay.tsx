@@ -2,6 +2,7 @@ import { ChannelLogo, Clock, TvIcon } from '@meddl/tv/ui';
 import { mediaTitle, t, tvLocale, type Media } from '@meddl/tv/util';
 import type { useLiveOverlay } from './live-overlay';
 import { AudioNotice } from './player-audio-notice';
+import { useSoundFallback } from './sound-fallback';
 import { VolumeControl } from './player-volume';
 import type { TvModel } from './use-tv';
 
@@ -39,6 +40,10 @@ export function PlayerOverlay({
 }) {
     const current = tv.playing;
     const element = tv.player.current?.video ?? null;
+    const sound = useSoundFallback(tv);
+    // Position and length of the title, also while the sound is converted.
+    const at = tv.player.current?.position ?? 0;
+    const length = tv.player.current?.length ?? NaN;
     const live = current?.kind === 'live';
     const paused = element?.paused ?? true;
     const channels = live ? tv.catalog.items.filter((m) => m.kind === 'live') : [];
@@ -114,8 +119,8 @@ export function PlayerOverlay({
                         aria-label={t('Playback position')}
                         type="range"
                         min="0"
-                        max={Number.isFinite(element?.duration) ? element!.duration : 0}
-                        value={element?.currentTime ?? 0}
+                        max={Number.isFinite(length) ? length : 0}
+                        value={at}
                         onInput={(e) =>
                             tv.player.current?.seekTo(Number(e.currentTarget.value))
                         }
@@ -125,7 +130,7 @@ export function PlayerOverlay({
                     <span class="player-time">
                         {live
                             ? clockTime(now)
-                            : `${duration(element?.currentTime ?? 0)} / ${duration(element?.duration ?? NaN)}`}
+                            : `${duration(at)} / ${duration(length)}`}
                     </span>
                     <div class="transport-center">
                         <button
@@ -174,7 +179,7 @@ export function PlayerOverlay({
                         <VolumeControl video={element} />
                     </div>
                 </div>
-                <AudioNotice video={element} />
+                <AudioNotice video={element} phase={sound.phase} onSilent={() => void sound.silent()} />
                 {tv.player.current?.restoringPosition ? (
                     <p role="status">{t('Restoring saved position…')}</p>
                 ) : null}

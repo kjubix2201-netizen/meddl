@@ -49,6 +49,7 @@ import {
     mountServerStorage,
 } from './storage/mount-server-storage';
 import type { ServerStorage } from './storage/server-storage';
+import { mountTranscode } from './transcode/transcode-router';
 export type {
     WebBackendHttpClient,
     WebBackendHttpGetOptions,
@@ -150,6 +151,9 @@ export function createWebBackendApp(
         maxDocumentBytes:
             options.maxDocumentBytes ?? DEFAULT_MAX_DOCUMENT_BYTES,
     });
+
+    // After the access guard, so starting a conversion needs the token.
+    mountTranscode(app, { corsMiddleware, providerUrlPolicy });
 
     app.options('/provider-targets', corsMiddleware);
     app.post(
