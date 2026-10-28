@@ -1,7 +1,7 @@
 import { t } from '@meddl/tv/util';
 import { useEffect, useRef, useState } from 'preact/hooks';
-
-export const RECONNECT_DELAYS = [2000, 5000, 10000, 30000];
+import { RECONNECT_DELAYS, shouldRetryOnResume } from './reconnect-policy';
+export { RECONNECT_DELAYS, shouldRetryOnResume } from './reconnect-policy';
 
 /** Bounded retries only in the foreground and outside a playback session. */
 export function useReconnect(options: {
@@ -37,8 +37,7 @@ export function useReconnect(options: {
             const current = latest.current;
             attempts.current = 0;
             setWake((n) => n + 1);
-            if (current.enabled && !current.busy && !current.playing)
-                current.retry();
+            if (shouldRetryOnResume(current)) current.retry();
         };
         window.addEventListener('online', resume);
         window.addEventListener('offline', resume);
