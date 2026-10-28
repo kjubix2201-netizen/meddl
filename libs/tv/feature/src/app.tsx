@@ -138,34 +138,37 @@ export function TvApp() {
             >
                 {cinematic ? <Backdrop item={metadata.item} /> : null}
                 <PageHeader tv={tv} />
-                {metadata.failed ? (
-                    <div class="metadata-notice" role="status">
-                        {t('TMDB is unavailable. Showing provider information.')}
-                        <button onClick={metadata.retry}>{t('Retry metadata')}</button>
-                    </div>
-                ) : null}
-                {tv.error ? (
-                    <div role="alert" class="error">
-                        <span>{tv.error}</span>
-                        {tv.errorRetry ? (
-                            <button onClick={tv.errorRetry}>
-                                {tv.errorRetryLabel}
+                {/* Notices float above every screen instead of pushing it down. */}
+                <div class="app-toasts">
+                    {metadata.failed ? (
+                        <div class="metadata-notice" role="status">
+                            {t('TMDB is unavailable. Showing provider information.')}
+                            <button onClick={metadata.retry}>{t('Retry metadata')}</button>
+                        </div>
+                    ) : null}
+                    {tv.error ? (
+                        <div role="alert" class="error">
+                            <span>{tv.error}</span>
+                            {tv.errorRetry ? (
+                                <button onClick={tv.errorRetry}>
+                                    {tv.errorRetryLabel}
+                                </button>
+                            ) : null}
+                            <button onClick={() => tv.setError('')}>{t('Dismiss')}</button>
+                            <button onClick={() => tv.navigate('sources')}>
+                                {t('Edit sources')}
                             </button>
-                        ) : null}
-                        <button onClick={() => tv.setError('')}>{t('Dismiss')}</button>
-                        <button onClick={() => tv.navigate('sources')}>
-                            {t('Edit sources')}
-                        </button>
-                    </div>
-                ) : null}
-                {tv.reconnectStatus ? (
-                    <p role="status">{tv.reconnectStatus}</p>
-                ) : null}
-                {tv.busy ? (
-                    <div class="loading" role="status">
-                        {t('Connecting to your source…')}
-                    </div>
-                ) : null}
+                        </div>
+                    ) : null}
+                    {tv.reconnectStatus ? (
+                        <p role="status">{tv.reconnectStatus}</p>
+                    ) : null}
+                    {tv.busy ? (
+                        <div class="loading" role="status">
+                            {t('Connecting to your source…')}
+                        </div>
+                    ) : null}
+                </div>
                 {needsCountry(r) ? (
                     <CountryPicker tv={tv} />
                 ) : r.view === 'home' ? (

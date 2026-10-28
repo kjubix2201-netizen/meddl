@@ -342,3 +342,49 @@ header select,
 .transport-center .play-toggle:focus {
     box-shadow: 0 0 0 0.6vh rgba(255, 255, 255, 0.35), 0 1.4vh 3vh rgba(0, 0, 0, 0.4);
 }
+
+/* ---------- Notices: floating box above every screen ---------- */
+.app-toasts {
+    position: fixed;
+    left: 50%;
+    bottom: 4vh;
+    z-index: 55;
+    width: 70vw;
+    max-width: 1200px;
+    margin-left: -35vw;
+    pointer-events: none;
+}
+@media (min-width: 1715px) {
+    .app-toasts {
+        margin-left: -600px;
+    }
+}
+.app-toasts > * {
+    pointer-events: auto;
+    margin: 1vh 0 0;
+    padding: 1.6vh 2.2vh;
+    border-radius: 1.2vh;
+    background: rgba(31, 29, 43, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 2vh 5vh rgba(0, 0, 0, 0.45);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    font-size: 2.2vh;
+}
+.app-toasts > .error {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    background: rgba(70, 24, 36, 0.95);
+    border-color: rgba(255, 120, 120, 0.4);
+}
+.app-toasts > .error > span {
+    flex: 1 1 auto;
+    margin-right: 2vh;
+}
+.app-toasts > .error button {
+    margin: 0.4vh 0 0.4vh 1vh;
+}
+.app-toasts:empty {
+    display: none;
+}
