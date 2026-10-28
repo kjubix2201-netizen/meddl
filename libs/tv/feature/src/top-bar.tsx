@@ -1,5 +1,6 @@
 import { Clock, TvIcon } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
+import { ProfileFace } from './home-portrait';
 import type { View } from './navigation';
 import type { TvModel } from './use-tv';
 
@@ -53,7 +54,7 @@ function HomeBar({ tv }: { tv: TvModel }) {
                     title={t('Sources & profile')}
                     onClick={() => tv.navigate('sources')}
                 >
-                    <TvIcon name="user" />
+                    <ProfileFace />
                 </button>
             </div>
         </header>

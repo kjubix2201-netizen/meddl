@@ -3,6 +3,7 @@ import { CatalogOrder, CatalogSortNotice } from './catalog-order';
 import { Empty, VirtualCollection, Poster, ResumeCard } from '@meddl/tv/ui';
 import { Media, Progress, t } from '@meddl/tv/util';
 import { HomeLauncher } from './home-launcher';
+import { HomePortrait } from './home-portrait';
 import { TvModel } from './use-tv';
 export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
     const items = tv.home;
@@ -20,6 +21,7 @@ export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
     ];
     return (
         <>
+            <HomePortrait />
             <HomeLauncher tv={tv} />
             {history.length ? (
                 <section>

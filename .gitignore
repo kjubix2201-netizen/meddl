@@ -99,3 +99,6 @@ vendor/embedded-mpv/*/runtime-manifest.json
 # MemPalace per-project files (issue #185)
 mempalace.yaml
 entities.json
+
+# Personal pictures for a local TV install (see home-portrait.tsx)
+apps/tv/public/local/
