@@ -97,6 +97,17 @@ jobs:
               shell: bash
               run: bash tools/ci/run-and-annotate.sh pnpm nx build web --skip-nx-cache
 
+            - name: Refresh Windows Embedded MPV runtime pin
+              # The upstream mpv-winbuild releases are deleted after ~30 days.
+              # Re-pin to the newest release (checksum from GitHub's asset
+              # digest) when the pinned one is gone or older than 14 days.
+              shell: bash
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              run: |
+                  node tools/embedded-mpv/update-windows-runtime-pin.mjs
+                  git diff --stat -- tools/embedded-mpv/windows-runtime-pin.json
+
             - name: Resolve pinned Windows Embedded MPV runtime
               id: mpv-pin
               shell: bash
