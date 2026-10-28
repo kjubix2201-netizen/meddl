@@ -133,7 +133,10 @@ export function TvApp() {
             ) : null}
             <aside hidden={tv.fullscreen || !tv.storageReady}>
                 <div class="wordmark">
-                    ip<span>tv</span>nator<small>TV EDITION</small>
+                    <img class="wordmark-logo" src="icon.png" alt="" />
+                    <span class="wordmark-text">
+                        meddl<small>TV</small>
+                    </span>
                 </div>
                 <nav aria-label="Main navigation">
                     {navigation.map(([view, label]) => (

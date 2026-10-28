@@ -106,8 +106,7 @@ export function Hero({
             </div>
             {!progress ? (
                 <span class="hero-number">
-                    IPTV<span>NATOR</span>
-                    <small>TV EDITION</small>
+                    MEDDL<span> TV</span>
                 </span>
             ) : null}
         </section>

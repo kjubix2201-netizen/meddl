@@ -5,6 +5,10 @@ import {
     ProviderClient,
     LatestRequest,
 } from '@meddl/tv/util';
+import {
+    DEFAULT_PREFERRED_REGION,
+    orderPreferredRegionFirst,
+} from '@meddl/shared/m3u-utils';
 import { Route } from './navigation';
 const empty = (): Catalog => ({ items: [], total: 0, page: 0, categories: [] });
 /** One active query survives detail navigation; a new query cancels its append lane. */
@@ -97,7 +101,17 @@ export function useCatalog(
                 page === 0 || items.length > previous.catalog.items.length;
             const next = {
                 key: current.key,
-                catalog: { ...result, items },
+                catalog: {
+                    ...result,
+                    items,
+                    // Categories of the viewer's region (Germany) come first,
+                    // as in the desktop app's "Show my region first" setting.
+                    categories: orderPreferredRegionFirst(
+                        result.categories,
+                        DEFAULT_PREFERRED_REGION,
+                        (category) => category.name
+                    ) as typeof result.categories,
+                },
                 busy: false,
                 error: '',
                 more:

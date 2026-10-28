@@ -1,13 +1,37 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('./fonts/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Poppins';
+    src: url('./fonts/Poppins-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Poppins';
+    src: url('./fonts/Poppins-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
 :root {
-    --tv-bg: #0b100f;
-    --tv-surface: #171f1d;
-    --tv-text: #eef3ef;
-    --tv-muted: #9aa9a3;
-    --tv-accent: #8ee5c2;
-    --app-focus-ring-color: var(--tv-accent);
-    --tv-line: #2a3832;
+    /* meddl brand: violet night surfaces, pink accent, logo gradient. */
+    --tv-bg: #0d0b14;
+    --tv-surface: #1a1726;
+    --tv-text: #f3f1f7;
+    --tv-muted: #a59fb5;
+    --tv-accent: #ff5a8a;
+    --tv-accent-warm: #ff8a4c;
+    --tv-gradient: linear-gradient(120deg, #ff7a3d 0%, #e6245e 52%, #7a2ad6 100%);
+    --app-focus-ring-color: #ffffff;
+    --tv-line: #2e2840;
     color-scheme: dark;
-    font-family: 'Trebuchet MS', sans-serif;
+    font-family: 'Poppins', 'Trebuchet MS', sans-serif;
     font-size: 22px;
     color: var(--tv-text);
     background: var(--tv-bg);
@@ -39,7 +63,7 @@ button {
     min-height: 56px;
 }
 button:hover {
-    background: #26362e;
+    background: #2c2636;
 }
 button:focus,
 input:focus,
@@ -57,15 +81,15 @@ button[aria-pressed='true'] {
     border-color: var(--tv-accent);
 }
 button.primary {
-    background: var(--tv-accent);
-    color: #0b2117;
+    background: var(--tv-gradient);
+    color: #ffffff;
     font-weight: 700;
 }
 input,
 select {
-    background: #17211d;
+    background: #1b1721;
     color: var(--tv-text);
-    border: 1px solid #40554a;
+    border: 1px solid #483f56;
     border-radius: 6px;
     min-height: 56px;
     padding: 12px 16px;
@@ -143,25 +167,37 @@ aside {
     bottom: 0;
     width: 230px;
     padding: 52px 22px;
-    background: #0d1411;
+    background: #100d14;
     display: flex;
     flex-direction: column;
 }
 .wordmark {
-    font-size: 31px;
-    font-weight: 700;
-    letter-spacing: -1.7px;
+    display: flex;
+    align-items: center;
     padding: 0 14px;
     margin-bottom: 56px;
-    color: var(--tv-accent);
 }
-.wordmark span {
+.wordmark-logo {
+    width: 46px;
+    height: 46px;
+    margin-right: 12px;
+    border-radius: 12px;
+    flex: none;
+}
+.wordmark-text {
+    font-size: 31px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
     color: var(--tv-text);
 }
 .wordmark small {
+    display: block;
     font-size: 11px;
+    font-weight: 600;
     letter-spacing: 5px;
-    margin-top: 8px;
+    margin-top: 6px;
+    color: var(--tv-accent);
 }
 nav {
     display: flex;
@@ -176,7 +212,7 @@ nav button {
 }
 nav button[aria-current='page'] {
     color: var(--tv-accent);
-    background: #1a2d24;
+    background: #211a2d;
 }
 .nav-icon {
     width: 38px;
@@ -188,7 +224,7 @@ nav button[aria-current='page'] {
     margin-top: auto;
     padding: 20px 14px 0;
     font-size: 12px;
-    color: #74897e;
+    color: #7c738a;
     line-height: 1.9;
     letter-spacing: 3px;
 }
@@ -225,7 +261,7 @@ header select {
     max-width: 360px;
     flex-shrink: 0;
     font-size: 17px;
-    background: rgba(11, 16, 15, 0.8);
+    background: rgba(13, 11, 16, 0.8);
 }
 .cinematic-page > * {
     position: relative;
@@ -239,7 +275,7 @@ header select {
     right: 0;
     height: 880px;
     pointer-events: none;
-    background: linear-gradient(135deg, #1c382d, var(--tv-bg) 80%);
+    background: linear-gradient(135deg, #261b39, var(--tv-bg) 80%);
 }
 .page-backdrop img,
 .backdrop-scrim {
@@ -258,14 +294,14 @@ header select {
         linear-gradient(
             0deg,
             var(--tv-bg) 0%,
-            rgba(11, 16, 15, 0.88) 12%,
-            rgba(11, 16, 15, 0) 64%
+            rgba(13, 11, 16, 0.88) 12%,
+            rgba(13, 11, 16, 0) 64%
         ),
         linear-gradient(
             90deg,
-            rgba(11, 16, 15, 0.96) 0%,
-            rgba(11, 16, 15, 0.78) 33%,
-            rgba(11, 16, 15, 0.18) 75%
+            rgba(13, 11, 16, 0.96) 0%,
+            rgba(13, 11, 16, 0.78) 33%,
+            rgba(13, 11, 16, 0.18) 75%
         );
 }
 .shelf .home-page > .page-backdrop {
@@ -293,17 +329,17 @@ header select {
     z-index: 1;
 }
 .hero h1 {
-    font-family: Georgia, serif;
-    font-size: 68px;
-    font-weight: 400;
-    letter-spacing: -2px;
+    font-family: 'Poppins', 'Trebuchet MS', sans-serif;
+    font-size: 62px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
     max-width: 720px;
     line-height: 1.05;
 }
 .hero p {
     max-width: 550px;
     font-size: 22px;
-    color: #becbc3;
+    color: #c3becb;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -351,12 +387,12 @@ header select {
     position: absolute;
     right: 42px;
     bottom: 48px;
-    color: #8ba996;
+    color: #968aaa;
     font-size: 27px;
     letter-spacing: 2px;
 }
 .hero-number span {
-    color: #b9cbbf;
+    color: #bfb9cb;
 }
 .hero-number small {
     font-size: 10px;
@@ -402,7 +438,7 @@ header select {
     height: 0;
     padding-top: 150%;
     display: block;
-    background: linear-gradient(145deg, #263e31, #141e1a);
+    background: linear-gradient(145deg, #2f253f, #18141e);
     position: relative;
     overflow: hidden;
     border-radius: 6px;
@@ -423,20 +459,21 @@ header select {
     left: 20px;
     right: 15px;
     font:
-        26px Georgia,
-        serif;
-    color: #b9cbbf;
+        600 26px 'Poppins',
+        'Trebuchet MS',
+        sans-serif;
+    color: #bfb9cb;
 }
 .poster-art small {
     position: absolute;
     z-index: 2;
     bottom: 14px;
     left: 16px;
-    background: #0b100fe6;
+    background: #0d0b10e6;
     padding: 3px 6px;
     font-size: 11px;
     letter-spacing: 2px;
-    color: #cbd9d0;
+    color: #d0cbd9;
 }
 .poster-card > strong {
     font-size: 20px;
@@ -480,7 +517,7 @@ header select {
     align-items: center;
     justify-content: center;
     color: var(--tv-accent);
-    background: #263e31;
+    background: #2f253f;
 }
 .resume-art > svg {
     width: 40px;
@@ -509,6 +546,16 @@ header select {
     line-height: 1.2;
     height: 48px;
     margin-bottom: 8px;
+}
+/* Episode title: one line, so the card keeps its height. */
+.resume-copy > .muted {
+    display: block;
+    font-size: 15px;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: -4px 0 6px;
 }
 .resume-position,
 .resume-action {
@@ -548,7 +595,7 @@ header select {
     font-size: 17px;
 }
 .favorite-types button[aria-pressed='true'] {
-    background: #1a2d24;
+    background: #211a2d;
     color: var(--tv-accent);
 }
 .station-grid {
@@ -698,7 +745,7 @@ summary {
     min-width: 240px;
     width: 240px;
     height: 360px;
-    background: #1d3025;
+    background: #241d30;
     margin-right: 55px;
     display: flex;
     align-items: center;
@@ -713,7 +760,7 @@ summary {
     max-width: 880px;
 }
 .detail-hero p {
-    color: #becbc3;
+    color: #c3becb;
     max-height: 180px;
     overflow: auto;
 }
@@ -776,8 +823,9 @@ summary {
 .episode-number {
     color: var(--tv-accent);
     font:
-        36px Georgia,
-        serif;
+        600 36px 'Poppins',
+        'Trebuchet MS',
+        sans-serif;
 }
 main.live-page {
     display: flex;
@@ -819,7 +867,7 @@ main.live-page {
 }
 .channels::-webkit-scrollbar-thumb,
 .programme-list::-webkit-scrollbar-thumb {
-    background: #40554a;
+    background: #483f56;
 }
 .channel-pane-header {
     flex-shrink: 0;
@@ -863,7 +911,7 @@ main.live-page {
     color: var(--tv-accent);
 }
 .live-category[aria-pressed='true'] {
-    background: #1c2a23;
+    background: #211c2a;
 }
 .channel {
     width: 100%;
@@ -875,11 +923,11 @@ main.live-page {
     min-height: 86px;
 }
 .channel[aria-pressed='true'] {
-    background: #1c2a23;
-    border-color: #52695c;
+    background: #211c2a;
+    border-color: #5a516a;
 }
 .channel.is-playing {
-    background: #234334;
+    background: #2f2244;
 }
 .channel-logo {
     width: 48px;
@@ -893,7 +941,7 @@ main.live-page {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #283e31;
+    background: #30273f;
     color: var(--tv-accent);
 }
 .channel-logo img {
@@ -903,7 +951,7 @@ main.live-page {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #283e31;
+    background: #30273f;
 }
 .channel-number {
     font-size: 14px;
@@ -933,7 +981,7 @@ main.live-page {
     width: 100%;
     height: 0;
     padding-bottom: 56.25%;
-    background: #050806;
+    background: #060508;
     position: relative;
     border: 1px solid var(--tv-line);
     display: flex;
@@ -952,7 +1000,7 @@ main.live-page {
     right: 18px;
     z-index: 5;
     font-size: 17px;
-    background: #17251ee6;
+    background: #1c1725e6;
 }
 .live-information .section-title h2 {
     font-size: 26px;
@@ -991,7 +1039,7 @@ main.live-page {
 .native-player {
     position: fixed;
     z-index: 3;
-    background: #000;
+    background: #000000;
 }
 .native-player.preview {
     pointer-events: none;
@@ -1015,7 +1063,7 @@ main.live-page {
     right: 0;
     top: 0;
     bottom: 0;
-    background: linear-gradient(#0009, transparent 30%, transparent 45%, #000e);
+    background: linear-gradient(#00000099, transparent 30%, transparent 45%, #000000ee);
     padding: 54px;
 }
 .player-top {
@@ -1034,7 +1082,7 @@ main.live-page {
     right: 65px;
 }
 .player-bottom h1 {
-    font-family: Georgia, serif;
+    font-family: 'Poppins', 'Trebuchet MS', sans-serif;
     font-size: 50px;
 }
 .player-bottom .seek {
@@ -1063,7 +1111,7 @@ main.live-page {
         width: 190px;
         padding: 32px 16px;
     }
-    .wordmark {
+    .wordmark-text {
         font-size: 27px;
     }
     nav button {
@@ -1140,11 +1188,10 @@ main.live-page {
         padding: 28px 10px;
     }
     .wordmark {
-        font-size: 17px;
         padding: 0;
-        letter-spacing: -1px;
+        justify-content: center;
     }
-    .wordmark small,
+    .wordmark-text,
     .side-caption {
         display: none;
     }
