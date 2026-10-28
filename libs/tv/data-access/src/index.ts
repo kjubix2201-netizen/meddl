@@ -6,6 +6,7 @@ import { M3uProvider } from './m3u';
 export * from './storage';
 export * from './player';
 export { ProviderTransport };
+export { FULL_LIST_TIMEOUT_MS, isFullListRequest } from './transport';
 export { ProviderRequestError } from './transport';
 export function createProvider(
     source: Source,

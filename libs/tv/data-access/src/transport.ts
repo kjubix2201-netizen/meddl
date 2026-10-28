@@ -8,6 +8,17 @@ export class ProviderRequestError extends Error {
         super('Provider request failed. Check the source and backend.');
     }
 }
+/**
+ * Whole-section lists (every channel, movie or series of a source) are large:
+ * many panels build them for a minute or more before answering, and the
+ * download itself takes a while. They get far more time than other requests.
+ */
+export const FULL_LIST_TIMEOUT_MS = 180000;
+const FULL_LIST_ACTIONS = new Set(['get_live_streams', 'get_vod_streams', 'get_series']);
+export function isFullListRequest(params: Record<string, string | number>): boolean {
+    return FULL_LIST_ACTIONS.has(String(params['action'] ?? '')) && params['category_id'] === undefined;
+}
+
 export class ProviderTransport {
     private targets = new Map<string, string>();
     constructor(
@@ -19,13 +30,14 @@ export class ProviderTransport {
     private async json(
         url: string,
         signal: AbortSignal,
-        init?: RequestInit
+        init?: RequestInit,
+        timeout = 35000
     ): Promise<unknown> {
         const controller = new AbortController();
         const cancel = () => controller.abort();
         signal.addEventListener('abort', cancel);
         if (signal.aborted) cancel();
-        const timer = setTimeout(cancel, 35000);
+        const timer = setTimeout(cancel, timeout);
         try {
             const response = await fetch(url, {
                 ...init,
@@ -99,7 +111,9 @@ export class ProviderTransport {
         try {
             result = (await this.json(
                 `${this.backend.replace(/\/$/, '')}/${route}?${query}`,
-                signal
+                signal,
+                undefined,
+                isFullListRequest(params) ? FULL_LIST_TIMEOUT_MS : 35000
             )) as { payload?: unknown };
         } catch (error) {
             if (

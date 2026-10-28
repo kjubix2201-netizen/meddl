@@ -25,6 +25,7 @@ import {
     reportProviderRequestFailure,
     reportProviderRequestSuccess,
     resetProviderHost,
+    xtreamRequestTimeout,
 } from './host-guard';
 import {
     collectProviderErrorCodes,
@@ -318,7 +319,7 @@ export function createWebBackendApp(
                     req.query.userAgent.trim()
                         ? { 'User-Agent': req.query.userAgent.trim() }
                         : undefined,
-                timeout: PROVIDER_REQUEST_TIMEOUT_MS.xtream,
+                timeout: xtreamRequestTimeout(req.query.action, req.query.category_id),
                 onConnect: () => {
                     connected = true;
                     reportProviderRequestConnected(hostGuard, guardToken);

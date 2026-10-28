@@ -50,7 +50,22 @@ export const PROVIDER_REQUEST_TIMEOUT_MS = {
     stalker: 15_000,
     stalkerCreateLink: 30_000,
     xtream: 30_000,
+    /**
+     * Whole-section Xtream lists (`get_live_streams`, `get_vod_streams`,
+     * `get_series` without a category): many panels assemble the complete
+     * JSON for a minute or more before sending the first byte.
+     */
+    xtreamFullList: 150_000,
 } as const;
+
+const XTREAM_FULL_LIST_ACTIONS = new Set(['get_live_streams', 'get_vod_streams', 'get_series']);
+
+/** Header timeout for one Xtream API call, by action. */
+export function xtreamRequestTimeout(action: unknown, categoryId: unknown): number {
+    return typeof action === 'string' && XTREAM_FULL_LIST_ACTIONS.has(action) && categoryId === undefined
+        ? PROVIDER_REQUEST_TIMEOUT_MS.xtreamFullList
+        : PROVIDER_REQUEST_TIMEOUT_MS.xtream;
+}
 
 /** Status used for a fast-fail, matching `normalizeProviderError`'s upstream-unreachable answer. */
 const HOST_UNREACHABLE_STATUS = 502;

@@ -97,3 +97,12 @@ test('identification rejects malformed advertised capabilities', async (t) => {
         identifyBackend('http://backend.example', new AbortController().signal)
     );
 });
+
+test('whole-section Xtream lists get the long request time, everything else the short one', async () => {
+    const { isFullListRequest, FULL_LIST_TIMEOUT_MS } = await import('@meddl/tv/data-access');
+    assert.equal(isFullListRequest({ action: 'get_vod_streams' }), true);
+    assert.equal(isFullListRequest({ action: 'get_series' }), true);
+    assert.equal(isFullListRequest({ action: 'get_live_streams', category_id: 3 }), false);
+    assert.equal(isFullListRequest({ action: 'get_vod_info', vod_id: 1 }), false);
+    assert.ok(FULL_LIST_TIMEOUT_MS > 35000);
+});
