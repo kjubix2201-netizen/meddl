@@ -53,7 +53,8 @@ jobs:
               run: node tools/build/inject-build-commit.mjs
 
             - name: Build web app
-              run: pnpm run build:frontend:pwa
+              shell: bash
+              run: bash tools/ci/run-and-annotate.sh pnpm run build:frontend:pwa
 
             - name: Upload web app
               uses: actions/upload-artifact@v7
@@ -93,7 +94,8 @@ jobs:
               run: node tools/build/inject-build-commit.mjs
 
             - name: Build frontend
-              run: pnpm nx build web --skip-nx-cache
+              shell: bash
+              run: bash tools/ci/run-and-annotate.sh pnpm nx build web --skip-nx-cache
 
             - name: Resolve pinned Windows Embedded MPV runtime
               id: mpv-pin
@@ -118,7 +120,8 @@ jobs:
                   MEDDL_EMBEDDED_MPV_PLATFORM: win32
                   MEDDL_EMBEDDED_MPV_ARCH: x64
                   MEDDL_REQUIRE_EMBEDDED_MPV: '1'
-              run: pnpm run build:backend
+              shell: bash
+              run: bash tools/ci/run-and-annotate.sh pnpm run build:backend
 
             - name: Build x64 installer only
               shell: bash
@@ -135,7 +138,8 @@ jobs:
                   MEDDL_EMBEDDED_MPV_PLATFORM: win32
                   MEDDL_EMBEDDED_MPV_ARCH: x64
                   MEDDL_REQUIRE_EMBEDDED_MPV: '1'
-              run: pnpm run make:app -- --publishPolicy=never
+              shell: bash
+              run: bash tools/ci/run-and-annotate.sh pnpm run make:app -- --publishPolicy=never
 
             - name: Verify packaged layout
               env:
