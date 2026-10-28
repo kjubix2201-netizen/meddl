@@ -105,4 +105,30 @@ describe('portal category sort', () => {
             ' SPORTS | INDIA',
         ]);
     });
+
+    it('lists preferred categories after pinned ones in every sort mode', () => {
+        const items = [
+            { id: '*', name: 'All' },
+            { id: '1', name: 'UK | News' },
+            { id: '2', name: 'DE | Sport' },
+            { id: '3', name: 'FR | Films' },
+            { id: '4', name: 'DE | Kinder' },
+        ];
+        const name = (item: { name: string }) => item.name;
+        const pinned = (item: { id: string }) => item.id === '*';
+        const preferred = (item: { name: string }) =>
+            item.name.startsWith('DE');
+        const ids = (sorted: readonly { id: string }[]) =>
+            sorted.map((item) => item.id);
+
+        expect(
+            ids(sortPortalCategoryItems(items, 'server', name, pinned, preferred))
+        ).toEqual(['*', '2', '4', '1', '3']);
+        expect(
+            ids(sortPortalCategoryItems(items, 'name-asc', name, pinned, preferred))
+        ).toEqual(['*', '4', '2', '3', '1']);
+        expect(
+            ids(sortPortalCategoryItems(items, 'name-desc', name, pinned, preferred))
+        ).toEqual(['*', '2', '4', '1', '3']);
+    });
 });

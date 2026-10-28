@@ -242,6 +242,9 @@ export const SettingsStore = signalStore(
                     stripCountryPrefix:
                         store.stripCountryPrefix?.() ??
                         DEFAULT_SETTINGS.stripCountryPrefix,
+                    preferredRegion:
+                        store.preferredRegion?.() ??
+                        DEFAULT_SETTINGS.preferredRegion,
                     theme: store.theme(),
                     mpvPlayerPath: store.mpvPlayerPath(),
                     mpvPlayerArguments: store.mpvPlayerArguments(),

@@ -77,6 +77,13 @@ export const SETTINGS_SEARCH_ENTRIES: readonly SettingsSearchEntry[] = [
         keywords: ['channel name', 'country', 'prefix', 'tag'],
     },
     {
+        id: 'preferred-region',
+        section: 'general',
+        labelKey: 'SETTINGS.PREFERRED_REGION',
+        descriptionKey: 'SETTINGS.PREFERRED_REGION_DESCRIPTION',
+        keywords: ['country', 'region', 'german', 'deutsch', 'categories', 'order', 'first'],
+    },
+    {
         id: 'portal-connectivity-guard',
         section: 'general',
         labelKey: 'SETTINGS.PORTAL_CONNECTIVITY_GUARD',

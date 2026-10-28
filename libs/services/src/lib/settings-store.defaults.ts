@@ -32,6 +32,7 @@ export const DEFAULT_SETTINGS: Settings = {
     updateChannel: 'stable',
     showExternalPlaybackBar: true,
     stripCountryPrefix: false,
+    preferredRegion: 'de',
     theme: Theme.SystemTheme,
     mpvPlayerPath: '',
     mpvPlayerArguments: '',

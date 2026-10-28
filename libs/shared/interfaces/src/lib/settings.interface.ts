@@ -213,6 +213,12 @@ export interface Settings {
     showExternalPlaybackBar?: boolean;
     /** Strip country/group prefixes like "US | " or "UK - " from channel names */
     stripCountryPrefix?: boolean;
+    /**
+     * Region whose categories / groups are listed first in Live TV, movies
+     * and series ("de", "dach", "uk", ...; "" turns it off). A missing value
+     * means "de". See `matchesPreferredRegion` in @meddl/shared/m3u-utils.
+     */
+    preferredRegion?: string;
     theme: Theme;
     mpvPlayerPath: string;
     /**

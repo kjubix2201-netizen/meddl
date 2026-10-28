@@ -6,6 +6,7 @@ import {
     ValidationErrors,
     Validators,
 } from '@angular/forms';
+import { normalizePreferredRegion } from '@meddl/shared/m3u-utils';
 import {
     AppUpdateChannel,
     CoverSize,
@@ -99,6 +100,7 @@ export function createSettingsForm(
         updateChannel: DEFAULT_APP_UPDATE_CHANNEL as AppUpdateChannel,
         showExternalPlaybackBar: true,
         stripCountryPrefix: false,
+        preferredRegion: 'de',
         theme: Theme.SystemTheme,
         mpvPlayerPath: '',
         mpvPlayerArguments: '',
@@ -196,6 +198,7 @@ export function createSettingsFromFormValue(
         updateChannel: normalizeAppUpdateChannel(value.updateChannel),
         showExternalPlaybackBar: value.showExternalPlaybackBar ?? true,
         stripCountryPrefix: value.stripCountryPrefix ?? false,
+        preferredRegion: normalizePreferredRegion(value.preferredRegion),
         theme: value.theme ?? Theme.SystemTheme,
         mpvPlayerPath: normalizeExternalPlayerPath(value.mpvPlayerPath),
         mpvPlayerArguments: normalizeExternalPlayerArguments(

@@ -256,6 +256,47 @@
                     ></mat-slide-toggle>
                 </div>
             </div>
+            <div class="setting-item" data-setting-id="preferred-region">
+                <div class="setting-item__meta">
+                    <h4 id="preferred-region-label">
+                        {{ 'SETTINGS.PREFERRED_REGION' | translate }}
+                    </h4>
+                    <p id="preferred-region-description">
+                        {{ 'SETTINGS.PREFERRED_REGION_DESCRIPTION' | translate }}
+                    </p>
+                </div>
+                <div class="setting-item__control">
+                    <mat-form-field
+                        class="settings-select"
+                        appearance="outline"
+                        subscriptSizing="dynamic"
+                    >
+                        <mat-select
+                            formControlName="preferredRegion"
+                            aria-labelledby="preferred-region-label"
+                            aria-describedby="preferred-region-description"
+                            data-test-id="select-preferred-region"
+                        >
+                            <mat-option value="" data-test-id="preferred-region-off">
+                                {{ 'SETTINGS.PREFERRED_REGION_OFF' | translate }}
+                            </mat-option>
+                            @for (
+                                option of preferredRegionOptions();
+                                track option.value
+                            ) {
+                                <mat-option
+                                    [value]="option.value"
+                                    [attr.data-test-id]="
+                                        'preferred-region-' + option.value
+                                    "
+                                >
+                                    {{ option.label }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
     </section>
 

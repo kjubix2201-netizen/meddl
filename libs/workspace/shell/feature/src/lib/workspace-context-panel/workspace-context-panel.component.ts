@@ -33,8 +33,13 @@ import {
 import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     ParentalLockService,
+    SettingsStore,
     injectTranslationTick,
 } from '@meddl/services';
+import {
+    matchesPreferredRegion,
+    normalizePreferredRegion,
+} from '@meddl/shared/m3u-utils';
 import {
     toParentalLockStalkerCategoryType,
     toParentalLockXtreamCategoryType,
@@ -348,6 +353,7 @@ export class WorkspaceContextPanelComponent {
     readonly categorySearchTerm = signal('');
     // Shared with the popover copy of this panel; see the service's note.
     private readonly categorySort = inject(PortalCategorySortStateService);
+    private readonly settingsStore = inject(SettingsStore);
     readonly categorySortMode = this.categorySort.mode;
     readonly categorySortLabelKey = computed(() =>
         this.getCategorySortLabelKey(this.categorySortMode())
@@ -393,6 +399,20 @@ export class WorkspaceContextPanelComponent {
             (this.isStalkerCategories() && this.isStalkerCategoryLoading())
     );
 
+    /** Categories of the preferred region (setting) are listed first. */
+    private readonly preferredCategoryFilter = computed(() => {
+        const region = normalizePreferredRegion(
+            this.settingsStore.preferredRegion?.()
+        );
+        if (!region) return null;
+        // Match the raw provider name: the label may have been localized.
+        return (category: WorkspaceCategoryLike) =>
+            matchesPreferredRegion(
+                category.category_name ?? category.name,
+                region
+            );
+    });
+
     readonly filteredXtreamCategories = computed(() => {
         this.languageTick();
         const cats = this.xtreamCategories();
@@ -407,7 +427,8 @@ export class WorkspaceContextPanelComponent {
             filtered,
             this.categorySortMode(),
             (category) => this.getCategoryLabel(category),
-            (category) => this.isAllCategory(category)
+            (category) => this.isAllCategory(category),
+            this.preferredCategoryFilter()
         );
     });
 
@@ -425,7 +446,8 @@ export class WorkspaceContextPanelComponent {
             filtered,
             this.categorySortMode(),
             (category) => this.getCategoryLabel(category),
-            (category) => this.isAllCategory(category)
+            (category) => this.isAllCategory(category),
+            this.preferredCategoryFilter()
         );
     });
 

@@ -24,6 +24,10 @@ import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
 import { resolveChannelEpgLookupKey } from '@meddl/m3u-state';
 import { ParentalLockService, SettingsStore } from '@meddl/services';
 import {
+    normalizePreferredRegion,
+    orderPreferredRegionFirst,
+} from '@meddl/shared/m3u-utils';
+import {
     foldSearchText,
     Channel,
     EpgProgram,
@@ -307,7 +311,12 @@ export class GroupsViewComponent {
             key,
         }));
 
-        return groups.sort(this.groupsComparator);
+        // Groups of the preferred region (setting) come first.
+        return orderPreferredRegionFirst(
+            groups.sort(this.groupsComparator),
+            normalizePreferredRegion(this.settingsStore.preferredRegion?.()),
+            (group) => group.key
+        ) as GroupView[];
     });
 
     readonly visibleGroups = computed(() => {
