@@ -1,0 +1,661 @@
+/*
+ * Phones in portrait (the iPhone home screen app, home-network-server.ts):
+ * the TV layout sizes itself to the screen height, which is far too large on
+ * a narrow, tall screen. Here sizes are in px, the sections move to a tab bar
+ * at the bottom, and multi-column screens show one column at a time.
+ * Loaded last; nothing changes on TVs or desktop windows.
+ */
+/* Portrait phones, and phones turned sideways (touch screens under 500 px high). */
+@media (max-width: 760px), (max-height: 500px) and (pointer: coarse) {
+    :root {
+        --top-bar-height: 60px;
+        --phone-tabs-height: 58px;
+        --phone-safe-bottom: env(safe-area-inset-bottom, 0px);
+        --phone-safe-top: env(safe-area-inset-top, 0px);
+    }
+    html,
+    body {
+        overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+    }
+    body {
+        font-size: 15px;
+    }
+    .tv-app {
+        width: 100vw;
+        overflow-x: hidden;
+    }
+    h1 {
+        font-size: 28px;
+        letter-spacing: -0.5px;
+        margin-bottom: 8px;
+    }
+    h2 {
+        font-size: 19px;
+        margin-bottom: 12px;
+    }
+    p {
+        line-height: 1.5;
+    }
+    button {
+        min-height: 44px;
+        padding: 10px 16px;
+        font-size: 15px;
+    }
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+        min-height: 44px;
+        line-height: 1.3;
+    }
+    select {
+        padding-top: 6px;
+        padding-bottom: 6px;
+    }
+    .muted,
+    small {
+        font-size: 13px;
+    }
+
+    /* ---------- Top bar: wordmark and tools; sections go to the bottom ---------- */
+    .top-bar,
+    .top-bar.home-bar,
+    .top-bar:not(.home-bar) {
+        height: calc(var(--top-bar-height) + var(--phone-safe-top));
+        padding: var(--phone-safe-top) 14px 0 16px;
+    }
+    /* Rows scroll below the bar on phones, so it needs a solid backing. */
+    .top-bar,
+    .top-bar.home-bar,
+    .top-bar:not(.home-bar) {
+        background: rgba(31, 29, 43, 0.94);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+    }
+    .top-bar .home-wordmark,
+    .top-bar:not(.home-bar) .home-wordmark {
+        font-size: 24px;
+    }
+    .top-bar .home-divider,
+    .top-tools .clock {
+        display: none;
+    }
+    .top-tools {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+    }
+    .top-bar button.round,
+    .home-bar button.round,
+    .top-bar:not(.home-bar) button.round {
+        width: 38px;
+        height: 38px;
+        min-height: 0;
+        margin-left: 8px;
+        padding: 0;
+    }
+    .top-bar button.round svg,
+    .home-bar button.round svg,
+    .top-bar:not(.home-bar) button.round svg {
+        width: 19px;
+        height: 19px;
+    }
+    .home-bar button.round.avatar,
+    .top-bar:not(.home-bar) button.round.avatar {
+        width: 40px;
+        height: 40px;
+        border-width: 2px;
+    }
+    .home-bar button.round.avatar svg,
+    .top-bar:not(.home-bar) button.round.avatar svg {
+        width: 20px;
+        height: 20px;
+    }
+    .search-pill {
+        height: 38px;
+        margin-left: 12px;
+        padding: 0 14px;
+        border-radius: 19px;
+        background: rgba(255, 255, 255, 0.1);
+        font-size: 15px;
+    }
+    .top-tabs {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 7;
+        height: calc(var(--phone-tabs-height) + var(--phone-safe-bottom));
+        padding: 0 8px var(--phone-safe-bottom);
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        background: rgba(24, 22, 34, 0.96);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+    }
+    .top-tabs button {
+        flex: 1 1 0;
+        height: 40px;
+        margin: 0 3px;
+        padding: 0 4px;
+        font-size: 14px;
+        text-align: center;
+        white-space: nowrap;
+        border-radius: 20px;
+    }
+    main {
+        padding: calc(var(--top-bar-height) + var(--phone-safe-top) + 6px) 16px
+            calc(var(--phone-tabs-height) + var(--phone-safe-bottom) + 18px);
+    }
+    main.home-page {
+        padding: 0 16px calc(24px + var(--phone-safe-bottom));
+    }
+    .page-header {
+        flex-wrap: wrap;
+        min-height: 0;
+        margin-bottom: 12px;
+    }
+    .page-header select,
+    header select {
+        max-width: 100%;
+        min-width: 0;
+        height: 40px;
+        font-size: 14px;
+    }
+    .page-heading h1 {
+        font-size: 26px;
+    }
+    .catalog-count {
+        font-size: 13px;
+    }
+    .error {
+        font-size: 14px;
+    }
+
+    /* ---------- Home: tiles one below the other ---------- */
+    .home-launcher {
+        height: auto;
+        min-height: 0;
+        padding-top: calc(var(--top-bar-height) + var(--phone-safe-top) + 24px);
+        display: block;
+    }
+    .launcher-row {
+        height: auto;
+        display: block;
+    }
+    .home-time {
+        display: none;
+    }
+    .launcher-tiles {
+        display: block;
+    }
+    .launcher-tile,
+    .launcher-tile:focus {
+        width: 100%;
+        height: 92px;
+        margin: 0 0 12px;
+        padding: 0 18px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: 12px;
+    }
+    .launcher-tile:focus {
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .launcher-tile > .launcher-focus-bar,
+    .launcher-tile::after {
+        display: none;
+    }
+    .launcher-icon {
+        margin: 0 16px 0 0;
+    }
+    .launcher-icon svg {
+        width: 38px;
+        height: 38px;
+    }
+    .launcher-tile strong {
+        font-size: 22px;
+    }
+    .launcher-tile small {
+        margin: 0 0 0 auto;
+        font-size: 13px;
+    }
+    .home-page > .page-backdrop,
+    .home-page > .home-portrait {
+        height: 100%;
+        min-height: 100vh;
+    }
+    .home-portrait img {
+        right: -20vw;
+        height: 70vh;
+    }
+    .home-page > section:not(.home-launcher) {
+        margin-top: 18px;
+    }
+
+    /* ---------- Rows and grids of titles ---------- */
+    .rail {
+        padding: 4px 0 8px;
+    }
+    .rail .poster-card {
+        width: 118px;
+        min-width: 118px;
+        margin-right: 12px;
+    }
+    .poster-card > strong {
+        font-size: 13px;
+        margin-top: 6px;
+    }
+    .poster-card > .muted {
+        font-size: 11px;
+        margin-top: 2px;
+    }
+    .poster-art span,
+    .poster-art strong {
+        font-size: 14px;
+    }
+    .poster-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-gap: 16px 10px;
+        padding: 4px 2px;
+    }
+    .resume-card {
+        width: 260px;
+        min-width: 260px;
+        height: 112px;
+        margin-right: 12px;
+    }
+    .resume-art {
+        width: 75px;
+        min-width: 75px;
+        height: 112px;
+    }
+    .resume-art > svg {
+        width: 26px;
+        height: 26px;
+    }
+    .resume-copy {
+        padding: 10px 12px;
+    }
+    .resume-copy strong {
+        font-size: 15px;
+        height: auto;
+        max-height: 36px;
+    }
+    .resume-copy > .muted {
+        font-size: 12px;
+    }
+    .catalog-filters {
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+    .catalog-filters label {
+        width: 100%;
+        margin: 0 0 8px;
+        font-size: 13px;
+    }
+    .catalog-filters label:nth-child(n + 2) {
+        width: calc(50% - 4px);
+    }
+    .catalog-filters label:nth-child(2) {
+        margin-right: 8px;
+    }
+    .catalog-filters input,
+    .catalog-filters select {
+        height: 42px;
+        margin-top: 4px;
+    }
+    .filters,
+    .favorite-types {
+        flex-wrap: wrap;
+    }
+    .filters button,
+    .favorite-types button {
+        margin: 0 6px 6px 0;
+        min-width: 0;
+    }
+
+    /* ---------- Countries ---------- */
+    .country-picker-header h1 {
+        font-size: 26px;
+    }
+    .country-picker-header p {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+    .country-list {
+        width: 100%;
+        padding: 4px 0 24px;
+    }
+    .country-row {
+        height: 60px;
+        padding: 0 12px;
+    }
+    .country-row .flag {
+        width: 40px;
+        height: 40px;
+        margin-right: 14px;
+        transform: none;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.16);
+    }
+    .country-row:focus .flag {
+        transform: none;
+    }
+    .country-row strong,
+    .country-row span {
+        font-size: 17px;
+    }
+    .country-row small {
+        font-size: 12px;
+    }
+    .country-chip {
+        font-size: 14px;
+    }
+
+    /* ---------- Live TV: categories, then preview and channels ---------- */
+    main.live-page {
+        overflow: hidden;
+    }
+    .live-layout,
+    .live-layout.shows-categories,
+    .live-layout.shows-channels {
+        display: flex;
+        flex-direction: column;
+        grid-gap: 0;
+    }
+    .live-layout.shows-categories .channel-column,
+    .live-layout.shows-categories .live-information,
+    .live-layout.shows-channels .category-column {
+        display: none;
+    }
+    .category-column {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .category-column h2 {
+        font-size: 19px;
+        min-height: 0;
+        margin-bottom: 8px;
+    }
+    .category-column .category-list,
+    .channel-column .channels {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 2px;
+    }
+    .live-information {
+        order: -1;
+        flex: 0 0 auto;
+        margin-bottom: 10px;
+        background: transparent;
+        border: none;
+        padding: 0;
+    }
+    .live-information .preview-placeholder {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        min-height: 0;
+        margin: 0;
+        font-size: 13px;
+    }
+    .live-information .section-title,
+    .live-information .programme-list {
+        display: none;
+    }
+    .preview-open {
+        min-height: 34px;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+    .channel-column {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+    .channel-pane-header {
+        padding: 0 2px 8px;
+    }
+    .channel-pane-header button {
+        min-height: 40px;
+        font-size: 15px;
+    }
+    .channel-pane-header .muted {
+        display: none;
+    }
+    .live-category,
+    .channel,
+    .channel-tile {
+        min-height: 56px;
+        padding: 8px 12px;
+        margin-bottom: 6px;
+        font-size: 15px;
+    }
+    .live-category strong,
+    .channel-tile strong {
+        font-size: 15px;
+    }
+    .live-category small,
+    .channel-tile small {
+        font-size: 12px;
+    }
+    .channel-tile .channel-logo,
+    .channel .channel-logo {
+        width: 54px;
+        height: 36px;
+        margin-right: 12px;
+    }
+    .live-category .flag {
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
+    }
+
+    /* ---------- Detail pages ---------- */
+    .detail-hero {
+        display: block;
+        min-height: 0;
+        padding-top: 12px;
+    }
+    .detail-poster {
+        width: 120px;
+        margin-bottom: 14px;
+    }
+    .detail-hero h1 {
+        font-size: 28px;
+    }
+    .detail-hero p {
+        font-size: 14px;
+    }
+    .eyebrow {
+        font-size: 12px;
+    }
+    .detail-hero .actions {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .detail-hero .actions button {
+        margin: 0 8px 8px 0;
+    }
+    .episode-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* ---------- Settings and sources ---------- */
+    .settings-workspace {
+        display: block;
+    }
+    .settings-categories {
+        display: flex;
+        overflow-x: auto;
+        margin-bottom: 12px;
+    }
+    .settings-categories {
+        width: auto;
+        margin: 0 -16px 12px;
+        padding: 4px 16px;
+    }
+    .settings-categories button {
+        width: auto;
+        flex: 0 0 auto;
+        min-height: 40px;
+        margin: 0 8px 0 0;
+        padding: 8px 14px;
+    }
+    .settings-categories button small {
+        display: none;
+    }
+    .settings-workspace > [role='tabpanel'] {
+        padding: 16px;
+    }
+    .source-form,
+    .backend-connection,
+    .tmdb-settings {
+        padding: 16px;
+    }
+    .source-row {
+        flex-wrap: wrap;
+    }
+    .home-network-share {
+        display: block;
+    }
+
+    /* ---------- Player ---------- */
+    .player-controls {
+        padding: calc(var(--phone-safe-top) + 10px) 14px calc(var(--phone-safe-bottom) + 14px);
+        font-size: 14px;
+    }
+    .player-top .clock {
+        font-size: 16px;
+    }
+    .player-top-left .channel-logo {
+        width: 44px;
+        height: 44px;
+        margin-left: 10px;
+    }
+    .player-live-actions button {
+        min-height: 38px;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+    .player-bottom {
+        left: 14px;
+        right: 14px;
+        bottom: calc(var(--phone-safe-bottom) + 14px);
+    }
+    .player-bottom h1 {
+        margin: 6px 0 2px;
+        font-size: 20px;
+    }
+    .player-subtitle {
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+    .player-transport {
+        flex-wrap: wrap;
+    }
+    .player-time {
+        flex: 1 0 100%;
+        margin: 4px 0 6px;
+        font-size: 13px;
+    }
+    .transport-center {
+        flex: 1 1 auto;
+    }
+    .player-controls button.round,
+    .transport-center button.round {
+        width: 44px;
+        height: 44px;
+        min-height: 0;
+        margin: 0 8px 0 0;
+        padding: 0;
+    }
+    .transport-center .play-toggle {
+        width: 54px;
+        height: 54px;
+    }
+    .player-controls button.round svg {
+        width: 20px;
+        height: 20px;
+    }
+    .transport-right {
+        flex: 0 0 auto;
+    }
+    .transport-right > button:not(.round) {
+        min-height: 40px;
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+    /* Phones change the volume with their own buttons. */
+    .transport-right .player-volume {
+        display: none;
+    }
+    .seek-preview {
+        bottom: 22px;
+        padding: 3px 8px;
+        font-size: 12px;
+    }
+    .audio-notice,
+    .player-bottom [role='status'],
+    .player-bottom .error {
+        font-size: 13px;
+    }
+
+    /* ---------- Windows above everything ---------- */
+    .loading-panel {
+        width: calc(100vw - 32px);
+        padding: 22px 18px;
+    }
+    .loading-panel h2 {
+        font-size: 19px;
+    }
+    .app-toasts {
+        left: 12px;
+        right: 12px;
+        width: auto;
+        margin-left: 0;
+        bottom: calc(var(--phone-tabs-height) + var(--phone-safe-bottom) + 10px);
+    }
+    .app-toasts > * {
+        font-size: 14px;
+        padding: 12px 14px;
+    }
+}
+
+/* Phones turned sideways: more room across, little in height. */
+@media (max-height: 500px) and (pointer: coarse) and (orientation: landscape) {
+    .poster-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .catalog-filters label,
+    .catalog-filters label:nth-child(n + 2) {
+        width: calc(33.3% - 6px);
+        margin: 0 8px 8px 0;
+    }
+    .catalog-filters label:last-child {
+        margin-right: 0;
+    }
+    .launcher-tiles {
+        display: flex;
+    }
+    .launcher-tile,
+    .launcher-tile:focus {
+        flex: 1 1 0;
+        width: auto;
+        margin-right: 10px;
+    }
+    .launcher-tile:last-child {
+        margin-right: 0;
+    }
+    .launcher-tile small {
+        display: none;
+    }
+    .detail-poster {
+        display: none;
+    }
+}

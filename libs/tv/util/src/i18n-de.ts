@@ -494,4 +494,21 @@ export const DE: Readonly<Record<string, string>> = {
     'Dolby / DTS sound through the meddl player': 'Dolby-/DTS-Ton über den meddl-Player',
     'Space: pause · ↑↓: volume · Esc: back': 'Leertaste: Pause · ↑↓: Lautstärke · Esc: zurück',
     'Space: pause · ←→: 10 s · ↑↓: volume · Esc: back': 'Leertaste: Pause · ←→: 10 s · ↑↓: Lautstärke · Esc: zurück',
+    'iPhone and phones': 'iPhone und Handys',
+    'Share meddl in your home network. Phones and tablets then open it in the browser, with this computer as the server.':
+        'Gib meddl in deinem Heimnetz frei. Handys und Tablets öffnen es dann im Browser, dieser Computer ist dabei der Server.',
+    'Share in the home network': 'Im Heimnetz freigeben',
+    'Sharing could not start: {reason}': 'Die Freigabe konnte nicht starten: {reason}',
+    'This computer is not connected to a home network.': 'Dieser Computer ist mit keinem Heimnetz verbunden.',
+    'QR code with the address of meddl': 'QR-Code mit der Adresse von meddl',
+    'On the iPhone, open this address in Safari:': 'Öffne auf dem iPhone diese Adresse in Safari:',
+    'Scan the QR code with the camera or type the address.': 'Scanne den QR-Code mit der Kamera oder tippe die Adresse ein.',
+    'Tap Share, then "Add to Home Screen".': 'Tippe auf „Teilen“ und dann auf „Zum Home-Bildschirm“.',
+    'Add your source once on the iPhone. It works while this computer runs meddl and the iPhone is in the same Wi-Fi.':
+        'Trage deine Quelle einmal auf dem iPhone ein. Es funktioniert, solange meddl auf diesem Computer läuft und das iPhone im selben WLAN ist.',
+    'If Windows asks, allow meddl in private networks.': 'Wenn Windows fragt, erlaube meddl in privaten Netzwerken.',
+    Movie: 'Film',
+    Episode: 'Folge',
+    'meddl runs through the meddl app on your computer in the home network.':
+        'meddl läuft über die meddl-App auf deinem Computer im Heimnetz.',
 };

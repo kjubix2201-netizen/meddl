@@ -59,7 +59,7 @@ export function Live({
     const saved = !!selected && tv.data.favorites.some((m) => m.id === selected.id);
     return (
         <div
-            class="live-layout"
+            class={`live-layout ${browse.categoriesOpen ? 'shows-categories' : 'shows-channels'}`}
             onKeyDown={(event) => {
                 if (
                     !tv.fullscreen &&

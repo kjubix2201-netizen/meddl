@@ -38,5 +38,5 @@ export * from './library-sources';
 export * from './weather';
 export { CachedProvider } from './cached-provider';
 export { LocalTransport } from './local-transport';
-export { directFetch, localServerAvailable } from './direct-fetch';
+export { directFetch, localServerAvailable, servedByMeddlApp } from './direct-fetch';
 export * from './desktop-mpv';

@@ -1,0 +1,10 @@
+{
+    "name": "meddl",
+    "short_name": "meddl",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#1f1d2b",
+    "theme_color": "#1f1d2b",
+    "icons": [{ "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }]
+}

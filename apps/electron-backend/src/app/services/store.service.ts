@@ -72,6 +72,9 @@ export const EMBEDDED_MPV_EXTRA_OPTIONS = 'EMBEDDED_MPV_EXTRA_OPTIONS';
  */
 export const EMBEDDED_MPV_AUTO_RECONNECT = 'EMBEDDED_MPV_AUTO_RECONNECT';
 
+/** Desktop TV interface: share meddl in the home network (home-network-server.ts). */
+export const HOME_NETWORK_SHARING = 'HOME_NETWORK_SHARING';
+
 export type StoreType = {
     [WINDOW_BOUNDS]: Electron.Rectangle;
     [ZOOM_LEVEL]: number;
@@ -89,6 +92,7 @@ export type StoreType = {
     [PARENTAL_LOCK_ENABLED]: boolean;
     [APP_UPDATE_CHANNEL]: AppUpdateChannel;
     [TRUSTED_LOCAL_EPG_SOURCES]: string[];
+    [HOME_NETWORK_SHARING]: boolean;
 };
 
 // Export singleton store instance

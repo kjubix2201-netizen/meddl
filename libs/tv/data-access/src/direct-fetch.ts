@@ -2,8 +2,10 @@
  * Provider requests without a meddl server. A web page may not read answers
  * from IPTV providers (they send no CORS headers), so the native app shells
  * offer a direct line: the Android TV app answers same-origin requests to
- * `/__meddl/fetch` by fetching the target itself (MainActivity), and the
- * desktop app exposes the same through its preload bridge.
+ * `/__meddl/fetch` by fetching the target itself (MainActivity), the
+ * desktop app exposes the same through its preload bridge, and pages the
+ * desktop app shares in the home network (phones, the iPhone home screen
+ * app) get `/__meddl/fetch` from its home network server.
  */
 type AndroidShell = { hasDirectFetch?: () => boolean };
 type DesktopShell = {
@@ -14,15 +16,23 @@ type DesktopShell = {
     ) => Promise<{ status: number; body: string }>;
 };
 
+type ServedPage = { directFetch?: boolean };
+
 function shells() {
-    const w = window as unknown as { MeddlAndroid?: AndroidShell; meddlDesktop?: DesktopShell };
-    return { android: w.MeddlAndroid, desktop: w.meddlDesktop };
+    const w = window as unknown as { MeddlAndroid?: AndroidShell; meddlDesktop?: DesktopShell; meddlServed?: ServedPage };
+    return { android: w.MeddlAndroid, desktop: w.meddlDesktop, served: w.meddlServed };
+}
+
+/** True on a page the desktop app shares in the home network. */
+export function servedByMeddlApp(): boolean {
+    return typeof window !== 'undefined' && shells().served?.directFetch === true;
 }
 
 /** True inside a meddl app that talks to providers itself. */
 export function localServerAvailable(): boolean {
     if (typeof window === 'undefined') return false;
-    const { android, desktop } = shells();
+    const { android, desktop, served } = shells();
+    if (served?.directFetch === true) return true;
     try {
         if (android?.hasDirectFetch?.()) return true;
     } catch {

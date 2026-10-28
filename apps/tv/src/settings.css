@@ -123,3 +123,28 @@
     z-index: 20;
     background: rgba(0, 0, 0, 0.65);
 }
+
+/* Desktop app: Settings → Connection → iPhone and phones */
+.home-network {
+    margin-top: 3vh;
+}
+.home-network-share {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 2vh;
+}
+.home-network-share .pairing-qr {
+    width: 22vh;
+    height: 22vh;
+    margin-right: 3vh;
+    border-radius: 1vh;
+    background: #ffffff;
+    flex: 0 0 auto;
+}
+.home-network-share strong {
+    font-weight: 500;
+    user-select: all;
+}
+.home-network-share ol {
+    padding-left: 2.4vh;
+}

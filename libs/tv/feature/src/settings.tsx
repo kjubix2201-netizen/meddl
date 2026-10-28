@@ -7,8 +7,9 @@ import { DirectAccessProbe } from './direct-probe';
 import { TmdbSettings } from './tmdb-settings';
 import { SettingsPreferences } from './settings-preferences';
 import { LanguageSetting } from './language-setting';
-import { localServerAvailable } from '@meddl/tv/data-access';
+import { localServerAvailable, servedByMeddlApp } from '@meddl/tv/data-access';
 import { WeatherSetting } from './weather-setting';
+import { HomeNetworkSetting, homeNetworkSharingAvailable } from './home-network-setting';
 import {
     settingsCategories,
     SettingsMemory,
@@ -87,8 +88,11 @@ export function Settings({
                                 <>
                                     <h2>{t('Built-in server')}</h2>
                                     <p class="muted">
-                                        {t('This app talks to your provider directly. No meddl server is needed.')}
+                                        {servedByMeddlApp()
+                                            ? t('meddl runs through the meddl app on your computer in the home network.')
+                                            : t('This app talks to your provider directly. No meddl server is needed.')}
                                     </p>
+                                    {homeNetworkSharingAvailable() ? <HomeNetworkSetting /> : null}
                                 </>
                             ) : (
                                 <>

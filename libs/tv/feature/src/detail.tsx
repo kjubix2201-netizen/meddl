@@ -4,6 +4,9 @@ import { TvMetadata } from '@meddl/tv/data-access';
 import { mediaTitle, t } from '@meddl/tv/util';
 import { MetadataCredits } from './metadata-credits';
 import { useEpisodeMetadata } from './use-episode-metadata';
+
+const KIND_LABELS: Record<string, string> = { movie: 'Movie', series: 'Series', episode: 'Episode', live: 'Live TV' };
+
 export function Detail({
     tv,
     metadataClient,
@@ -44,7 +47,7 @@ export function Detail({
                 </div>
                 <div>
                     <span class="eyebrow">
-                        {item.kind.toUpperCase()}{' '}
+                        {t(KIND_LABELS[item.kind] ?? 'Movie').toUpperCase()}{' '}
                         {item.year ? `· ${item.year}` : ''}
                     </span>
                     <h1>{mediaTitle(item)}</h1>

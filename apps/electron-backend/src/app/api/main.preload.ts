@@ -1252,4 +1252,6 @@ contextBridge.exposeInMainWorld('electron', wrapElectronApi(electronApi));
 contextBridge.exposeInMainWorld('meddlDesktop', {
     directFetch: (url: string, headers: Record<string, string>, timeoutMs: number) =>
         ipcRenderer.invoke('meddl:tv-direct-fetch', { url, headers, timeoutMs }),
+    homeNetworkStatus: () => ipcRenderer.invoke('meddl:home-network-status'),
+    setHomeNetwork: (enabled: boolean) => ipcRenderer.invoke('meddl:home-network-set', enabled === true),
 });
