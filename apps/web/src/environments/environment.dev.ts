@@ -9,5 +9,5 @@ export const AppConfig = {
     production: false,
     environment: 'DEV',
     version: appVersion,
-    BACKEND_URL: 'http://localhost:3000',
+    BACKEND_URL: 'http://localhost:3333',
 };

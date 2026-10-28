@@ -4,5 +4,7 @@ export const AppConfig = {
     production: true,
     environment: 'PROD',
     version: appVersion,
-    BACKEND_URL: 'https://meddl-playlist-parser-api.vercel.app',
+    // Same-origin backend (Docker image / reverse proxy). Self-hosted
+    // deployments override it at runtime via assets/app-config.js.
+    BACKEND_URL: '/api',
 };
