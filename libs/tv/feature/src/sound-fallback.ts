@@ -18,7 +18,7 @@ function androidBridge(): AndroidBridge | undefined {
  * Silent sound (Dolby Digital, DTS … the page cannot decode): the Android
  * app hands the stream to its native player and the desktop app to its MPV
  * player (desktop-player.tsx); both decode these formats and continue at the
- * same position. A browser without Dolby support shows a hint to use the
+ * same position, also when the page cannot play the stream at all. A browser without Dolby support shows a hint to use the
  * meddl apps instead.
  */
 export function useSoundFallback(tv: TvModel) {
@@ -49,6 +49,16 @@ export function useSoundFallback(tv: TvModel) {
             delete (window as unknown as { meddlNativeClosed?: NativeClosed }).meddlNativeClosed;
         };
     }, []);
+
+    // The page cannot play the stream at all (live .ts, unsupported codecs):
+    // the app's own player takes over instead of showing the error.
+    useEffect(() => {
+        const failed = /^(This stream could not be played|Playback did not start)/.test(tv.error);
+        if (failed && item && phase === 'idle' && (androidBridge()?.playNative || desktopMpvAvailable())) {
+            silent();
+            tv.setError('');
+        }
+    }, [tv.error, phase, item?.id]);
 
     function silent() {
         const player = tv.player.current;
