@@ -101,9 +101,6 @@
 .next-banner button {
     margin-left: 1.2vh;
 }
-.audio-notice.is-converting,
-.audio-notice.is-preparing,
-.audio-notice.is-native,
-.audio-notice.is-server {
+.audio-notice.is-native {
     color: rgba(255, 255, 255, 0.85);
 }

@@ -19,14 +19,10 @@ type DecodeCounters = HTMLVideoElement & {
 export function AudioNotice({
     video,
     phase,
-    progress,
-    reason,
     onSilent,
 }: {
     video: HTMLVideoElement | null;
     phase: SoundPhase;
-    progress?: number;
-    reason?: string;
     onSilent: () => void;
 }) {
     const [silent, setSilent] = useState(false);
@@ -58,21 +54,11 @@ export function AudioNotice({
     }, [silent, phase]);
 
     const message =
-        phase === 'converting'
-            ? t('Converting the sound for this device…')
-            : phase === 'preparing'
-              ? progress !== undefined
-                  ? t('Setting up the sound conversion once on your meddl server… {percent} %', { percent: progress })
-                  : t('Setting up the sound conversion once on your meddl server…')
-            : phase === 'native'
-              ? t('Opening the meddl player with Dolby / DTS sound…')
-              : phase === 'server'
-                ? t('Sound converted by your meddl server.')
-                : phase === 'unavailable' && silent
-                  ? reason
-                      ? t('No sound: this stream uses Dolby Digital or DTS, and converting it failed: {reason}', { reason: t(reason) })
-                      : t('No sound: this stream uses Dolby Digital or DTS. Connect a meddl server to convert it, or use the meddl desktop app.')
-                  : '';
+        phase === 'native'
+            ? t('Opening the meddl player with Dolby / DTS sound…')
+            : phase === 'unavailable' && silent
+              ? t('No sound: this stream uses Dolby Digital or DTS, which this browser cannot play. Watch it in the meddl desktop app or the meddl Android TV app; Microsoft Edge plays Dolby Digital too.')
+              : '';
     if (!message) return null;
     return (
         <p role="status" class={`audio-notice is-${phase}`}>

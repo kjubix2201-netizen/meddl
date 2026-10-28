@@ -36,4 +36,3 @@ export * from './library';
 export * from './library-sources';
 export * from './weather';
 export { CachedProvider } from './cached-provider';
-export { startConversion, ConversionPreparing, type Conversion } from './sound-conversion';

@@ -39,20 +39,13 @@ docker compose -f docker/docker-compose.yml up --build -d
 Danach läuft meddl unter <http://localhost:4333>. Details:
 [`docker/README.md`](docker/README.md).
 
-### Ton bei Dolby / DTS (FFmpeg)
+### Ton bei Dolby / DTS
 
-Browser spielen Dolby Digital und DTS ohne Ton ab. Der meddl-Server wandelt
-den Ton solcher Streams automatisch in AAC um (Bild unverändert) – ohne dass
-jemand etwas installieren muss:
-
-- **Docker:** FFmpeg ist im Image enthalten.
-- **Windows:** Beim ersten Bedarf lädt der Server einmalig die freie
-  LGPL-Version von FFmpeg (ca. 100 MB) nach `%LOCALAPPDATA%\meddl\ffmpeg`.
-- **Linux ohne Docker:** FFmpeg aus der Paketverwaltung, z. B.
-  `sudo apt install ffmpeg`.
-
-Ein eigenes FFmpeg lässt sich mit `MEDDL_FFMPEG` / `MEDDL_FFPROBE` setzen.
-Die Android-TV-/Fire-TV-App und die Desktop-App spielen Dolby/DTS selbst ab.
+Browser wie Chrome, Brave und Firefox spielen Dolby Digital und DTS ohne Ton
+ab. Für solche Streams die meddl-Apps nutzen: die Desktop-App (eingebettetes
+MPV) und die Android-TV-/Fire-TV-App (eigener Player mit FFmpeg-Decoder)
+spielen Dolby und DTS selbst ab. Microsoft Edge und Safari können Dolby
+Digital (nicht DTS) auch direkt.
 
 ## Entwicklung
 

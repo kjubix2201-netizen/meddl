@@ -43,7 +43,7 @@ export function PlayerOverlay({
     const current = tv.playing;
     const element = tv.player.current?.video ?? null;
     const sound = useSoundFallback(tv);
-    // Position and length of the title, also while the sound is converted.
+    // Position and length of the title.
     const at = tv.player.current?.position ?? 0;
     const length = tv.player.current?.length ?? NaN;
     const nextEpisode = useNextEpisode(tv, element);
@@ -218,13 +218,7 @@ export function PlayerOverlay({
                         </button>
                     </div>
                 ) : null}
-                <AudioNotice
-                    video={element}
-                    phase={sound.phase}
-                    progress={sound.progress}
-                    reason={sound.reason}
-                    onSilent={() => void sound.silent()}
-                />
+                <AudioNotice video={element} phase={sound.phase} onSilent={sound.silent} />
                 {tv.player.current?.restoringPosition ? (
                     <p role="status">{t('Restoring saved position…')}</p>
                 ) : null}
