@@ -129,7 +129,8 @@ main.home-page::-webkit-scrollbar {
             rgba(38, 36, 51, 0.2) 100%
         ),
         linear-gradient(0deg, #1f1d2b 0%, rgba(31, 29, 43, 0) 22%),
-        linear-gradient(180deg, rgba(31, 29, 43, 0.7) 0%, rgba(31, 29, 43, 0) 30%);
+        linear-gradient(180deg, rgba(31, 29, 43, 0.7) 0%, rgba(31, 29, 43, 0) 30%),
+        linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
 }
 
 /* ---------- Launcher ---------- */
@@ -372,7 +373,9 @@ main.home-page::-webkit-scrollbar {
     bottom: 0;
     background:
         linear-gradient(90deg, rgba(38, 36, 51, 0.9) 0%, rgba(38, 36, 51, 0.35) 45%, rgba(38, 36, 51, 0) 70%),
-        linear-gradient(0deg, rgba(31, 29, 43, 0.85) 0%, rgba(31, 29, 43, 0) 30%);
+        linear-gradient(0deg, rgba(31, 29, 43, 0.85) 0%, rgba(31, 29, 43, 0) 30%),
+        /* Black veil: keeps the picture in the background, the menu in focus. */
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45));
 }
 .home-bar button.round.avatar {
     overflow: hidden;
