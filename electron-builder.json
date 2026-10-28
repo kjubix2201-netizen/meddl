@@ -35,6 +35,11 @@
             "to": "remote-control-web",
             "filter": ["**/*"]
         },
+        {
+            "from": "dist/apps/tv",
+            "to": "tv",
+            "filter": ["**/*"]
+        },
         "electron-backend/**/*",
         "!electron-backend/native{,/**/*}",
         "web/**/*",

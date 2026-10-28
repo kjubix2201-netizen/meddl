@@ -653,7 +653,7 @@ describe('Electron app security helpers', () => {
 
     describe('renderer reload recovery', () => {
         const rendererRoot = path.dirname(
-            path.resolve(__dirname, '..', 'web', 'index.html')
+            path.resolve(__dirname, '..', 'tv', 'index.html')
         );
         const routedUrl = pathToFileURL(
             path.join(rendererRoot, 'workspace', 'sources')

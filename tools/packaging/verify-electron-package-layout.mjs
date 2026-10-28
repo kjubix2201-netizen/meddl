@@ -484,6 +484,8 @@ const REQUIRED_MAIN_PROCESS_ENTRIES = [
     '/electron-backend/main.app.js',
     '/electron-backend/deferred-events.js',
     '/electron-backend/main.preload.js',
+    // The TV interface is the desktop UI (app.ts useTvInterface).
+    '/tv/index.html',
 ];
 
 function verifyPackagedMainProcessEntries(resourceDir, errors) {

@@ -17,6 +17,7 @@ import { readCompileCacheOutcome } from './app/services/compile-cache';
 import { applyElectronNetworkDefaults } from './app/util/network-defaults';
 import { registerStaticHeaderShims } from './app/services/request-header-overrides.service';
 import WindowEvents from './app/events/window.events';
+import { registerTvDirectFetchHandler } from './app/events/tv-direct-fetch.events';
 import { bootstrapWindowCloseGuard } from './app/services/window-close-guard.service';
 import { environment } from './environments/environment';
 import {
@@ -129,6 +130,7 @@ export default class Main {
         registerStaticHeaderShims();
         WindowEvents.bootstrapWindowEvents();
         PlaylistOpenEvents.bootstrapPlaylistOpenEvents();
+        registerTvDirectFetchHandler();
 
         const deferred = createDeferredBootstrap<
             DeferredEventsModule,

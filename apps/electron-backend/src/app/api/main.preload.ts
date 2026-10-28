@@ -1247,3 +1247,9 @@ applyPersistedZoomLevel({
 });
 
 contextBridge.exposeInMainWorld('electron', wrapElectronApi(electronApi));
+
+// Built-in server for the TV interface (libs/tv/data-access/direct-fetch.ts).
+contextBridge.exposeInMainWorld('meddlDesktop', {
+    directFetch: (url: string, headers: Record<string, string>, timeoutMs: number) =>
+        ipcRenderer.invoke('meddl:tv-direct-fetch', { url, headers, timeoutMs }),
+});

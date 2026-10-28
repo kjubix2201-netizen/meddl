@@ -63,8 +63,18 @@ function parseUrl(url: string): URL | null {
     }
 }
 
+/**
+ * The meddl TV interface (apps/tv, packaged as `tv/`) is the desktop UI;
+ * MEDDL_CLASSIC_UI=1 opens the previous interface instead.
+ */
+export function useTvInterface(): boolean {
+    return process.env['MEDDL_CLASSIC_UI'] !== '1';
+}
+
 function getPackagedRendererIndexPath(): string {
-    return resolve(__dirname, '..', rendererAppName, 'index.html');
+    return useTvInterface()
+        ? resolve(__dirname, '..', 'tv', 'index.html')
+        : resolve(__dirname, '..', rendererAppName, 'index.html');
 }
 
 function getFilePathFromUrl(url: URL): string | null {
@@ -399,6 +409,11 @@ export default class App {
      * and snapping keep working.
      */
     private static getPlatformTitleBarOptions(): Electron.BrowserWindowConstructorOptions {
+        // The TV interface draws no window controls: keep the native frame.
+        if (useTvInterface()) {
+            return {};
+        }
+
         if (process.platform === 'darwin') {
             return {
                 titleBarStyle: 'hidden',
