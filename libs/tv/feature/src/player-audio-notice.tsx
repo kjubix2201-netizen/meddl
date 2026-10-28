@@ -20,11 +20,13 @@ export function AudioNotice({
     video,
     phase,
     progress,
+    reason,
     onSilent,
 }: {
     video: HTMLVideoElement | null;
     phase: SoundPhase;
     progress?: number;
+    reason?: string;
     onSilent: () => void;
 }) {
     const [silent, setSilent] = useState(false);
@@ -67,7 +69,9 @@ export function AudioNotice({
               : phase === 'server'
                 ? t('Sound converted by your meddl server.')
                 : phase === 'unavailable' && silent
-                  ? t('No sound: this stream uses Dolby Digital or DTS. Install FFmpeg on the computer running the meddl server to convert it automatically, or use the meddl desktop app.')
+                  ? reason
+                      ? t('No sound: this stream uses Dolby Digital or DTS, and converting it failed: {reason}', { reason: t(reason) })
+                      : t('No sound: this stream uses Dolby Digital or DTS. Connect a meddl server to convert it, or use the meddl desktop app.')
                   : '';
     if (!message) return null;
     return (

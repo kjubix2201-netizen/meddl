@@ -23,13 +23,14 @@ function androidBridge(): AndroidBridge | undefined {
  * sound to AAC and the title continues at the same position.
  */
 export function useSoundFallback(tv: TvModel) {
-    const [state, setState] = useState<{ id: string; phase: SoundPhase; progress?: number }>({
+    const [state, setState] = useState<{ id: string; phase: SoundPhase; progress?: number; reason?: string }>({
         id: '',
         phase: 'idle',
     });
     const item = tv.playing;
     const phase: SoundPhase = item && state.id === item.id ? state.phase : 'idle';
     const progress = item && state.id === item.id ? state.progress : undefined;
+    const reason = item && state.id === item.id ? state.reason : undefined;
     const latest = useRef(tv);
     latest.current = tv;
 
@@ -104,9 +105,11 @@ export function useSoundFallback(tv: TvModel) {
             setState({ id, phase: 'converting' });
             await player.playConverted(item, conversion.url, position, conversion.duration ?? knownLength);
             setState({ id, phase: 'server' });
-        } catch {
-            if (latest.current.playing?.id === id) setState({ id, phase: 'unavailable' });
+        } catch (error) {
+            const reason = error instanceof Error ? error.message : String(error);
+            console.warn('[meddl] sound conversion failed:', reason);
+            if (latest.current.playing?.id === id) setState({ id, phase: 'unavailable', reason });
         }
     }
-    return { phase, progress, silent };
+    return { phase, progress, reason, silent };
 }

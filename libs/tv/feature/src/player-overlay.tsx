@@ -3,6 +3,8 @@ import { mediaTitle, t, tvLocale, type Media } from '@meddl/tv/util';
 import type { useLiveOverlay } from './live-overlay';
 import { AudioNotice } from './player-audio-notice';
 import { useSoundFallback } from './sound-fallback';
+import { useNextEpisode } from './next-episode';
+import { useState } from 'preact/hooks';
 import { VolumeControl } from './player-volume';
 import type { TvModel } from './use-tv';
 
@@ -44,6 +46,11 @@ export function PlayerOverlay({
     // Position and length of the title, also while the sound is converted.
     const at = tv.player.current?.position ?? 0;
     const length = tv.player.current?.length ?? NaN;
+    const nextEpisode = useNextEpisode(tv, element);
+    // Where the viewer is moving the seek bar to (applied on release).
+    const [scrub, setScrub] = useState<number | null>(null);
+    const shown = scrub ?? at;
+    const share = Number.isFinite(length) && length > 0 ? Math.min(100, (shown / length) * 100) : 0;
     const live = current?.kind === 'live';
     const paused = element?.paused ?? true;
     const channels = live ? tv.catalog.items.filter((m) => m.kind === 'live') : [];
@@ -62,7 +69,7 @@ export function PlayerOverlay({
     const favorite = !!current && tv.data.favorites.some((m) => m.id === current.id);
     return (
         <div
-            class={`player-controls ${visible || tv.error ? '' : 'dormant'}`}
+            class={`player-controls ${visible || tv.error || nextEpisode.countdown !== null ? '' : 'dormant'}`}
             hidden={!!overlay.panel}
         >
             <div class="player-top">
@@ -114,17 +121,28 @@ export function PlayerOverlay({
                           : ''}
                 </p>
                 {!live ? (
-                    <input
-                        class="player-seek"
-                        aria-label={t('Playback position')}
-                        type="range"
-                        min="0"
-                        max={Number.isFinite(length) ? length : 0}
-                        value={at}
-                        onInput={(e) =>
-                            tv.player.current?.seekTo(Number(e.currentTarget.value))
-                        }
-                    />
+                    <div class="player-seek-wrap" style={{ '--seek': `${share}%` }}>
+                        {scrub !== null ? (
+                            <span class="seek-preview" style={{ left: `${share}%` }}>
+                                {duration(scrub)}
+                            </span>
+                        ) : null}
+                        <input
+                            class="player-seek"
+                            aria-label={t('Playback position')}
+                            type="range"
+                            min="0"
+                            step="10"
+                            max={Number.isFinite(length) ? length : 0}
+                            value={shown}
+                            onInput={(e) => setScrub(Number(e.currentTarget.value))}
+                            onChange={(e) => {
+                                setScrub(null);
+                                tv.player.current?.seekTo(Number(e.currentTarget.value));
+                            }}
+                            onBlur={() => setScrub(null)}
+                        />
+                    </div>
                 ) : null}
                 <div class="player-transport">
                     <span class="player-time">
@@ -168,6 +186,11 @@ export function PlayerOverlay({
                                 {seriesDetails.busy ? t('Finding series…') : t('Series details')}
                             </button>
                         ) : null}
+                        {nextEpisode.next ? (
+                            <button data-focus="player-next-episode" onClick={nextEpisode.playNext}>
+                                <TvIcon name="next" /> {t('Next episode')}
+                            </button>
+                        ) : null}
                         <button
                             class={`round ${favorite ? 'is-favorite' : ''}`}
                             aria-label={favorite ? t('Remove from favorites') : t('Add to favorites')}
@@ -179,10 +202,27 @@ export function PlayerOverlay({
                         <VolumeControl video={element} />
                     </div>
                 </div>
+                {nextEpisode.countdown !== null && nextEpisode.next ? (
+                    <div class="next-banner" role="status">
+                        <span>
+                            {t('Next episode in {seconds} s: {title}', {
+                                seconds: nextEpisode.countdown,
+                                title: nextEpisode.next.title,
+                            })}
+                        </span>
+                        <button class="primary" data-focus="next-now" onClick={nextEpisode.playNext}>
+                            {t('Play now')}
+                        </button>
+                        <button data-focus="next-cancel" onClick={nextEpisode.cancel}>
+                            {t('Cancel')}
+                        </button>
+                    </div>
+                ) : null}
                 <AudioNotice
                     video={element}
                     phase={sound.phase}
                     progress={sound.progress}
+                    reason={sound.reason}
                     onSilent={() => void sound.silent()}
                 />
                 {tv.player.current?.restoringPosition ? (

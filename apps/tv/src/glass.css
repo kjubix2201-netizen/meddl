@@ -332,8 +332,7 @@ header select,
     background: #ffffff;
     color: #1d1b29;
 }
-.now-progress span,
-.player-seek::-webkit-slider-runnable-track {
+.now-progress span {
     background: #ffffff;
 }
 .transport-center .play-toggle {

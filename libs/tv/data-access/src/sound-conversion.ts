@@ -55,13 +55,26 @@ export async function startConversion(
         if (response.status === 503 && result.code === 'ffmpeg-preparing')
             throw new ConversionPreparing(result.setup?.received ?? 0, result.setup?.total ?? 0);
         if (!response.ok || !result.path)
-            throw new Error('The meddl server did not start the conversion.');
+            throw new Error(
+                (result as { message?: string }).message ||
+                    (response.status === 404
+                        ? 'The meddl server is out of date: restart it.'
+                        : `HTTP ${response.status}`)
+            );
         const stream = `${base}${result.path}`;
         return {
             url: (start) => (start > 0 ? `${stream}?start=${start.toFixed(1)}` : stream),
             ...(result.duration ? { duration: result.duration } : {}),
             ...(result.audio ? { audio: result.audio } : {}),
         };
+    } catch (error) {
+        if (error instanceof ConversionPreparing) throw error;
+        if (error instanceof Error && error.name !== 'TypeError' && error.name !== 'AbortError') throw error;
+        throw new Error(
+            error instanceof Error && error.name === 'AbortError'
+                ? 'The meddl server did not answer in time.'
+                : 'The meddl server is not reachable.'
+        );
     } finally {
         clearTimeout(timer);
         signal.removeEventListener('abort', cancel);

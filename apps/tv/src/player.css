@@ -1,0 +1,109 @@
+/*
+ * Player details: seek bar with played part, handle and a time bubble while
+ * seeking; the "next episode" countdown. Loaded after glass.css.
+ */
+.player-seek-wrap {
+    position: relative;
+    margin: 0 0 2vh;
+    --seek: 0%;
+}
+.player-seek {
+    -webkit-appearance: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    height: 3.2vh;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+.player-seek:focus {
+    outline: none;
+    box-shadow: none;
+}
+.player-seek::-webkit-slider-runnable-track {
+    height: 0.7vh;
+    border-radius: 0.35vh;
+    background: linear-gradient(
+        90deg,
+        #ffffff 0%,
+        #ffffff var(--seek),
+        rgba(255, 255, 255, 0.28) var(--seek),
+        rgba(255, 255, 255, 0.28) 100%
+    );
+}
+.player-seek::-moz-range-track {
+    height: 0.7vh;
+    border-radius: 0.35vh;
+    background: rgba(255, 255, 255, 0.28);
+}
+.player-seek::-moz-range-progress {
+    height: 0.7vh;
+    border-radius: 0.35vh;
+    background: #ffffff;
+}
+.player-seek::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 2.4vh;
+    height: 2.4vh;
+    margin-top: -0.85vh;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 0 0.5vh rgba(255, 255, 255, 0.25), 0 0.6vh 1.6vh rgba(0, 0, 0, 0.5);
+    transition: transform 0.12s ease;
+}
+.player-seek::-moz-range-thumb {
+    width: 2.4vh;
+    height: 2.4vh;
+    border: none;
+    border-radius: 50%;
+    background: #ffffff;
+}
+.player-seek:focus::-webkit-slider-thumb {
+    transform: scale(1.35);
+    box-shadow: 0 0 0 0.7vh rgba(255, 255, 255, 0.35), 0 0.6vh 1.6vh rgba(0, 0, 0, 0.5);
+}
+.seek-preview {
+    position: absolute;
+    bottom: 4vh;
+    transform: translateX(-50%);
+    padding: 0.6vh 1.4vh;
+    border-radius: 0.8vh;
+    background: #ffffff;
+    color: #1d1b29;
+    font-size: 2.2vh;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 0.8vh 2vh rgba(0, 0, 0, 0.45);
+}
+
+.next-banner {
+    display: flex;
+    align-items: center;
+    margin-top: 1.6vh;
+    padding: 1.6vh 2vh;
+    border-radius: 1.2vh;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    font-size: 2.3vh;
+}
+.next-banner span {
+    flex: 1;
+    margin-right: 2vh;
+}
+.next-banner button {
+    margin-left: 1.2vh;
+}
+.audio-notice.is-converting,
+.audio-notice.is-preparing,
+.audio-notice.is-native,
+.audio-notice.is-server {
+    color: rgba(255, 255, 255, 0.85);
+}
