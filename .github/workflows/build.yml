@@ -239,6 +239,13 @@ jobs:
                   cp apps/android-tv/app/build/outputs/apk/release/app-release.apk "dist/android/meddl-tv-${version}.apk"
                   ls -l dist/android
 
+            - name: Verify APK signature and manifest
+              run: |
+                  tools=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+                  apk=$(ls dist/android/*.apk)
+                  "$tools/apksigner" verify --verbose --print-certs "$apk"
+                  "$tools/aapt2" dump badging "$apk" | grep -E "^(package|sdkVersion|targetSdkVersion|native-code|launchable)" || true
+
             - name: Upload APK
               uses: actions/upload-artifact@v7
               with:
