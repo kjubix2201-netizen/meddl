@@ -119,13 +119,18 @@ main {
 }
 .launcher-tiles {
     display: flex;
+    flex: 1 1 auto;
     align-items: flex-end;
+    margin-right: 48px;
 }
 .launcher-tile {
     position: relative;
-    width: 280px;
-    height: 360px;
-    margin-right: 26px;
+    flex: 1 1 0;
+    max-width: 400px;
+    min-width: 0;
+    height: 400px;
+    margin-right: 28px;
+    overflow: visible;
     padding: 32px 30px;
     display: flex;
     flex-direction: column;
@@ -144,14 +149,14 @@ main {
 }
 .launcher-tile:focus {
     outline: none;
-    height: 420px;
+    height: 460px;
     transform: translateY(-6px);
     background: rgba(48, 39, 70, 0.86);
     border-color: rgba(255, 255, 255, 0.35);
 }
 .launcher-icon {
-    width: 64px;
-    height: 64px;
+    width: 76px;
+    height: 76px;
     margin-bottom: auto;
     border-radius: 18px;
     display: flex;
@@ -163,12 +168,40 @@ main {
 .launcher-tile:focus .launcher-icon {
     background: var(--tv-gradient);
 }
+/* Each section carries its own soft colour wash, like a lit glass panel. */
+.launcher-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.55;
+    transition: opacity 0.18s ease;
+}
+.launcher-tile:focus::before {
+    opacity: 1;
+}
+.launcher-tile > * {
+    position: relative;
+}
+.launcher-live::before {
+    background: radial-gradient(circle at 20% 0%, rgba(255, 90, 138, 0.42), rgba(255, 90, 138, 0) 70%);
+}
+.launcher-movie::before {
+    background: radial-gradient(circle at 20% 0%, rgba(255, 159, 67, 0.4), rgba(255, 159, 67, 0) 70%);
+}
+.launcher-series::before {
+    background: radial-gradient(circle at 20% 0%, rgba(124, 92, 255, 0.45), rgba(124, 92, 255, 0) 70%);
+}
 .launcher-icon svg {
-    width: 34px;
-    height: 34px;
+    width: 40px;
+    height: 40px;
 }
 .launcher-tile strong {
-    font-size: 34px;
+    font-size: 40px;
     font-weight: 600;
     line-height: 1.15;
     color: var(--tv-text);
@@ -178,7 +211,7 @@ main {
     font-size: 18px;
     color: var(--tv-muted);
 }
-.launcher-focus-bar {
+.launcher-tile > .launcher-focus-bar {
     position: absolute;
     left: 50%;
     bottom: -14px;
@@ -514,11 +547,13 @@ main {
         padding: 0 35px;
     }
     .launcher-tile {
-        width: 230px;
-        height: 300px;
+        height: 320px;
     }
     .launcher-tile:focus {
-        height: 350px;
+        height: 370px;
+    }
+    .launcher-tile strong {
+        font-size: 32px;
     }
     .clock-large time {
         font-size: 72px;
