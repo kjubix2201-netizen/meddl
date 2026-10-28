@@ -6,6 +6,7 @@ import {
 import {
     Catalog,
     CatalogSort,
+    Category,
     sortCatalog,
     catalogTitleMatcher,
     categoryFilter,
@@ -32,6 +33,8 @@ export class XtreamProvider implements ProviderClient {
     };
     private client: XtreamClient;
     private catalogs = new Map<string, Record<string, unknown>[]>();
+    // Category lists change rarely; one request per section and session.
+    private categoryLists = new Map<string, Category[]>();
     constructor(
         private source: Source,
         transport: ProviderTransport
@@ -88,12 +91,16 @@ export class XtreamProvider implements ProviderClient {
             );
             if (!signal.aborted) this.catalogs.set(key, data);
         }
-        const categories = rows(
-            await this.client.request(`get_${type}_categories`, {}, signal)
-        ).map((r) => ({
-            id: text(r.category_id),
-            name: text(r.category_name),
-        }));
+        let categories = this.categoryLists.get(type);
+        if (!categories) {
+            categories = rows(
+                await this.client.request(`get_${type}_categories`, {}, signal)
+            ).map((r) => ({
+                id: text(r.category_id),
+                name: text(r.category_name),
+            }));
+            if (!signal.aborted) this.categoryLists.set(type, categories);
+        }
         const matchesTitle = catalogTitleMatcher(query);
         const inCategory = categoryFilter(category);
         const all = data.map((r) => this.media(r, kind));

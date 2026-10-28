@@ -1,6 +1,10 @@
 import { t } from '@meddl/tv/util';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { createProvider, ProviderTransport } from '@meddl/tv/data-access';
+import {
+    CachedProvider,
+    createProvider,
+    ProviderTransport,
+} from '@meddl/tv/data-access';
 import type { ProviderClient, UserData } from '@meddl/tv/util';
 
 export function useProvider(
@@ -50,7 +54,7 @@ export function useProvider(
         }
         const abort = new AbortController();
         const snapshot = { ...active };
-        const client = createProvider(
+        const client = new CachedProvider(createProvider(
             snapshot,
             new ProviderTransport(data.backend, data.backendToken),
             (source) =>
@@ -67,7 +71,7 @@ export function useProvider(
                             : s
                     ),
                 }))
-        );
+        ));
         owner.current = connectionKey;
         provider.current = client;
         setBusy(true);
@@ -78,6 +82,9 @@ export function useProvider(
                 if (!abort.signal.aborted) {
                     callbacks.current.report('');
                     setReady(retry + 1);
+                    // Load every section once in the background; tabs then
+                    // open from memory instead of asking the provider again.
+                    setTimeout(() => void client.warm(data.catalogSort), 400);
                 }
             })
             .catch(() => {

@@ -11,6 +11,7 @@ import {
 } from '@meddl/shared/interfaces';
 import {
     Catalog,
+    Category,
     CatalogSort,
     Kind,
     Media,
@@ -38,6 +39,7 @@ export class StalkerProvider implements ProviderClient {
     };
     private session: StalkerSession;
     private pages: StalkerPagedCatalog;
+    private categoryLists = new Map<string, Category[]>();
     private bulk: StalkerEpgBulk;
     constructor(
         private source: Source,
@@ -99,18 +101,22 @@ export class StalkerProvider implements ProviderClient {
     ): Promise<Catalog> {
         const type =
             kind === 'movie' ? 'vod' : kind === 'live' ? 'itv' : 'series';
-        const categories = rows(
-            unwrap(
-                await this.session.request(
-                    {
-                        type,
-                        action:
-                            kind === 'live' ? 'get_genres' : 'get_categories',
-                    },
-                    signal
+        let categories = this.categoryLists.get(type);
+        if (!categories) {
+            categories = rows(
+                unwrap(
+                    await this.session.request(
+                        {
+                            type,
+                            action:
+                                kind === 'live' ? 'get_genres' : 'get_categories',
+                        },
+                        signal
+                    )
                 )
-            )
-        ).map((c) => ({ id: text(c.id), name: text(c.title ?? c.name) }));
+            ).map((c) => ({ id: text(c.id), name: text(c.title ?? c.name) }));
+            if (!signal.aborted) this.categoryLists.set(type, categories);
+        }
         const response = await this.pages.load(
             {
                 type,
