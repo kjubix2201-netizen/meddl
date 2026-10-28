@@ -104,3 +104,76 @@
 .audio-notice.is-native {
     color: rgba(255, 255, 255, 0.85);
 }
+
+/* ---------- Desktop app: MPV player for Dolby / DTS (desktop-player.tsx) ---------- */
+/* MPV paints a native surface above the page; the bar sits below it. */
+.desktop-player {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    background: #000000;
+}
+.desktop-player-spinner {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    margin: -3vh 0 0 -3vh;
+}
+.desktop-player-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.6vh 4.3vw 1.4vh 5.6vw;
+    background: #1f1d2b;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.desktop-player.dormant .desktop-player-bar {
+    visibility: hidden;
+}
+.desktop-player.dormant {
+    cursor: none;
+}
+.desktop-player-row {
+    display: flex;
+    align-items: center;
+}
+.desktop-player-row button.round {
+    width: 6.4vh;
+    height: 6.4vh;
+    min-height: 0;
+    margin-right: 1.4vh;
+    flex: 0 0 auto;
+}
+.desktop-player-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0 2vh 0 0.6vh;
+}
+.desktop-player-title strong {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 2.6vh;
+    font-weight: 500;
+}
+.desktop-player-title small {
+    display: block;
+    margin-top: 0.3vh;
+    font-size: 1.9vh;
+    color: rgba(255, 255, 255, 0.64);
+}
+.desktop-player-time {
+    flex: 0 0 auto;
+    font-size: 2.2vh;
+    font-weight: 300;
+    font-variant-numeric: tabular-nums;
+}
+.desktop-player-bar .now-progress {
+    margin-top: 1.2vh;
+}
+.desktop-player-keys {
+    margin: 1vh 0 0;
+    font-size: 1.7vh;
+}

@@ -489,4 +489,9 @@ export const DE: Readonly<Record<string, string>> = {
     'Waiting for your phone · {time}': 'Warte auf dein Handy · {time}',
     'Built-in server': 'Eingebauter Server',
     'This app talks to your provider directly. No meddl server is needed.': 'Diese App spricht direkt mit deinem Anbieter. Ein meddl-Server wird nicht gebraucht.',
+    'This stream could not be played.': 'Dieser Stream konnte nicht abgespielt werden.',
+    Paused: 'Pausiert',
+    'Dolby / DTS sound through the meddl player': 'Dolby-/DTS-Ton über den meddl-Player',
+    'Space: pause · ↑↓: volume · Esc: back': 'Leertaste: Pause · ↑↓: Lautstärke · Esc: zurück',
+    'Space: pause · ←→: 10 s · ↑↓: volume · Esc: back': 'Leertaste: Pause · ←→: 10 s · ↑↓: Lautstärke · Esc: zurück',
 };

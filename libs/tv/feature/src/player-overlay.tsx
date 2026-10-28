@@ -2,6 +2,7 @@ import { ChannelLogo, Clock, TvIcon } from '@meddl/tv/ui';
 import { mediaTitle, t, tvLocale, type Media } from '@meddl/tv/util';
 import type { useLiveOverlay } from './live-overlay';
 import { AudioNotice } from './player-audio-notice';
+import { DesktopPlayer } from './desktop-player';
 import { useSoundFallback } from './sound-fallback';
 import { useNextEpisode } from './next-episode';
 import { useState } from 'preact/hooks';
@@ -67,6 +68,8 @@ export function PlayerOverlay({
             ? tv.epg.find((p) => p.start <= now && p.end > now)
             : undefined;
     const favorite = !!current && tv.data.favorites.some((m) => m.id === current.id);
+    if (sound.desktop)
+        return <DesktopPlayer key={current?.id} playback={sound.desktop} onClose={sound.desktopClosed} />;
     return (
         <div
             class={`player-controls ${visible || tv.error || nextEpisode.countdown !== null ? '' : 'dormant'}`}
