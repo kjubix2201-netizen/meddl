@@ -472,4 +472,9 @@ export const DE: Readonly<Record<string, string>> = {
     'This source has no categories here yet.': 'Diese Quelle hat hier noch keine Kategorien.',
     '{count} category': '{count} Kategorie',
     '{count} categories': '{count} Kategorien',
+    'Loading your channels…': 'Sender werden geladen …',
+    'This happens once per start. Everything opens instantly afterwards.': 'Das passiert nur einmal pro Start. Danach öffnet sich alles sofort.',
+    'Loads when opened': 'Wird beim Öffnen geladen',
+    'Waiting': 'Wartet',
+    'Continue, keep loading in the background': 'Weiter, im Hintergrund fertig laden',
 };

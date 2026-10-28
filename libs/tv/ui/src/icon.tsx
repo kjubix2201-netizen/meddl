@@ -8,6 +8,7 @@ const paths: Record<string, string> = {
     sources: 'M3 3h18v18H3z M12 7v10 M7 12h10',
     settings: 'M4 5h16 M4 12h16 M4 19h16 M8 2v6 M16 9v6 M9 16v6',
     check: 'M4 12l5 5L20 6',
+    close: 'M6 6l12 12 M18 6L6 18',
     volume: 'M4 9h4l5-4v14l-5-4H4z M16 9a4 4 0 0 1 0 6 M18.5 6.5a7.5 7.5 0 0 1 0 11',
     muted: 'M4 9h4l5-4v14l-5-4H4z M16 9l5 6 M21 9l-5 6',
     star: 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z',

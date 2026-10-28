@@ -118,16 +118,33 @@ export class CachedProvider implements ProviderClient {
     resolve(item: Media, signal: AbortSignal): Promise<Playback> {
         return this.inner.resolve(item, signal);
     }
-    /** Loads the first page of every section in the background. */
-    async warm(sorts: { movie: CatalogSort; series: CatalogSort }) {
-        const kinds: [Kind, boolean, CatalogSort][] = [
-            ['live', this.capabilities.live, 'provider'],
-            ['movie', this.capabilities.movies, sorts.movie],
-            ['series', this.capabilities.series, sorts.series],
+    /** Sections this source offers, in loading order. */
+    warmKinds(): Kind[] {
+        const kinds: [Kind, boolean][] = [
+            ['live', this.capabilities.live],
+            ['movie', this.capabilities.movies],
+            ['series', this.capabilities.series],
         ];
-        for (const [kind, supported, sort] of kinds) {
-            if (!supported || this.owner.signal.aborted) continue;
-            await this.catalog(kind, '', 0, '', this.owner.signal, sort).catch(() => undefined);
+        return kinds.filter(([, supported]) => supported).map(([kind]) => kind);
+    }
+    /**
+     * Loads the first page of every section, one after the other, and
+     * reports each step (with the number of titles once loaded).
+     */
+    async warm(
+        sorts: { movie: CatalogSort; series: CatalogSort },
+        onStep: (kind: Kind, state: 'loading' | 'done' | 'failed', total?: number) => void = () => undefined
+    ) {
+        for (const kind of this.warmKinds()) {
+            if (this.owner.signal.aborted) return;
+            const sort = kind === 'live' ? 'provider' : sorts[kind === 'movie' ? 'movie' : 'series'];
+            onStep(kind, 'loading');
+            try {
+                const result = await this.catalog(kind, '', 0, '', this.owner.signal, sort);
+                onStep(kind, 'done', result.total);
+            } catch {
+                onStep(kind, 'failed');
+            }
         }
     }
     dispose() {

@@ -5,7 +5,19 @@ import {
     createProvider,
     ProviderTransport,
 } from '@meddl/tv/data-access';
-import type { ProviderClient, UserData } from '@meddl/tv/util';
+import type { Kind, ProviderClient, UserData } from '@meddl/tv/util';
+
+export type WarmStep = {
+    kind: Kind;
+    state: 'waiting' | 'loading' | 'done' | 'failed';
+    total?: number;
+};
+/** Start-up progress for the blocking loading window. */
+export type WarmState = {
+    phase: 'idle' | 'connecting' | 'loading';
+    steps: WarmStep[];
+};
+const IDLE: WarmState = { phase: 'idle', steps: [] };
 
 export function useProvider(
     data: UserData,
@@ -19,6 +31,7 @@ export function useProvider(
 ) {
     const [ready, setReady] = useState(0);
     const [busy, setBusy] = useState(false);
+    const [warm, setWarm] = useState<WarmState>(IDLE);
     const provider = useRef<ProviderClient>();
     const owner = useRef('');
     const callbacks = useRef(options);
@@ -50,6 +63,7 @@ export function useProvider(
         provider.current?.dispose();
         if (!storageReady || !active || !data.backend) {
             setBusy(false);
+            setWarm(IDLE);
             return;
         }
         const abort = new AbortController();
@@ -75,6 +89,7 @@ export function useProvider(
         owner.current = connectionKey;
         provider.current = client;
         setBusy(true);
+        setWarm({ phase: 'connecting', steps: [] });
         callbacks.current.report('');
         client
             .connect(abort.signal)
@@ -82,12 +97,29 @@ export function useProvider(
                 if (!abort.signal.aborted) {
                     callbacks.current.report('');
                     setReady(retry + 1);
-                    // Load every section once in the background; tabs then
-                    // open from memory instead of asking the provider again.
-                    setTimeout(() => void client.warm(data.catalogSort), 400);
+                    // Load every section once while the loading window
+                    // blocks the screen; tabs then open from memory.
+                    setWarm({
+                        phase: 'loading',
+                        steps: client.warmKinds().map((kind) => ({ kind, state: 'waiting' })),
+                    });
+                    void client
+                        .warm(data.catalogSort, (kind, state, total) => {
+                            if (abort.signal.aborted) return;
+                            setWarm((current) => ({
+                                ...current,
+                                steps: current.steps.map((step) =>
+                                    step.kind === kind ? { kind, state, total } : step
+                                ),
+                            }));
+                        })
+                        .finally(() => {
+                            if (!abort.signal.aborted) setWarm(IDLE);
+                        });
                 }
             })
             .catch(() => {
+                if (!abort.signal.aborted) setWarm(IDLE);
                 if (!abort.signal.aborted)
                     callbacks.current.report(
                         t('The request failed. Check your source and backend, then retry.')
@@ -112,6 +144,8 @@ export function useProvider(
         provider,
         ready: owner.current === connectionKey ? ready : 0,
         busy,
+        warm: owner.current === connectionKey ? warm : IDLE,
+        skipWarm: () => setWarm(IDLE),
         connectionKey,
         enabled: storageReady && !!active && !!data.backend,
     };

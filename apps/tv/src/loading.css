@@ -1,0 +1,125 @@
+/* Blocking start-up window (loading-overlay.tsx) in the glass style. */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(12, 11, 18, 0.74);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+.loading-panel {
+    width: 62vh;
+    max-width: 92vw;
+    padding: 5vh 5vh 4.4vh;
+    text-align: center;
+    border-radius: 2vh;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.07) 100%);
+    box-shadow: 0 4vh 9vh rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+.loading-panel h2 {
+    margin: 2.6vh 0 1vh;
+    font-size: 3.4vh;
+    font-weight: 500;
+}
+.loading-panel > .muted {
+    margin: 0 0 3vh;
+    font-size: 2vh;
+}
+.spinner {
+    display: inline-block;
+    width: 2.6vh;
+    height: 2.6vh;
+    border-radius: 50%;
+    border: 0.35vh solid rgba(255, 255, 255, 0.22);
+    border-top-color: #ffffff;
+    animation: meddl-spin 0.8s linear infinite;
+}
+.spinner.large {
+    width: 8vh;
+    height: 8vh;
+    border-width: 0.6vh;
+}
+@keyframes meddl-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.loading-progress {
+    height: 0.8vh;
+    margin: 0 0 3vh;
+    border-radius: 0.4vh;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.14);
+}
+.loading-progress span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #ffffff;
+    transition: width 0.4s ease;
+}
+.loading-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+.loading-step {
+    display: flex;
+    align-items: center;
+    padding: 1.4vh 1.8vh;
+    margin-bottom: 1vh;
+    border-radius: 1.2vh;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.loading-step.is-loading {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.loading-step-icon {
+    width: 3.6vh;
+    height: 3.6vh;
+    margin-right: 1.8vh;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+}
+.loading-step.is-done .loading-step-icon {
+    background: #ffffff;
+    color: #1d1b29;
+}
+.loading-step-icon svg {
+    width: 2.2vh;
+    height: 2.2vh;
+    stroke-width: 2.4;
+}
+.loading-dot {
+    width: 0.9vh;
+    height: 0.9vh;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+}
+.loading-step strong {
+    font-size: 2.4vh;
+    font-weight: 500;
+}
+.loading-step small {
+    margin-left: auto;
+    font-size: 2vh;
+    color: rgba(255, 255, 255, 0.7);
+}
+.loading-panel button.primary {
+    margin-top: 2.6vh;
+}

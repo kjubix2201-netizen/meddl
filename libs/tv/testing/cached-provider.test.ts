@@ -87,7 +87,9 @@ test('failures are not kept; stream links are always resolved fresh', async () =
 test('warming loads each supported section once', async () => {
     const fake = fakeProvider();
     const cached = new CachedProvider(fake.client);
-    await cached.warm({ movie: 'title', series: 'recent' });
+    const steps: string[] = [];
+    await cached.warm({ movie: 'title', series: 'recent' }, (kind, state) => steps.push(`${kind}:${state}`));
+    assert.deepEqual(steps, ['live:loading', 'live:done', 'movie:loading', 'movie:done']);
     await cached.catalog('movie', '', 0, '', live(), 'title');
     assert.deepEqual(fake.calls, [
         'catalog:live::0::provider',

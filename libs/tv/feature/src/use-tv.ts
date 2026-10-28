@@ -65,7 +65,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
     });
     const library = useLibrary(data, storageReady, !!playing, update);
     const backend = useBackend(data, storageReady, update);
-    const { provider, ready, busy, connectionKey, enabled } = useProvider(
+    const { provider, ready, busy, warm, skipWarm, connectionKey, enabled } = useProvider(
         data,
         storageReady,
         retry,
@@ -362,6 +362,8 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         ready,
         ...content,
         busy: busy || content.busy,
+        warm,
+        skipWarm,
         selected,
         setSelected,
         playing,

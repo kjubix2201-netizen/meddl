@@ -13,6 +13,7 @@ import { Settings } from './settings';
 import type { SettingsMemory } from './settings-navigation';
 import { Home, CatalogScreen } from './screens';
 import { CountryPicker } from './country-picker';
+import { LoadingOverlay } from './loading-overlay';
 import { needsCountry } from './country-catalog';
 import { Detail } from './detail';
 import { useDetailSeason } from './use-detail-season';
@@ -218,6 +219,7 @@ export function TvApp() {
                 ) : null}
             </div>
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />
+            <LoadingOverlay tv={tv} />
         </div>
     );
 }
