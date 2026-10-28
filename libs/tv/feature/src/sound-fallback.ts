@@ -18,7 +18,8 @@ function androidBridge(): AndroidBridge | undefined {
  * Silent sound (Dolby Digital, DTS … the page cannot decode): the Android
  * app hands the stream to its native player and the desktop app to its MPV
  * player (desktop-player.tsx); both decode these formats and continue at the
- * same position, also when the page cannot play the stream at all. A browser without Dolby support shows a hint to use the
+ * same position. Live channels and streams the page cannot play at all go
+ * there directly. A browser without Dolby support shows a hint to use the
  * meddl apps instead.
  */
 export function useSoundFallback(tv: TvModel) {
@@ -31,6 +32,7 @@ export function useSoundFallback(tv: TvModel) {
     const desktop = phase === 'desktop' ? state.desktop : undefined;
     const latest = useRef(tv);
     latest.current = tv;
+    const silentRef = useRef<() => void>(() => undefined);
 
     const closed: NativeClosed = (positionMs, durationMs) => {
         const current = latest.current;
@@ -59,6 +61,22 @@ export function useSoundFallback(tv: TvModel) {
             tv.setError('');
         }
     }, [tv.error, phase, item?.id]);
+
+    // Live channels start in the app's own engine right away, like other
+    // IPTV players do: raw transport streams and Dolby/DTS are its strength.
+    useEffect(() => {
+        if (item?.kind !== 'live' || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
+        const id = item.id;
+        let tries = 0;
+        const timer = setInterval(() => {
+            const player = latest.current.player.current;
+            if (player?.item?.id === id && player.lastPlayback?.url) {
+                clearInterval(timer);
+                silentRef.current();
+            } else if (++tries > 40) clearInterval(timer);
+        }, 150);
+        return () => clearInterval(timer);
+    }, [item?.id, phase]);
 
     function silent() {
         const player = tv.player.current;
@@ -98,5 +116,6 @@ export function useSoundFallback(tv: TvModel) {
         );
         setState({ id: item.id, phase: 'native' });
     }
+    silentRef.current = silent;
     return { phase, silent, desktop, desktopClosed };
 }
