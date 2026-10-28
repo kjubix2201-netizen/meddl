@@ -106,3 +106,28 @@ test('whole-section Xtream lists get the long request time, everything else the 
     assert.equal(isFullListRequest({ action: 'get_vod_info', vod_id: 1 }), false);
     assert.ok(FULL_LIST_TIMEOUT_MS > 35000);
 });
+
+test('the phone setup QR code never points to localhost when the server knows its home-network address', async () => {
+    const { phoneBackendUrl } = await import('@meddl/tv/data-access');
+    const signal = new AbortController().signal;
+    const original = globalThis.fetch;
+    let asked = '';
+    globalThis.fetch = (async (url: string) => {
+        asked = String(url);
+        return new Response(
+            JSON.stringify({ service: 'meddl', protocol: 1, pairing: true, auth: 'none', addresses: ['192.168.178.21'] }),
+            { headers: { 'Content-Type': 'application/json' } }
+        );
+    }) as typeof fetch;
+    try {
+        assert.equal(await phoneBackendUrl('http://localhost:3333', signal), 'http://192.168.178.21:3333');
+        assert.equal(asked, 'http://localhost:3333/tv/connection');
+        assert.equal(await phoneBackendUrl('http://127.0.0.1:3333', signal), 'http://192.168.178.21:3333');
+        asked = '';
+        // A real address is already reachable: kept, no lookup.
+        assert.equal(await phoneBackendUrl('http://192.168.1.5:3333', signal), 'http://192.168.1.5:3333');
+        assert.equal(asked, '');
+    } finally {
+        globalThis.fetch = original;
+    }
+});

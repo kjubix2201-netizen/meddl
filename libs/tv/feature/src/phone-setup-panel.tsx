@@ -111,8 +111,9 @@ export function PhoneInstructions({
                 <h3>{t('Open your phone’s camera')}</h3>
                 <p>{t('Keep your phone on the same home network.')}</p>
                 <p class="muted" role="status">
-                    Waiting for your phone · {Math.floor(remaining / 60)}:
-                    {String(remaining % 60).padStart(2, '0')}
+                    {t('Waiting for your phone · {time}', {
+                        time: `${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, '0')}`,
+                    })}
                 </p>
             </div>
         </>

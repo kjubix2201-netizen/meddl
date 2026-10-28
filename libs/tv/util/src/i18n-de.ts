@@ -486,4 +486,5 @@ export const DE: Readonly<Record<string, string>> = {
         'Kein Ton: Dieser Stream nutzt Dolby Digital oder DTS, das dieser Browser nicht abspielen kann. Schau ihn in der meddl-Desktop-App oder der meddl-Android-TV-App – Microsoft Edge spielt Dolby Digital ebenfalls ab.',
     'Your provider is answering slowly ({seconds} s). Close meddl in other browsers and apps, so only one connection is open.':
         'Dein Anbieter antwortet gerade sehr langsam ({seconds} s). Schließe meddl in anderen Browsern und Apps, damit nur eine Verbindung offen ist.',
+    'Waiting for your phone · {time}': 'Warte auf dein Handy · {time}',
 };

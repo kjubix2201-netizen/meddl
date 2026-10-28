@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import QRCode from 'qrcode';
 import {
     createPairing,
+    phoneBackendUrl,
     finishPairing,
     pairingState,
     PairingSession,
@@ -75,7 +76,10 @@ export function PhoneSetup({
             );
             if (abort.signal.aborted) return;
             owner.current = { session: next, backend: tv.data.backend };
-            const url = `${tv.data.backend}/tv/setup#${next.id}.${next.phoneToken}`;
+            // The phone needs an address it can reach, not "localhost".
+            const reachable = await phoneBackendUrl(tv.data.backend, abort.signal);
+            if (abort.signal.aborted) return;
+            const url = `${reachable}/tv/setup#${next.id}.${next.phoneToken}`;
             setQr(
                 await QRCode.toDataURL(url, {
                     width: 360,
