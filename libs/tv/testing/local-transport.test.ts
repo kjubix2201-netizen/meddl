@@ -27,7 +27,8 @@ test('Xtream calls go straight to player_api.php with long time for whole lists'
     const url = new URL(calls[0].url);
     assert.equal(url.origin + url.pathname, 'http://panel.example:8080/player_api.php');
     assert.equal(url.searchParams.get('action'), 'get_vod_streams');
-    assert.ok(calls[0].timeoutMs > 60000);
+    assert.equal(calls[0].timeoutMs, 60000);
+    assert.match(calls[0].headers["User-Agent"], /VLC/);
     await transport.request(xtream, 'xtream', { action: 'get_account_info' }, signal);
     assert.equal(calls[1].timeoutMs, 30000);
 });

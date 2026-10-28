@@ -8,13 +8,15 @@ import { extractDrmFromRaw } from '@meddl/shared/m3u-utils';
 import type { Source } from '@meddl/tv/util';
 import { directFetch } from './direct-fetch';
 import {
-    FULL_LIST_TIMEOUT_MS,
     isFullListRequest,
     ProviderRequestError,
     ProviderTransport,
 } from './transport';
 
 const XTREAM_MS = 30000;
+const FULL_LIST_MS = 60000;
+/** Panels treat unknown clients as scrapers and throttle them. */
+const PLAYER_USER_AGENT = 'VLC/3.0.20 LibVLC/3.0.20';
 const STALKER_MS = 15000;
 const STALKER_LINK_MS = 30000;
 const PLAYLIST_MS = 60000;
@@ -67,8 +69,10 @@ export class LocalTransport extends ProviderTransport {
     private async xtream(endpoint: string, params: Record<string, string | number>, signal: AbortSignal) {
         const url = new URL(`${normalizeXtreamServerUrl(endpoint)}/player_api.php`);
         for (const [key, value] of Object.entries(params)) url.searchParams.set(key, String(value));
-        const timeout = isFullListRequest(params) ? FULL_LIST_TIMEOUT_MS : XTREAM_MS;
-        return parseBody(await this.get(url.href, {}, signal, timeout));
+        // A whole section that is not answered within a minute is then loaded
+        // per category (xtream.ts); that is how other players get through.
+        const timeout = isFullListRequest(params) ? FULL_LIST_MS : XTREAM_MS;
+        return parseBody(await this.get(url.href, { 'User-Agent': PLAYER_USER_AGENT }, signal, timeout));
     }
 
     private async stalker(endpoint: string, all: Record<string, string | number>, signal: AbortSignal) {

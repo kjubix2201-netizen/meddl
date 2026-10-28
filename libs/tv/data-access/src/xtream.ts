@@ -94,13 +94,7 @@ export class XtreamProvider implements ProviderClient {
         const key = type;
         let data = this.catalogs.get(key);
         if (!data) {
-            data = rows(
-                await this.client.request(
-                    kind === 'series' ? 'get_series' : `get_${type}_streams`,
-                    {},
-                    signal
-                )
-            );
+            data = await this.fullList(kind === 'series' ? 'get_series' : `get_${type}_streams`, type, signal);
             // An empty answer is often a busy or throttled panel: ask again later.
             if (!signal.aborted && data.length) this.catalogs.set(key, data);
         }
@@ -125,6 +119,30 @@ export class XtreamProvider implements ProviderClient {
             categories,
             categoryCounts: countByCategory(all),
         };
+    }
+    /**
+     * The whole section in one request. Some panels never finish that answer
+     * (or cut it off); the list is then built category by category, like
+     * other players do, so the section still loads.
+     */
+    private async fullList(action: string, type: string, signal: AbortSignal): Promise<Record<string, unknown>[]> {
+        try {
+            const all = rows(await this.client.request(action, {}, signal));
+            if (all.length || signal.aborted) return all;
+        } catch (error) {
+            if (signal.aborted) throw error;
+        }
+        const categories = await this.loadCategories(type, signal);
+        const merged: Record<string, unknown>[] = [];
+        for (const category of categories) {
+            if (signal.aborted) break;
+            try {
+                merged.push(...rows(await this.client.request(action, { category_id: category.id }, signal)));
+            } catch (error) {
+                if (signal.aborted) throw error;
+            }
+        }
+        return merged;
     }
     /**
      * Category list of one section. Some panels answer it as an object map
