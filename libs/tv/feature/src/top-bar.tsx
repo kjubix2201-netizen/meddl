@@ -14,8 +14,51 @@ const TOOLS: [View, string, string][] = [
     ['search', 'Search', 'search'],
     ['favorites', 'Favorites', 'star'],
     ['sources', 'Sources', 'sources'],
-    ['settings', 'Settings', 'settings'],
+    ['settings', 'Settings', 'gear'],
 ];
+
+/**
+ * Home keeps the bar calm: wordmark, a search entry, settings and the
+ * profile button (sources). The tiles below are the navigation.
+ */
+function HomeBar({ tv }: { tv: TvModel }) {
+    return (
+        <header class="top-bar home-bar" hidden={tv.fullscreen || !tv.storageReady}>
+            <span class="home-wordmark">meddl</span>
+            <span class="home-divider" aria-hidden="true" />
+            <button
+                class="search-pill"
+                data-focus="nav:search"
+                onClick={() => tv.navigate('search')}
+            >
+                <span class="search-pill-icon" aria-hidden="true">
+                    <TvIcon name="mic" />
+                </span>
+                <span>{t('Search')}</span>
+            </button>
+            <div class="top-tools">
+                <button
+                    class="round"
+                    data-focus="nav:settings"
+                    aria-label={t('Settings')}
+                    title={t('Settings')}
+                    onClick={() => tv.navigate('settings')}
+                >
+                    <TvIcon name="gear" />
+                </button>
+                <button
+                    class="round avatar"
+                    data-focus="nav:sources"
+                    aria-label={t('Sources & profile')}
+                    title={t('Sources & profile')}
+                    onClick={() => tv.navigate('sources')}
+                >
+                    <TvIcon name="user" />
+                </button>
+            </div>
+        </header>
+    );
+}
 
 /**
  * Top navigation bar (replaces the former side rail). Buttons keep the
@@ -24,6 +67,7 @@ const TOOLS: [View, string, string][] = [
  */
 export function TopBar({ tv }: { tv: TvModel }) {
     const current = tv.route.view;
+    if (current === 'home') return <HomeBar tv={tv} />;
     return (
         <header class="top-bar" hidden={tv.fullscreen || !tv.storageReady}>
             <div class="wordmark">

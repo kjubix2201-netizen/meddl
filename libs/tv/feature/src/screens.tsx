@@ -58,21 +58,9 @@ export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
                         </div>
                     </section>
                 ))}
-            {!tv.busy && !items.length ? (
+            {!tv.busy && !items.length && tv.data.sources.length ? (
                 <Empty>
-                    {tv.data.sources.length ? (
-                        t('This source has no titles available here. Browse TV or check your source.')
-                    ) : (
-                        <>
-                            <h2>{t('Your screen, your sources.')}</h2>
-                            <button
-                                class="primary"
-                                onClick={() => tv.navigate('sources')}
-                            >
-                                {t('Add your first source')}
-                            </button>
-                        </>
-                    )}
+                    {t('This source has no titles available here. Browse TV or check your source.')}
                 </Empty>
             ) : null}
         </>

@@ -3,6 +3,8 @@ import { favoritesFor } from './favorites';
 import { t, tn } from '@meddl/tv/util';
 export function PageHeader({ tv }: { tv: TvModel }) {
     const view = tv.route.view;
+    // Home is the full-screen launcher; sources are switched on Sources.
+    if (view === 'home') return null;
     const title = {
         movies: t('Movies'),
         series: t('Series'),

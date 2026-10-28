@@ -7,6 +7,7 @@ import { DirectAccessProbe } from './direct-probe';
 import { TmdbSettings } from './tmdb-settings';
 import { SettingsPreferences } from './settings-preferences';
 import { LanguageSetting } from './language-setting';
+import { WeatherSetting } from './weather-setting';
 import {
     settingsCategories,
     SettingsMemory,
@@ -91,6 +92,7 @@ export function Settings({
                         ) : id === 'appearance' ? (
                             <>
                                 <LanguageSetting />
+                                <WeatherSetting />
                                 <SettingsPreferences
                                     key={`layout:${phoneRevision}`}
                                     tv={tv}

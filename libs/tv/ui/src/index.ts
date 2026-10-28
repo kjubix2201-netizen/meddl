@@ -8,3 +8,4 @@ export { ResumeCard } from './resume-card';
 export { Hero } from './hero';
 export { Flag, hasFlag } from './flag';
 export { Clock } from './clock';
+export { WeatherIcon } from './weather-icon';

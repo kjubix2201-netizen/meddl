@@ -31,7 +31,7 @@ export function Clock({ large = false }: { large?: boolean }) {
                 {now.toLocaleDateString(tvLocale(), {
                     weekday: 'long',
                     day: 'numeric',
-                    month: 'long',
+                    month: 'short',
                 })}
             </span>
         </div>

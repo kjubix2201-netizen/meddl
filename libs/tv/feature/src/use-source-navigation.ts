@@ -26,6 +26,6 @@ export function useSourceNavigation(
                   }
         );
         if (route.view === 'detail' || route.view === 'person')
-            restoreFocus('nav:home');
+            restoreFocus('nav:home', 'launcher:live');
     }, [sourceId]);
 }

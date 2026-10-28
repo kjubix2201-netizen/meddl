@@ -104,147 +104,6 @@ main {
 .cinematic-page > .page-backdrop {
     height: 100vh;
 }
-.home-page > .page-backdrop img {
-    filter: blur(6px) brightness(0.55);
-    transform: scale(1.06);
-}
-
-/* ---------- Home launcher ---------- */
-.home-launcher {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    min-height: 470px;
-    margin: 10px 0 44px;
-}
-.launcher-tiles {
-    display: flex;
-    flex: 1 1 auto;
-    align-items: flex-end;
-    margin-right: 48px;
-}
-.launcher-tile {
-    position: relative;
-    flex: 1 1 0;
-    max-width: 400px;
-    min-width: 0;
-    height: 400px;
-    margin-right: 28px;
-    overflow: visible;
-    padding: 32px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    text-align: left;
-    border-radius: 16px;
-    border: 1px solid var(--tv-glass-line);
-    background: rgba(26, 23, 38, 0.72);
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
-    transition: transform 0.18s ease, background 0.18s ease, height 0.18s ease;
-}
-.launcher-tile:hover {
-    background: rgba(40, 34, 58, 0.8);
-}
-.launcher-tile:focus {
-    outline: none;
-    height: 460px;
-    transform: translateY(-6px);
-    background: rgba(48, 39, 70, 0.86);
-    border-color: rgba(255, 255, 255, 0.35);
-}
-.launcher-icon {
-    width: 76px;
-    height: 76px;
-    margin-bottom: auto;
-    border-radius: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    background: var(--tv-glass-strong);
-}
-.launcher-tile:focus .launcher-icon {
-    background: var(--tv-gradient);
-}
-/* Each section carries its own soft colour wash, like a lit glass panel. */
-.launcher-tile::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0.55;
-    transition: opacity 0.18s ease;
-}
-.launcher-tile:focus::before {
-    opacity: 1;
-}
-.launcher-tile > * {
-    position: relative;
-}
-.launcher-live::before {
-    background: radial-gradient(circle at 20% 0%, rgba(255, 90, 138, 0.42), rgba(255, 90, 138, 0) 70%);
-}
-.launcher-movie::before {
-    background: radial-gradient(circle at 20% 0%, rgba(255, 159, 67, 0.4), rgba(255, 159, 67, 0) 70%);
-}
-.launcher-series::before {
-    background: radial-gradient(circle at 20% 0%, rgba(124, 92, 255, 0.45), rgba(124, 92, 255, 0) 70%);
-}
-.launcher-icon svg {
-    width: 40px;
-    height: 40px;
-}
-.launcher-tile strong {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 1.15;
-    color: var(--tv-text);
-}
-.launcher-tile small {
-    margin-top: 8px;
-    font-size: 18px;
-    color: var(--tv-muted);
-}
-.launcher-tile > .launcher-focus-bar {
-    position: absolute;
-    left: 50%;
-    bottom: -14px;
-    width: 64px;
-    height: 5px;
-    margin-left: -32px;
-    border-radius: 3px;
-    background: #ffffff;
-    opacity: 0;
-    transition: opacity 0.18s ease;
-}
-.launcher-tile:focus .launcher-focus-bar {
-    opacity: 1;
-}
-.clock-large {
-    text-align: right;
-    color: var(--tv-text);
-}
-.clock-large time {
-    display: block;
-    font-size: 96px;
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -2px;
-    font-variant-numeric: tabular-nums;
-}
-.clock-large span {
-    display: block;
-    margin-top: 14px;
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--tv-muted);
-}
 
 /* ---------- Live TV: categories · channels · preview ---------- */
 .live-layout {
@@ -546,18 +405,6 @@ main {
     .top-bar {
         padding: 0 35px;
     }
-    .launcher-tile {
-        height: 320px;
-    }
-    .launcher-tile:focus {
-        height: 370px;
-    }
-    .launcher-tile strong {
-        font-size: 32px;
-    }
-    .clock-large time {
-        font-size: 72px;
-    }
     .live-layout {
         grid-template-columns: 240px minmax(0, 1fr) minmax(0, 1fr);
         grid-gap: 18px;
@@ -575,12 +422,6 @@ main {
         padding: 8px 12px;
     }
     .top-bar .wordmark-text {
-        display: none;
-    }
-    .launcher-tiles {
-        flex-wrap: wrap;
-    }
-    .clock-large {
         display: none;
     }
 }

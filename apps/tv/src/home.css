@@ -1,0 +1,337 @@
+/*
+ * meddl Home: full-screen launcher. Calm bar (wordmark · search ·
+ * settings · profile), three tall frosted tiles, weather, clock and date over
+ * a dimmed backdrop on the right. Sizes follow the screen height (vh), so
+ * 720p and 1080p TVs show the same composition; narrower windows switch to
+ * width-based sizes below. Rows such as "Continue watching" follow below the
+ * fold and are reached with Down.
+ */
+
+/* ---------- Bar ---------- */
+.top-bar.home-bar {
+    height: 26vh;
+    padding: 0 4.3vw 0 5.6vw;
+    background: linear-gradient(180deg, rgba(16, 14, 24, 0.55) 0%, rgba(16, 14, 24, 0) 100%);
+    pointer-events: none;
+}
+.home-bar button {
+    pointer-events: auto;
+}
+.home-wordmark {
+    font-size: 5vh;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    line-height: 1;
+}
+.home-divider {
+    width: 2px;
+    height: 5vh;
+    margin: 0 3.2vh;
+    background: rgba(255, 255, 255, 0.25);
+}
+.search-pill {
+    display: flex;
+    align-items: center;
+    padding: 0 2vh 0 0;
+    min-height: 0;
+    background: transparent;
+    border: none;
+    border-radius: 6vh;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 2.6vh;
+}
+.search-pill:hover {
+    background: transparent;
+}
+.search-pill:focus {
+    outline: none;
+    color: #ffffff;
+}
+.search-pill-icon {
+    width: 8.6vh;
+    height: 8.6vh;
+    margin-right: 2.6vh;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.search-pill:focus .search-pill-icon,
+.search-pill:hover .search-pill-icon {
+    background: #ffffff;
+    color: #1d1b29;
+}
+.search-pill-icon svg {
+    width: 3.6vh;
+    height: 3.6vh;
+}
+.home-bar button.round {
+    width: 8.6vh;
+    height: 8.6vh;
+    min-height: 0;
+    margin-left: 2.2vh;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+}
+.home-bar button.round svg {
+    width: 3.8vh;
+    height: 3.8vh;
+}
+.home-bar button.round.avatar {
+    width: 10.4vh;
+    height: 10.4vh;
+    background: radial-gradient(circle at 35% 30%, #ff5a5a 0%, #e0141f 70%, #b80d16 100%);
+    border: 0.35vh solid rgba(255, 255, 255, 0.12);
+}
+.home-bar button.round.avatar svg {
+    width: 5vh;
+    height: 5vh;
+    stroke-width: 1.8;
+}
+.home-bar button.round:focus {
+    outline-offset: 0.6vh;
+}
+
+/* ---------- Page and backdrop ---------- */
+main.home-page {
+    padding: 0 4.3vw 0 5.6vw;
+    background: #23212f;
+    scrollbar-width: none;
+}
+main.home-page::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+.home-page > .page-backdrop {
+    height: 100vh;
+    background:
+        radial-gradient(ellipse at 30% 40%, #34314a 0%, rgba(35, 33, 47, 0) 65%),
+        linear-gradient(180deg, #2a2839 0%, #1f1d2b 100%);
+}
+.home-page > .page-backdrop img {
+    left: 34%;
+    width: 66%;
+    object-position: center 18%;
+    filter: brightness(0.62) saturate(0.85);
+}
+.home-page .backdrop-scrim {
+    background:
+        linear-gradient(
+            90deg,
+            #262433 0%,
+            rgba(38, 36, 51, 0.97) 34%,
+            rgba(38, 36, 51, 0.72) 48%,
+            rgba(38, 36, 51, 0.28) 70%,
+            rgba(38, 36, 51, 0.2) 100%
+        ),
+        linear-gradient(0deg, #1f1d2b 0%, rgba(31, 29, 43, 0) 22%),
+        linear-gradient(180deg, rgba(31, 29, 43, 0.7) 0%, rgba(31, 29, 43, 0) 30%);
+}
+
+/* ---------- Launcher ---------- */
+.home-launcher {
+    height: 100vh;
+    padding-top: 16vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+.launcher-row {
+    width: 100%;
+    height: 61.5vh;
+    display: flex;
+    justify-content: space-between;
+}
+.launcher-tiles {
+    display: flex;
+    align-items: center;
+}
+.launcher-tile {
+    position: relative;
+    width: 33vh;
+    height: 54vh;
+    margin: 0 2.6vh 0 0;
+    padding: 0 0 8.5vh 7vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: left;
+    color: #ffffff;
+    border-radius: 0.6vh;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.06) 100%);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
+}
+.launcher-tile:hover {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.09) 100%);
+}
+.launcher-tile:focus {
+    outline: none;
+    width: 36.5vh;
+    height: 61.5vh;
+    border-color: rgba(255, 255, 255, 0.34);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.27) 0%, rgba(255, 255, 255, 0.15) 58%, rgba(255, 255, 255, 0.17) 100%);
+    box-shadow: 0 3vh 6vh rgba(0, 0, 0, 0.35);
+}
+/* Light pooling at the foot of the focused tile, under the white bar. */
+.launcher-tile::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30%;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(ellipse 34% 42% at 50% 100%, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.launcher-tile:focus::after {
+    opacity: 1;
+}
+.launcher-icon {
+    display: block;
+    margin-bottom: 4.4vh;
+    line-height: 0;
+}
+.launcher-icon svg {
+    width: 10.4vh;
+    height: 10.4vh;
+    stroke-width: 1.45;
+}
+.launcher-tile strong {
+    font-size: 4.9vh;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+.launcher-tile small {
+    margin-top: 1.4vh;
+    font-size: 2.7vh;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.72);
+}
+.launcher-tile > .launcher-focus-bar {
+    position: absolute;
+    left: 50%;
+    bottom: -0.5vh;
+    width: 13vh;
+    height: 0.9vh;
+    margin-left: -6.5vh;
+    border-radius: 0.2vh;
+    background: #ffffff;
+    box-shadow: 0 0 2.4vh rgba(255, 255, 255, 0.55);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.launcher-tile:focus > .launcher-focus-bar {
+    opacity: 1;
+}
+
+/* ---------- Weather, clock, date ---------- */
+.home-time {
+    align-self: flex-end;
+    margin-bottom: 0.6vh;
+    text-align: right;
+    color: #ffffff;
+}
+.home-weather {
+    margin: 0 0 1.6vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 2.7vh;
+    font-weight: 400;
+}
+.home-weather .weather-icon {
+    width: 4.2vh;
+    height: 4.2vh;
+    margin-right: 1vh;
+}
+.home-time .clock-large time {
+    display: block;
+    font-size: 10.6vh;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+}
+.home-time .clock-large span {
+    display: block;
+    margin-top: 1.6vh;
+    font-size: 3vh;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+/* Rows below the launcher keep the regular spacing. */
+.home-page > section:not(.home-launcher) {
+    margin-top: 2vh;
+}
+.home-page > section:last-child:not(.home-launcher) {
+    padding-bottom: 6vh;
+}
+
+/* ---------- Windows narrower than 16:10 (laptops, phones, portrait) ---------- */
+@media (max-aspect-ratio: 3/2) {
+    .launcher-row {
+        height: 37vw;
+    }
+    .launcher-tile {
+        width: 20vw;
+        height: 32.5vw;
+        padding: 0 0 5vw 4vw;
+        margin-right: 1.6vw;
+    }
+    .launcher-tile:focus {
+        width: 22vw;
+        height: 37vw;
+    }
+    .launcher-icon svg {
+        width: 6vw;
+        height: 6vw;
+    }
+    .launcher-tile strong {
+        font-size: 2.9vw;
+    }
+    .launcher-tile small {
+        font-size: 1.6vw;
+    }
+    .home-time .clock-large time {
+        font-size: 6.4vw;
+    }
+    .home-time .clock-large span,
+    .home-weather {
+        font-size: 1.8vw;
+    }
+}
+@media (max-width: 900px) {
+    .home-time {
+        display: none;
+    }
+    .launcher-tile {
+        width: 29vw;
+        height: 44vw;
+    }
+    .launcher-tile:focus {
+        width: 31vw;
+        height: 48vw;
+    }
+    .launcher-row {
+        height: 48vw;
+    }
+    .launcher-tile strong {
+        font-size: 4.4vw;
+    }
+    .launcher-tile small {
+        font-size: 2.6vw;
+    }
+}

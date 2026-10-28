@@ -105,7 +105,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         if (!data.sources.length) {
             setRoute({ ...firstRoute(), view: 'sources' });
             restoreFocus('nav:sources');
-        } else restoreFocus('nav:home');
+        } else restoreFocus('nav:home', 'launcher:live');
     }, [storageReady]);
     const recovery = useReconnect({
         key: connectionKey,
@@ -139,7 +139,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
                       ? 'series'
                       : 'movie',
         });
-        restoreFocus(`nav:${view}`, '', 0);
+        restoreFocus(`nav:${view}`, view === 'home' ? 'launcher:live' : '', 0);
     }
     function open(item: Media, origin?: NavigationOrigin) {
         if (item.sourceId !== data.activeId) return;

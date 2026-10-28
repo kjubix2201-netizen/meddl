@@ -6,7 +6,7 @@ export const DE: Readonly<Record<string, string>> = {
     'Live TV': 'Live-TV',
     'Movies': 'Filme',
     'Series': 'Serien',
-    'Search': 'Suche',
+    'Search': 'Suchen',
     'Favorites': 'Favoriten',
     'Sources': 'Quellen',
     'Settings': 'Einstellungen',
@@ -451,4 +451,18 @@ export const DE: Readonly<Record<string, string>> = {
     'Saved TV data could not be read. Your data has not been replaced. Free storage if needed, then retry.':
         'Die gespeicherten TV-Daten konnten nicht gelesen werden. Deine Daten wurden nicht überschrieben. Gib bei Bedarf Speicher frei und versuche es erneut.',
     'Loading more…': 'Weitere werden geladen …',
+    '+{count} channels': '+{count} Sender',
+    '+{count} titles': '+{count} Titel',
+    '+{count} series': '+{count} Serien',
+    'Sources & profile': 'Quellen & Profil',
+    '{temperature}° in {place}': '{temperature}° in {place}',
+    'Weather location': 'Ort für das Wetter',
+    'e.g. Berlin': 'z. B. Berlin',
+    'Shown on Home next to the clock. Leave empty to hide the weather.':
+        'Wird auf der Startseite über der Uhr angezeigt. Leer lassen, um das Wetter auszublenden.',
+    'Save location': 'Ort speichern',
+    'Weather hidden on Home.': 'Das Wetter wird auf der Startseite ausgeblendet.',
+    'Place not found.': 'Ort nicht gefunden.',
+    'Location saved: {place}': 'Ort gespeichert: {place}',
+    'The weather service is not reachable right now.': 'Der Wetterdienst ist gerade nicht erreichbar.',
 };
