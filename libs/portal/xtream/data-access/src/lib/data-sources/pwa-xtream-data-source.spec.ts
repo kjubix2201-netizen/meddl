@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+import { PlaybackPositionData } from '@meddl/shared/interfaces';
 import { PwaXtreamDataSource } from './pwa-xtream-data-source';
 import type { XtreamContentItem } from './xtream-data-source.interface';
 import {
     XtreamApiService,
     XtreamCredentials,
 } from '../services/xtream-api.service';
-import { ParentalLockService, PlaylistsService } from '@iptvnator/services';
+import { ParentalLockService, PlaylistsService } from '@meddl/services';
 import { of } from 'rxjs';
 
 describe('PwaXtreamDataSource', () => {

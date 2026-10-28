@@ -4,10 +4,10 @@ import {
     PORTAL_EXTERNAL_PLAYBACK,
     PORTAL_PLAYBACK_POSITIONS,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { PlaybackPositionRuntimeBridgeService } from '@iptvnator/services';
-import type { PlayerContentInfo } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { PlaybackPositionRuntimeBridgeService } from '@meddl/services';
+import type { PlayerContentInfo } from '@meddl/shared/interfaces';
 import { VodDetailsPlaybackService } from './vod-details-playback.service';
 
 /**

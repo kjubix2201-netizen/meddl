@@ -5,8 +5,8 @@ import type {
     DbWorkerResponseMessage,
 } from './database-worker.types';
 
-const BATCH_DELAY_ENV = 'IPTVNATOR_DB_WORKER_BATCH_DELAY_MS';
-const WORKER_PROFILING_ENV = 'IPTVNATOR_PERF_WORKER_PROFILING';
+const BATCH_DELAY_ENV = 'MEDDL_DB_WORKER_BATCH_DELAY_MS';
+const WORKER_PROFILING_ENV = 'MEDDL_PERF_WORKER_PROFILING';
 const originalBatchDelay = process.env[BATCH_DELAY_ENV];
 const originalWorkerProfiling = process.env[WORKER_PROFILING_ENV];
 

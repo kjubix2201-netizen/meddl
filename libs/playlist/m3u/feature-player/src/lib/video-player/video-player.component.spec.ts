@@ -8,20 +8,20 @@ import { StorageMap } from '@ngx-pwa/local-storage';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MockPipe } from 'ng-mocks';
 import { of } from 'rxjs';
-import { ChannelActions, EpgActions } from '@iptvnator/m3u-state';
-import { EpgService } from '@iptvnator/epg/data-access';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
+import { ChannelActions, EpgActions } from '@meddl/m3u-state';
+import { EpgService } from '@meddl/epg/data-access';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
 import {
     PORTAL_EXTERNAL_PLAYBACK,
     LIVE_EPG_PANEL_STATE_STORAGE_KEY,
     WorkspaceHeaderContextService,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     DataService,
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     Channel,
     EpgProgram,
@@ -29,9 +29,9 @@ import {
     ResolvedPortalPlayback,
     Settings,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
-import type { PlaybackFallbackRequest } from '@iptvnator/ui/playback';
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
+} from '@meddl/shared/interfaces';
+import type { PlaybackFallbackRequest } from '@meddl/ui/playback';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
 import type { VideoPlayerComponent as VideoPlayerComponentInstance } from './video-player.component';
 import {
     activeChannel,
@@ -722,7 +722,7 @@ describe('VideoPlayerComponent', () => {
         syncStoreState({
             ...sampleChannel,
             http: {
-                'user-agent': 'IPTVnator Test',
+                'user-agent': 'meddl Test',
                 referrer: 'https://referrer.example.com',
                 origin: 'https://origin.example.com',
             },
@@ -733,7 +733,7 @@ describe('VideoPlayerComponent', () => {
             title: 'Sample TV',
             isLive: true,
             headers: {
-                'user-agent': 'IPTVnator Test',
+                'user-agent': 'meddl Test',
                 Referer: 'https://referrer.example.com',
                 Origin: 'https://origin.example.com',
             },
@@ -760,7 +760,7 @@ describe('VideoPlayerComponent', () => {
             {
                 url: 'https://archive.example.com/live.m3u8?utc=1',
                 title: 'Sample TV',
-                'user-agent': 'IPTVnator Test',
+                'user-agent': 'meddl Test',
                 referer: 'https://referrer.example.com',
                 origin: 'https://origin.example.com',
             }

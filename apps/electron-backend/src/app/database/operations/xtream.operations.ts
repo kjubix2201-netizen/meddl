@@ -2,13 +2,13 @@ import { reconcileFavoriteIdentity } from './favorite-catalog';
 import { restoreXtreamFavorites } from './favorite-restore';
 export { restoreXtreamFavorites } from './favorite-restore';
 import { and, eq, inArray } from 'drizzle-orm';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 import {
     XTREAM_DATABASE_PERFORMANCE_PHASE,
     type XtreamBackupFavoriteItem,
     type XtreamBackupHiddenCategory,
     type XtreamBackupRecentlyViewedItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { AppDatabase } from '../database.types';
 import {
     type CategoryRowCount,

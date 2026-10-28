@@ -10,12 +10,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import {
     CollectionContentType,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import { ContentCardComponent } from '../content-card/content-card.component';
 import {
     foldSearchText,
     isCatalogUnavailable,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 @Component({
     selector: 'app-unified-grid-tab',

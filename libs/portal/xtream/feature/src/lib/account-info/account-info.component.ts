@@ -13,18 +13,18 @@ import {
     XtreamAccountInfo,
     XtreamApiService,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
-import { createLogger } from '@iptvnator/portal/shared/util';
-import { DataService, resetHostConnectivityGuard } from '@iptvnator/services';
+} from '@meddl/portal/xtream/data-access';
+import { createLogger } from '@meddl/portal/shared/util';
+import { DataService, resetHostConnectivityGuard } from '@meddl/services';
 import {
     isHostConnectivityFastFailMessage,
     resolveXtreamPortalStatus,
     type XtreamAccountInfoDialogData,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     DialogHeaderEndDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 type AccountLoadState = 'loading' | 'ready' | 'error';
 

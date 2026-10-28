@@ -43,7 +43,7 @@ resolve the observed rejection.
 - Explicit HLS MIME type and webOS `mediaTransportType=HLS` do not consistently
   resolve clean, unprimed launches. Earlier successful MIME experiments were
   followed by repeat failures; this is not a confirmed complete fix.
-- After the user confirmed quitting desktop IPTVnator with Cmd-Q (the phone
+- After the user confirmed quitting desktop meddl with Cmd-Q (the phone
   player was already closed), the TV app was fully closed and launched again
   through webOS CLI. First Channel and Setanta Sports 1 still failed before
   metadata (`readyState=0`, time 0, source-error alert). A successful uncached
@@ -92,7 +92,7 @@ full-restart findings above were retained. Stalkinator's recorded solution is
 Live may receive a signed URL but fail at the media host until the authenticated
 portal session sends `type=watchdog&action=get_events&event_active_id=0&cur_play_type=0&init=1`.
 Stalkinator awaits this before Live resolution, then sends `init=0` on subsequent
-Live starts and every 25 seconds. The main IPTVnator's
+Live starts and every 25 seconds. The main meddl's
 `StalkerWatchdogController.sendPing` uses the same parameter set with immediate
 initialization on activation and its profile-based periodic cadence.
 

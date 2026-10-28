@@ -2,8 +2,8 @@ import {
     type PlaybackRecommendation,
     type PlaybackRecommendationReason,
     type PlaybackRecommendationTarget,
-} from '@iptvnator/playback/util';
-import type { ExternalPlayerName } from '@iptvnator/shared/interfaces';
+} from '@meddl/playback/util';
+import type { ExternalPlayerName } from '@meddl/shared/interfaces';
 import type { ExternalRecoveryTargetState } from '../web-player-view/external-playback-recovery';
 
 export function getRecommendationKey(

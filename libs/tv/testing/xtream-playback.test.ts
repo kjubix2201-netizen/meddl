@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createProvider, ProviderTransport } from '@iptvnator/tv/data-access';
-import type { Source } from '@iptvnator/tv/util';
+import { createProvider, ProviderTransport } from '@meddl/tv/data-access';
+import type { Source } from '@meddl/tv/util';
 
 const source: Source = {
     id: 'xtream',

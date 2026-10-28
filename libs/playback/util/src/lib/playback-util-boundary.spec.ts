@@ -6,7 +6,7 @@ import ts from 'typescript';
 const PROJECT_SOURCE_ROOT = join(process.cwd(), 'libs/playback/util/src');
 const FORBIDDEN_IMPORT_PREFIXES = [
     '@angular/',
-    '@iptvnator/ui/',
+    '@meddl/ui/',
     'electron',
     '@ngx-pwa/',
 ] as const;
@@ -36,8 +36,8 @@ describe('playback util boundary', () => {
         ['import declaration', "import '@angular/core';", '@angular/core'],
         [
             're-export declaration',
-            "export * from '@iptvnator/ui/components';",
-            '@iptvnator/ui/components',
+            "export * from '@meddl/ui/components';",
+            '@meddl/ui/components',
         ],
         [
             'import type node',

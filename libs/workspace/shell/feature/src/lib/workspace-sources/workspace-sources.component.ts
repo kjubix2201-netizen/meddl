@@ -17,45 +17,45 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs';
-import { PlaylistActions, selectAllPlaylistsMeta } from '@iptvnator/m3u-state';
-import { dialogSize } from '@iptvnator/ui/components';
+import { PlaylistActions, selectAllPlaylistsMeta } from '@meddl/m3u-state';
+import { dialogSize } from '@meddl/ui/components';
 import {
     SourceStatusService,
     sourceStatusBucket,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     isLiveExternalPlayerSession,
     PORTAL_EXTERNAL_PLAYBACK,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     PlaylistRefreshActionService,
     RecentPlaylistsComponent,
     SourceCleanupDialogComponent,
     SourceRemovalService,
-} from '@iptvnator/playlist/shared/ui';
+} from '@meddl/playlist/shared/ui';
 import {
     filterSources,
     SourceBucketOf,
     SourcesViewStateService,
-} from '@iptvnator/playlist/shared/util';
+} from '@meddl/playlist/shared/util';
 import {
     injectTranslationTick,
     RuntimeCapabilitiesService,
     SortService,
     SourceActivityService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PlaylistUpdateState,
     sourceHealthType,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     MenuItemRadioCheckDirective,
     MenuItemRadioDirective,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     WORKSPACE_SHELL_ACTIONS,
     WorkspacePlaylistType,
-} from '@iptvnator/workspace/shell/util';
+} from '@meddl/workspace/shell/util';
 import {
     isSortOptionActive,
     SOURCE_SORT_OPTIONS,

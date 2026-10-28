@@ -1,4 +1,4 @@
-import { observeRequestSocketConnect } from '@iptvnator/shared/host-health';
+import { observeRequestSocketConnect } from '@meddl/shared/host-health';
 import axios from 'axios';
 import {
     request as httpRequest,

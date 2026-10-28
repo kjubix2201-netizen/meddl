@@ -4,8 +4,8 @@ import {
     createProvider,
     findFilmographyTitle,
     ProviderTransport,
-} from '@iptvnator/tv/data-access';
-import type { Source } from '@iptvnator/tv/util';
+} from '@meddl/tv/data-access';
+import type { Source } from '@meddl/tv/util';
 
 class Transport extends ProviderTransport {
     constructor() {

@@ -4,14 +4,14 @@ import {
     formatDurationLabel,
     playbackProgressPercent,
     type ExternalPlaybackButtonLabel,
-} from '@iptvnator/portal/shared/util';
-import type { CrossPortalSimilarItem } from '@iptvnator/services';
+} from '@meddl/portal/shared/util';
+import type { CrossPortalSimilarItem } from '@meddl/services';
 import {
     VideoPlayer,
     type ExternalPlayerName,
     type NormalizedVodMeta,
-} from '@iptvnator/shared/interfaces';
-import type { DetailActionButtonState } from '@iptvnator/ui/components';
+} from '@meddl/shared/interfaces';
+import type { DetailActionButtonState } from '@meddl/ui/components';
 import {
     buildCastMembers,
     buildCountryChips,

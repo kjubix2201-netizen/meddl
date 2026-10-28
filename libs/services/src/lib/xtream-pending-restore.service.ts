@@ -3,7 +3,7 @@ import {
     getXtreamPendingRestoreStorageKey,
     normalizeXtreamPendingRestoreState,
     XtreamPendingRestoreState,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 export interface XtreamPendingRestoreSnapshot {
     readonly playlistId: string;

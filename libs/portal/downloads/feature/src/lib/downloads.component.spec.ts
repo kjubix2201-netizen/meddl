@@ -18,13 +18,13 @@ import {
     PlaylistsService,
     type RecordingItem,
     RecordingsService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PORTAL_SHELL_ACTIONS,
     PortalCollectionContextService,
-} from '@iptvnator/portal/shared/util';
-import type { Playlist, XtreamCategory } from '@iptvnator/shared/interfaces';
-import { DialogService } from '@iptvnator/ui/components';
+} from '@meddl/portal/shared/util';
+import type { Playlist, XtreamCategory } from '@meddl/shared/interfaces';
+import { DialogService } from '@meddl/ui/components';
 import { BehaviorSubject, type Observable, Subject } from 'rxjs';
 import { DownloadLibraryNavigationService } from './download-library-navigation.service';
 import type { DownloadActionResult } from './download-actions';
@@ -654,7 +654,7 @@ describe('DownloadsComponent', () => {
     it.each(['remove', 'clear'])(
         'shows a persistent recovery dialog with a copyable path on %s',
         async (action) => {
-            const recoveryPath = '/downloads/.iptvnator-cleanup-example/entry';
+            const recoveryPath = '/downloads/.meddl-cleanup-example/entry';
             const result = { success: false, recoveryPath };
             downloadsService.removeDownload.mockResolvedValueOnce(result);
             downloadsService.clearCompleted.mockResolvedValueOnce(result);

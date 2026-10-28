@@ -16,9 +16,9 @@ import {
     createLogger,
     getSeriesQuickStartAction,
     inlineProgressPosition,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { PlaybackPositionRuntimeBridgeService } from '@iptvnator/services';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { PlaybackPositionRuntimeBridgeService } from '@meddl/services';
 import {
     ExternalPlayerName,
     ExternalPlayerSession,
@@ -26,18 +26,18 @@ import {
     ResolvedPortalPlayback,
     XtreamSerieDetails,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     SeasonContainerPlaybackToggleRequest,
     SeasonContainerSeriesPlaybackToggleRequest,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     getSeriesEpisodeMetadata,
     getSeriesPlaybackNavigation,
     inlineSeriesEpisodeState,
     type PlaybackFallbackRequest,
     type SeriesPlaybackEpisodeState,
-} from '@iptvnator/ui/playback';
+} from '@meddl/ui/playback';
 import {
     injectXtreamRecentHistory,
     xtreamPlayedDetail,

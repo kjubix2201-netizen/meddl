@@ -13,11 +13,11 @@ import {
     ANNOUNCE_PLAYLIST_OPEN_LISTENER,
     OPEN_FILE,
     WINDOW_BACK_REQUESTED,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type {
     DownloadMetadataSnapshot,
     ElectronBridgeApi,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     dbPreloadCases,
     epgPreloadCases,
@@ -233,7 +233,7 @@ describe('main preload DB IPC contract', () => {
             currentVersion: '0.22.0',
             latestVersion: '0.23.0',
             manualDownloadUrl:
-                'https://github.com/4gray/iptvnator/releases/latest',
+                'https://github.com/kjubix2201-netizen/meddl/releases/latest',
             status: 'available',
             supportedSelfUpdate: true,
         };

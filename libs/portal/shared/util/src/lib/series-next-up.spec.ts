@@ -1,7 +1,7 @@
 import type {
     PlaybackPositionData,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     getSeriesNextUp,
     isExtrasSeason,

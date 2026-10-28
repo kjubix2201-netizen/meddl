@@ -8,15 +8,15 @@ import {
     PORTAL_EXTERNAL_PLAYBACK,
     PORTAL_PLAYBACK_POSITIONS,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     StalkerStore,
     StalkerEpisodeResolver,
     type StalkerMappedEpisode,
     type StalkerVodSource,
-} from '@iptvnator/portal/stalker/data-access';
-import { TmdbEnrichmentService } from '@iptvnator/services';
-import type { ResolvedPortalPlayback } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/stalker/data-access';
+import { TmdbEnrichmentService } from '@meddl/services';
+import type { ResolvedPortalPlayback } from '@meddl/shared/interfaces';
 import { StalkerSeriesViewComponent } from './stalker-series-view.component';
 import { STALKER_SERIES_DOWNLOAD_MODES } from './stalker-series-download.adapter';
 import { createStalkerEpisodePlaybackSessionKey } from './stalker-episode-playback-session-key';

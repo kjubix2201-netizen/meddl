@@ -1,10 +1,10 @@
-import { createDevLogger } from '@iptvnator/shared/interfaces';
+import { createDevLogger } from '@meddl/shared/interfaces';
 import {
     InlinePlaybackPlayer,
     type PlaybackDiagnostic,
     classifyNativePlaybackIssue,
     createPlaybackSourceMetadata,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import type { PlayerTimeUpdate } from '../playback-history/player-time-update';
 
 const debugHtmlPlayer = createDevLogger('HtmlVideoPlayer');

@@ -1,7 +1,7 @@
 import {
     ExternalPlayerSession,
     readExternalPlayerErrorCode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { externalPlayerProcessTeardownGate } from './external-player-process';
 import { externalPlayerSessions } from './external-player-runtime';
 

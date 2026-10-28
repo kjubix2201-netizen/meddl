@@ -1,12 +1,12 @@
 import { Injector, runInInjectionContext } from '@angular/core';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { Router } from '@angular/router';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { EpgService } from '@iptvnator/epg/data-access';
-import { PlaylistsService, SettingsStore } from '@iptvnator/services';
-import type { Channel } from '@iptvnator/shared/interfaces';
+import { EpgService } from '@meddl/epg/data-access';
+import { PlaylistsService, SettingsStore } from '@meddl/services';
+import type { Channel } from '@meddl/shared/interfaces';
 import { of, Subject } from 'rxjs';
 import { FavoritesActions } from './actions';
 import { PlaylistEffects } from './effects';

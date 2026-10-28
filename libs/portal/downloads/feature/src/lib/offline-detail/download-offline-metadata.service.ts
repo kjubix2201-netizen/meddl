@@ -7,12 +7,12 @@ import {
     SettingsStore,
     TmdbEnrichmentService,
     type DownloadItem,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     createMovieDownloadSnapshot,
     createSeriesEpisodeDownloadSnapshot,
-} from '@iptvnator/portal/shared/util';
-import type { DownloadMetadataSnapshot } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/util';
+import type { DownloadMetadataSnapshot } from '@meddl/shared/interfaces';
 import {
     mapProviderToDownloadSnapshot,
     mergeSnapshotWithTmdb,

@@ -1,4 +1,4 @@
-import type { DownloadMetadataSnapshot } from '@iptvnator/shared/interfaces';
+import type { DownloadMetadataSnapshot } from '@meddl/shared/interfaces';
 import {
     decodeDownloadMetadataSnapshot,
     DOWNLOAD_METADATA_MAX_BYTES,

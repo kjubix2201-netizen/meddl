@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { probeDirect } from '@iptvnator/tv/data-access';
+import { probeDirect } from '@meddl/tv/data-access';
 import { TvModel } from './use-tv';
 export function DirectAccessProbe({ tv }: { tv: TvModel }) {
     const [result, setResult] = useState<{ catalog: string; media: string }>();

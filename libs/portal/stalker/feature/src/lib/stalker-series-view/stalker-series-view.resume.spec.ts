@@ -10,18 +10,18 @@ import {
     PORTAL_PLAYER,
     SERIES_QUICK_START_ACTION_KIND,
     type SeriesResumeTarget,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     StalkerStore,
     StalkerEpisodeResolver,
     type StalkerVodSource,
-} from '@iptvnator/portal/stalker/data-access';
-import { TmdbEnrichmentService } from '@iptvnator/services';
+} from '@meddl/portal/stalker/data-access';
+import { TmdbEnrichmentService } from '@meddl/services';
 import type {
     PlaybackPositionData,
     ResolvedPortalPlayback,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { StalkerSeriesViewComponent } from './stalker-series-view.component';
 import { STALKER_SERIES_RESUME_TARGET } from './stalker-series-resume';
 

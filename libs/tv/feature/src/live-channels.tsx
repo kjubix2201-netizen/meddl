@@ -1,4 +1,4 @@
-import { ChannelLogo, Empty, VirtualCollection } from '@iptvnator/tv/ui';
+import { ChannelLogo, Empty, VirtualCollection } from '@meddl/tv/ui';
 import type { TvModel } from './use-tv';
 import { categoryKey, useLiveBrowse } from './use-live-browse';
 export function LiveChannels({

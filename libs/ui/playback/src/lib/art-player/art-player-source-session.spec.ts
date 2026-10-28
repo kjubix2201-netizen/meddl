@@ -1,4 +1,4 @@
-import type { PlaybackDiagnostic } from '@iptvnator/playback/util';
+import type { PlaybackDiagnostic } from '@meddl/playback/util';
 import {
     MockHls,
     MockMpegTsPlayer,

@@ -11,14 +11,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslatePipe } from '@ngx-translate/core';
-import { ServerStorageStatusService } from '@iptvnator/services';
+import { ServerStorageStatusService } from '@meddl/services';
 import {
     SERVER_STORAGE_CONFIG,
     ServerMigrationService,
     ServerStorageSession,
     type ServerMigrationResult,
-} from '@iptvnator/services/server-storage';
-import type { ServerStorageStatusResponse } from '@iptvnator/shared/interfaces';
+} from '@meddl/services/server-storage';
+import type { ServerStorageStatusResponse } from '@meddl/shared/interfaces';
 
 /**
  * Settings → Server: shown only when the PWA runs against self-hosted

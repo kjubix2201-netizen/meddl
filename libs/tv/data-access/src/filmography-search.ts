@@ -3,9 +3,9 @@ import {
     titleYearsCompatible,
     extractYear,
     extractSeasonFromTitle,
-} from '@iptvnator/shared/interfaces';
-import { ActorFilmographyCredit } from '@iptvnator/shared/tmdb';
-import { Kind, Media, ProviderClient } from '@iptvnator/tv/util';
+} from '@meddl/shared/interfaces';
+import { ActorFilmographyCredit } from '@meddl/shared/tmdb';
+import { Kind, Media, ProviderClient } from '@meddl/tv/util';
 
 export type FilmographyMatch =
     | { status: 'found'; item: Media }

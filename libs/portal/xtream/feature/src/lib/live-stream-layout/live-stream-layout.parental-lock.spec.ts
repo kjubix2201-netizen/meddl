@@ -8,26 +8,26 @@ import { Subject, of } from 'rxjs';
 import {
     LiveLayoutSidebarStateService,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     FavoritesService,
     XtreamStore,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     EpgArchiveCopyService,
     EpgArchiveDownloadService,
     EpgListViewComponent,
     EpgTimelineComponent,
-} from '@iptvnator/ui/epg';
-import { WebPlayerViewComponent } from '@iptvnator/ui/playback';
-import { GridListComponent } from '@iptvnator/portal/shared/ui';
+} from '@meddl/ui/epg';
+import { WebPlayerViewComponent } from '@meddl/ui/playback';
+import { GridListComponent } from '@meddl/portal/shared/ui';
 import {
     DatabaseService,
     ParentalLockService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import { PortalChannelsListComponent } from '../portal-channels-list/portal-channels-list.component';
 import { LiveStreamLayoutComponent } from './live-stream-layout.component';
 import {

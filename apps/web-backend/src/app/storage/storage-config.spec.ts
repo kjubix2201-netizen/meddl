@@ -12,36 +12,36 @@ describe('readServerStorageConfig', () => {
         });
     });
 
-    it('enables storage only for IPTVNATOR_STORAGE=server', () => {
+    it('enables storage only for MEDDL_STORAGE=server', () => {
         expect(
-            readServerStorageConfig({ IPTVNATOR_STORAGE: ' Server ' }).enabled
+            readServerStorageConfig({ MEDDL_STORAGE: ' Server ' }).enabled
         ).toBe(true);
         expect(
-            readServerStorageConfig({ IPTVNATOR_STORAGE: 'none' }).enabled
+            readServerStorageConfig({ MEDDL_STORAGE: 'none' }).enabled
         ).toBe(false);
         expect(
-            readServerStorageConfig({ IPTVNATOR_STORAGE: '1' }).enabled
+            readServerStorageConfig({ MEDDL_STORAGE: '1' }).enabled
         ).toBe(false);
     });
 
     it('reads a trimmed access token and ignores a blank one', () => {
         expect(
-            readServerStorageConfig({ IPTVNATOR_ACCESS_TOKEN: ' s3cret ' })
+            readServerStorageConfig({ MEDDL_ACCESS_TOKEN: ' s3cret ' })
                 .accessToken
         ).toBe('s3cret');
         expect(
-            readServerStorageConfig({ IPTVNATOR_ACCESS_TOKEN: '  ' })
+            readServerStorageConfig({ MEDDL_ACCESS_TOKEN: '  ' })
                 .accessToken
         ).toBeNull();
     });
 
     it('reads a positive document limit in megabytes', () => {
         expect(
-            readServerStorageConfig({ IPTVNATOR_MAX_DOCUMENT_MB: '8' })
+            readServerStorageConfig({ MEDDL_MAX_DOCUMENT_MB: '8' })
                 .maxDocumentBytes
         ).toBe(8 * 1024 * 1024);
         expect(
-            readServerStorageConfig({ IPTVNATOR_MAX_DOCUMENT_MB: '-1' })
+            readServerStorageConfig({ MEDDL_MAX_DOCUMENT_MB: '-1' })
                 .maxDocumentBytes
         ).toBe(64 * 1024 * 1024);
     });
@@ -50,13 +50,13 @@ describe('readServerStorageConfig', () => {
         const problem = (env: Record<string, string>) =>
             serverStorageConfigProblem(readServerStorageConfig(env));
 
-        expect(problem({ IPTVNATOR_ACCESS_TOKEN: 's3cret' })).toContain(
-            'IPTVNATOR_STORAGE=server'
+        expect(problem({ MEDDL_ACCESS_TOKEN: 's3cret' })).toContain(
+            'MEDDL_STORAGE=server'
         );
         expect(
             problem({
-                IPTVNATOR_ACCESS_TOKEN: 's3cret',
-                IPTVNATOR_STORAGE: 'server',
+                MEDDL_ACCESS_TOKEN: 's3cret',
+                MEDDL_STORAGE: 'server',
             })
         ).toBeNull();
         expect(problem({})).toBeNull();

@@ -2,14 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Store } from '@ngrx/store';
 import { of, throwError } from 'rxjs';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { PlaylistsService } from '@iptvnator/services';
-import { PlaylistMeta } from '@iptvnator/shared/interfaces';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { PlaylistsService } from '@meddl/services';
+import { PlaylistMeta } from '@meddl/shared/interfaces';
 import { StalkerContentType } from '../stalker-store.contracts';
 import { withStalkerRecent } from './with-stalker-recent.feature';
 
-jest.mock('@iptvnator/portal/shared/util', () => ({
-    ...jest.requireActual('@iptvnator/portal/shared/util'),
+jest.mock('@meddl/portal/shared/util', () => ({
+    ...jest.requireActual('@meddl/portal/shared/util'),
     createLogger: () => ({
         debug: jest.fn(),
         info: jest.fn(),

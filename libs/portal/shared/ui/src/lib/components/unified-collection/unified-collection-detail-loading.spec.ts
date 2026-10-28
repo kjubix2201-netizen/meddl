@@ -4,18 +4,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { provideRouter } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
-import { DialogService } from '@iptvnator/ui/components';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { DialogService } from '@meddl/ui/components';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 import {
     OPEN_COLLECTION_DETAIL_STATE_KEY,
     ScopeToggleService,
     UnifiedCollectionItem,
     WorkspaceViewCommandService,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     UnifiedFavoritesDataService,
     UnifiedRecentDataService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import { UnifiedCollectionPageComponent } from './unified-collection-page.component';
 import { UnifiedCollectionDetailDirective } from './unified-collection-detail.directive';
 

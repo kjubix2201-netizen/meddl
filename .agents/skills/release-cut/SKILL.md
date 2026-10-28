@@ -1,6 +1,6 @@
 ---
 name: release-cut
-description: Use when preparing, cutting, tagging, publishing, or verifying an IPTVnator release or its release assets.
+description: Use when preparing, cutting, tagging, publishing, or verifying an meddl release or its release assets.
 ---
 
 # Release Cut

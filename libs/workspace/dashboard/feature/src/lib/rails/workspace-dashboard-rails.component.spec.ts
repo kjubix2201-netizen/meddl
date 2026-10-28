@@ -1,7 +1,7 @@
 import { WorkspaceDashboardRailsComponent } from './workspace-dashboard-rails.component';
-import type { GlobalRecentItem } from '@iptvnator/workspace/dashboard/data-access';
-import type { EpgProgram, PlaylistMeta } from '@iptvnator/shared/interfaces';
-import { DEFAULT_DASHBOARD_RAILS_SETTINGS } from '@iptvnator/shared/interfaces';
+import type { GlobalRecentItem } from '@meddl/workspace/dashboard/data-access';
+import type { EpgProgram, PlaylistMeta } from '@meddl/shared/interfaces';
+import { DEFAULT_DASHBOARD_RAILS_SETTINGS } from '@meddl/shared/interfaces';
 import {
     buildDashboardCollectionViewState,
     buildDashboardContinueWatchingActions,
@@ -30,7 +30,7 @@ import {
 } from './dashboard-playback.utils';
 import { resolveDashboardHeroArtwork } from './dashboard-hero.utils';
 import type { DashboardRailCard } from './dashboard-rail.component';
-import { COLLECTION_VIEW_STATE_KEY } from '@iptvnator/portal/shared/util';
+import { COLLECTION_VIEW_STATE_KEY } from '@meddl/portal/shared/util';
 
 describe('buildDashboardSourceActions', () => {
     const basePlaylist = {

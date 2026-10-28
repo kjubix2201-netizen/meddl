@@ -28,8 +28,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
-import { PlaylistActions } from '@iptvnator/m3u-state';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
+import { PlaylistActions } from '@meddl/m3u-state';
 import { firstValueFrom } from 'rxjs';
 import {
     createXtreamConnectionTestState,
@@ -37,7 +37,7 @@ import {
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     createStalkerMacAddressValidator,
     normalizeStalkerIdentityValue,
@@ -47,12 +47,12 @@ import {
     PlaylistMeta,
     PlaylistMetaUpdate,
     validateEpgSourceReferenceControl,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     normalizeEpgUrls,
     resolvePlaylistEpgSourceState,
-} from '@iptvnator/shared/m3u-utils';
-import { PasswordVisibilityToggleDirective } from '@iptvnator/ui/components/password-visibility-toggle';
+} from '@meddl/shared/m3u-utils';
+import { PasswordVisibilityToggleDirective } from '@meddl/ui/components/password-visibility-toggle';
 import {
     hasStalkerConnectionChanged,
     omitStalkerConnection,
@@ -62,13 +62,13 @@ import {
     STALKER_PLAYLIST_CONNECTION_EDITOR,
     STALKER_PLAYLIST_CONNECTION_EDITOR_STATUS,
 } from './stalker-playlist-connection-editor.token';
-import { RevealDetailsDirective } from '@iptvnator/ui/components/reveal-details';
-import { provideFormFieldDefaults } from '@iptvnator/ui/components/form-field-defaults';
+import { RevealDetailsDirective } from '@meddl/ui/components/reveal-details';
+import { provideFormFieldDefaults } from '@meddl/ui/components/form-field-defaults';
 import {
     DialogFooterDirective,
     DialogFooterStartDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 type DesktopFileSaveBridge = Pick<
     typeof window.electron,

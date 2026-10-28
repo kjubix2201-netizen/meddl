@@ -13,7 +13,7 @@ jest.mock('node:v8', () => ({
     getHeapStatistics: jest.fn(),
 }));
 
-const PROFILING_ENV = 'IPTVNATOR_PERF_WORKER_PROFILING';
+const PROFILING_ENV = 'MEDDL_PERF_WORKER_PROFILING';
 const mockedGetHeapStatistics = getHeapStatistics as jest.MockedFunction<
     typeof getHeapStatistics
 >;

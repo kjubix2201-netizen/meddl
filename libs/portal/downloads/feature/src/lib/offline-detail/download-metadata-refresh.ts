@@ -1,5 +1,5 @@
-import { TMDB_DETAILS_CACHE_TTL_MS } from '@iptvnator/services';
-import type { DownloadMetadataSnapshot } from '@iptvnator/shared/interfaces';
+import { TMDB_DETAILS_CACHE_TTL_MS } from '@meddl/services';
+import type { DownloadMetadataSnapshot } from '@meddl/shared/interfaces';
 
 export const TMDB_REFRESH_STATE = {
     DISABLED: 'disabled',

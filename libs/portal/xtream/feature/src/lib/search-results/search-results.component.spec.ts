@@ -2,16 +2,16 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { BehaviorSubject, of } from 'rxjs';
-import { DatabaseService } from '@iptvnator/services';
+import { DatabaseService } from '@meddl/services';
 import { SearchResultsComponent } from './search-results.component';
 import {
     SearchFilters,
     XtreamContentItem,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
-import { GlobalSearchResult } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/xtream/data-access';
+import { GlobalSearchResult } from '@meddl/shared/interfaces';
 
-jest.mock('@iptvnator/portal/shared/ui', () => ({
+jest.mock('@meddl/portal/shared/ui', () => ({
     ContentCardComponent: class {},
     SearchLayoutComponent: class {},
 }));

@@ -9,12 +9,12 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from '@ngx-translate/core';
-import { selectAllPlaylistsMeta } from '@iptvnator/m3u-state';
+import { selectAllPlaylistsMeta } from '@meddl/m3u-state';
 import {
     SourceStatusService,
     sourceStatusBucket,
-} from '@iptvnator/portal/shared/data-access';
-import { SourceRemovalService } from '@iptvnator/playlist/shared/ui';
+} from '@meddl/portal/shared/data-access';
+import { SourceRemovalService } from '@meddl/playlist/shared/ui';
 import {
     countSourcesByStatus,
     countSourcesByType,
@@ -22,12 +22,12 @@ import {
     SourcesStatusFilter,
     SourcesTypeFilter,
     SourcesViewStateService,
-} from '@iptvnator/playlist/shared/util';
-import { SOURCE_TYPE_ICONS } from '@iptvnator/shared/interfaces';
+} from '@meddl/playlist/shared/util';
+import { SOURCE_TYPE_ICONS } from '@meddl/shared/interfaces';
 import {
     WORKSPACE_SHELL_ACTIONS,
     WorkspaceShellContextDrawerService,
-} from '@iptvnator/workspace/shell/util';
+} from '@meddl/workspace/shell/util';
 
 interface TypeOption {
     id: SourcesTypeFilter;

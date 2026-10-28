@@ -1,10 +1,10 @@
 import { createHash } from 'node:crypto';
 import { and, eq } from 'drizzle-orm';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 import {
     normalizeContentMetadataPatch,
     type XtreamBackupFavoriteItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { reconcileFavoriteIdentity } from './favorite-catalog';
 import type { AppDatabase } from '../database.types';
 import {

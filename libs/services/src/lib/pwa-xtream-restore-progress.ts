@@ -2,8 +2,8 @@ import type {
     XtreamBackupCollectionItem,
     XtreamPendingRestoreState,
     XtreamPlaylistBackupEntry,
-} from '@iptvnator/shared/interfaces';
-import { normalizeXtreamPendingRestoreState } from '@iptvnator/shared/interfaces/xtream-restore-state';
+} from '@meddl/shared/interfaces';
+import { normalizeXtreamPendingRestoreState } from '@meddl/shared/interfaces/xtream-restore-state';
 import type { UserDataStorage } from './user-data-storage';
 import {
     XTREAM_RESTORE_RECEIPTS,

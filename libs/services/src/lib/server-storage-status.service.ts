@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import type { ServerInstanceInfo } from '@iptvnator/shared/interfaces';
+import type { ServerInstanceInfo } from '@meddl/shared/interfaces';
 import {
     clearServerAccessToken,
     readServerAccessToken,

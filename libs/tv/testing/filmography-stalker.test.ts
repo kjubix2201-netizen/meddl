@@ -1,11 +1,11 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import type { Source } from '@iptvnator/tv/util';
+import type { Source } from '@meddl/tv/util';
 import {
     ProviderTransport,
     createProvider,
     findFilmographyTitle,
-} from '@iptvnator/tv/data-access';
+} from '@meddl/tv/data-access';
 class Transport extends ProviderTransport {
     constructor(
         private respond: (params: Record<string, string | number>) => unknown

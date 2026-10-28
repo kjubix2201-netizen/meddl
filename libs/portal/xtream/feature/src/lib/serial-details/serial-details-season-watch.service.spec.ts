@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { PORTAL_PLAYBACK_POSITIONS } from '@iptvnator/portal/shared/util';
-import { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+import { PORTAL_PLAYBACK_POSITIONS } from '@meddl/portal/shared/util';
+import { PlaybackPositionData } from '@meddl/shared/interfaces';
 import { SerialDetailsSeasonWatchService } from './serial-details-season-watch.service';
 
 describe('SerialDetailsSeasonWatchService', () => {

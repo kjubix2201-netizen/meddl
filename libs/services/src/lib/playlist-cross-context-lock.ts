@@ -1,4 +1,4 @@
-const PLAYLIST_AUTHORITY_BARRIER = 'iptvnator:playlist-authority';
+const PLAYLIST_AUTHORITY_BARRIER = 'meddl:playlist-authority';
 
 export type PlaylistAuthorityReservation =
     | {

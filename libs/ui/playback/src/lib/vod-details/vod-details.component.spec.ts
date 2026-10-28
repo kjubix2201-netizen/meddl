@@ -20,20 +20,20 @@ import {
     PortalDetailShellComponent,
     SimilarRailComponent,
     VodMoreMenuComponent,
-} from '@iptvnator/ui/components';
-import { PORTAL_EXTERNAL_PLAYBACK } from '@iptvnator/portal/shared/util';
+} from '@meddl/ui/components';
+import { PORTAL_EXTERNAL_PLAYBACK } from '@meddl/portal/shared/util';
 import {
     CrossPortalSimilarService,
     DownloadItem,
     DownloadsService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     ExternalPlayerSession,
     VideoPlayer,
     VodDetailsItem,
     createStalkerVodItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { VodDetailsComponent as VodDetailsComponentInstance } from './vod-details.component';
 
 jest.unstable_mockModule('video.js', () => ({

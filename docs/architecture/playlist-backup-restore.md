@@ -22,7 +22,7 @@ database snapshots.
 
 Top-level shape:
 
-- `kind: "iptvnator-playlist-backup"`
+- `kind: "meddl-playlist-backup"`
 - `version: 1`
 - `exportedAt`
 - `includeSecrets`
@@ -288,7 +288,7 @@ The settings page now exports/imports “playlist backups” instead of the old
 raw JSON application dump.
 
 - Export filename:
-  `iptvnator-playlist-backup-YYYY-MM-DD.json`
+  `meddl-playlist-backup-YYYY-MM-DD.json`
 - Import summary reports:
     - imported
     - merged

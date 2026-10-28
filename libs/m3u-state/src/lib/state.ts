@@ -1,7 +1,7 @@
-import { Channel } from '@iptvnator/shared/interfaces';
+import { Channel } from '@meddl/shared/interfaces';
 import { initialPlaylistMetaState, PlaylistMetaState } from './playlists.state';
 
-import { EpgProgram } from '@iptvnator/shared/interfaces';
+import { EpgProgram } from '@meddl/shared/interfaces';
 
 export interface PlaylistState {
     active: Channel | undefined;

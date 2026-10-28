@@ -6,7 +6,7 @@ import {
 } from './worker-performance-capture';
 import { createFakeRuntime } from './worker-performance-capture.test-harness';
 
-const PROFILING_ENV = 'IPTVNATOR_PERF_WORKER_PROFILING';
+const PROFILING_ENV = 'MEDDL_PERF_WORKER_PROFILING';
 
 /**
  * Capture must never change the business result. These cases drive the

@@ -1,10 +1,10 @@
-import type { ChannelDrm } from '@iptvnator/shared/interfaces';
+import type { ChannelDrm } from '@meddl/shared/interfaces';
 import {
     InlinePlaybackPlayer,
     type PlaybackDiagnostic,
     PlaybackDiagnosticCode,
     PlaybackDiagnosticSource,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import {
     createFakeShakaEnvironment,
     flushShakaMicrotasks,

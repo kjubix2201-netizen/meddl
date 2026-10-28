@@ -15,9 +15,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 import {
     EXTERNAL_PLAYER_ERROR_KEYS,
     ExternalPlayerSession,
-} from '@iptvnator/shared/interfaces';
-import { SettingsStore } from '@iptvnator/services';
-import { applyChannelNameStrip } from '@iptvnator/shared/m3u-utils';
+} from '@meddl/shared/interfaces';
+import { SettingsStore } from '@meddl/services';
+import { applyChannelNameStrip } from '@meddl/shared/m3u-utils';
 
 @Component({
     selector: 'app-external-playback-dock',

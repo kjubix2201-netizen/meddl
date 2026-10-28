@@ -69,7 +69,7 @@ async function createXtreamAppResource(
 ): Promise<XtreamAppResource> {
     await assertTcpPortAvailable(configuration.cdpPort);
     const dataDirectory = await mkdtemp(
-        join(tmpdir(), 'iptvnator-xtream-performance-')
+        join(tmpdir(), 'meddl-xtream-performance-')
     );
     try {
         const app = await launchElectronApp(dataDirectory, {
@@ -81,14 +81,14 @@ async function createXtreamAppResource(
             ],
             environmentInheritance: 'runtime-only',
             env: {
-                IPTVNATOR_DB_WORKER_BATCH_DELAY_MS: '0',
-                IPTVNATOR_PERF_CAPTURE: '1',
-                IPTVNATOR_PERF_WORKER_PROFILING: '1',
-                IPTVNATOR_TRACE_RENDERER_CONSOLE: '0',
+                MEDDL_DB_WORKER_BATCH_DELAY_MS: '0',
+                MEDDL_PERF_CAPTURE: '1',
+                MEDDL_PERF_WORKER_PROFILING: '1',
+                MEDDL_TRACE_RENDERER_CONSOLE: '0',
             },
             omitEnvKeys: [
-                'IPTVNATOR_XTREAM_MOCK_CONTROL',
-                'IPTVNATOR_XTREAM_MOCK_CONTROL_TOKEN',
+                'MEDDL_XTREAM_MOCK_CONTROL',
+                'MEDDL_XTREAM_MOCK_CONTROL_TOKEN',
             ],
         });
         return { app, dataDirectory };

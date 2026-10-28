@@ -1,7 +1,7 @@
 # Nx Workspace Boundaries
 
 This document records the current monorepo placement, tagging, and validation
-contract for IPTVnator. Nx discovery is the canonical project inventory; avoid
+contract for meddl. Nx discovery is the canonical project inventory; avoid
 copying an exhaustive project list into documentation.
 
 ## Fresh Worktree Bootstrap and Discovery
@@ -88,7 +88,7 @@ Two third-party packages need scoped compatibility bridges in
 - `ngx-indexed-db@22.0.0` declares Angular `<22`, but its used API remains
   compatible. Its allowance is scoped to the exact Angular version and must be
   revalidated on upgrades. `apps/web-e2e/src/basic.e2e.ts` opens a historical
-  `iptvnator` v1 database, retains the `_id` key path, and checks reload
+  `meddl` v1 database, retains the `_id` key path, and checks reload
   persistence. The shared interfaces package declares the same library version.
   Remove the allowance when upstream includes the installed Angular version.
 
@@ -204,7 +204,7 @@ in `libs/playback/util` and receive browser capability checks as explicit
 probes.
 
 `libs/playback/util` is the `playback-util` Nx project and is imported through
-`@iptvnator/playback/util`. Its exact tags are `scope:shared`,
+`@meddl/playback/util`. Its exact tags are `scope:shared`,
 `domain:playback`, and `type:util`. It owns the public playback diagnostic,
 structured engine-evidence, source/engine-family, target-capability,
 content-session-key, and recovery-recommendation contracts and pure helpers.
@@ -219,15 +219,15 @@ other utility projects, including shared interface contracts, while
 session-local recovery actions.
 
 `libs/playback/data-access` is the `playback-data-access` Nx project,
-imported through `@iptvnator/playback/data-access` (tags `scope:shared`,
+imported through `@meddl/playback/data-access` (tags `scope:shared`,
 `domain:playback`, `type:data-access`). It owns renderer playback state that
 store, feature and player layers share — currently `PlaybackHistoryGate`,
 which holds "recently viewed" writes until playback is confirmed. It is kept
-out of `@iptvnator/services` on purpose: that barrel ships in the initial
+out of `@meddl/services` on purpose: that barrel ships in the initial
 bundle, and this project is only reached from lazy player and portal code.
 
 `libs/shared/epg` is the pure `shared-epg` utility project, imported through
-`@iptvnator/shared/epg` (scope:shared, domain:shared-contracts, type:util).
+`@meddl/shared/epg` (scope:shared, domain:shared-contracts, type:util).
 It owns epoch-millisecond time-axis projection, ticks and clipping used by Angular
 EPG and the independent TV grid. Provider parsing, Angular controllers and Preact
 navigation remain with their respective adapters and feature projects.
@@ -264,15 +264,15 @@ dependency of `web-backend`, not an imported application module. Its domain
 constraint permits TV, TMDB, provider, M3U and shared-contract libraries, while the
 same type constraints still apply. TV runtime imports additionally reject
 Angular, Electron and Node. The framework-free provider sub-entrypoints are
-`@iptvnator/portal/xtream/client` and `@iptvnator/portal/stalker/client`;
+`@meddl/portal/xtream/client` and `@meddl/portal/stalker/client`;
 see [TV architecture](tv-application.md). `shared-tmdb` exposes
-`@iptvnator/shared/tmdb` with `scope:shared`, `domain:tmdb`, `type:data-access`.
+`@meddl/shared/tmdb` with `scope:shared`, `domain:tmdb`, `type:data-access`.
 Its domain constraint permits only TMDB and shared contracts; the core has no
 Angular dependencies. Angular services retain injectable compatibility wrappers.
 
 `workspace-shell-util` is a deliberate path/tag exception:
 `libs/workspace/shell/util` is tagged `type:data-access` because it exports
-injectable services that depend on `@iptvnator/services`. The web app imports
+injectable services that depend on `@meddl/services`. The web app imports
 those services eagerly from `apps/web/src/app/app.routes.ts` without pulling
 the lazy workspace shell feature into the initial bundle.
 
@@ -282,22 +282,22 @@ Use scoped aliases from `tsconfig.base.json` and expose public imports through a
 library's `src/index.ts`. Do not introduce legacy bare aliases such as
 `services`, `components`, `shared-interfaces`, or `database`, and avoid deep
 imports unless a sub-entrypoint is explicitly configured. The configured
-sub-entrypoints are `@iptvnator/shared/interfaces/ipc-commands` and
-`@iptvnator/shared/interfaces/zoom-level`, both for the Electron preload: the
-`@iptvnator/shared/interfaces` barrel pulls in `ngx-indexed-db`, which the
+sub-entrypoints are `@meddl/shared/interfaces/ipc-commands` and
+`@meddl/shared/interfaces/zoom-level`, both for the Electron preload: the
+`@meddl/shared/interfaces` barrel pulls in `ngx-indexed-db`, which the
 preload bundle must not carry, so the preload only type-imports the barrel
 and value-imports those two dependency-free modules directly.
-`@iptvnator/workspace/shell/util/settings-search` exists for the opposite
+`@meddl/workspace/shell/util/settings-search` exists for the opposite
 reason: the main `workspace-shell-util` barrel is imported eagerly, and the
 settings search index must stay in the lazy settings and shell chunks.
-`@iptvnator/workspace/shell/util/settings-context` keeps
+`@meddl/workspace/shell/util/settings-context` keeps
 `SettingsContextService`, which only the lazy settings page and settings
 context panel use, out of that barrel for the same reason, and
-`@iptvnator/services/playlist-backup` keeps `PlaylistBackupService` (about
-22 KB, used only by the lazy settings page) out of the `@iptvnator/services`
+`@meddl/services/playlist-backup` keeps `PlaylistBackupService` (about
+22 KB, used only by the lazy settings page) out of the `@meddl/services`
 barrel.
 
-`@iptvnator/services/pwa-xtream-backup-storage` exposes the framework-free browser
+`@meddl/services/pwa-xtream-backup-storage` exposes the framework-free browser
 backup persistence implementation without re-exporting it from the eager services
 barrel. The injected backup service wraps it; deferred restore loads it through a
 local dynamic-import module with the data source's storage. Its map keys live in
@@ -305,7 +305,7 @@ a separate pure module so it does not import the Angular storage token at runtim
 Electron favorites likewise load their
 legacy pending-conversion helper only when a favorites operation needs it.
 Those lazy helpers value-import the pure normalizer through
-`@iptvnator/shared/interfaces/xtream-restore-state`; their remaining contracts
+`@meddl/shared/interfaces/xtream-restore-state`; their remaining contracts
 use type-only imports so a deferred conversion does not load the interfaces
 barrel's Angular/IndexedDB dependencies.
 
@@ -314,16 +314,16 @@ they construct) is on the renderer's initial path, where a barrel costs its
 whole library: esbuild keeps every Angular component module a barrel
 re-exports, because their static definitions count as side effects (so do an
 `@Injectable` service's and a pipe's). Importing
-`WindowControlsComponent` and `DialogService` from `@iptvnator/ui/components`
+`WindowControlsComponent` and `DialogService` from `@meddl/ui/components`
 once put the channel lists, EPG views, `@angular/forms`, `date-fns` and the
 Stalker data layer into `main.js`. The root shell therefore uses file-level
-entries: `@iptvnator/ui/components/window-controls`,
-`@iptvnator/ui/components/confirm-dialog`,
-`@iptvnator/playlist/shared/ui/stalker-connection-editor`,
-`@iptvnator/playlist/shared/util/playlist-file-import` (the barrel would add
-`PlaylistContextFacade`) and `@iptvnator/pipes/date-format` (the barrel would
+entries: `@meddl/ui/components/window-controls`,
+`@meddl/ui/components/confirm-dialog`,
+`@meddl/playlist/shared/ui/stalker-connection-editor`,
+`@meddl/playlist/shared/util/playlist-file-import` (the barrel would add
+`PlaylistContextFacade`) and `@meddl/pipes/date-format` (the barrel would
 add `SafePipe`; the eager EPG progress panel uses it too), like the existing
-`@iptvnator/ui/epg/progress-panel`, and loads anything used only on demand
+`@meddl/ui/epg/progress-panel`, and loads anything used only on demand
 through a local file it imports dynamically (the Stalker connection editor,
 the release-notes dialog, the external-player info dialog, the parental-lock
 PIN dialog and the Stalker step of the parental-lock enforcement, which runs
@@ -337,9 +337,9 @@ code splitting places a module in the chunk shared by every entry point
 that reaches it, so a helper that only lazy routes use, but that an eager
 file can reach through a barrel's re-export, lands in an initial chunk even
 though tree shaking would drop it from a single bundle. The eager Xtream
-data layer and root shell therefore import `@iptvnator/portal/shared/util/logger`
-and `@iptvnator/portal/shared/util/tokens` (the portal DI tokens), not the
-`@iptvnator/portal/shared/util` barrel, whose navigation, keyboard-shortcut
+data layer and root shell therefore import `@meddl/portal/shared/util/logger`
+and `@meddl/portal/shared/util/tokens` (the portal DI tokens), not the
+`@meddl/portal/shared/util` barrel, whose navigation, keyboard-shortcut
 and download helpers (about 45 KB) belong to the lazy portal routes. A
 type-only import of a barrel uses `import type`, so it can never keep the
 barrel reachable. `renderer.initialBytes` in

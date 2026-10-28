@@ -23,7 +23,7 @@ describe('durable Xtream favorites against initialized SQLite', () => {
     ])(
         '%s preserves the saved favorite independently of catalog rows',
         (scenario) => {
-            const dataDir = mkdtempSync(join(tmpdir(), 'iptvnator-favorites-'));
+            const dataDir = mkdtempSync(join(tmpdir(), 'meddl-favorites-'));
             try {
                 expect(
                     execFileSync(
@@ -41,7 +41,7 @@ describe('durable Xtream favorites against initialized SQLite', () => {
                             env: {
                                 ...process.env,
                                 ELECTRON_RUN_AS_NODE: '1',
-                                IPTVNATOR_E2E_DATA_DIR: dataDir,
+                                MEDDL_E2E_DATA_DIR: dataDir,
                                 TSX_TSCONFIG_PATH: resolve(
                                     process.cwd(),
                                     'tsconfig.base.json'

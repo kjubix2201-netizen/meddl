@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { PlaylistFileImportService } from '@iptvnator/playlist/shared/util/playlist-file-import';
-import type { ElectronBridgePlaylistOpenRequest } from '@iptvnator/shared/interfaces';
+import { PlaylistFileImportService } from '@meddl/playlist/shared/util/playlist-file-import';
+import type { ElectronBridgePlaylistOpenRequest } from '@meddl/shared/interfaces';
 
 type PlaylistOpenRequestBridge = {
     acknowledgePlaylistOpenRequest?: (requestId: string) => Promise<void>;

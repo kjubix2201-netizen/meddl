@@ -10,12 +10,12 @@ import {
     PlaylistActions,
     selectAllPlaylistsMeta,
     selectPlaylistsLoadingFlag,
-} from '@iptvnator/m3u-state';
-import { SourceStatusService } from '@iptvnator/portal/shared/data-access';
+} from '@meddl/m3u-state';
+import { SourceStatusService } from '@meddl/portal/shared/data-access';
 import {
     PlaylistContextFacade,
     SourcesViewStateService,
-} from '@iptvnator/playlist/shared/util';
+} from '@meddl/playlist/shared/util';
 import {
     RuntimeCapabilitiesService,
     SortBy,
@@ -23,8 +23,8 @@ import {
     SortOrder,
     SortService,
     SourceActivityService,
-} from '@iptvnator/services';
-import { PlaylistMeta, SourceStatus } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { PlaylistMeta, SourceStatus } from '@meddl/shared/interfaces';
 import { PlaylistRefreshActionService } from '../playlist-refresh-action.service';
 import { SourceRemovalService } from '../source-removal/source-removal.service';
 import { SourceRowComponent } from '../source-row/source-row.component';

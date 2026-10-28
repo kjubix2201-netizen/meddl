@@ -17,199 +17,199 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@iptvnator/shared/tmdb": ["libs/shared/tmdb/src/index.ts"],
-            "@iptvnator/shared/epg": ["libs/shared/epg/src/index.ts"],
-            "@iptvnator/portal/catalog/feature": [
+            "@meddl/shared/tmdb": ["libs/shared/tmdb/src/index.ts"],
+            "@meddl/shared/epg": ["libs/shared/epg/src/index.ts"],
+            "@meddl/portal/catalog/feature": [
                 "libs/portal/catalog/feature/src/index.ts"
             ],
-            "@iptvnator/portal/downloads/feature": [
+            "@meddl/portal/downloads/feature": [
                 "libs/portal/downloads/feature/src/index.ts"
             ],
-            "@iptvnator/portal/shared/ui": [
+            "@meddl/portal/shared/ui": [
                 "libs/portal/shared/ui/src/index.ts"
             ],
-            "@iptvnator/portal/shared/data-access": [
+            "@meddl/portal/shared/data-access": [
                 "libs/portal/shared/data-access/src/index.ts"
             ],
-            "@iptvnator/portal/shared/util": [
+            "@meddl/portal/shared/util": [
                 "libs/portal/shared/util/src/index.ts"
             ],
-            "@iptvnator/portal/shared/util/logger": [
+            "@meddl/portal/shared/util/logger": [
                 "libs/portal/shared/util/src/lib/logger.ts"
             ],
-            "@iptvnator/portal/shared/util/tokens": [
+            "@meddl/portal/shared/util/tokens": [
                 "libs/portal/shared/util/src/tokens.ts"
             ],
-            "@iptvnator/epg/data-access": ["libs/epg/data-access/src/index.ts"],
-            "@iptvnator/playback/data-access": [
+            "@meddl/epg/data-access": ["libs/epg/data-access/src/index.ts"],
+            "@meddl/playback/data-access": [
                 "libs/playback/data-access/src/index.ts"
             ],
-            "@iptvnator/playback/util": ["libs/playback/util/src/index.ts"],
-            "@iptvnator/playlist/shared/ui": [
+            "@meddl/playback/util": ["libs/playback/util/src/index.ts"],
+            "@meddl/playlist/shared/ui": [
                 "libs/playlist/shared/ui/src/index.ts"
             ],
-            "@iptvnator/playlist/shared/ui/stalker-connection-editor": [
+            "@meddl/playlist/shared/ui/stalker-connection-editor": [
                 "libs/playlist/shared/ui/src/lib/recent-playlists/playlist-info/stalker-playlist-connection-editor.token.ts"
             ],
-            "@iptvnator/playlist/shared/util": [
+            "@meddl/playlist/shared/util": [
                 "libs/playlist/shared/util/src/index.ts"
             ],
-            "@iptvnator/playlist/shared/util/playlist-file-import": [
+            "@meddl/playlist/shared/util/playlist-file-import": [
                 "libs/playlist/shared/util/src/lib/playlist-file-import.service.ts"
             ],
-            "@iptvnator/ui/epg": ["libs/ui/epg/src/index.ts"],
-            "@iptvnator/ui/epg/date": ["libs/ui/epg/src/lib/epg-date.ts"],
-            "@iptvnator/ui/epg/progress-panel": [
+            "@meddl/ui/epg": ["libs/ui/epg/src/index.ts"],
+            "@meddl/ui/epg/date": ["libs/ui/epg/src/lib/epg-date.ts"],
+            "@meddl/ui/epg/progress-panel": [
                 "libs/ui/epg/src/lib/epg-progress-panel/epg-progress-panel.component.ts"
             ],
-            "@iptvnator/ui/playback/external-player-info-dialog": [
+            "@meddl/ui/playback/external-player-info-dialog": [
                 "libs/ui/playback/src/lib/external-player-info-dialog/external-player-info-dialog.component.ts"
             ],
-            "@iptvnator/ui/playback/embedded-mpv-player": [
+            "@meddl/ui/playback/embedded-mpv-player": [
                 "libs/ui/playback/src/lib/embedded-mpv-player/index.ts"
             ],
-            "@iptvnator/ui/playback": ["libs/ui/playback/src/index.ts"],
-            "@iptvnator/playlist/import/feature": [
+            "@meddl/ui/playback": ["libs/ui/playback/src/index.ts"],
+            "@meddl/playlist/import/feature": [
                 "libs/playlist/import/feature/src/index.ts"
             ],
-            "@iptvnator/playlist/m3u/feature-player": [
+            "@meddl/playlist/m3u/feature-player": [
                 "libs/playlist/m3u/feature-player/src/index.ts"
             ],
-            "@iptvnator/portal/stalker/feature": [
+            "@meddl/portal/stalker/feature": [
                 "libs/portal/stalker/feature/src/index.ts"
             ],
-            "@iptvnator/portal/stalker/data-access": [
+            "@meddl/portal/stalker/data-access": [
                 "libs/portal/stalker/data-access/src/index.ts"
             ],
-            "@iptvnator/portal/xtream/feature": [
+            "@meddl/portal/xtream/feature": [
                 "libs/portal/xtream/feature/src/index.ts"
             ],
-            "@iptvnator/portal/xtream/data-access": [
+            "@meddl/portal/xtream/data-access": [
                 "libs/portal/xtream/data-access/src/index.ts"
             ],
-            "@iptvnator/workspace/shell/feature": [
+            "@meddl/workspace/shell/feature": [
                 "libs/workspace/shell/feature/src/index.ts"
             ],
-            "@iptvnator/workspace/shell/util": [
+            "@meddl/workspace/shell/util": [
                 "libs/workspace/shell/util/src/index.ts"
             ],
-            "@iptvnator/workspace/shell/util/settings-context": [
+            "@meddl/workspace/shell/util/settings-context": [
                 "libs/workspace/shell/util/src/lib/settings-context.service.ts"
             ],
-            "@iptvnator/workspace/shell/util/settings-search": [
+            "@meddl/workspace/shell/util/settings-search": [
                 "libs/workspace/shell/util/src/lib/settings-search/index.ts"
             ],
-            "@iptvnator/pipes": ["libs/ui/pipes/src/index.ts"],
-            "@iptvnator/pipes/date-format": [
+            "@meddl/pipes": ["libs/ui/pipes/src/index.ts"],
+            "@meddl/pipes/date-format": [
                 "libs/ui/pipes/src/lib/date-format.util.ts"
             ],
-            "@iptvnator/ui/components": ["libs/ui/components/src/index.ts"],
-            "@iptvnator/ui/components/confirm-dialog": [
+            "@meddl/ui/components": ["libs/ui/components/src/index.ts"],
+            "@meddl/ui/components/confirm-dialog": [
                 "libs/ui/components/src/lib/confirm-dialog/dialog.service.ts"
             ],
-            "@iptvnator/ui/components/dialog-size": [
+            "@meddl/ui/components/dialog-size": [
                 "libs/ui/components/src/lib/dialog-shell/dialog-size.ts"
             ],
-            "@iptvnator/ui/components/form-field-defaults": [
+            "@meddl/ui/components/form-field-defaults": [
                 "libs/ui/components/src/lib/form-field-defaults/form-field-defaults.ts"
             ],
-            "@iptvnator/ui/components/lazy-dialog": [
+            "@meddl/ui/components/lazy-dialog": [
                 "libs/ui/components/src/lib/lazy-dialog/lazy-mat-dialog.ts"
             ],
-            "@iptvnator/ui/components/parental-lock-pin-dialog": [
+            "@meddl/ui/components/parental-lock-pin-dialog": [
                 "libs/ui/components/src/lib/parental-lock-pin-dialog/parental-lock-pin-dialog.component.ts"
             ],
-            "@iptvnator/ui/components/password-visibility-toggle": [
+            "@meddl/ui/components/password-visibility-toggle": [
                 "libs/ui/components/src/lib/password-visibility-toggle/password-visibility-toggle.directive.ts"
             ],
-            "@iptvnator/ui/components/radio-group": [
+            "@meddl/ui/components/radio-group": [
                 "libs/ui/components/src/lib/radio-group/radio-group.directive.ts"
             ],
-            "@iptvnator/ui/components/reveal-details": [
+            "@meddl/ui/components/reveal-details": [
                 "libs/ui/components/src/lib/reveal-details/reveal-details.directive.ts"
             ],
-            "@iptvnator/ui/components/window-controls": [
+            "@meddl/ui/components/window-controls": [
                 "libs/ui/components/src/lib/window-controls/window-controls.component.ts"
             ],
-            "@iptvnator/m3u-state": ["libs/m3u-state/src/index.ts"],
-            "@iptvnator/shared/m3u-utils": [
+            "@meddl/m3u-state": ["libs/m3u-state/src/index.ts"],
+            "@meddl/shared/m3u-utils": [
                 "libs/shared/m3u-utils/src/index.ts"
             ],
-            "@iptvnator/shared/testing": ["libs/shared/testing/src/index.ts"],
-            "@iptvnator/shared/logging": ["libs/shared/logging/src/index.ts"],
-            "@iptvnator/shared/host-health": [
+            "@meddl/shared/testing": ["libs/shared/testing/src/index.ts"],
+            "@meddl/shared/logging": ["libs/shared/logging/src/index.ts"],
+            "@meddl/shared/host-health": [
                 "libs/shared/host-health/src/index.ts"
             ],
-            "@iptvnator/services": ["libs/services/src/index.ts"],
-            "@iptvnator/services/lazy-snack-bar": [
+            "@meddl/services": ["libs/services/src/index.ts"],
+            "@meddl/services/lazy-snack-bar": [
                 "libs/services/src/lib/lazy-snack-bar/lazy-snack-bar.ts"
             ],
-            "@iptvnator/services/playlist-backup": [
+            "@meddl/services/playlist-backup": [
                 "libs/services/src/lib/playlist-backup.service.ts"
             ],
-            "@iptvnator/services/pwa-xtream-backup-storage": [
+            "@meddl/services/pwa-xtream-backup-storage": [
                 "libs/services/src/lib/pwa-xtream-backup-storage.ts"
             ],
-            "@iptvnator/services/server-storage": [
+            "@meddl/services/server-storage": [
                 "libs/services/src/lib/server-storage/index.ts"
             ],
-            "@iptvnator/shared/interfaces": [
+            "@meddl/shared/interfaces": [
                 "libs/shared/interfaces/src/index.ts"
             ],
-            "@iptvnator/shared/interfaces/xtream-restore-state": [
+            "@meddl/shared/interfaces/xtream-restore-state": [
                 "libs/shared/interfaces/src/lib/xtream-restore-state.util.ts"
             ],
-            "@iptvnator/shared/interfaces/ipc-commands": [
+            "@meddl/shared/interfaces/ipc-commands": [
                 "libs/shared/interfaces/src/lib/ipc-commands.ts"
             ],
-            "@iptvnator/shared/interfaces/zoom-level": [
+            "@meddl/shared/interfaces/zoom-level": [
                 "libs/shared/interfaces/src/lib/zoom-level.util.ts"
             ],
-            "@iptvnator/ui/shared-portals": [
+            "@meddl/ui/shared-portals": [
                 "libs/ui/shared-portals/src/index.ts"
             ],
-            "@iptvnator/ui/remote-control": [
+            "@meddl/ui/remote-control": [
                 "libs/ui/remote-control/src/index.ts"
             ],
-            "@iptvnator/shared/database": ["libs/shared/database/src/index.ts"],
-            "@iptvnator/shared/database/schema": [
+            "@meddl/shared/database": ["libs/shared/database/src/index.ts"],
+            "@meddl/shared/database/schema": [
                 "libs/shared/database/src/lib/schema.ts"
             ],
-            "@iptvnator/shared/database/app-playlist": [
+            "@meddl/shared/database/app-playlist": [
                 "libs/shared/database/src/lib/app-playlist.ts"
             ],
-            "@iptvnator/shared/database/path-utils": [
+            "@meddl/shared/database/path-utils": [
                 "libs/shared/database/src/lib/path-utils.ts"
             ],
-            "@iptvnator/shared/database/connection-observer": [
+            "@meddl/shared/database/connection-observer": [
                 "libs/shared/database/src/lib/connection-observer.ts"
             ],
-            "@iptvnator/workspace/dashboard/feature": [
+            "@meddl/workspace/dashboard/feature": [
                 "libs/workspace/dashboard/feature/src/index.ts"
             ],
-            "@iptvnator/workspace/dashboard/data-access": [
+            "@meddl/workspace/dashboard/data-access": [
                 "libs/workspace/dashboard/data-access/src/index.ts"
             ],
             "@package": ["./package.json"],
-            "@iptvnator/shared/marketing-fixtures": [
+            "@meddl/shared/marketing-fixtures": [
                 "./libs/shared/marketing-fixtures/src/index.ts"
             ],
-            "@iptvnator/tv/util": [
+            "@meddl/tv/util": [
                 "libs/tv/util/src/index.ts"
             ],
-            "@iptvnator/tv/data-access": [
+            "@meddl/tv/data-access": [
                 "libs/tv/data-access/src/index.ts"
             ],
-            "@iptvnator/tv/ui": [
+            "@meddl/tv/ui": [
                 "libs/tv/ui/src/index.ts"
             ],
-            "@iptvnator/tv/feature": [
+            "@meddl/tv/feature": [
                 "libs/tv/feature/src/index.ts"
             ],
-            "@iptvnator/portal/xtream/client": [
+            "@meddl/portal/xtream/client": [
                 "libs/portal/xtream/data-access/src/client.ts"
             ],
-            "@iptvnator/portal/stalker/client": [
+            "@meddl/portal/stalker/client": [
                 "libs/portal/stalker/data-access/src/client.ts"
             ]
         },

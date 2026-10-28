@@ -1,4 +1,4 @@
-import type { PerformancePhaseMetadata } from '@iptvnator/shared/interfaces';
+import type { PerformancePhaseMetadata } from '@meddl/shared/interfaces';
 
 export interface PairedPerformancePhase {
     readonly durationMs: number;

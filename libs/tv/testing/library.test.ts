@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { initialData, type Source } from '@iptvnator/tv/util';
+import { initialData, type Source } from '@meddl/tv/util';
 import {
     librarySource,
     sourceDocument,
@@ -9,8 +9,8 @@ import {
     ServerLibrary,
     createProvider,
     ProviderTransport,
-} from '@iptvnator/tv/data-access';
-import type { Playlist } from '@iptvnator/shared/interfaces';
+} from '@meddl/tv/data-access';
+import type { Playlist } from '@meddl/shared/interfaces';
 const doc = (fields: Partial<Playlist> = {}): Playlist => ({
     _id: 'server-1',
     title: 'Library',
@@ -172,7 +172,7 @@ test('library verifies instance without credentials and refuses token/write to a
     globalThis.fetch = async (_url, init = {}) => {
         calls.push(init);
         return Response.json({
-            service: 'iptvnator',
+            service: 'meddl',
             apiVersion: 1,
             storage: 'server',
             auth: 'token',
@@ -201,7 +201,7 @@ test('upload skips existing provider account and uses create-only stable IDs for
         const url = String(input);
         if (url.endsWith('/instance'))
             return Response.json({
-                service: 'iptvnator',
+                service: 'meddl',
                 apiVersion: 1,
                 storage: 'server',
                 auth: 'token',
@@ -257,7 +257,7 @@ test('upload refuses an unrelated colliding server ID without issuing a write', 
         return Response.json(
             String(input).endsWith('/instance')
                 ? {
-                      service: 'iptvnator',
+                      service: 'meddl',
                       apiVersion: 1,
                       storage: 'server',
                       auth: 'none',

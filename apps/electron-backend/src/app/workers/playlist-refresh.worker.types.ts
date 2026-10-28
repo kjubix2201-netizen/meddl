@@ -1,7 +1,7 @@
 import type {
     PlaylistRefreshEvent,
     PlaylistRefreshPayload,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { WorkerPerformanceCaptureResult } from './worker-performance-capture';
 
 export interface PlaylistRefreshWorkerRequestMessage {

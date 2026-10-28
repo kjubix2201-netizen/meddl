@@ -2,7 +2,7 @@ import {
     AppUpdateChannel,
     appUpdateRepository,
     NIGHTLY_PRERELEASE_TAG,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 export interface AppUpdateGitHubFeedOptions {
     provider: 'github';

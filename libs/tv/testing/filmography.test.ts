@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findFilmographyTitle } from '@iptvnator/tv/data-access';
-import type { ActorFilmographyCredit } from '@iptvnator/shared/tmdb';
-import type { Media, ProviderClient } from '@iptvnator/tv/util';
+import { findFilmographyTitle } from '@meddl/tv/data-access';
+import type { ActorFilmographyCredit } from '@meddl/shared/tmdb';
+import type { Media, ProviderClient } from '@meddl/tv/util';
 
 const credit: ActorFilmographyCredit = {
     tmdbId: 700,

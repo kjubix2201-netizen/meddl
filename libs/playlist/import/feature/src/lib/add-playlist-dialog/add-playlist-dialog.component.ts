@@ -22,19 +22,19 @@ import {
     DialogFooterDirective,
     DialogFooterStartDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     RadioGroupDirective,
     RadioOptionDirective,
-} from '@iptvnator/ui/components/radio-group';
-import { PlaylistType } from '@iptvnator/playlist/shared/ui';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { DataService } from '@iptvnator/services';
+} from '@meddl/ui/components/radio-group';
+import { PlaylistType } from '@meddl/playlist/shared/ui';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { DataService } from '@meddl/services';
 import {
     PLAYLIST_PARSE_BY_URL,
     ProviderImportCandidate,
     SOURCE_TYPE_ICONS,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { AutoImportComponent } from '../auto-import/auto-import.component';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
 import { StalkerPortalImportComponent } from '../stalker-portal-import/stalker-portal-import.component';

@@ -15,26 +15,26 @@ import {
     PORTAL_EXTERNAL_PLAYBACK,
     PORTAL_PLAYBACK_POSITIONS,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     CrossPortalSimilarService,
     type DownloadItem,
     DownloadsService,
     PlaybackPositionRuntimeBridgeService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PlaybackPositionData,
     VideoPlayer,
     XtreamCategory,
     XtreamVodDetails,
     XtreamVodStream,
-} from '@iptvnator/shared/interfaces';
-import { PortalInlinePlayerComponent } from '@iptvnator/ui/playback';
+} from '@meddl/shared/interfaces';
+import { PortalInlinePlayerComponent } from '@meddl/ui/playback';
 import { BehaviorSubject, NEVER, of } from 'rxjs';
 import { VodDetailsRouteComponent } from './vod-details-route.component';
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
 
 @Component({
     selector: 'app-portal-inline-player',
@@ -79,7 +79,7 @@ describe('VodDetailsRouteComponent fallback actions', () => {
     const activeSession = signal<unknown>(null);
     const currentPlaylist = signal({
         id: 'playlist-1',
-        userAgent: 'IPTVnator',
+        userAgent: 'meddl',
         referrer: 'https://referrer.example',
         origin: 'https://origin.example',
     });
@@ -144,7 +144,7 @@ describe('VodDetailsRouteComponent fallback actions', () => {
         isFavorite.set(false);
         currentPlaylist.set({
             id: 'playlist-1',
-            userAgent: 'IPTVnator',
+            userAgent: 'meddl',
             referrer: 'https://referrer.example',
             origin: 'https://origin.example',
         });
@@ -342,7 +342,7 @@ describe('VodDetailsRouteComponent fallback actions', () => {
     it('ignores catalog data owned by another playlist', () => {
         currentPlaylist.set({
             id: 'playlist-b',
-            userAgent: 'IPTVnator',
+            userAgent: 'meddl',
             referrer: 'https://referrer.example',
             origin: 'https://origin.example',
         });
@@ -511,7 +511,7 @@ describe('VodDetailsRouteComponent fallback actions', () => {
                 headers: {
                     origin: 'https://origin.example',
                     referer: 'https://referrer.example',
-                    userAgent: 'IPTVnator',
+                    userAgent: 'meddl',
                 },
                 title: 'Catalog movie',
                 posterUrl: 'https://example.com/catalog-poster.jpg',

@@ -25,7 +25,7 @@ import {
     ParentalLockPinThrottle,
     PARENTAL_LOCK_PIN_MAX_LENGTH,
     PARENTAL_LOCK_PIN_MIN_LENGTH,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { provideFormFieldDefaults } from '../form-field-defaults/form-field-defaults';
 import { DialogShellComponent } from '../dialog-shell/dialog-shell.component';
 import { DialogFooterDirective } from '../dialog-shell/dialog-shell.directives';

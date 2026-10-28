@@ -1,4 +1,4 @@
-import type { VodDetailsItem } from '@iptvnator/shared/interfaces';
+import type { VodDetailsItem } from '@meddl/shared/interfaces';
 import { startStalkerVodDownload } from './stalker-vod-download';
 
 describe('startStalkerVodDownload', () => {

@@ -6,21 +6,21 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { PlaylistRefreshActionService } from '@iptvnator/playlist/shared/ui';
+import { PlaylistRefreshActionService } from '@meddl/playlist/shared/ui';
 import {
     PlaylistDeleteActionService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
-import { DialogService } from '@iptvnator/ui/components';
-import { WORKSPACE_SHELL_ACTIONS } from '@iptvnator/workspace/shell/util';
+} from '@meddl/services';
+import { DialogService } from '@meddl/ui/components';
+import { WORKSPACE_SHELL_ACTIONS } from '@meddl/workspace/shell/util';
 import {
     DashboardDataService,
     DashboardSourceExpiryService,
     DashboardTrendingService,
     DashboardRecommendationsService,
     type DashboardFavoriteItem,
-} from '@iptvnator/workspace/dashboard/data-access';
+} from '@meddl/workspace/dashboard/data-access';
 import { DashboardLiveEpgPresenter } from './dashboard-live-epg.presenter';
 import { WorkspaceDashboardRailsComponent } from './workspace-dashboard-rails.component';
 

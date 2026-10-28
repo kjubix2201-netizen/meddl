@@ -1,22 +1,22 @@
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { formatSeriesEpisodeCode } from '@iptvnator/portal/shared/util';
+import { formatSeriesEpisodeCode } from '@meddl/portal/shared/util';
 import {
     StalkerStore,
     type StalkerSelectedVodItem,
-} from '@iptvnator/portal/stalker/data-access';
+} from '@meddl/portal/stalker/data-access';
 import {
     SettingsStore,
     type CrossPortalSimilarItem,
     injectTranslationTick,
-} from '@iptvnator/services';
-import { youtubeEmbedUrl } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { youtubeEmbedUrl } from '@meddl/shared/interfaces';
 import {
     createSeriesHeroState,
     TrailerDialogService,
     type SeriesHeroQuickStart,
     type SimilarRailItem,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import type { StalkerQuickStartButton } from './stalker-series-quick-start';
 
 interface StalkerSeriesHeroBindings {

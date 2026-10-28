@@ -1,4 +1,4 @@
-import type { ResolvedPortalPlayback } from '@iptvnator/shared/interfaces';
+import type { ResolvedPortalPlayback } from '@meddl/shared/interfaces';
 import { EmbeddedMpvSessionGoneError } from './embedded-mpv-session-errors';
 import {
     createEmbeddedMpvReconnectState,

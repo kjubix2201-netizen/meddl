@@ -1,5 +1,5 @@
-import { resolveStalkerArtwork } from '@iptvnator/portal/stalker/client';
-import { Media, Source, seriesForEpisode } from '@iptvnator/tv/util';
+import { resolveStalkerArtwork } from '@meddl/portal/stalker/client';
+import { Media, Source, seriesForEpisode } from '@meddl/tv/util';
 
 /** Prefer exact current/saved series covers; retain raw Stalker artwork for older items. */
 export function storedMediaPoster(

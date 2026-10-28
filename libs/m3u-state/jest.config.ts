@@ -1,5 +1,5 @@
 export default {
-    displayName: '@iptvnator/m3u-state',
+    displayName: '@meddl/m3u-state',
     preset: '../../jest.preset.js',
     setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
     coverageDirectory: '../../coverage/libs/m3u-state',

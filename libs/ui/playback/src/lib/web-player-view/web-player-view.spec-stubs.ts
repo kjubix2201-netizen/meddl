@@ -1,10 +1,10 @@
 import { Component, input, output, signal } from '@angular/core';
-import type { PlaybackDiagnostic } from '@iptvnator/playback/util';
+import type { PlaybackDiagnostic } from '@meddl/playback/util';
 import type {
     EmbeddedMpvSupport,
     RecordingStartMetadata,
     RecordingStoppedEvent,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { PlayerTimeUpdate } from '../playback-history/player-time-update';
 
 /**

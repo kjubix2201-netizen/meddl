@@ -7,7 +7,7 @@ is the canonical runtime/provider/persistence contract.
 ```sh
 pnpm nx serve tv
 pnpm nx build tv-setup # needed before launching backend source directly
-CLIENT_URL=http://localhost:4310 PORT=3333 IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS=1 TSX_TSCONFIG_PATH=tsconfig.base.json node --import tsx apps/web-backend/src/main.ts
+CLIENT_URL=http://localhost:4310 PORT=3333 MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS=1 TSX_TSCONFIG_PATH=tsconfig.base.json node --import tsx apps/web-backend/src/main.ts
 pnpm nx run tv-setup:typecheck
 pnpm nx run tv:typecheck
 pnpm nx run tv-tests:typecheck
@@ -35,7 +35,7 @@ The [self-hosted container](../../docker/README.md) includes this web backend
 under `/api`: with the default port mapping, enter `http://<NAS-IP>:4333/api`
 on TV. Build the matching TV branch until its backend changes are published;
 verify `/api/tv/connection` reports protocol 1 and pairing support, and include
-`file://com.iptvnator.tv.prototype-webos` alongside the NAS web origin in
+`file://com.meddl.tv.prototype-webos` alongside the NAS web origin in
 `CLIENT_URL`. The existing Compose restart policy is `unless-stopped`.
 TV favorites/progress remain local. Sources can optionally connect through
 Settings → Server library, independently from the provider backend URL. See the
@@ -78,19 +78,19 @@ BX's Chromium 68 engine, native HLS, transport stream decoding or MAG headers.
 `tv-playlist.m3u` and `tv-test-media.webm` are local mock-server fixtures only.
 
 The package target produces
-`dist/tv-package/com.iptvnator.tv.prototype_0.1.25_all.ipk` with the pinned webOS
+`dist/tv-package/com.meddl.tv.prototype_0.1.25_all.ipk` with the pinned webOS
 CLI. Inspect it with:
 
 ```sh
-pnpm exec ares-package -i dist/tv-package/com.iptvnator.tv.prototype_0.1.25_all.ipk
+pnpm exec ares-package -i dist/tv-package/com.meddl.tv.prototype_0.1.25_all.ipk
 pnpm exec ares-setup-device --list
 ```
 
 Only after the user supplies an enabled Developer Mode target and pairing:
 
 ```sh
-pnpm exec ares-install --device <configured-device> dist/tv-package/com.iptvnator.tv.prototype_0.1.25_all.ipk
-pnpm exec ares-launch --device <configured-device> com.iptvnator.tv.prototype
+pnpm exec ares-install --device <configured-device> dist/tv-package/com.meddl.tv.prototype_0.1.25_all.ipk
+pnpm exec ares-launch --device <configured-device> com.meddl.tv.prototype
 ```
 
 Do not root, wake, reconfigure or pair a television without appropriate scope.
@@ -102,7 +102,7 @@ Install the matching TV and backend builds. `pnpm nx build web-backend` first
 builds `tv-setup` and copies its assets into `dist/apps/web-backend/tv-setup`;
 ship that directory alongside `main.cjs`. Nx serve/test targets also build the
 phone assets. Direct `node --import tsx` launches need the explicit build above.
-For a packaged TV, allow `file://com.iptvnator.tv.prototype-webos` in `CLIENT_URL`.
+For a packaged TV, allow `file://com.meddl.tv.prototype-webos` in `CLIENT_URL`.
 
 Sources automatically looks for a backend if none is saved. Settings and Sources
 also expose Find backend, manual URL/token entry, and a verified connection
@@ -140,7 +140,7 @@ on-demand title availability searches within the active source.
 ## Hardware update on 2026-10-25
 
 The user enabled Developer Mode and supplied the pairing passphrase. The CLI
-target `iptvnator-lg-bx` now connects to `192.168.178.44:9922` as `prisoner`.
+target `meddl-lg-bx` now connects to `192.168.178.44:9922` as `prisoner`.
 System information confirms OLED55BX9LB, SDK 5.6.2 and firmware 04.64.00.
 Prototype 0.1.1 (revision `845dd7af3bfe59391fc885d9e715cd13320cdb3e`) installed
 and launched successfully. Its IPK SHA-256 is

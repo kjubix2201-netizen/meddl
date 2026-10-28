@@ -16,18 +16,18 @@ import {
     PortalDetailShellComponent,
     VIEW_IN_PORTAL_HANDOFF,
     ViewInPortalHandoff,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     SeriesResumeTarget,
     UnifiedCollectionItem,
     getUnifiedCollectionDetailNavigation,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     XtreamPlaylistData,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
-import { PlaylistsService } from '@iptvnator/services';
-import { Playlist } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/xtream/data-access';
+import { PlaylistsService } from '@meddl/services';
+import { Playlist } from '@meddl/shared/interfaces';
 import { firstValueFrom, of } from 'rxjs';
 import { SerialDetailsComponent } from './serial-details/serial-details.component';
 import { XTREAM_SERIES_RESUME_TARGET } from './serial-details/serial-details-resume-target.token';

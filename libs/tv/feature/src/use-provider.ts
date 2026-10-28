@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { createProvider, ProviderTransport } from '@iptvnator/tv/data-access';
-import type { ProviderClient, UserData } from '@iptvnator/tv/util';
+import { createProvider, ProviderTransport } from '@meddl/tv/data-access';
+import type { ProviderClient, UserData } from '@meddl/tv/util';
 
 export function useProvider(
     data: UserData,

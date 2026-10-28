@@ -15,19 +15,19 @@ import {
     PORTAL_EXTERNAL_PLAYBACK,
     PORTAL_PLAYBACK_POSITIONS,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     DownloadsService,
     PlaybackPositionRuntimeBridgeService,
     PlaylistsService,
-} from '@iptvnator/services';
-import { VodDetailsComponent } from '@iptvnator/ui/playback';
+} from '@meddl/services';
+import { VodDetailsComponent } from '@meddl/ui/playback';
 import { EMPTY, of } from 'rxjs';
-import { buildStalkerSelectedVodItem } from '@iptvnator/portal/stalker/data-access';
+import { buildStalkerSelectedVodItem } from '@meddl/portal/stalker/data-access';
 import { StalkerCatalogFacadeService } from '../stalker-catalog-facade.service';
 import { StalkerSeriesViewComponent } from '../stalker-series-view/stalker-series-view.component';
 import { StalkerCatalogDetailComponent } from './stalker-catalog-detail.component';
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
 
 function deferred<T>() {
     let resolve!: (value: T) => void;

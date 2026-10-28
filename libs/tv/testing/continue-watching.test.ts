@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { storedMediaPoster } from '@iptvnator/tv/data-access';
+import { storedMediaPoster } from '@meddl/tv/data-access';
 import {
     continueWatching,
     initialData,
@@ -11,7 +11,7 @@ import {
     mediaTitle,
     seriesForEpisode,
     withSeriesContext,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 const progress = (
     id: string,
     updated: number,

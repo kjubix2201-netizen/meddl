@@ -15,22 +15,22 @@ import {
     normalizeStoredStalkerAccountInfo,
     StalkerAccountInfoService,
     StalkerAccountSnapshot,
-} from '@iptvnator/portal/stalker/data-access';
-import { createLogger } from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/stalker/data-access';
+import { createLogger } from '@meddl/portal/shared/util';
 import {
     DataService,
     PlaylistsService,
     resetHostConnectivityGuard,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     isHostConnectivityFastFailMessage,
     PlaylistMeta,
     type StalkerAccountInfoDialogData,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     DialogHeaderEndDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 type AccountLoadState = 'loading' | 'ready' | 'error';
 

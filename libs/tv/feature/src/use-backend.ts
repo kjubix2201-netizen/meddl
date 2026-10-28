@@ -4,8 +4,8 @@ import {
     backendUrl,
     checkBackend,
     discoverBackends,
-} from '@iptvnator/tv/data-access';
-import { LatestRequest, UserData } from '@iptvnator/tv/util';
+} from '@meddl/tv/data-access';
+import { LatestRequest, UserData } from '@meddl/tv/util';
 export function useBackend(
     data: UserData,
     ready: boolean,
@@ -73,7 +73,7 @@ export function useBackend(
         setSearching(true);
         setConnected(false);
         setFound([]);
-        setStatus('Looking for IPTVnator in your local network…');
+        setStatus('Looking for meddl in your local network…');
         const matches: BackendInfo[] = [];
         await discoverBackends(job.signal, (info) => {
             if (

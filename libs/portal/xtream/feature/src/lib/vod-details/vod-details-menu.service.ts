@@ -5,16 +5,16 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     createLogger,
     PORTAL_PLAYBACK_POSITIONS,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
 import {
     VideoPlayer,
     type ExternalPlayerName,
     type XtreamCategory,
     type XtreamVodDetails,
-} from '@iptvnator/shared/interfaces';
-import type { VodMoreMenuSection } from '@iptvnator/ui/components';
+} from '@meddl/shared/interfaces';
+import type { VodMoreMenuSection } from '@meddl/ui/components';
 import { VodDetailsMultiSourceUiService } from './vod-details-multi-source-ui.service';
 import { VodDetailsPlaybackService } from './vod-details-playback.service';
 import { withoutVodResetTarget } from './vod-details-reset-target';

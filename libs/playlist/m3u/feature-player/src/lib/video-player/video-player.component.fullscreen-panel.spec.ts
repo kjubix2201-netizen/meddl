@@ -11,24 +11,24 @@ import {
     selectChannels,
     selectChannelsLoading,
     selectCurrentEpgProgram,
-} from '@iptvnator/m3u-state';
-import { EpgService } from '@iptvnator/epg/data-access';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
-import { PORTAL_EXTERNAL_PLAYBACK } from '@iptvnator/portal/shared/util';
+} from '@meddl/m3u-state';
+import { EpgService } from '@meddl/epg/data-access';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
+import { PORTAL_EXTERNAL_PLAYBACK } from '@meddl/portal/shared/util';
 import {
     DataService,
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     Channel,
     EpgProgram,
     ExternalPlayerSession,
     PlaylistMeta,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { VideoPlayerComponent as VideoPlayerComponentInstance } from './video-player.component';
 import { translateServiceProvider } from './video-player.spec-harness';
 

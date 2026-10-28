@@ -2,7 +2,7 @@ import { selectContentFields } from './content-fields';
 export { getContentByXtreamId } from './content-identity-lookup';
 import { reconcileFavoriteIdentity } from './favorite-catalog';
 import { and, asc, desc, eq, inArray, or, sql, type SQL } from 'drizzle-orm';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 import {
     Channel,
     GLOBAL_SEARCH_CONTENT_TYPES,
@@ -16,7 +16,7 @@ import {
     getXtreamRecentlyAddedMaxEpochSeconds,
     toXtreamRecentlyAddedEpochSeconds,
     XtreamGlobalSearchResult,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { AppDatabase } from '../database.types';
 import {
     unlockedCategoryCondition,

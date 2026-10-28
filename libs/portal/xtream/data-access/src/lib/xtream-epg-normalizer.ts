@@ -1,7 +1,7 @@
 import {
     EpgItem,
     parseXtreamServerLocalDateTime,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 /**
  * Raw EPG listing from API (before decoding)
  */

@@ -2,8 +2,8 @@ import {
     TmdbEnrichmentService,
     extractYear,
     mergeStalkerInfoWithTmdb,
-} from '@iptvnator/services';
-import { StalkerVodInfo, TmdbMediaType } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { StalkerVodInfo, TmdbMediaType } from '@meddl/shared/interfaces';
 import { StalkerVodSource } from '../models';
 import {
     firstNonBlankStalkerIdText,

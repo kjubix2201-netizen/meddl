@@ -4,8 +4,8 @@ import { join } from 'path';
 
 // Use home directory with a simple path (no spaces) to avoid libSQL issues
 // This matches the path used in connection.ts
-const dbDir = join(homedir(), '.iptvnator', 'databases');
-const dbPath = join(dbDir, 'iptvnator.db');
+const dbDir = join(homedir(), '.meddl', 'databases');
+const dbPath = join(dbDir, 'meddl.db');
 // libSQL requires file: prefix
 const dbUrl = `file:${dbPath}`;
 

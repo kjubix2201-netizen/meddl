@@ -1,10 +1,10 @@
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
-import { ActorFilmographyCredit } from '@iptvnator/shared/tmdb';
+import { ActorFilmographyCredit } from '@meddl/shared/tmdb';
 import {
     findFilmographyTitle,
     FilmographyMatch,
-} from '@iptvnator/tv/data-access';
-import { restoreFocus } from '@iptvnator/tv/ui';
+} from '@meddl/tv/data-access';
+import { restoreFocus } from '@meddl/tv/ui';
 import type { TvModel } from './use-tv';
 import type { NavigationOrigin } from './use-route-history';
 

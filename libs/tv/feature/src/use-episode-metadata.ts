@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import { Media } from '@iptvnator/tv/util';
+import { TvMetadata } from '@meddl/tv/data-access';
+import { Media } from '@meddl/tv/util';
 
 /** Season requests share the selection's client/cache and cannot publish across navigation. */
 export function useEpisodeMetadata(

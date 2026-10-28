@@ -10,4 +10,4 @@ sha256sum -c SHA256SUMS
 docker compose --env-file .env -f compose.yaml config --quiet
 docker load -i image.tar
 docker compose --env-file .env -f compose.yaml up -d --no-build
-printf '%s\n' 'TV backend started. Existing IPTVnator and its data volume were not replaced.'
+printf '%s\n' 'TV backend started. Existing meddl and its data volume were not replaced.'

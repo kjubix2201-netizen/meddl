@@ -4,13 +4,13 @@ import { readFile } from 'node:fs/promises';
 import {
     createPlaylistObject,
     getFilenameFromUrl,
-} from '@iptvnator/shared/m3u-utils';
+} from '@meddl/shared/m3u-utils';
 import { createPlaylistAgentFactory } from '../util/secure-https';
 import type {
     Playlist,
     PlaylistRefreshEvent,
     PlaylistRefreshPayload,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type {
     PlaylistRefreshWorkerIncomingMessage,
     PlaylistRefreshWorkerMessage,

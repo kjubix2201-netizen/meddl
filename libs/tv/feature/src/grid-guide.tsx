@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
-import { restoreFocus, VirtualCollection } from '@iptvnator/tv/ui';
+import { restoreFocus, VirtualCollection } from '@meddl/tv/ui';
 import { useCatalog } from './use-catalog';
 import { GridSchedule } from './grid-schedule';
 import type { TvModel } from './use-tv';

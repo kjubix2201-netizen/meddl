@@ -8,7 +8,7 @@ import {
     inject,
     signal,
 } from '@angular/core';
-import { ElectronBridgeWindowState } from '@iptvnator/shared/interfaces';
+import { ElectronBridgeWindowState } from '@meddl/shared/interfaces';
 import { TranslatePipe } from '@ngx-translate/core';
 
 /**

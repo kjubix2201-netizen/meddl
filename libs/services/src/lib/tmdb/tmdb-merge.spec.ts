@@ -1,4 +1,4 @@
-import { XtreamSerieInfo, XtreamVodInfo } from '@iptvnator/shared/interfaces';
+import { XtreamSerieInfo, XtreamVodInfo } from '@meddl/shared/interfaces';
 import { mergeSerieInfoWithTmdb, mergeVodInfoWithTmdb } from './tmdb-merge';
 import { TmdbMovieDetails, TmdbTvDetails } from './tmdb.types';
 

@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import {
     CatalogTitleMatchService,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
-import type { TmdbTrendingEntry } from '@iptvnator/services';
-import { CatalogTitleMatch } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import type { TmdbTrendingEntry } from '@meddl/services';
+import { CatalogTitleMatch } from '@meddl/shared/interfaces';
 import { DashboardTrendingService } from './dashboard-trending.service';
 
 describe('DashboardTrendingService', () => {

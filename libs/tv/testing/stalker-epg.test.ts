@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { beforeEach, test } from 'node:test';
-import { createProvider, ProviderTransport } from '@iptvnator/tv/data-access';
-import { Media, Source } from '@iptvnator/tv/util';
+import { createProvider, ProviderTransport } from '@meddl/tv/data-access';
+import { Media, Source } from '@meddl/tv/util';
 
 const source: Source = {
     id: 'epg-source',

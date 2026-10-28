@@ -8,7 +8,7 @@ import {
 import {
     PlaybackPositionData,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { resolveAutoSelectedSeason } from './season-auto-select.util';
 
 export interface SeasonAutoSelectSources {

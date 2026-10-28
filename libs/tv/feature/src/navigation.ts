@@ -1,4 +1,4 @@
-import type { Kind, Media } from '@iptvnator/tv/util';
+import type { Kind, Media } from '@meddl/tv/util';
 export type View =
     | 'home'
     | 'live'

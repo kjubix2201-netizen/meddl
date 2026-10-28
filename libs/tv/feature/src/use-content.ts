@@ -6,8 +6,8 @@ import {
     Media,
     Program,
     ProviderClient,
-} from '@iptvnator/tv/util';
-import { restoreFocus } from '@iptvnator/tv/ui';
+} from '@meddl/tv/util';
+import { restoreFocus } from '@meddl/tv/ui';
 import type { Route } from './navigation';
 import { useCatalog } from './use-catalog';
 export function useContent(

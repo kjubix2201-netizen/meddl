@@ -15,9 +15,9 @@ const electronElf = Buffer.from([
 
 async function createAfterPackFixture(targets) {
     const appOutDir = await fs.mkdtemp(
-        path.join(os.tmpdir(), 'iptvnator-linux-after-pack-')
+        path.join(os.tmpdir(), 'meddl-linux-after-pack-')
     );
-    const executablePath = path.join(appOutDir, 'iptvnator');
+    const executablePath = path.join(appOutDir, 'meddl');
     await fs.writeFile(executablePath, electronElf, { mode: 0o755 });
 
     return {
@@ -28,9 +28,9 @@ async function createAfterPackFixture(targets) {
             electronPlatformName: 'linux',
             targets,
             packager: {
-                executableName: 'iptvnator',
+                executableName: 'meddl',
                 appInfo: {
-                    productName: 'IPTVnator',
+                    productName: 'meddl',
                 },
             },
         },
@@ -68,17 +68,17 @@ test('isolated Flatpak preserves the Electron ELF for Zypak', async (t) => {
 test('resolves normalized string and Target-like launcher layouts', () => {
     assert.deepEqual(resolveLinuxLauncherLayout([' FlatPak ']), {
         targetNames: ['flatpak'],
-        electronBinaryName: 'iptvnator',
+        electronBinaryName: 'meddl',
         wrapperRequired: false,
     });
     assert.deepEqual(
         resolveLinuxLauncherLayout(
             [' AppImage ', { name: ' DEB ' }],
-            'iptvnator-player'
+            'meddl-player'
         ),
         {
             targetNames: ['appimage', 'deb'],
-            electronBinaryName: 'iptvnator-player.bin',
+            electronBinaryName: 'meddl-player.bin',
             wrapperRequired: true,
         }
     );
@@ -136,8 +136,8 @@ for (const targetName of ['appimage', 'deb', 'rpm', 'pacman', 'snap']) {
         assert.equal(
             await fs.readFile(fixture.executablePath, 'utf8'),
             createLoaderScript({
-                executableName: 'iptvnator',
-                productName: 'IPTVnator',
+                executableName: 'meddl',
+                productName: 'meddl',
             })
         );
         assert.deepEqual(

@@ -32,24 +32,24 @@ import {
     VodMoreMenuComponent,
     readSavedEpisodeViewMode,
     scrollToCastCrewRow,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     registerContentMetadataBackfill,
     xtreamDetailContentMetadata,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     buildUpNextRailItems,
     type PlaybackFallbackRequest,
     PortalInlinePlayerComponent,
     type UpNextRailItem,
-} from '@iptvnator/ui/playback';
+} from '@meddl/ui/playback';
 import {
     TmdbEnrichedCastMember,
     XtreamSerieDetails,
     XtreamSerieEpisode,
     XtreamSerieInfo,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { injectXtreamDetailNavigation } from '../xtream-detail-navigation';
 import {
     SerialDetailsPlaybackService,

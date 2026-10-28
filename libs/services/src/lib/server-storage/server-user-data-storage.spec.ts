@@ -1,7 +1,7 @@
 import type { KeepaliveOutcome } from './server-api-client';
 import { ServerUserDataStorage } from './server-user-data-storage';
 
-const FAVORITES_CACHE = 'iptvnator-server:cache:default:xtream-favorites';
+const FAVORITES_CACHE = 'meddl-server:cache:default:xtream-favorites';
 
 function memoryStorage() {
     const values = new Map<string, string>();
@@ -20,7 +20,7 @@ function savedWrites(
     local: ReturnType<typeof memoryStorage>,
     instanceId = 'default'
 ): unknown[] {
-    const prefix = `iptvnator-server:unsent-writes:${instanceId}:`;
+    const prefix = `meddl-server:unsent-writes:${instanceId}:`;
     const key = [...local.values.keys()].find((name) =>
         name.startsWith(prefix)
     );
@@ -534,19 +534,19 @@ describe('ServerUserDataStorage', () => {
 
     it('drops cache and saved writes of another server database', () => {
         const local = memoryStorage();
-        local.setItem('iptvnator-server:cache-owner', 'old-db');
+        local.setItem('meddl-server:cache-owner', 'old-db');
         local.setItem(
-            'iptvnator-server:cache:old-db:xtream-favorites',
+            'meddl-server:cache:old-db:xtream-favorites',
             '{"p1":["a"]}'
         );
         // An earlier build's unscoped key.
-        local.setItem('iptvnator-server:xtream-favorites', '{"p1":["a"]}');
+        local.setItem('meddl-server:xtream-favorites', '{"p1":["a"]}');
         local.setItem(
-            'iptvnator-server:unconfirmed:old-db:tab',
+            'meddl-server:unconfirmed:old-db:tab',
             JSON.stringify({ at: 0, keys: ['xtream-favorites|p1'] })
         );
         local.setItem(
-            'iptvnator-server:unsent-writes:old-db:tab',
+            'meddl-server:unsent-writes:old-db:tab',
             JSON.stringify([
                 {
                     namespace: 'xtream-favorites',
@@ -564,17 +564,17 @@ describe('ServerUserDataStorage', () => {
         );
 
         expect(storage.hasUnsentWrites()).toBe(false);
-        expect(local.values.has('iptvnator-server:xtream-favorites')).toBe(
+        expect(local.values.has('meddl-server:xtream-favorites')).toBe(
             false
         );
         expect(
-            local.values.has('iptvnator-server:cache:old-db:xtream-favorites')
+            local.values.has('meddl-server:cache:old-db:xtream-favorites')
         ).toBe(false);
         expect(savedWrites(local, 'old-db')).toEqual([]);
         expect(
-            local.values.has('iptvnator-server:unconfirmed:old-db:tab')
+            local.values.has('meddl-server:unconfirmed:old-db:tab')
         ).toBe(false);
-        expect(local.values.get('iptvnator-server:cache-owner')).toBe('new-db');
+        expect(local.values.get('meddl-server:cache-owner')).toBe('new-db');
     });
 
     it('tells, once a first read in flight settled, whether it read the server', async () => {

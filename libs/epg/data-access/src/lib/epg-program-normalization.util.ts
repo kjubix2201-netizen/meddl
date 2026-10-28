@@ -1,4 +1,4 @@
-import { EpgProgram } from '@iptvnator/shared/interfaces';
+import { EpgProgram } from '@meddl/shared/interfaces';
 
 function toIsoDate(value: string | undefined): string | null {
     if (!value) {

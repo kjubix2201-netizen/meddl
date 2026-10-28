@@ -4,7 +4,7 @@ import type {
     WorkerEventLoopDelayHistogram,
 } from './worker-performance-capture.model';
 
-export const WORKER_PROFILING_ENV = 'IPTVNATOR_PERF_WORKER_PROFILING';
+export const WORKER_PROFILING_ENV = 'MEDDL_PERF_WORKER_PROFILING';
 export const HISTOGRAM_POLL_INTERVAL_MS = 1;
 export const HISTOGRAM_WAIT_CAP_MS = 50;
 

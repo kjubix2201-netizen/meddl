@@ -1,6 +1,6 @@
 import { and, eq, sql } from 'drizzle-orm';
-import * as schema from '@iptvnator/shared/database/schema';
-import { XTREAM_FAVORITE_IDENTITY_CONFLICT } from '@iptvnator/shared/interfaces';
+import * as schema from '@meddl/shared/database/schema';
+import { XTREAM_FAVORITE_IDENTITY_CONFLICT } from '@meddl/shared/interfaces';
 import type { AppDatabase } from '../database.types';
 import {
     chunkValues,

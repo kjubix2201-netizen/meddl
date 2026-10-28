@@ -1,19 +1,19 @@
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { RuntimeCapabilitiesService } from '@meddl/services';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import {
     type ContentMetadataPatch,
     normalizeContentMetadataPatch,
     XTREAM_FAVORITE_IDENTITY_CONFLICT,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     patchState,
     signalStoreFeature,
     withMethods,
     withState,
 } from '@ngrx/signals';
-import { createLogger } from '@iptvnator/portal/shared/util/logger';
+import { createLogger } from '@meddl/portal/shared/util/logger';
 import { XTREAM_DATA_SOURCE } from './data-sources/xtream-data-source.interface';
 
 const favoriteTargetKey = (

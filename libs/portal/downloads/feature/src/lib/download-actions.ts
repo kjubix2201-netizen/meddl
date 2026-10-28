@@ -1,4 +1,4 @@
-import type { DownloadItem } from '@iptvnator/services';
+import type { DownloadItem } from '@meddl/services';
 
 export type DownloadItemActionType =
     | 'cancel'

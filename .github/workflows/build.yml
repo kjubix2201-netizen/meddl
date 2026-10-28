@@ -1,0 +1,193 @@
+name: Build
+
+# Builds the Windows installer and the web app (PWA).
+#   - push to master / manual run: build and upload as workflow artifacts
+#   - tag vX.Y.Z: additionally create a DRAFT GitHub release with the
+#     installer and the updater metadata. Publishing the draft makes it
+#     visible to the desktop auto-updater.
+on:
+    push:
+        branches:
+            - master
+        tags:
+            - 'v*'
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+
+permissions:
+    contents: read
+
+jobs:
+    web:
+        name: Web app (PWA)
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v6.1.0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Inject TMDB API key
+              # No-op without the secret: users then enter their own key.
+              env:
+                  TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+              run: node tools/tmdb/inject-tmdb-key.mjs
+
+            - name: Inject build commit
+              env:
+                  BUILD_COMMIT: ${{ github.sha }}
+              run: node tools/build/inject-build-commit.mjs
+
+            - name: Build web app
+              run: pnpm run build:frontend:pwa
+
+            - name: Upload web app
+              uses: actions/upload-artifact@v7
+              with:
+                  name: meddl-web
+                  path: dist/apps/web
+                  retention-days: 14
+
+    windows:
+        name: Windows installer (x64)
+        runs-on: windows-2022
+        timeout-minutes: 60
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v6.1.0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Inject TMDB API key
+              env:
+                  TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+              run: node tools/tmdb/inject-tmdb-key.mjs
+
+            - name: Inject build commit
+              env:
+                  BUILD_COMMIT: ${{ github.sha }}
+              run: node tools/build/inject-build-commit.mjs
+
+            - name: Build frontend
+              run: pnpm nx build web --skip-nx-cache
+
+            - name: Resolve pinned Windows Embedded MPV runtime
+              id: mpv-pin
+              shell: bash
+              run: node tools/embedded-mpv/windows-runtime-pin.mjs --github-output
+
+            - name: Stage Windows Embedded MPV runtime
+              shell: bash
+              env:
+                  WINDOWS_RUNTIME_URL: ${{ steps.mpv-pin.outputs.url }}
+                  WINDOWS_RUNTIME_SHA256: ${{ steps.mpv-pin.outputs.sha256 }}
+              run: |
+                  set -euo pipefail
+                  if [ -z "${WINDOWS_RUNTIME_URL}" ] || [ -z "${WINDOWS_RUNTIME_SHA256}" ]; then
+                      echo "::error::Windows Embedded MPV runtime pin did not resolve."
+                      exit 1
+                  fi
+                  pnpm embedded-mpv:stage-runtime:windows-archive -- "${WINDOWS_RUNTIME_URL}" "${WINDOWS_RUNTIME_SHA256}"
+
+            - name: Build backend
+              env:
+                  MEDDL_EMBEDDED_MPV_PLATFORM: win32
+                  MEDDL_EMBEDDED_MPV_ARCH: x64
+                  MEDDL_REQUIRE_EMBEDDED_MPV: '1'
+              run: pnpm run build:backend
+
+            - name: Build x64 installer only
+              shell: bash
+              run: |
+                  node -e "
+                    const fs = require('fs');
+                    const cfg = JSON.parse(fs.readFileSync('electron-builder.json', 'utf8'));
+                    for (const t of cfg.win.target) if (t && typeof t === 'object') t.arch = ['x64'];
+                    fs.writeFileSync('electron-builder.json', JSON.stringify(cfg, null, 4) + '\n');
+                  "
+
+            - name: Make Electron app
+              env:
+                  MEDDL_EMBEDDED_MPV_PLATFORM: win32
+                  MEDDL_EMBEDDED_MPV_ARCH: x64
+                  MEDDL_REQUIRE_EMBEDDED_MPV: '1'
+              run: pnpm run make:app -- --publishPolicy=never
+
+            - name: Verify packaged layout
+              env:
+                  MEDDL_REQUIRE_EMBEDDED_MPV: '1'
+              run: pnpm run verify:package-layout -- windows x64
+
+            - name: Upload installer
+              uses: actions/upload-artifact@v7
+              with:
+                  name: meddl-windows-x64
+                  path: |
+                      dist/executables/*.exe
+                      dist/executables/*.blockmap
+                      dist/executables/*.yml
+                  if-no-files-found: error
+                  retention-days: 14
+
+    release:
+        name: Draft GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        needs: [web, windows]
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Download artifacts
+              uses: actions/download-artifact@v8
+              with:
+                  path: artifacts
+
+            - name: Pack web app
+              run: |
+                  cd artifacts/meddl-web
+                  zip -qr "../meddl-web-${GITHUB_REF_NAME}.zip" .
+
+            - name: Release notes from CHANGELOG
+              run: |
+                  version="${GITHUB_REF_NAME#v}"
+                  if ! node tools/release/extract-changelog-section.mjs --public "$version" > notes.md 2>/dev/null; then
+                      echo "meddl ${GITHUB_REF_NAME}" > notes.md
+                  fi
+
+            - name: Create draft release
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  gh release create "$GITHUB_REF_NAME" \
+                      --draft \
+                      --title "meddl ${GITHUB_REF_NAME}" \
+                      --notes-file notes.md \
+                      artifacts/meddl-windows-x64/* \
+                      "artifacts/meddl-web-${GITHUB_REF_NAME}.zip"

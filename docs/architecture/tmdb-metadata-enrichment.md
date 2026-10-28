@@ -40,7 +40,7 @@ Related:
 
 ## Module Layout
 
-Framework-free code lives in `libs/shared/tmdb/` (`@iptvnator/shared/tmdb`,
+Framework-free code lives in `libs/shared/tmdb/` (`@meddl/shared/tmdb`,
 `scope:shared`, `domain:tmdb`, `type:data-access`). It owns the API client,
 ID resolver, movie/TV metadata orchestration and the pure configuration,
 matching, credits, cache-payload and language-fallback helpers listed below.
@@ -297,7 +297,7 @@ descriptions provider-first (`buildSeasonDescriptions` in
 `libs/portal/xtream/feature/src/lib/serial-details/season-descriptions.util.ts`):
 a `get_series_info` season overview wins when it is real prose, but panels
 routinely fill it with a bare cover-image URL —
-`sanitizeProviderOverview` (`@iptvnator/shared/interfaces`) treats a
+`sanitizeProviderOverview` (`@meddl/shared/interfaces`) treats a
 URL-only value as absent, and the stored TMDB overview fills the gap.
 
 The same payload's `poster_path` — every TMDB season has its own poster,
@@ -406,7 +406,7 @@ Filmography has two scopes:
   over ALL imported Xtream playlists
   (`operations/title-match.operations.ts`), confirming candidates with
   the same two-tier normalized-title matching the renderer uses
-  (`normalizeTitle` now lives in `@iptvnator/shared/interfaces` so the
+  (`normalizeTitle` now lives in `@meddl/shared/interfaces` so the
   worker and the renderer share it). Matches carry the playlist name
   (shown in the badge) and navigate into that playlist's detail view.
   This also works from Stalker actor pages — the one place the Stalker
@@ -699,7 +699,7 @@ on. This applies to release, local development, and fork builds alike.
 Brazil. Legacy saved `pt` preferences normalize to `pt-BR`, matching the
 existing Brazilian UI. Cache keys already include the TMDB language, so the
 two regional payloads remain separate without deleting cached data. The
-regional mapping and legacy normalization live in `@iptvnator/shared/tmdb`,
+regional mapping and legacy normalization live in `@meddl/shared/tmdb`,
 shared by the Angular facade and TV runtime.
 
 ## Failure Behavior

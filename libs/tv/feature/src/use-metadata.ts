@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import { Media, UserData } from '@iptvnator/tv/util';
+import { TvMetadata } from '@meddl/tv/data-access';
+import { Media, UserData } from '@meddl/tv/util';
 
 /** Provider data renders immediately; metadata can only patch its own selection. */
 export function useMetadata(

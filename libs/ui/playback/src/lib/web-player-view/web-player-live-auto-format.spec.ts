@@ -4,11 +4,11 @@ import {
     PlaybackDiagnosticCode,
     PlaybackDiagnosticSource,
     type PlaybackDiagnostic,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import {
     VideoPlayer,
     type ResolvedPortalPlayback,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { ErrorDetails } from 'hls.js';
 import { WebPlayerLiveAutoFormat } from './web-player-live-auto-format';
 

@@ -16,32 +16,32 @@ import {
     liveSidebarStateStorageKey,
     LiveLayoutSidebarStateService,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     FavoritesService,
     XtreamStore,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     EpgArchiveDownloadService,
     EpgArchiveCopyService,
     EpgListViewComponent,
     EpgTimelineComponent,
-} from '@iptvnator/ui/epg';
+} from '@meddl/ui/epg';
 import {
     type PlaybackFallbackRequest,
     WebPlayerViewComponent,
-} from '@iptvnator/ui/playback';
+} from '@meddl/ui/playback';
 import {
     EpgItem,
     EpgProgram,
     ResolvedPortalPlayback,
-} from '@iptvnator/shared/interfaces';
-import { GridListComponent } from '@iptvnator/portal/shared/ui';
+} from '@meddl/shared/interfaces';
+import { GridListComponent } from '@meddl/portal/shared/ui';
 import { PortalChannelsListComponent } from '../portal-channels-list/portal-channels-list.component';
 import { LiveStreamLayoutComponent } from './live-stream-layout.component';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
 import { liveHistoryTestCases } from './live-stream-layout-history.spec-data';
 
 import {

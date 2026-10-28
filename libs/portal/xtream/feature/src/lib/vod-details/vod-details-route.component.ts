@@ -27,24 +27,24 @@ import {
     type SimilarRailItem,
     VodMoreMenuComponent,
     scrollToCastCrewRow,
-} from '@iptvnator/ui/components';
-import { createLogger } from '@iptvnator/portal/shared/util';
+} from '@meddl/ui/components';
+import { createLogger } from '@meddl/portal/shared/util';
 import {
     registerContentMetadataBackfill,
     xtreamDetailContentMetadata,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     type PlaybackFallbackRequest,
     PortalInlinePlayerComponent,
-} from '@iptvnator/ui/playback';
-import { DownloadsService, SettingsStore } from '@iptvnator/services';
+} from '@meddl/ui/playback';
+import { DownloadsService, SettingsStore } from '@meddl/services';
 import {
     TmdbEnrichedCastMember,
     XtreamVodDetails,
     XtreamVodInfo,
     type ExternalPlayerName,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { injectXtreamDetailNavigation } from '../xtream-detail-navigation';
 import { VodDetailsPlaybackService } from './vod-details-playback.service';
 import { VodDetailsMultiSourceUiService } from './vod-details-multi-source-ui.service';

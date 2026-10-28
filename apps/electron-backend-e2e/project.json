@@ -76,7 +76,7 @@
             "options": {
                 "cwd": "apps/electron-backend-e2e",
                 "env": {
-                    "IPTVNATOR_JOURNEY_LARGE_LIBRARY": "1"
+                    "MEDDL_JOURNEY_LARGE_LIBRARY": "1"
                 },
                 "command": "playwright test --config=playwright.journeys.config.ts src/journeys/launch-large.journey.ts"
             }

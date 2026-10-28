@@ -41,10 +41,10 @@ for (const engine of [
         const media = embedded ? await createLocalMediaServer() : undefined;
         const app = await launchElectronApp(dataDir, {
             env: {
-                IPTVNATOR_ENABLE_EMBEDDED_MPV_EXPERIMENT: '1',
-                IPTVNATOR_ENABLE_EMBEDDED_MPV_FRAME_COPY:
+                MEDDL_ENABLE_EMBEDDED_MPV_EXPERIMENT: '1',
+                MEDDL_ENABLE_EMBEDDED_MPV_FRAME_COPY:
                     engine === 'frame-copy' ? '1' : '0',
-                IPTVNATOR_EMBEDDED_MPV_ALLOW_HOMEBREW: '1',
+                MEDDL_EMBEDDED_MPV_ALLOW_HOMEBREW: '1',
             },
         });
         try {

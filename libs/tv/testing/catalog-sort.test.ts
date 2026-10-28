@@ -5,9 +5,9 @@ import {
     initialData,
     sortCatalog,
     Source,
-} from '@iptvnator/tv/util';
-import { createProvider, ProviderTransport } from '@iptvnator/tv/data-access';
-import { xtreamCatalogTimestamp } from '@iptvnator/portal/xtream/client';
+} from '@meddl/tv/util';
+import { createProvider, ProviderTransport } from '@meddl/tv/data-access';
+import { xtreamCatalogTimestamp } from '@meddl/portal/xtream/client';
 const signal = new AbortController().signal;
 class Transport extends ProviderTransport {
     calls: Record<string, string | number>[] = [];

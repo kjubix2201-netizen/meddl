@@ -1,4 +1,4 @@
-import type { EpgProgram } from '@iptvnator/shared/interfaces';
+import type { EpgProgram } from '@meddl/shared/interfaces';
 
 /**
  * Per-channel short-EPG fallback for the ITV channel-list previews.

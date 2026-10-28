@@ -1,7 +1,7 @@
 # TV companion backend
 
 This optional development deployment adds the matching TV API and phone setup
-alongside an existing self-hosted IPTVnator. It never mounts the existing database.
+alongside an existing self-hosted meddl. It never mounts the existing database.
 `/api` serves the new TV backend; `/library/v1` forwards only GET/PUT/OPTIONS to the
 existing library API. Its server token passes through unchanged. CORS allows the
 packaged TV origin, `null` for webOS file origins and the configured web origin.
@@ -16,7 +16,7 @@ pnpm nx build web-backend
 mkdir -p dist/tv-nas/build/web-backend
 cp -R dist/apps/web-backend/. dist/tv-nas/build/web-backend/
 cp docker/tv/Dockerfile docker/tv/nginx.conf docker/tv/start.sh dist/tv-nas/build/
-docker build --platform linux/amd64 -t iptvnator-tv:0.1.9 dist/tv-nas/build
+docker build --platform linux/amd64 -t meddl-tv:0.1.9 dist/tv-nas/build
 ```
 
 The base is the existing published self-hosted runtime, with its matching native
@@ -28,15 +28,15 @@ Prepare `image.tar` using `docker save`, and copy `compose.yaml`, `install.sh` a
 an `.env` next to it. The environment names an existing Docker network and service:
 
 ```dotenv
-LIBRARY_NETWORK=iptvnator_default
-LIBRARY_UPSTREAM=http://iptvnator/api
+LIBRARY_NETWORK=meddl_default
+LIBRARY_UPSTREAM=http://meddl/api
 TV_WEB_ORIGIN=http://nas.fritz.box:4335
 ```
 
 Use trusted deployment values. Generate `SHA256SUMS` over the archive, Compose,
 installer and `.env`. On the NAS, review these files and run `sudo sh install.sh`.
 The installer checks hashes before loading the image and starts only the separate
-`iptvnator-tv` Compose project. Its restart policy is `unless-stopped`. No registry
+`meddl-tv` Compose project. Its restart policy is `unless-stopped`. No registry
 push, existing-service restart or database migration is part of this installation.
 
 Check `/api/tv/connection` and `/library/v1/instance` before changing TV settings.
@@ -47,5 +47,5 @@ URL, once the existing service is deliberately upgraded.
 
 Rollback: disconnect the server library on TV (downloaded sources stay local),
 restore the previous backend URL, then run `docker compose down` in this companion
-project. Do not run it in the existing IPTVnator project. The original PWA and data
+project. Do not run it in the existing meddl project. The original PWA and data
 volume remain independent.

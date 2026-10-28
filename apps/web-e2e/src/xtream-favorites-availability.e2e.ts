@@ -747,7 +747,7 @@ test('@xtream @collections importing partial favorite identity rejects conflicti
         snapshot: { title: 'Partial saved original', tmdbId: 100 },
     };
     const manifest = {
-        kind: 'iptvnator-playlist-backup',
+        kind: 'meddl-playlist-backup',
         version: 1,
         exportedAt: new Date().toISOString(),
         includeSecrets: true,

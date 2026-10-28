@@ -20,8 +20,8 @@ import {
     WorkspaceCommandGroup,
     WorkspaceCommandSelection,
     WorkspaceResolvedCommandItem,
-} from '@iptvnator/portal/shared/util';
-import { foldSearchText } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/util';
+import { foldSearchText } from '@meddl/shared/interfaces';
 
 export interface WorkspaceCommandPaletteData {
     commands: WorkspaceResolvedCommandItem[];

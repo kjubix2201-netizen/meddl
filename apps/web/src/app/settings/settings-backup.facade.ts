@@ -1,13 +1,13 @@
 import { inject, Injectable, Injector, signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 import {
     PlaylistBackupImportSummary,
     PlaylistBackupService,
-} from '@iptvnator/services/playlist-backup';
+} from '@meddl/services/playlist-backup';
 import { SettingsSnackbarService } from './settings-snackbar.service';
 
 @Injectable()

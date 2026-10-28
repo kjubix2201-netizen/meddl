@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { TvApp } from '@iptvnator/tv/feature';
+import { TvApp } from '@meddl/tv/feature';
 import './theme.css';
 import './live-overlay.css';
 import './programme-guide.css';

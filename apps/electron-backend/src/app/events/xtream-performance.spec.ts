@@ -7,7 +7,7 @@ import {
     XTREAM_MAIN_PERFORMANCE_PHASE,
     type PerformancePhaseEvent,
     type XtreamMainPerformancePhase,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     createXtreamMainPerformanceCapture,
     createXtreamMeasuredTransformResponse,

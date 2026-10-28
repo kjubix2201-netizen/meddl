@@ -1,12 +1,12 @@
 import type { StalkerRequestOptions } from './stalker-request-options';
 import { Injectable, Injector, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { PlaylistsService } from '@iptvnator/services';
+import { PlaylistsService } from '@meddl/services';
 import {
     isFullStalkerPortalPlaylist,
     type PlaylistMeta,
-} from '@iptvnator/shared/interfaces';
-import { createLogger } from '@iptvnator/portal/shared/util';
+} from '@meddl/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util';
 import { StalkerPortalDiscoveryService } from './stalker-portal-discovery.service';
 import { shouldAttemptStalkerPortalRepair } from './stalker-portal-repair-trigger';
 import {

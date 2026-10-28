@@ -9,7 +9,7 @@ import {
     DialogFooterDirective,
     DialogFooterStartDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 @Component({
     template: `
@@ -23,7 +23,7 @@ import {
                     class="external-player-info__link"
                     (click)="
                         openUrl(
-                            'https://github.com/4gray/iptvnator/wiki/What-is-mpv-video-player-and-how-to-install-it-on-different-operating-systems%3F'
+                            'https://github.com/kjubix2201-netizen/meddl/wiki/What-is-mpv-video-player-and-how-to-install-it-on-different-operating-systems%3F'
                         )
                     "
                     >{{

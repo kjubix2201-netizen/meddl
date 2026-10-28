@@ -3,8 +3,8 @@ import {
     normalizeEmbeddedMpvExtraOptions,
     normalizeExternalPlayerArguments,
     normalizeStartupWindowMode,
-} from '@iptvnator/shared/interfaces';
-import { redactSensitiveData } from '@iptvnator/shared/logging';
+} from '@meddl/shared/interfaces';
+import { redactSensitiveData } from '@meddl/shared/logging';
 import {
     EMBEDDED_MPV_AUTO_RECONNECT,
     EMBEDDED_MPV_EXTRA_OPTIONS,

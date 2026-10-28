@@ -1,8 +1,8 @@
 import {
     getXtreamPendingRestoreStorageKey,
     normalizeXtreamPendingRestoreState,
-} from '@iptvnator/shared/interfaces/xtream-restore-state';
-import type { ElectronBridgeApi } from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces/xtream-restore-state';
+import type { ElectronBridgeApi } from '@meddl/shared/interfaces';
 
 type FavoriteRestoreSupport = Partial<
     Pick<ElectronBridgeApi, 'dbReplaceAllPlaybackPositions'>

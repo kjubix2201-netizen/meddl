@@ -35,21 +35,21 @@ import type { Page } from '@playwright/test';
  * trace events received between the two. Renderer-to-main IPC is ordered, so
  * the count is exact regardless of clock skew.
  */
-export const JOURNEY_PROBE_STATE_KEY = '__iptvnatorJourneyProbe';
+export const JOURNEY_PROBE_STATE_KEY = '__meddlJourneyProbe';
 export const JOURNEY_PROBE_SCHEMA_VERSION = 1;
-export const JOURNEY_IPC_SENTINEL_ID = '__iptvnator-journey-sentinel__';
+export const JOURNEY_IPC_SENTINEL_ID = '__meddl-journey-sentinel__';
 export const JOURNEY_OPEN_SOURCE_PROBE_STATE_KEY =
-    '__iptvnatorJourneyOpenSourceProbe';
+    '__meddlJourneyOpenSourceProbe';
 export const JOURNEY_OPEN_SOURCE_START_SENTINEL_ID =
-    '__iptvnator-journey-open-source-start__';
+    '__meddl-journey-open-source-start__';
 export const JOURNEY_OPEN_SOURCE_END_SENTINEL_ID =
-    '__iptvnator-journey-open-source-end__';
+    '__meddl-journey-open-source-end__';
 export const JOURNEY_PLAYBACK_PROBE_STATE_KEY =
-    '__iptvnatorJourneyPlaybackProbe';
+    '__meddlJourneyPlaybackProbe';
 export const JOURNEY_PLAYBACK_START_SENTINEL_ID =
-    '__iptvnator-journey-playback-start__';
+    '__meddl-journey-playback-start__';
 export const JOURNEY_PLAYBACK_END_SENTINEL_ID =
-    '__iptvnator-journey-playback-end__';
+    '__meddl-journey-playback-end__';
 /** A live channel row in the Xtream live layout. */
 export const JOURNEY_PLAYBACK_START_SELECTOR =
     'app-live-stream-layout [data-test-id="channel-item"]';
@@ -107,7 +107,7 @@ export const JOURNEY_SETTLE_ROOT_SELECTOR = 'main.workspace-content';
  * build-config spec checks it against
  * `CHANGE_DETECTION_TICK_COUNTER_KEY` in apps/web.
  */
-export const JOURNEY_CD_TICK_COUNTER_KEY = '__iptvnatorCdTicks';
+export const JOURNEY_CD_TICK_COUNTER_KEY = '__meddlCdTicks';
 
 /**
  * J1's idle window: it opens at the settle point and counts what the page

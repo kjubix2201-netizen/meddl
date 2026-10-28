@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { focusKey, restoreFocus } from '@iptvnator/tv/ui';
+import { focusKey, restoreFocus } from '@meddl/tv/ui';
 import { LiveChannels } from './live-channels';
 import { GridGuide } from './grid-guide';
 import { ProgrammeGuide } from './programme-guide';

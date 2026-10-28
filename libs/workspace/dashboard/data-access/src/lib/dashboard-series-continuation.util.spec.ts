@@ -2,7 +2,7 @@ import type {
     PlaybackPositionData,
     PortalRecentItem,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     CONTINUE_WATCHING_SERIES_LOOKUP_LIMIT,
     CONTINUE_WATCHING_VISIBLE_ITEMS,

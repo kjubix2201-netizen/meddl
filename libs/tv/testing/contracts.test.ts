@@ -8,16 +8,16 @@ import {
     hydrateUserData,
     LatestRequest,
     Source,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import {
     UserDataRepository,
     createProvider,
     ProviderTransport,
-} from '@iptvnator/tv/data-access';
+} from '@meddl/tv/data-access';
 import {
     XtreamClient,
     resolveXtreamVodPlaybackSource,
-} from '@iptvnator/portal/xtream/client';
+} from '@meddl/portal/xtream/client';
 const source: Source = {
     id: 'a',
     provider: 'xtream',

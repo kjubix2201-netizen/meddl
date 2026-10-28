@@ -1,4 +1,4 @@
-import { Media } from '@iptvnator/tv/util';
+import { Media } from '@meddl/tv/util';
 import { TvIcon } from './icon';
 /** A local vector remains visible when a channel has no logo or its URL fails. */
 export function ChannelLogo({ src }: { src?: string }) {

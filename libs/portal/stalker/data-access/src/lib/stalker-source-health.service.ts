@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { DataService, withSourceProbe } from '@iptvnator/services';
+import { DataService, withSourceProbe } from '@meddl/services';
 import {
     accountHealth,
     isFullStalkerPortalPlaylist,
@@ -8,8 +8,8 @@ import {
     SourceProbeContext,
     sourceHealthUnknown,
     isStalkerAuthFailureResponse,
-} from '@iptvnator/shared/interfaces';
-import { createLogger } from '@iptvnator/portal/shared/util';
+} from '@meddl/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util';
 import {
     StalkerSessionService,
     getStalkerPortalIdentityFromPlaylist,

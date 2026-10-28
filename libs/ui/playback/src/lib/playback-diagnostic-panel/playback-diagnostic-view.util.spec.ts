@@ -2,7 +2,7 @@ import {
     PlaybackDiagnosticCode,
     PlaybackDiagnosticSource,
     type PlaybackDiagnostic,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import {
     getDiagnosticCodecHint,
     getDiagnosticDescriptionKey,

@@ -1,5 +1,5 @@
-import { initialData, hydrateUserData, UserData } from '@iptvnator/tv/util';
-const DATABASE = 'iptvnator-tv-user-data';
+import { initialData, hydrateUserData, UserData } from '@meddl/tv/util';
+const DATABASE = 'meddl-tv-user-data';
 const VERSION = 1;
 export class UserDataStorage {
     private db?: IDBDatabase;
@@ -15,7 +15,7 @@ export class UserDataStorage {
             request.onblocked = () =>
                 reject(
                     new Error(
-                        'Close other IPTVnator TV windows to upgrade local storage.'
+                        'Close other meddl TV windows to upgrade local storage.'
                     )
                 );
         });

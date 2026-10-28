@@ -1,4 +1,4 @@
-import type { PlaylistMeta } from '@iptvnator/shared/interfaces';
+import type { PlaylistMeta } from '@meddl/shared/interfaces';
 import { buildStalkerFavoriteItems } from './dashboard-mappers';
 
 describe('buildStalkerFavoriteItems', () => {

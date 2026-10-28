@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
 import {
     XtreamApiService,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
-import { StalkerSessionService } from '@iptvnator/portal/stalker/data-access';
-import { UnifiedCollectionItem } from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/xtream/data-access';
+import { StalkerSessionService } from '@meddl/portal/stalker/data-access';
+import { UnifiedCollectionItem } from '@meddl/portal/shared/util';
 import {
     DataService,
     PlaylistsService,
     SettingsStore,
-} from '@iptvnator/services';
-import { Playlist } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { Playlist } from '@meddl/shared/interfaces';
 import { of } from 'rxjs';
 import { StreamResolverService } from './stream-resolver.service';
 

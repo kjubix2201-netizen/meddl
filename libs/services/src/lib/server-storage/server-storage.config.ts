@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import type { ServerInstanceInfo } from '@iptvnator/shared/interfaces';
+import type { ServerInstanceInfo } from '@meddl/shared/interfaces';
 
 export interface ServerStorageConfig {
     readonly instance: ServerInstanceInfo;

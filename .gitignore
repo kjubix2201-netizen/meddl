@@ -76,10 +76,10 @@ Thumbs.db
 .claude/*
 !.claude/skills/
 .claude/skills/*
-!.claude/skills/iptvnator-nx-architecture
-!.claude/skills/iptvnator-sqlite-db-worker
-!.claude/skills/iptvnator-theme-style
-!.claude/skills/iptvnator-ui-design
+!.claude/skills/meddl-nx-architecture
+!.claude/skills/meddl-sqlite-db-worker
+!.claude/skills/meddl-theme-style
+!.claude/skills/meddl-ui-design
 !.claude/skills/release-cut
 !.claude/skills/release-notes
 !.claude/skills/stalker-portal

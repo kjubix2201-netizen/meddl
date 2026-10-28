@@ -1,12 +1,12 @@
 import { createHash } from 'node:crypto';
 import { and, eq } from 'drizzle-orm';
-import type { DatabaseInstance } from '@iptvnator/shared/database';
+import type { DatabaseInstance } from '@meddl/shared/database';
 import {
     SERVER_USER_STATE_NAMESPACES,
     type ServerUserStateCurrent,
     type ServerUserStateNamespace,
     type ServerUserStateResponse,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { serverUserState } from './server-user-state.table';
 
 /**

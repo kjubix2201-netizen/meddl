@@ -3,8 +3,8 @@ import {
     NativePlayer,
     UserDataRepository,
     UserDataStorage,
-} from '@iptvnator/tv/data-access';
-import { initialData, recordProgress, UserData } from '@iptvnator/tv/util';
+} from '@meddl/tv/data-access';
+import { initialData, recordProgress, UserData } from '@meddl/tv/util';
 /** Persisted state is published only after its transaction commits. */
 export function useUserData(
     video: { current: HTMLVideoElement | null },

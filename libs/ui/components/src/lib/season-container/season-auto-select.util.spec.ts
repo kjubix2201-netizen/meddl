@@ -1,7 +1,7 @@
 import {
     PlaybackPositionData,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     type AutoSeasonContext,
     resolveAutoSelectedSeason,

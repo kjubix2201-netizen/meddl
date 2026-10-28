@@ -8,9 +8,9 @@ import {
     TranslateModule,
     TranslateService,
 } from '@ngx-translate/core';
-import { SeasonDownloadCoordinator } from '@iptvnator/portal/shared/data-access';
-import { XtreamSerieEpisode } from '@iptvnator/shared/interfaces';
-import { DownloadsService } from '@iptvnator/services';
+import { SeasonDownloadCoordinator } from '@meddl/portal/shared/data-access';
+import { XtreamSerieEpisode } from '@meddl/shared/interfaces';
+import { DownloadsService } from '@meddl/services';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { of } from 'rxjs';

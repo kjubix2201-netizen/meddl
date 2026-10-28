@@ -1,4 +1,4 @@
-import { InlinePlaybackPlayer } from '@iptvnator/playback/util';
+import { InlinePlaybackPlayer } from '@meddl/playback/util';
 import {
     createFakeShakaEnvironment,
     flushShakaMicrotasks as flush,

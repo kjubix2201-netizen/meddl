@@ -2,15 +2,15 @@ import { Injectable, inject } from '@angular/core';
 import {
     PORTAL_PLAYBACK_POSITIONS,
     PortalPlaybackPositions,
-} from '@iptvnator/portal/shared/util/tokens';
+} from '@meddl/portal/shared/util/tokens';
 import {
     PlaybackPositionRuntimeBridgeService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PlaybackPositionData,
     XTREAM_DATA_SOURCE,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 
 @Injectable({
     providedIn: 'root',

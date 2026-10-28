@@ -1,8 +1,8 @@
 import {
     normalizeXtreamServerUrl,
     isStalkerAuthFailureResponse,
-} from '@iptvnator/shared/interfaces';
-import { Source } from '@iptvnator/tv/util';
+} from '@meddl/shared/interfaces';
+import { Source } from '@meddl/tv/util';
 export interface DirectProbeResult {
     catalog: string;
     media: string;

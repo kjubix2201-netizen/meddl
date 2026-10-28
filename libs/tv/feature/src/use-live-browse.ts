@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
-import { focusKey, restoreFocus } from '@iptvnator/tv/ui';
+import { focusKey, restoreFocus } from '@meddl/tv/ui';
 import type { TvModel } from './use-tv';
 function visibleChannels() {
     return (

@@ -19,12 +19,12 @@ import {
     type PlaybackDiagnostic,
     type PlaybackRecommendation,
     type PlaybackRecommendationTarget,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import type {
     ResolvedPortalPlayback,
     VodSourceDescriptor,
-} from '@iptvnator/shared/interfaces';
-import { VodSourceRowComponent } from '@iptvnator/ui/components';
+} from '@meddl/shared/interfaces';
+import { VodSourceRowComponent } from '@meddl/ui/components';
 import type {
     ExternalRecoveryStates,
     ExternalRecoveryTargetState,

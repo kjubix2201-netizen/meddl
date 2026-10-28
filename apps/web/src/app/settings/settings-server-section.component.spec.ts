@@ -1,12 +1,12 @@
 import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { ServerStorageStatusService } from '@iptvnator/services';
+import { ServerStorageStatusService } from '@meddl/services';
 import {
     SERVER_STORAGE_CONFIG,
     ServerMigrationService,
     ServerStorageSession,
-} from '@iptvnator/services/server-storage';
+} from '@meddl/services/server-storage';
 import { SettingsServerSectionComponent } from './settings-server-section.component';
 
 describe('SettingsServerSectionComponent', () => {
@@ -25,7 +25,7 @@ describe('SettingsServerSectionComponent', () => {
         session.fetchStatus.mockResolvedValue({
             playlists: 4,
             databaseBytes: 38 * 1024 * 1024,
-            databasePath: '/data/databases/iptvnator.db',
+            databasePath: '/data/databases/meddl.db',
             startedAt: '2026-10-11T08:00:00.000Z',
         });
         migration.browserDataMoved.mockReturnValue(false);
@@ -68,7 +68,7 @@ describe('SettingsServerSectionComponent', () => {
         await render('none');
         const text = fixture.nativeElement.textContent;
 
-        expect(text).toContain('/data/databases/iptvnator.db');
+        expect(text).toContain('/data/databases/meddl.db');
         expect(byTestId('server-address')?.textContent?.trim()).toBe(
             'http://nas.local:4333'
         );

@@ -1,16 +1,16 @@
-import type { PlaylistMeta } from '@iptvnator/shared/interfaces';
-import { isPortalAccountPlaylist } from '@iptvnator/shared/interfaces';
+import type { PlaylistMeta } from '@meddl/shared/interfaces';
+import { isPortalAccountPlaylist } from '@meddl/shared/interfaces';
 import {
     buildCollectionViewState,
     COLLECTION_VIEW_STATE_KEY,
     CollectionContentType,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import type {
     DashboardRailAction,
     DashboardRailCard,
     DashboardRailLayout,
 } from './dashboard-rail.component';
-import type { DashboardRailsSettings } from '@iptvnator/shared/interfaces';
+import type { DashboardRailsSettings } from '@meddl/shared/interfaces';
 
 // Cap dashboard rails at 20 items. Users get ~3x what's visible at once,
 // the DOM stays cheap, and the "Manage all" link is one click away for the

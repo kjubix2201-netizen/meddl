@@ -1,13 +1,13 @@
 import { eq, getTableColumns } from 'drizzle-orm';
-import type { DatabaseInstance } from '@iptvnator/shared/database';
+import type { DatabaseInstance } from '@meddl/shared/database';
 import {
     buildPlaylistRow,
     parseAppPlaylist,
     playlistConflictUpdate,
-} from '@iptvnator/shared/database/app-playlist';
-import { appState, playlists } from '@iptvnator/shared/database/schema';
-import type { Playlist as PlaylistRow } from '@iptvnator/shared/database/schema';
-import { SERVER_PAYLOAD_FIELDS } from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/database/app-playlist';
+import { appState, playlists } from '@meddl/shared/database/schema';
+import type { Playlist as PlaylistRow } from '@meddl/shared/database/schema';
+import { SERVER_PAYLOAD_FIELDS } from '@meddl/shared/interfaces';
 import {
     metadataDocument,
     payloadMetadata,

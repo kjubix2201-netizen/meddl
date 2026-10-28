@@ -6,7 +6,7 @@ import {
     type XtreamPreloadPerformanceMarker,
     type XtreamPreloadPerformanceMethod,
     type XtreamPreloadPerformanceOutcome,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     extractXtreamPreloadPerformanceMetadata,
     type XtreamPreloadMarkerMetadata,
@@ -62,7 +62,7 @@ export function toXtreamPreloadPerformanceTargetMethod(
 }
 
 export function isXtreamPreloadPerformanceCaptureEnabled(): boolean {
-    return process.env['IPTVNATOR_PERF_CAPTURE'] === '1';
+    return process.env['MEDDL_PERF_CAPTURE'] === '1';
 }
 
 function readHighResolutionEpochMs(): number {

@@ -32,9 +32,9 @@ import {
  * directory from `actions/cache` with the same key (`--print-cache-key`).
  */
 export const LARGE_LIBRARY_PROFILE_CACHE_ENV =
-    'IPTVNATOR_LARGE_LIBRARY_PROFILE_CACHE';
+    'MEDDL_LARGE_LIBRARY_PROFILE_CACHE';
 export const LARGE_LIBRARY_PROFILE_CACHE_DEFAULT =
-    'node_modules/.cache/iptvnator/large-library-profile';
+    'node_modules/.cache/meddl/large-library-profile';
 const DATABASE_LIBRARY = 'libs/shared/database/src';
 const GENERATOR_SOURCES = [
     'apps/electron-backend-e2e/src/performance/large-library-profile.ts',
@@ -47,7 +47,7 @@ const GENERATION_TIMEOUT_MS = 30 * 60 * 1_000;
 export interface LargeLibraryProfile {
     readonly cached: boolean;
     readonly cacheKey: string;
-    /** The data directory holding `databases/iptvnator.db`; copy, never launch on it. */
+    /** The data directory holding `databases/meddl.db`; copy, never launch on it. */
     readonly directory: string;
     readonly manifest: LargeLibraryProfileManifest;
 }
@@ -152,7 +152,7 @@ export function readLargeLibraryProfileManifest(
     directory: string
 ): LargeLibraryProfileManifest | null {
     const manifestPath = join(directory, LARGE_LIBRARY_MANIFEST_FILE_NAME);
-    const databasePath = join(directory, 'databases', 'iptvnator.db');
+    const databasePath = join(directory, 'databases', 'meddl.db');
     if (!existsSync(manifestPath) || !existsSync(databasePath)) {
         return null;
     }
@@ -203,7 +203,7 @@ async function runGenerator(
                 env: {
                     ...env,
                     ELECTRON_RUN_AS_NODE: '1',
-                    IPTVNATOR_E2E_DATA_DIR: outputDirectory,
+                    MEDDL_E2E_DATA_DIR: outputDirectory,
                     TSX_TSCONFIG_PATH: join(
                         workspaceRoot,
                         'tsconfig.base.json'

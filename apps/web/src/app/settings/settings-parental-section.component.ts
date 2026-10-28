@@ -8,8 +8,8 @@ import {
     MatSlideToggleModule,
 } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
-import { ParentalLockRelockMinutes } from '@iptvnator/shared/interfaces';
-import { provideFormFieldDefaults } from '@iptvnator/ui/components/form-field-defaults';
+import { ParentalLockRelockMinutes } from '@meddl/shared/interfaces';
+import { provideFormFieldDefaults } from '@meddl/ui/components/form-field-defaults';
 
 @Component({
     selector: 'app-settings-parental-lock-section',

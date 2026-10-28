@@ -1,4 +1,4 @@
-import { EpgProgram } from '@iptvnator/shared/interfaces';
+import { EpgProgram } from '@meddl/shared/interfaces';
 
 /**
  * Shared shape for a raw `epg_programs` row as read by both

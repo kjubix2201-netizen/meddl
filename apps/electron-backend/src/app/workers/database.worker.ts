@@ -1,7 +1,7 @@
 import type {
     ElectronBridgeFavoriteReorderUpdate,
     XtreamFavoriteRemovalRef,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { migrateAppPlaylists } from '../database/operations/playlist-migration.operations';
 import {
     closeWorkerDatabase,
@@ -14,7 +14,7 @@ import type {
     VodSourcePin,
     XtreamBackupFavoriteItem,
     XtreamBackupRecentlyViewedItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type {
     DbOperationEvent,
     DbWorkerIncomingMessage,
@@ -150,7 +150,7 @@ setParentalLockActive(
         ?.parentalLockActive === true
 );
 const batchDelayMs = Number.parseInt(
-    process.env['IPTVNATOR_DB_WORKER_BATCH_DELAY_MS'] ?? '0',
+    process.env['MEDDL_DB_WORKER_BATCH_DELAY_MS'] ?? '0',
     10
 );
 /**

@@ -3,14 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
     createDiscoverFacetNavigation,
     type DiscoverFacetNavigation,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     CrossPortalSimilarItem,
     CrossPortalSimilarService,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
-import type { TmdbEnrichedCastMember } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import type { TmdbEnrichedCastMember } from '@meddl/shared/interfaces';
 import type { SimilarCatalogItem } from './tmdb-similar.util';
 
 /** Where an Xtream movie or series details page can send the viewer. */

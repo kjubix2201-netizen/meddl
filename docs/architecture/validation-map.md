@@ -325,7 +325,7 @@ pnpm run perf:initial-bytes         # breakdown only
 pnpm run perf:initial-bytes:check   # measure, then compare with the committed baseline
 pnpm nx test performance-tools
 pnpm run perf:journeys              # J1 launch, J2 open-source and J3 playback journeys, one dist/performance/journeys/<timestamp>/summary.json
-pnpm nx run electron-backend-e2e:journeys-large-library   # J1 on the large-library profile (launch-large); skipped by perf:journeys unless IPTVNATOR_JOURNEY_LARGE_LIBRARY=1
+pnpm nx run electron-backend-e2e:journeys-large-library   # J1 on the large-library profile (launch-large); skipped by perf:journeys unless MEDDL_JOURNEY_LARGE_LIBRARY=1
 pnpm nx run electron-backend-e2e:large-library-profile    # build or find that profile (cached by content hash under node_modules/.cache)
 pnpm run perf:compositing           # tile memory and composited layers per route, dist/performance/compositing/<timestamp>/summary.json
 ```
@@ -351,7 +351,7 @@ journey spec against the Xtream mock: J1 launch, then J2 open-source (a
 second set of launches, each followed by the click on the portal card), both
 written to the same summary file. The large-library variant of J1
 (`launch-large`, a generated profile of 182 sources and 2.4M catalog rows)
-skips itself unless `IPTVNATOR_JOURNEY_LARGE_LIBRARY=1`, which the
+skips itself unless `MEDDL_JOURNEY_LARGE_LIBRARY=1`, which the
 `journeys-large-library` target sets and the weekly `performance-ratchet.yml`
 passes through the composite action; pull-request CI does not run it (see
 "CI cost" in the journeys document). Its probe specs run with
@@ -376,7 +376,7 @@ helpers instead of unconditional `console.log`. Electron external-player traces
 are gated by:
 
 ```bash
-IPTVNATOR_TRACE_PLAYER=1 pnpm run serve:backend
+MEDDL_TRACE_PLAYER=1 pnpm run serve:backend
 ```
 
 ## Test impact and completion

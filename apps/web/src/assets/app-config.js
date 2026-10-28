@@ -1,1 +1,1 @@
-window.__IPTVNATOR_CONFIG__ = window.__IPTVNATOR_CONFIG__ || {};
+window.__MEDDL_CONFIG__ = window.__MEDDL_CONFIG__ || {};

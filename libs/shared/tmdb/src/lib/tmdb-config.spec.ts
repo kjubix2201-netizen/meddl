@@ -1,4 +1,4 @@
-import { Language } from '@iptvnator/shared/interfaces';
+import { Language } from '@meddl/shared/interfaces';
 import { tmdbSearchLanguageForTitle, toTmdbLanguage } from './tmdb-config';
 
 describe('toTmdbLanguage', () => {

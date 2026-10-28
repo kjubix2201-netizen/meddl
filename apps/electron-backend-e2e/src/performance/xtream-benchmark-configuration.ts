@@ -88,13 +88,13 @@ export async function resolveXtreamBenchmarkConfiguration(
     const repositoryRoot = resolve(
         options.workspaceRoot ?? defaultWorkspaceRoot
     );
-    const requestedRoot = environment['IPTVNATOR_PERF_OUTPUT_DIR'];
+    const requestedRoot = environment['MEDDL_PERF_OUTPUT_DIR'];
     if (!requestedRoot) {
-        throw new Error('IPTVNATOR_PERF_OUTPUT_DIR is required');
+        throw new Error('MEDDL_PERF_OUTPUT_DIR is required');
     }
-    const smoke = resolveSmokeMode(environment['IPTVNATOR_PERF_SMOKE']);
+    const smoke = resolveSmokeMode(environment['MEDDL_PERF_SMOKE']);
     const mode = smoke ? 'smoke' : 'formal';
-    const variant = environment['IPTVNATOR_PERF_VARIANT'] ?? 'baseline';
+    const variant = environment['MEDDL_PERF_VARIANT'] ?? 'baseline';
     const layout = resolveXtreamBenchmarkOutputLayout(
         repositoryRoot,
         requestedRoot,
@@ -102,10 +102,10 @@ export async function resolveXtreamBenchmarkConfiguration(
     );
     const cdpPort = resolveXtreamBenchmarkCdpPort(
         mode,
-        environment['IPTVNATOR_PERF_CDP_PORT']
+        environment['MEDDL_PERF_CDP_PORT']
     );
     const controlToken =
-        environment['IPTVNATOR_XTREAM_MOCK_CONTROL_TOKEN'] ?? '';
+        environment['MEDDL_XTREAM_MOCK_CONTROL_TOKEN'] ?? '';
     if (!CONTROL_TOKEN.test(controlToken)) {
         throw new Error(
             'Xtream benchmark requires a high-entropy mock control token'
@@ -226,7 +226,7 @@ export async function assertXtreamBenchmarkBuildUnchanged(
 function resolveSmokeMode(value: string | undefined): boolean {
     if (value === undefined) return false;
     if (value === '1') return true;
-    throw new Error('IPTVNATOR_PERF_SMOKE is invalid');
+    throw new Error('MEDDL_PERF_SMOKE is invalid');
 }
 
 function assertSourceState(

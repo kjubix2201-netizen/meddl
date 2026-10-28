@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { signalStore } from '@ngrx/signals';
-import { DataService, RuntimeCapabilitiesService } from '@iptvnator/services';
-import { ElectronBridgeApi, PlaylistMeta } from '@iptvnator/shared/interfaces';
+import { DataService, RuntimeCapabilitiesService } from '@meddl/services';
+import { ElectronBridgeApi, PlaylistMeta } from '@meddl/shared/interfaces';
 import { StalkerPortalRepairService } from '../../stalker-portal-repair.service';
 import { StalkerSessionService } from '../../stalker-session.service';
 import { withStalkerPortal } from './with-stalker-portal.feature';
 
-jest.mock('@iptvnator/portal/shared/util', () => ({
+jest.mock('@meddl/portal/shared/util', () => ({
     createLogger: () => ({
         debug: jest.fn(),
         error: jest.fn(),

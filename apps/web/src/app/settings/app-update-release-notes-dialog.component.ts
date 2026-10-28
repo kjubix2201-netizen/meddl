@@ -28,13 +28,13 @@ import {
     ElectronBridgeAppUpdateReleaseNotesDirection,
     ElectronBridgeAppUpdateReleaseNotesRequest,
     isAppUpdateReleaseNotesNotFoundMessage,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     DialogFooterDirective,
     DialogFooterStartDirective,
     DialogShellComponent,
     dialogSize,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 const RELEASE_NOTES_IMAGE_CLASS = 'release-notes-dialog__image';
 

@@ -18,16 +18,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { EpgViewMode } from '@iptvnator/shared/interfaces';
-import { EpgSourceStatusComponent } from '@iptvnator/ui/epg';
+import { EpgViewMode } from '@meddl/shared/interfaces';
+import { EpgSourceStatusComponent } from '@meddl/ui/epg';
 import { TranslateModule } from '@ngx-translate/core';
 import { EpgViewModeOption } from './settings.models';
 import { markSectionForCheckOnFormEvents } from './settings-section-form-render';
 import {
     RadioGroupDirective,
     RadioOptionDirective,
-} from '@iptvnator/ui/components/radio-group';
-import { provideFormFieldDefaults } from '@iptvnator/ui/components/form-field-defaults';
+} from '@meddl/ui/components/radio-group';
+import { provideFormFieldDefaults } from '@meddl/ui/components/form-field-defaults';
 
 @Component({
     selector: 'app-settings-epg-section',

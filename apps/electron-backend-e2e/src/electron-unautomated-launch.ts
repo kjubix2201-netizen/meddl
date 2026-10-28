@@ -240,7 +240,7 @@ app.on('browser-window-created', (_event, window) => {
             env: {
                 ...process.env,
                 ELECTRON_IS_DEV: '0',
-                IPTVNATOR_E2E_DATA_DIR: dataDir,
+                MEDDL_E2E_DATA_DIR: dataDir,
                 NODE_ENV: 'test',
             },
             stdio: ['ignore', 'ignore', 'pipe'],

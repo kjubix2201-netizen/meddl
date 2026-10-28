@@ -4,31 +4,31 @@ import {
     getM3uArchiveDays,
     getM3uCatchupWindowEndSeconds,
     isM3uCatchupPlaybackSupported,
-} from '@iptvnator/shared/m3u-utils';
-import { ResolvedLiveCollectionDetail } from '@iptvnator/portal/shared/data-access';
+} from '@meddl/shared/m3u-utils';
+import { ResolvedLiveCollectionDetail } from '@meddl/portal/shared/data-access';
 import {
     LiveEpgPanelState,
     persistLiveEpgPanelState,
     restoreLiveEpgPanelState,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     EpgDateNavigationDirection,
     getTodayEpgDateKey,
     shiftEpgDateKey,
-} from '@iptvnator/ui/epg';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
+} from '@meddl/ui/epg';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
 import {
     Channel,
     EpgItem,
     EpgProgram,
     EpgViewMode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     buildCatchupTimelineSegments,
     type PlayerTimelineSegment,
-} from '@iptvnator/ui/playback';
-import { LiveEpgPanelSummary } from '@iptvnator/ui/shared-portals';
+} from '@meddl/ui/playback';
+import { LiveEpgPanelSummary } from '@meddl/ui/shared-portals';
 import {
     getLiveEpgPanelSummary,
     toEpgProgram,

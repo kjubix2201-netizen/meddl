@@ -19,8 +19,8 @@ import {
     ProviderImportConfidence,
     ProviderImportKind,
     SOURCE_TYPE_ICONS,
-} from '@iptvnator/shared/interfaces';
-import { provideFormFieldDefaults } from '@iptvnator/ui/components/form-field-defaults';
+} from '@meddl/shared/interfaces';
+import { provideFormFieldDefaults } from '@meddl/ui/components/form-field-defaults';
 
 interface CandidateSummaryRow {
     labelKey: string;

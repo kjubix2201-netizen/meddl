@@ -4,8 +4,8 @@ import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
 
-const isStaticPwaE2E = process.env['IPTVNATOR_E2E_STATIC_PWA'] === '1';
-const staticPwaPort = process.env['IPTVNATOR_E2E_STATIC_PORT'] ?? '4300';
+const isStaticPwaE2E = process.env['MEDDL_E2E_STATIC_PWA'] === '1';
+const staticPwaPort = process.env['MEDDL_E2E_STATIC_PORT'] ?? '4300';
 // For CI, you may want to set BASE_URL to the deployed application.
 const baseURL =
     process.env['BASE_URL'] ||
@@ -22,7 +22,7 @@ const storageBackendPort = process.env['STORAGE_BACKEND_PORT'] ?? '3334';
 // Path only; the backend creates it. A new pid gives every run an empty store.
 const storageBackendDataDir = join(
     tmpdir(),
-    `iptvnator-web-e2e-storage-${process.pid}`
+    `meddl-web-e2e-storage-${process.pid}`
 );
 
 /**
@@ -107,7 +107,7 @@ export default defineConfig({
                 PORT: webBackendPort,
                 CLIENT_URL: 'http://localhost:4200',
                 BACKEND_URL: '/api',
-                IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS: '1',
+                MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS: '1',
                 TSX_TSCONFIG_PATH: 'tsconfig.base.json',
             },
             url: `http://localhost:${webBackendPort}/health`,
@@ -123,10 +123,10 @@ export default defineConfig({
                 PORT: storageBackendPort,
                 CLIENT_URL: `http://localhost:4200,http://localhost:${staticPwaPort}`,
                 BACKEND_URL: '/api',
-                IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS: '1',
+                MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS: '1',
                 TSX_TSCONFIG_PATH: 'tsconfig.base.json',
-                IPTVNATOR_STORAGE: 'server',
-                IPTVNATOR_DATA_DIR: storageBackendDataDir,
+                MEDDL_STORAGE: 'server',
+                MEDDL_DATA_DIR: storageBackendDataDir,
             },
             url: `http://localhost:${storageBackendPort}/health`,
             // Never another backend on that port: the specs delete every

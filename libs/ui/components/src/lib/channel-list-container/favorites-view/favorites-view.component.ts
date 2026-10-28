@@ -17,15 +17,15 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
-import { SettingsStore } from '@iptvnator/services';
-import { resolveChannelEpgLookupKey } from '@iptvnator/m3u-state';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
+import { SettingsStore } from '@meddl/services';
+import { resolveChannelEpgLookupKey } from '@meddl/m3u-state';
 import {
     foldSearchText,
     Channel,
     EpgProgram,
     epgProviderClockMs,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { ChannelContextMenuComponent } from '../channel-context-menu/channel-context-menu.component';
 import { buildChannelEpgMetadataMap } from '../epg-enrichment.util';
 import { EpgMappingDialogComponent } from '../epg-mapping-dialog/epg-mapping-dialog.component';

@@ -261,7 +261,7 @@ describe('request header overrides', () => {
             'https://www.youtube-nocookie.com/embed/abc123'
         );
 
-        expect(headers['Referer']).toBe('https://4gray.github.io/iptvnator/');
+        expect(headers['Referer']).toBe('https://github.com/kjubix2201-netizen/meddl');
     });
 
     it('keeps an existing Referer on YouTube embed requests', async () => {

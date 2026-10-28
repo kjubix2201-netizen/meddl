@@ -1,5 +1,5 @@
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
-import type { StalkerMappedEpisode } from '@iptvnator/portal/stalker/data-access';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
+import type { StalkerMappedEpisode } from '@meddl/portal/stalker/data-access';
 import { STALKER_SERIES_DOWNLOAD_MODES } from './stalker-series-download.adapter';
 import {
     captureStalkerEpisodePlaybackSessionIdentity,

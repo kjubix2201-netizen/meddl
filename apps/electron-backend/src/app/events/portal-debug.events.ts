@@ -2,8 +2,8 @@ import { BrowserWindow } from 'electron';
 import {
     PORTAL_DEBUG_EVENT,
     PortalDebugEvent,
-} from '@iptvnator/shared/interfaces';
-import { redactSensitiveData } from '@iptvnator/shared/logging';
+} from '@meddl/shared/interfaces';
+import { redactSensitiveData } from '@meddl/shared/logging';
 import { environment } from '../../environments/environment';
 
 export function sanitizePortalDebugEvent(

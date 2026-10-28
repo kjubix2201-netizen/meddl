@@ -3,12 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import {
     PortalStatusService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PlaylistMeta,
     SourceHealthHistoryEntry,
     SourceHealthSnapshot,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { sourceHealthFingerprint } from './source-health-identity';
 import { SourceHealthHistoryService } from './source-health-history.service';
 import { SourceHealthService } from './source-health.service';

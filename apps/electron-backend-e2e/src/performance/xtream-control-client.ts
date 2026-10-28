@@ -65,7 +65,7 @@ export function createXtreamControlClient(
                 method: body ? 'POST' : 'GET',
                 redirect: 'error',
                 headers: {
-                    'x-iptvnator-performance-token': token,
+                    'x-meddl-performance-token': token,
                     ...(body ? { 'content-type': 'application/json' } : {}),
                 },
                 ...(body ? { body: JSON.stringify(body) } : {}),

@@ -142,7 +142,7 @@ test('phone setup owns remote and Tab focus, Back closes it in the selected cate
     page,
 }) => {
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(page.locator('.connection-status')).toHaveText('Connected');
     await nav(page, 'Settings');
@@ -241,11 +241,11 @@ test('dynamic backend results keep control focus keys unique and stable across r
     const key = await probe.getAttribute('data-focus');
     for (const port of [3333, 3335]) {
         await page.route(
-            `http://iptvnator.local:${port}/tv/connection`,
+            `http://meddl.local:${port}/tv/connection`,
             (route) =>
                 route.fulfill({
                     json: {
-                        service: 'iptvnator',
+                        service: 'meddl',
                         protocol: 1,
                         pairing: true,
                         auth: 'token',
@@ -253,7 +253,7 @@ test('dynamic backend results keep control focus keys unique and stable across r
                 })
         );
     }
-    await page.route('http://iptvnator.local:4333/**', (route) =>
+    await page.route('http://meddl.local:4333/**', (route) =>
         route.abort()
     );
     await page
@@ -280,7 +280,7 @@ test('phone modal blocks pointer and programmatic focus behind the QR', async ({
     page,
 }) => {
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(page.locator('.connection-status')).toHaveText('Connected');
     await nav(page, 'Settings');

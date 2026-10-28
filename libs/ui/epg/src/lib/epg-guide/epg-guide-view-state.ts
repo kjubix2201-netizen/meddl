@@ -1,5 +1,5 @@
 import { computed, effect, signal } from '@angular/core';
-import { foldSearchText, EpgProgram } from '@iptvnator/shared/interfaces';
+import { foldSearchText, EpgProgram } from '@meddl/shared/interfaces';
 import {
     EpgDateNavigationDirection,
     getTodayEpgDateKey,

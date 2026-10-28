@@ -8,8 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PlaylistErrorViewComponent } from '@iptvnator/portal/shared/ui';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+import { PlaylistErrorViewComponent } from '@meddl/portal/shared/ui';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import { XtreamCachedOfflineNoticeComponent } from './xtream-cached-offline-notice.component';
 
 @Component({

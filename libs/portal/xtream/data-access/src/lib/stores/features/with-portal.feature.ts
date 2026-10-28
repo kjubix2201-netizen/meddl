@@ -14,11 +14,11 @@ import {
     XtreamCredentials,
 } from '../../services/xtream-api.service';
 import { PortalStatusType } from '../../xtream-state';
-import { createLogger } from '@iptvnator/portal/shared/util/logger';
+import { createLogger } from '@meddl/portal/shared/util/logger';
 import {
     resolveXtreamPortalStatus,
     resolveXtreamServerTimezone,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 /**
  * Portal state for managing playlist and portal status

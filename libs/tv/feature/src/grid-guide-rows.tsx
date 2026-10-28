@@ -4,9 +4,9 @@ import {
     guideNowLeftPx,
     guideXForMs,
     TimelineAxis,
-} from '@iptvnator/shared/epg';
-import { gridTime, gridVisiblePrograms, Media } from '@iptvnator/tv/util';
-import { ChannelLogo } from '@iptvnator/tv/ui';
+} from '@meddl/shared/epg';
+import { gridTime, gridVisiblePrograms, Media } from '@meddl/tv/util';
+import { ChannelLogo } from '@meddl/tv/ui';
 import type { GridSchedule } from './use-grid-guide';
 import type { useGridNavigation } from './use-grid-navigation';
 export function GridGuideRows({

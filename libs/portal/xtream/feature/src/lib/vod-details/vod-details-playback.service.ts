@@ -14,12 +14,12 @@ import {
     createInlinePlaybackPositionWriter,
     createLogger,
     createPendingPlaybackStart,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     resolveXtreamVodPlaybackSource,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
-import { PlaybackPositionRuntimeBridgeService } from '@iptvnator/services';
+} from '@meddl/portal/xtream/data-access';
+import { PlaybackPositionRuntimeBridgeService } from '@meddl/services';
 import {
     ExternalPlayerName,
     ExternalPlayerSession,
@@ -28,8 +28,8 @@ import {
     ResolvedPortalPlayback,
     XtreamVodDetails,
     XtreamVodInfo,
-} from '@iptvnator/shared/interfaces';
-import type { PlaybackFallbackRequest } from '@iptvnator/ui/playback';
+} from '@meddl/shared/interfaces';
+import type { PlaybackFallbackRequest } from '@meddl/ui/playback';
 import {
     closeRunningExternalSession,
     runningExternalSession,

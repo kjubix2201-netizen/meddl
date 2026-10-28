@@ -1,13 +1,13 @@
 import { computed, inject, Signal } from '@angular/core';
-import { isDashChannel, isDashStreamUrl } from '@iptvnator/shared/m3u-utils';
-import { ResolvedLiveCollectionDetail } from '@iptvnator/portal/shared/data-access';
+import { isDashChannel, isDashStreamUrl } from '@meddl/shared/m3u-utils';
+import { ResolvedLiveCollectionDetail } from '@meddl/portal/shared/data-access';
 import {
     getLiveCollectionPlaylistNavigation,
     PORTAL_PLAYER,
     UnifiedCollectionItem,
     WorkspaceNavigationTarget,
-} from '@iptvnator/portal/shared/util';
-import { SettingsStore } from '@iptvnator/services';
+} from '@meddl/portal/shared/util';
+import { SettingsStore } from '@meddl/services';
 import {
     Channel,
     EpgItem,
@@ -15,7 +15,7 @@ import {
     playlistDisplayLabel,
     ResolvedPortalPlayback,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { createUnifiedLivePlaybackSessionKey } from './unified-live-playback-session-key';
 import { UnifiedLiveTimeshift } from './unified-live-catchup';
 

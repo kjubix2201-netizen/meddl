@@ -1,10 +1,10 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { WorkspaceBackNavigationService } from '@iptvnator/portal/shared/data-access';
-import { WorkspaceBackTarget } from '@iptvnator/portal/shared/util';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
-import type { ElectronBridgeBackGestureSource } from '@iptvnator/shared/interfaces';
-import { WorkspaceShellContextDrawerService } from '@iptvnator/workspace/shell/util';
+import { WorkspaceBackNavigationService } from '@meddl/portal/shared/data-access';
+import { WorkspaceBackTarget } from '@meddl/portal/shared/util';
+import { RuntimeCapabilitiesService } from '@meddl/services';
+import type { ElectronBridgeBackGestureSource } from '@meddl/shared/interfaces';
+import { WorkspaceShellContextDrawerService } from '@meddl/workspace/shell/util';
 import {
     BACK_PRESS_TWIN_MS,
     WorkspaceBackGesturesService,

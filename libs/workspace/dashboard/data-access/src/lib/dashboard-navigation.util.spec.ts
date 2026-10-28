@@ -1,7 +1,7 @@
 import type {
     PlaybackPositionData,
     PortalRecentItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     getRecentItemDetailNavigationState,
     getRecentItemNavigationState,

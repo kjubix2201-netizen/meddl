@@ -18,17 +18,17 @@ import {
     tmdbBackdropUrl,
     tmdbPosterUrl,
     tmdbStillUrl,
-} from '@iptvnator/shared/tmdb';
+} from '@meddl/shared/tmdb';
 import {
     pickSeasonMarkedTitle,
     resolveEnrichmentSeasonNumber,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     artwork,
     Media,
     UserData,
     withSeriesContext,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 /** The caller owns cancellation; the deadline also bounds offline/slow API calls. */
 async function withDeadline<T>(

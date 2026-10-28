@@ -3,14 +3,14 @@ import {
     isPortalPlaybackWatched,
     type SeriesEpisodeEntry,
     type SeriesNextUp,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     resolvePortalActivityWatchKind,
     isCatalogUnavailable,
     type PlaybackPositionData,
     type PortalRecentItem,
     type XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { DashboardSeriesEpisodes } from './dashboard-series-episodes.service';
 
 /**

@@ -6,8 +6,8 @@ import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { runScenarioWorker } from './epg-scenario-worker';
 import { gzipSync } from 'node:zlib';
-import { getIptvnatorDatabasePath } from '@iptvnator/shared/database/path-utils';
-import { __databaseConnectionTestHooks } from '@iptvnator/shared/database';
+import { getMeddlDatabasePath } from '@meddl/shared/database/path-utils';
+import { __databaseConnectionTestHooks } from '@meddl/shared/database';
 import { EpgDatabase } from '../epg-database';
 
 export type EpgImportScenario =
@@ -26,8 +26,8 @@ export async function runEpgImportScenario(
     scenario: EpgImportScenario,
     programmeCount = 1001
 ) {
-    const directory = mkdtempSync(join(tmpdir(), 'iptvnator-epg-atomic-'));
-    process.env.IPTVNATOR_E2E_DATA_DIR = directory;
+    const directory = mkdtempSync(join(tmpdir(), 'meddl-epg-atomic-'));
+    process.env.MEDDL_E2E_DATA_DIR = directory;
     const localFile = join(directory, 'guide.xml');
     let source = localFile;
     let pausedFeed = '';
@@ -50,7 +50,7 @@ export async function runEpgImportScenario(
             throw new Error('Missing test server address');
         source = `http://127.0.0.1:${address.port}/guide.xml`;
     }
-    const sqlite = new Database(getIptvnatorDatabasePath());
+    const sqlite = new Database(getMeddlDatabasePath());
     sqlite.pragma('journal_mode = WAL');
     const statements = __databaseConnectionTestHooks.createTableStatements;
     for (const sql of statements) {

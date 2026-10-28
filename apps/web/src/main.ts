@@ -1,6 +1,6 @@
 import { ApplicationConfig, mergeApplicationConfig } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { resolveRestoredRendererRoute } from '@iptvnator/shared/interfaces';
+import { resolveRestoredRendererRoute } from '@meddl/shared/interfaces';
 import { registerAppDateLocale } from './app/app-date-locales';
 import { AppComponent } from './app/app.component';
 import { appConfig, getInitialLanguage } from './app/app.config';

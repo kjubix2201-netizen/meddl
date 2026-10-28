@@ -20,15 +20,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
-import { resolveChannelEpgLookupKey } from '@iptvnator/m3u-state';
-import { ParentalLockService, SettingsStore } from '@iptvnator/services';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
+import { resolveChannelEpgLookupKey } from '@meddl/m3u-state';
+import { ParentalLockService, SettingsStore } from '@meddl/services';
 import {
     foldSearchText,
     Channel,
     EpgProgram,
     epgProviderClockMs,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { ChannelContextMenuComponent } from '../channel-context-menu/channel-context-menu.component';
 import { buildChannelEpgMetadataMap } from '../epg-enrichment.util';
 import {

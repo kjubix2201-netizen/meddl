@@ -1,4 +1,4 @@
-# IPTVnator TV
+# meddl TV
 
 <!-- impeccable:product-schema 1 -->
 
@@ -20,7 +20,7 @@ product and design work is the [Electron/PWA player](../web/PRODUCT.md) under
 `apps/web`. TV support is not an equal-priority replacement for that application.
 
 Let users browse, watch and resume their own live TV, movies and series on the
-television. IPTVnator supplies the player, not channels or subscriptions.
+television. meddl supplies the player, not channels or subscriptions.
 
 ## Positioning
 
@@ -36,7 +36,7 @@ runtime, navigation and local viewing state.
   Compatibility with other TV platforms is not established by this record.
 - Users select or configure a backend, add sources, browse catalogs or the live
   guide, start playback, and return to favorites or continue watching.
-- A matching IPTVnator web backend is required. Native stream compatibility
+- A matching meddl web backend is required. Native stream compatibility
   depends on the device and provider.
 - `apps/tv-setup` is the companion phone form for source and settings entry via
   a temporary setup session. It belongs to the TV workflow and is served by the
@@ -64,7 +64,7 @@ runtime, navigation and local viewing state.
 
 ## Brand Commitments
 
-Keep the IPTVnator identity and distinguish TV playback from desktop remote
+Keep the meddl identity and distinguish TV playback from desktop remote
 control. The maintainer prohibits decorative vertical side borders or accent
 strips, including shadow and pseudo-element imitations.
 

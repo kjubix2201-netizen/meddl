@@ -9,12 +9,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { ServerStorageStatusService } from '@iptvnator/services';
-import { SOURCE_TYPE_ICONS } from '@iptvnator/shared/interfaces';
+import { ServerStorageStatusService } from '@meddl/services';
+import { SOURCE_TYPE_ICONS } from '@meddl/shared/interfaces';
 import {
     DialogFooterDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 export interface SettingsDeleteAllPlaylistsDialogData {
     summary: {

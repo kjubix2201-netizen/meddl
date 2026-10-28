@@ -17,14 +17,14 @@ import {
 } from '@angular/core';
 import Hls, { type ErrorData, type ManifestParsedData } from 'hls.js';
 import mpegts from 'mpegts.js';
-import { type Channel, createDevLogger } from '@iptvnator/shared/interfaces';
+import { type Channel, createDevLogger } from '@meddl/shared/interfaces';
 import { releaseVideoPictureInPicture } from '../player-controls/web-video-picture-in-picture-lifecycle';
 import {
     InlinePlaybackPlayer,
     PlaybackDiagnostic,
     PlaybackSourceKind,
     resolvePlaybackUrlSourceKind,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import {
     type LegacyPlayerShortcuts,
     PlayerControlsComponent,

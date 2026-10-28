@@ -1,11 +1,11 @@
 import {
     createLogger,
     type PortalPlaybackPositions,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import type {
     SeasonContainerPlaybackToggleRequest,
     SeasonContainerSeriesPlaybackToggleRequest,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import type { SerialDetailsPlaybackPositionState } from './serial-details-playback-position-state';
 import type {
     SerialDetailsSeasonWatchService,

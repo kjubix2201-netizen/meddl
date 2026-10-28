@@ -8,8 +8,8 @@ import {
 import type {
     CrossPortalSimilarItem,
     CrossPortalSimilarService,
-} from '@iptvnator/services';
-import type { NormalizedVodMeta } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import type { NormalizedVodMeta } from '@meddl/shared/interfaces';
 
 /**
  * TMDB recommendations found in the user's OTHER portals (batched DB

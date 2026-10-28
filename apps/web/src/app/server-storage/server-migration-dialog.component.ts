@@ -17,12 +17,12 @@ import {
     ServerMigrationService,
     type ServerMigrationPlaylist,
     type ServerMigrationResult,
-} from '@iptvnator/services/server-storage';
-import { SOURCE_TYPE_ICONS } from '@iptvnator/shared/interfaces';
+} from '@meddl/services/server-storage';
+import { SOURCE_TYPE_ICONS } from '@meddl/shared/interfaces';
 import {
     DialogFooterDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 @Component({
     selector: 'app-server-migration-dialog',

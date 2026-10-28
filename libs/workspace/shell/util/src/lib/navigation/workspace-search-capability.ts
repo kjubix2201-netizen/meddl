@@ -1,4 +1,4 @@
-import { PortalRailSection } from '@iptvnator/portal/shared/util';
+import { PortalRailSection } from '@meddl/portal/shared/util';
 import {
     WorkspacePortalContext,
     WorkspaceShellSearchMode,

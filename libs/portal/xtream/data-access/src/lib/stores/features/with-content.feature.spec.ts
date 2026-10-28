@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import type { RendererPerformancePhaseEvent } from '@iptvnator/shared/logging';
+import type { RendererPerformancePhaseEvent } from '@meddl/shared/logging';
 import { PortalStatusType } from '../../xtream-state';
 import {
     createAbortError,
@@ -14,7 +14,7 @@ import {
     waitForCondition,
 } from './with-content.feature.spec-helpers';
 
-jest.mock('@iptvnator/portal/shared/util', () => ({
+jest.mock('@meddl/portal/shared/util', () => ({
     createLogger: () => ({
         debug: jest.fn(),
         info: jest.fn(),

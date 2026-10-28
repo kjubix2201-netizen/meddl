@@ -2,11 +2,11 @@ import { Signal, computed, effect, signal } from '@angular/core';
 import {
     getPortalPlaybackProgressPercent,
     PORTAL_WATCHED_PROGRESS_PERCENT,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import type {
     PlaybackPositionData,
     VodSourceDescriptor,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 /**
  * The position the PRIMARY button acts on.

@@ -1,4 +1,4 @@
-import { isLikelyM3uVod } from '@iptvnator/shared/m3u-utils';
+import { isLikelyM3uVod } from '@meddl/shared/m3u-utils';
 import {
     Catalog,
     CatalogSort,
@@ -12,7 +12,7 @@ import {
     text,
     artwork,
     identity,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import { ProviderTransport } from './transport';
 export class M3uProvider implements ProviderClient {
     readonly capabilities = {

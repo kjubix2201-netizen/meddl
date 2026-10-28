@@ -19,12 +19,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import {
     SourceCleanupContext,
     SourceCleanupService,
-} from '@iptvnator/portal/shared/data-access';
-import { PlaylistMeta, sourceHealthType } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/data-access';
+import { PlaylistMeta, sourceHealthType } from '@meddl/shared/interfaces';
 import {
     DialogFooterDirective,
     DialogShellComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 export interface SourceCleanupDialogData extends SourceCleanupContext {
     playlists: readonly PlaylistMeta[];

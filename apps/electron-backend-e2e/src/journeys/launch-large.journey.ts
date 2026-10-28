@@ -24,7 +24,7 @@ import {
  * J1 "Launch to usable" on the large-library profile: the same journey as
  * `launch.journey.ts` (spawn until the first source card) on a database of
  * 182 sources and a few million catalog rows, followed by the "dashboard
- * rails settled" phase. Off unless `IPTVNATOR_JOURNEY_LARGE_LIBRARY=1`
+ * rails settled" phase. Off unless `MEDDL_JOURNEY_LARGE_LIBRARY=1`
  * (the `journeys-large-library` target sets it); see the journeys document
  * for why it runs weekly rather than on every pull request.
  */

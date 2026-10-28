@@ -1,4 +1,4 @@
-import type { XtreamPendingRestoreState } from '@iptvnator/shared/interfaces';
+import type { XtreamPendingRestoreState } from '@meddl/shared/interfaces';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
@@ -232,7 +232,7 @@ test('@critical @persistence @xtream @electron upgrades orphaned legacy favorite
         ),
         'utf8'
     );
-    const databaseFile = join(dataDir, 'databases/iptvnator.db');
+    const databaseFile = join(dataDir, 'databases/meddl.db');
     const dependency = join(workspaceRoot, 'node_modules/better-sqlite3');
     const wrapper = join(dataDir, 'legacy-favorites-startup.cjs');
     const seed = `

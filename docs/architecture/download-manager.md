@@ -49,7 +49,7 @@ hardlinks. Existing destination files are never overwritten. Cleanup atomically
 moves the public pathname into a private temporary directory before checking its
 identity and removing it. A captured replacement is restored with no-clobber
 linking; if restoration is unavailable or the original pathname is occupied,
-the file is retained in `.iptvnator-cleanup-*/entry` and its recovery location
+the file is retained in `.meddl-cleanup-*/entry` and its recovery location
 is logged. Cleanup never recursively deletes a nonempty quarantine. This closes
 the predictable-path check/unlink window; it does not isolate files from
 same-user processes that deliberately enter the private temporary directory.
@@ -494,12 +494,12 @@ display snapshot via `playlistDisplayLabel`).
   once mpv owned the file, the bytes are left alone. Rows carry `owner_pid`,
   so startup repair (`recording-recovery.ts`, `reconcileStaleRecordings`)
   resolves what a hard kill left in `recording` while skipping rows another
-  live instance still owns (`IPTVNATOR_ALLOW_MULTIPLE_INSTANCES`) and rows
+  live instance still owns (`MEDDL_ALLOW_MULTIPLE_INSTANCES`) and rows
   the tracker itself is still tracking (`activeRowIds()`) — the renderer is
   interactive before this pass runs, so a recording started during bootstrap
   carries this process's own pid and only the tracker's ledger proves it
   live. Bare pid liveness is not ownership: the holder must also look like
-  an IPTVnator/Electron process (`ps`/`tasklist` name, best-effort) and must
+  an meddl/Electron process (`ps`/`tasklist` name, best-effort) and must
   not provably have started after the recording did (`ps -o etime=` /
   PowerShell `StartTime`) — a pid frees only when its previous owner dies,
   so a recycled pid's holder is always younger than the recording, even
@@ -547,7 +547,7 @@ EmbeddedMpvControlsAdapter → EmbeddedMpvRecordingStartOptions.metadata`.
   enriching, so switching between two same-keyed items cannot attach the
   second item's schedule to the first item's recording. The host answers with **stop enrichment**: it filters its in-memory
   program list to the programs overlapping `[startedAt, endedAt]`
-  (`filterRecordingProgramsOverlap` in `@iptvnator/shared/interfaces`) and
+  (`filterRecordingProgramsOverlap` in `@meddl/shared/interfaces`) and
   sends them through `RECORDINGS_UPDATE_PROGRAMS`, keyed by the unique
   target path — that is how a recording spanning a program boundary lists
   every covered show. The handler is deliberately independent of finalization: it

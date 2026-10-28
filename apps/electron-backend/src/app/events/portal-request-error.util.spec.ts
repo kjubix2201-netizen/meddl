@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { redactSensitiveData } from '@iptvnator/shared/logging';
+import { redactSensitiveData } from '@meddl/shared/logging';
 import { formatPortalRequestError } from './portal-request-error.util';
 
 describe('formatPortalRequestError', () => {

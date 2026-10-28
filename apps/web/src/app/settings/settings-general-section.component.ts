@@ -12,7 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
-import { CoverSize, Language, Theme } from '@iptvnator/shared/interfaces';
+import { CoverSize, Language, Theme } from '@meddl/shared/interfaces';
 import {
     CoverSizeOption,
     StartupBehaviorOption,
@@ -23,8 +23,8 @@ import { markSectionForCheckOnFormEvents } from './settings-section-form-render'
 import {
     RadioGroupDirective,
     RadioOptionDirective,
-} from '@iptvnator/ui/components/radio-group';
-import { provideFormFieldDefaults } from '@iptvnator/ui/components/form-field-defaults';
+} from '@meddl/ui/components/radio-group';
+import { provideFormFieldDefaults } from '@meddl/ui/components/form-field-defaults';
 
 @Component({
     selector: 'app-settings-general-section',

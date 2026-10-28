@@ -2,7 +2,7 @@ import { computed, Injectable, signal } from '@angular/core';
 import {
     ExternalPlayerSession,
     PlayerContentInfo,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 /** Launch order when both carry it, else the start time. */
 function startedBefore(

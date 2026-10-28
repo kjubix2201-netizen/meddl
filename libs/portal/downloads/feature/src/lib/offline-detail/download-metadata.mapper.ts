@@ -1,18 +1,18 @@
 import {
     createMovieDownloadSnapshot,
     createSeriesEpisodeDownloadSnapshot,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     mergeSerieInfoWithTmdb,
     mergeStalkerInfoWithTmdb,
     mergeVodInfoWithTmdb,
     type TmdbMovieDetails,
     type TmdbTvDetails,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import type {
     DownloadMetadataPerson,
     DownloadMetadataSnapshot,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     movieSeed,
     seriesSeed,

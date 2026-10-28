@@ -78,11 +78,11 @@ export const LARGE_LIBRARY_PROFILE_SPEC: LargeLibraryProfileSpec =
     });
 
 /**
- * `IPTVNATOR_LARGE_LIBRARY_CONTENT_PER_PORTAL` scales the catalog for a
+ * `MEDDL_LARGE_LIBRARY_CONTENT_PER_PORTAL` scales the catalog for a
  * local check; the value is part of the profile's cache key.
  */
 export const LARGE_LIBRARY_CONTENT_PER_PORTAL_ENV =
-    'IPTVNATOR_LARGE_LIBRARY_CONTENT_PER_PORTAL';
+    'MEDDL_LARGE_LIBRARY_CONTENT_PER_PORTAL';
 
 export function resolveLargeLibraryProfileSpec(
     env: Readonly<Record<string, string | undefined>>,

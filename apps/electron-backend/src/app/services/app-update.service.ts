@@ -10,7 +10,7 @@ import {
     ElectronBridgeAppUpdateReleaseNotes,
     ElectronBridgeAppUpdateReleaseNotesRequest,
     ElectronBridgeAppUpdateStatus,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { AppUpdateFeedTarget, applyAppUpdateChannel } from './app-update-feed';
 import {
     CachedGitHubRelease,
@@ -193,7 +193,7 @@ export class AppUpdateService {
             ((url, init) => fetch(url, init) as Promise<ReleaseFetchResponse>);
         this.catalogs = new AppUpdateReleaseCatalogs(
             releaseFetcher,
-            `iptvnator/${this.currentVersion}`
+            `meddl/${this.currentVersion}`
         );
         this.status = {
             currentVersion: this.currentVersion,

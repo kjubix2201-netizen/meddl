@@ -1,10 +1,10 @@
 {
-    "id": "com.iptvnator.tv.prototype",
+    "id": "com.meddl.tv.prototype",
     "version": "0.1.25",
-    "vendor": "IPTVnator",
+    "vendor": "meddl",
     "type": "web",
     "main": "index.html",
-    "title": "IPTVnator TV",
+    "title": "meddl TV",
     "icon": "icon.png",
     "largeIcon": "large-icon.png",
     "resolution": "1920x1080",

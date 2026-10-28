@@ -1,14 +1,14 @@
-import { isCatalogUnavailable } from '@iptvnator/shared/interfaces';
+import { isCatalogUnavailable } from '@meddl/shared/interfaces';
 import { inject, Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { extractDrmFromRaw } from '@iptvnator/shared/m3u-utils';
+import { extractDrmFromRaw } from '@meddl/shared/m3u-utils';
 import {
     DataService,
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
+} from '@meddl/services';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
 import {
     buildStalkerEpgMappingKey,
     buildXtreamEpgMappingKey,
@@ -24,11 +24,11 @@ import {
     STALKER_REQUEST,
     StalkerPortalActions,
     windowEpgItemsAtProviderClock,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     XtreamApiService,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     buildStalkerExternalPlaybackHeaders,
     ensureStalkerSession,
@@ -41,12 +41,12 @@ import {
     StalkerPortalRepairService,
     StalkerSessionService,
     type StalkerLinkFlagSource,
-} from '@iptvnator/portal/stalker/data-access';
+} from '@meddl/portal/stalker/data-access';
 import {
     UnifiedCollectionItem,
     collectionEpgKey,
     createLogger,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 
 type PlaylistWithChannels = Playlist & {
     readonly playlist?: { readonly items?: Channel[] };

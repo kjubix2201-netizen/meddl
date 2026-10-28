@@ -5,13 +5,13 @@ import {
     Router,
     UrlTree,
 } from '@angular/router';
-import { XTREAM_DATA_SOURCE } from '@iptvnator/portal/xtream/data-access';
+import { XTREAM_DATA_SOURCE } from '@meddl/portal/xtream/data-access';
 import {
     DatabaseService,
     ParentalLockService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
-import { ParentalLockXtreamCategoryType } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { ParentalLockXtreamCategoryType } from '@meddl/shared/interfaces';
 
 type XtreamCategorySection = 'live' | 'vod' | 'series';
 

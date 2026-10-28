@@ -7,7 +7,7 @@ import {
     type Signal,
     untracked,
 } from '@angular/core';
-import type { DownloadMetadataSnapshot } from '@iptvnator/shared/interfaces';
+import type { DownloadMetadataSnapshot } from '@meddl/shared/interfaces';
 import type { DownloadOfflineDetail } from './download-offline-detail.viewmodel';
 import { DownloadOfflineMetadataService } from './download-offline-metadata.service';
 

@@ -11,15 +11,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { PlaylistInfoComponent } from '@iptvnator/playlist/shared/ui';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { PlaylistInfoComponent } from '@meddl/playlist/shared/ui';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
 import {
     PlaylistDeleteActionService,
     SourceActivityService,
-} from '@iptvnator/services';
-import { PlaylistMeta } from '@iptvnator/shared/interfaces';
-import { DialogService } from '@iptvnator/ui/components';
+} from '@meddl/services';
+import { PlaylistMeta } from '@meddl/shared/interfaces';
+import { DialogService } from '@meddl/ui/components';
 
 @Component({
     selector: 'app-playlist-error-view',

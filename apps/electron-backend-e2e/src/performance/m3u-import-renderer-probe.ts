@@ -3,14 +3,14 @@ import {
     RENDERER_PERFORMANCE_PHASE_HOOK_KEY,
     type RendererPerformancePhaseEvent,
     type RendererPerformancePhaseHook,
-} from '@iptvnator/shared/logging';
+} from '@meddl/shared/logging';
 
 import {
     recordFixedGridRendererHeartbeats,
 } from './renderer-heartbeat-fixed-grid';
 
 export const M3U_IMPORT_RENDERER_STATE_KEY =
-    '__iptvnatorM3uImportRendererCapture';
+    '__meddlM3uImportRendererCapture';
 
 export interface M3uImportDialogOptions {
     readonly playlistTitle: string;

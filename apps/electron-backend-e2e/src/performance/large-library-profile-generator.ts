@@ -18,7 +18,7 @@ import {
     playbackPositions,
     playlists,
     recentlyViewed,
-} from '@iptvnator/shared/database';
+} from '@meddl/shared/database';
 
 import {
     epgChannelRows,
@@ -43,7 +43,7 @@ import {
 
 /**
  * Writes the large-library profile into the data directory named by
- * `IPTVNATOR_E2E_DATA_DIR`, through the app's own database code:
+ * `MEDDL_E2E_DATA_DIR`, through the app's own database code:
  * `initDatabase()` creates the schema and runs every migration exactly as a
  * launch does, and the rows go in through Drizzle with the app's table
  * definitions, so a renamed column fails here instead of producing a
@@ -285,10 +285,10 @@ function countRows(
 
 async function main(): Promise<void> {
     const cacheKey = process.argv[2];
-    const outputDirectory = process.env['IPTVNATOR_E2E_DATA_DIR'];
+    const outputDirectory = process.env['MEDDL_E2E_DATA_DIR'];
     if (!cacheKey || !outputDirectory) {
         throw new Error(
-            'usage: IPTVNATOR_E2E_DATA_DIR=<dir> large-library-profile-generator <cache key>'
+            'usage: MEDDL_E2E_DATA_DIR=<dir> large-library-profile-generator <cache key>'
         );
     }
     const manifest = await generateLargeLibraryProfile(

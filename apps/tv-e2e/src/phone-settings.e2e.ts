@@ -5,7 +5,7 @@ test('phone settings require TV confirmation, preserve the saved key on blank re
     browser,
 }) => {
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(page.locator('.connection-status')).toHaveText('Connected');
     await nav(page, 'Settings');
@@ -87,7 +87,7 @@ test('explicit unchanged phone settings replace local preference drafts only aft
     browser,
 }) => {
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(page.locator('.connection-status')).toHaveText('Connected');
     await nav(page, 'Settings');

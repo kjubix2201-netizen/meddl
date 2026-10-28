@@ -5,14 +5,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
     ResolvedLiveCollectionDetail,
     StreamResolverService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     PORTAL_PLAYER,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
-import { SettingsStore } from '@iptvnator/services';
-import { Channel, EpgItem, EpgProgram } from '@iptvnator/shared/interfaces';
-import { EpgArchiveCopyService } from '@iptvnator/ui/epg';
+} from '@meddl/portal/shared/util';
+import { SettingsStore } from '@meddl/services';
+import { Channel, EpgItem, EpgProgram } from '@meddl/shared/interfaces';
+import { EpgArchiveCopyService } from '@meddl/ui/epg';
 import {
     createUnifiedLiveCatchup,
     UnifiedLiveTimeshift,

@@ -2,15 +2,15 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subject } from 'rxjs';
-import { isPortalPlaybackWatched } from '@iptvnator/portal/shared/util';
+import { isPortalPlaybackWatched } from '@meddl/portal/shared/util';
 import type {
     PlaybackPositionData,
     PortalActivityItem,
     PortalAddedItem,
     PortalFavoriteItem,
     PortalRecentItem,
-} from '@iptvnator/shared/interfaces';
-import { DashboardDataService } from '@iptvnator/workspace/dashboard/data-access';
+} from '@meddl/shared/interfaces';
+import { DashboardDataService } from '@meddl/workspace/dashboard/data-access';
 import {
     DashboardHeroTmdbService,
     type DashboardHeroTmdbExtras,

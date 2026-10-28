@@ -1,5 +1,5 @@
 import type { AppDatabase } from '../../database.types';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 
 export function createFavoriteTestCatalog(db: AppDatabase) {
     return async function catalog(

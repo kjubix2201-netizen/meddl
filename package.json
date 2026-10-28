@@ -1,15 +1,14 @@
 {
-    "name": "iptvnator",
+    "name": "meddl",
     "version": "0.25.0",
     "engines": {
         "node": "^22.22.3 || ^24.15.0"
     },
     "license": "MIT",
     "description": "IPTV player application.",
-    "homepage": "https://github.com/4gray/iptvnator",
+    "homepage": "https://github.com/kjubix2201-netizen/meddl",
     "author": {
-        "name": "4gray",
-        "email": "fourgray@proton.me"
+        "name": "kjubix2201-netizen"
     },
     "keywords": [
         "angular",
@@ -86,7 +85,7 @@
         "typecheck:spec": "node tools/typecheck/spec-typecheck.mjs",
         "typecheck:spec:test": "node --test tools/typecheck/spec-typecheck.test.mjs",
         "verify:package-layout": "node tools/packaging/verify-electron-package-layout.mjs",
-        "embedded-mpv:build-native:homebrew": "IPTVNATOR_EMBEDDED_MPV_ALLOW_HOMEBREW=1 nx run electron-backend:build-embedded-mpv",
+        "embedded-mpv:build-native:homebrew": "MEDDL_EMBEDDED_MPV_ALLOW_HOMEBREW=1 nx run electron-backend:build-embedded-mpv",
         "embedded-mpv:build-runtime": "node tools/embedded-mpv/build-macos-runtime.mjs",
         "embedded-mpv:build-runtime:linux": "node tools/embedded-mpv/build-linux-runtime.mjs",
         "embedded-mpv:stage-runtime": "node tools/embedded-mpv/stage-runtime.mjs",
@@ -94,12 +93,10 @@
         "embedded-mpv:stage-runtime:windows-archive": "node tools/embedded-mpv/stage-windows-runtime-archive.mjs",
         "embedded-mpv:windows-runtime-pin:check": "node tools/embedded-mpv/windows-runtime-pin.mjs",
         "embedded-mpv:windows-runtime-pin:refresh": "node tools/embedded-mpv/update-windows-runtime-pin.mjs",
-        "serve:backend:embedded-mpv": "pnpm embedded-mpv:build-native:homebrew && IPTVNATOR_EMBEDDED_MPV_ALLOW_HOMEBREW=1 IPTVNATOR_ENABLE_EMBEDDED_MPV_EXPERIMENT=1 pnpm serve:backend",
+        "serve:backend:embedded-mpv": "pnpm embedded-mpv:build-native:homebrew && MEDDL_EMBEDDED_MPV_ALLOW_HOMEBREW=1 MEDDL_ENABLE_EMBEDDED_MPV_EXPERIMENT=1 pnpm serve:backend",
         "package:app": "nx run electron-backend:make --prepackageOnly",
         "make:app": "nx run electron-backend:make",
         "smoke:packaged": "node tools/testing/launch-packaged-electron.mjs",
-        "serve:website": "nx serve website",
-        "build:website": "nx build website",
         "i18n:check": "node tools/i18n/check-drift.mjs && node tools/i18n/check-usage.mjs",
         "i18n:test": "node --test tools/i18n/check-drift.test.mjs tools/i18n/check-usage.test.mjs tools/i18n/check-duplicates.test.mjs",
         "i18n:usage": "node tools/i18n/check-usage.mjs",

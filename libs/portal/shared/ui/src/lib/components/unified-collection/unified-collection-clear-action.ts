@@ -4,12 +4,12 @@ import {
     CollectionContentType,
     UnifiedCollectionItem,
     WorkspaceViewCommandService,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     CollectionMode,
     UnifiedCollectionDataService,
-} from '@iptvnator/portal/shared/data-access';
-import { DialogService } from '@iptvnator/ui/components';
+} from '@meddl/portal/shared/data-access';
+import { DialogService } from '@meddl/ui/components';
 import { resolveClearCollectionDialogKeys } from './unified-collection-labels';
 
 export interface ClearCollectionAction {

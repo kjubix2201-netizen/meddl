@@ -1,4 +1,4 @@
-import { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+import { PlaybackPositionData } from '@meddl/shared/interfaces';
 import {
     ElectronXtreamDataSourceHarness,
     setupElectronXtreamDataSource,

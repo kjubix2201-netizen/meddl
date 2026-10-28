@@ -15,7 +15,7 @@ The M3U playlist module provides:
 
 ## Desktop upgrades from legacy profiles
 
-v0.19.0 stores the complete source list in IndexedDB database `iptvnator`,
+v0.19.0 stores the complete source list in IndexedDB database `meddl`,
 version 1, store `playlists`, key path `_id`. Source type is inferred from
 `serverUrl` (Xtream), `macAddress` (Stalker), or the M3U fields; the last-used
 source does not select which records are migrated. Settings live separately
@@ -24,10 +24,10 @@ holds the Xtream catalogs opened in v0.19, including favorites and history;
 it is not the authoritative inventory of configured sources.
 
 The published v0.19 Linux DEB's `app.asar/package.json` names the app
-`electron-backend`. Later packages set `productName: IPTVnator`. Electron
+`electron-backend`. Later packages set `productName: meddl`. Electron
 resolves different `userData` directories from those identities; a later
-`app.setName('iptvnator')` does not reset the cached path. The shared
-`~/.iptvnator/databases/iptvnator.db` is independent of that path, so cached
+`app.setName('meddl')` does not reset the cached path. The shared
+`~/.meddl/databases/meddl.db` is independent of that path, so cached
 Xtream sources can remain visible while the complete IndexedDB list is in
 the older profile. Linux usually places these profiles below `~/.config/`.
 Snap/Flatpak confinement and a changed installation type can give them
@@ -147,10 +147,10 @@ Linux Mint MATE, Snap, or Flatpak upgrade testing.
 
 All four parse call sites (Electron `playlist-source.ts` import, `playlist-refresh.worker.ts`, `web-backend` `/parse`, PWA `playlists.service.ts`) use the
 [4gray/iptv-playlist-parser](https://github.com/4gray/iptv-playlist-parser) fork, pinned by commit SHA in `package.json`. The fork tracks upstream
-`freearhey/iptv-playlist-parser` (currently synced to v0.15.2) plus three deliberate deltas iptvnator depends on:
+`freearhey/iptv-playlist-parser` (currently synced to v0.15.2) plus three deliberate deltas meddl depends on:
 
 - **`radio` attribute** — `item.radio` (string, `'true'` triggers the radio player, EPG suppression, and external-player gating app-wide). Upstream does not have this field; it must survive every upstream sync.
-- **Pipe stripping** — `item.url` is cut at the first `|`; `|User-Agent=` / `|Referer=` params still land in `item.http`. Upstream 0.15.0 stopped stripping, but iptvnator consumes `item.url` verbatim in hls.js/mpv/vlc, catch-up URL building, and url-keyed favorites.
+- **Pipe stripping** — `item.url` is cut at the first `|`; `|User-Agent=` / `|Referer=` params still land in `item.http`. Upstream 0.15.0 stopped stripping, but meddl consumes `item.url` verbatim in hls.js/mpv/vlc, catch-up URL building, and url-keyed favorites.
 - **`#KODIPROP` lines before `#EXTINF` are preserved** (since `v0.15.2-iptvnator.2`) — Kodi property lines apply to the _next_ list entry, so ones placed above the `#EXTINF` are buffered and attached to that item's `raw` in file order (case-insensitive prefix); other stray `#` lines outside an open item are still dropped. The DASH + ClearKey feature extracts `inputstream.adaptive.license_*` config from `item.raw`, so this delta must survive every upstream sync.
 
 There is intentionally **no URL validation** (upstream removed it in 0.15.0): any non-empty non-`#` line after `#EXTINF` becomes the item URL. This is what fixes issue #1189 (Pluto TV JWT URLs longer than validator's 2084-char IE-era limit used to be rejected, and the stalled item index collapsed the whole playlist into one channel). `#` comment lines and unknown directives are appended to `item.raw` and never treated as URLs.
@@ -198,27 +198,27 @@ Electron process and data directory:
 
 ```bash
 perf_output="$PWD/dist/performance/$(date -u +%Y%m%dT%H%M%SZ)-m3u-import"
-IPTVNATOR_PERF_OUTPUT_DIR="$perf_output" \
-IPTVNATOR_PERF_VARIANT=baseline \
+MEDDL_PERF_OUTPUT_DIR="$perf_output" \
+MEDDL_PERF_VARIANT=baseline \
 pnpm nx run electron-backend-e2e:benchmark-m3u-import
 ```
 
-Use a new output directory and `IPTVNATOR_PERF_VARIANT=after` for the identical
+Use a new output directory and `MEDDL_PERF_VARIANT=after` for the identical
 post-change run. Formal runs require a clean worktree and record the commit,
 source-state hash, runtime, and exact fixture identity. A development smoke run
 uses one warm-up, one measured iteration, and one diagnostic iteration per
 size:
 
 ```bash
-IPTVNATOR_PERF_OUTPUT_DIR="$PWD/dist/performance/<timestamp>-m3u-import-smoke" \
-IPTVNATOR_PERF_VARIANT=smoke \
-IPTVNATOR_PERF_SMOKE=1 \
+MEDDL_PERF_OUTPUT_DIR="$PWD/dist/performance/<timestamp>-m3u-import-smoke" \
+MEDDL_PERF_VARIANT=smoke \
+MEDDL_PERF_SMOKE=1 \
 pnpm nx run electron-backend-e2e:benchmark-m3u-import
 ```
 
 Smoke runs may use a dirty worktree and validate only the harness; they cannot
 support a performance claim. If another local application owns port 9222, smoke
-only may set `IPTVNATOR_PERF_CDP_PORT` to an unused loopback port; formal runs
+only may set `MEDDL_PERF_CDP_PORT` to an unused loopback port; formal runs
 fail closed unless CDP uses `127.0.0.1:9222`. Raw captures and JSON results stay
 under the gitignored `dist/performance/` tree; preflight rejects a symbolic
 link in any existing output-path component before creating artifacts. Headline
@@ -326,7 +326,7 @@ dead source must never stall startup (issue #931):
   `autoRefresh`, `favorites`, `userAgent`) onto the freshly parsed playlist.
 - Playlist URLs frequently carry Xtream-style `username`/`password` query parameters,
   so refresh logging goes through `redactSensitiveData()` from
-  `@iptvnator/shared/logging`.
+  `@meddl/shared/logging`.
 
 ### Refresh Cancellation Performance Regression
 
@@ -337,8 +337,8 @@ profiles below the gitignored `dist/performance/` directory:
 
 ```bash
 perf_output="$PWD/dist/performance/$(date -u +%Y%m%dT%H%M%SZ)-m3u-refresh-cancel"
-IPTVNATOR_PERF_OUTPUT_DIR="$perf_output" \
-IPTVNATOR_PERF_VARIANT=after \
+MEDDL_PERF_OUTPUT_DIR="$perf_output" \
+MEDDL_PERF_VARIANT=after \
 pnpm nx run electron-backend-e2e:benchmark-m3u-refresh-cancellation
 ```
 
@@ -347,7 +347,7 @@ The output path must be an absolute, previously unused descendant of
 commit, source-state hash, OS/architecture, Node, Electron, and fixture identity
 in its manifest. Commit the harness first and capture `baseline` from that clean
 commit; commit the production change separately, rebuild, and capture `after`
-with the same harness and machine. Set `IPTVNATOR_PERF_SMOKE=1` for one measured
+with the same harness and machine. Set `MEDDL_PERF_SMOKE=1` for one measured
 run during harness development; smoke runs may be dirty and must not support
 before/after claims.
 
@@ -793,7 +793,7 @@ wherever a guide exists, the browser PWA's provider guides included.
 
 Both components stay presentation-focused; the reusable, view-agnostic pieces
 (shared by the timeline and the list) are split out and re-exported from
-`@iptvnator/ui/epg`:
+`@meddl/ui/epg`:
 
 - `epg-timeline.utils.ts` (axis/blocks/date helpers) + `epg-timeline-render.util.ts`
   (short-programme tiers, grouping, zoom bounds) — the ribbon geometry.
@@ -936,7 +936,7 @@ action is reachable whichever view the setting selects.
 Some M3U providers declare XMLTV sources in the playlist header instead of
 requiring the user to add them in Settings. The importer extracts EPG URLs from
 `#EXTM3U` header attributes `x-tvg-url`, `url-tvg`, and `tvg-url` in
-`@iptvnator/shared/m3u-utils`, then stores the normalized, deduplicated
+`@meddl/shared/m3u-utils`, then stores the normalized, deduplicated
 candidates on `Playlist.detectedEpgUrls`.
 
 `Playlist.epgUrls` is the enabled playlist-scoped subset used for automatic
@@ -1243,7 +1243,7 @@ so two layers guard it:
   until `epg.events.ts` installs the persisted one, so a missing wiring fails
   closed. This mirrors `save-file-dialog` → `write-file` for playlist exports.
 
-### EpgService (`@iptvnator/epg/data-access`)
+### EpgService (`@meddl/epg/data-access`)
 
 ```typescript
 class EpgService {
@@ -1308,13 +1308,13 @@ class EpgService {
 - The shared EPG UI only shows the archive replay badge when the host confirms
   that the selected M3U channel has a playable replay scheme. Archive days
   alone are not enough.
-- M3U catch-up support is resolved in `@iptvnator/shared/m3u-utils` from channel metadata and
+- M3U catch-up support is resolved in `@meddl/shared/m3u-utils` from channel metadata and
   the archived program start time.
 - Supported replay precedence:
-    1. `catchup.source` if it is an HTTP(S) URL. IPTVNator rewrites or appends
+    1. `catchup.source` if it is an HTTP(S) URL. meddl rewrites or appends
        standard `utc` and `lutc` query params on that URL.
     2. Legacy same-stream shift playback when `catchup.type === 'shift'`. In
-       that case IPTVNator rewrites or appends `utc` and `lutc` on `channel.url`.
+       that case meddl rewrites or appends `utc` and `lutc` on `channel.url`.
     3. Legacy same-stream shift fallback when no explicit catch-up mode is
        declared, archive-day metadata exists (`tvg.rec`, `timeshift`, or
        `catchup.days`), and `channel.url` itself is an HTTP(S) stream URL. This
@@ -1323,7 +1323,7 @@ class EpgService {
        the live URL.
 - `tvg.rec`, `timeshift`, and `catchup.days` still define the archive window
   shown in the EPG, but replay remains unavailable when the provider declares a
-  different explicit catch-up scheme that IPTVNator does not understand or when
+  different explicit catch-up scheme that meddl does not understand or when
   the stream URL itself is not an HTTP(S) replay target.
 - Active replay is stored separately from the selected channel in
   `playlistState.activePlaybackUrl`. Inline and external players use
@@ -1511,7 +1511,7 @@ player in settings.
    URLs, malformed values) are preserved as `supported: false` — never a
    throw.
 3. The typed result lands on `Channel.drm` (`ChannelDrm` in
-   `@iptvnator/shared/interfaces`), travels through
+   `@meddl/shared/interfaces`), travels through
    `ResolvedPortalPlayback.drm` into `WebPlayerViewComponent`'s synthetic
    channel, and reaches the engine. Persistence is free for newly imported or
    refreshed playlists (playlist JSON blob / IndexedDB object). Playlists
@@ -1939,7 +1939,7 @@ no URL or credential). A result kept for an edited address or account is
 ignored, and the next check starts the history over. Deleting a source or
 resetting the library clears its entry. The Sources page keeps every
 library source checked while it is open (`keepSourcesChecked`), so a status
-filter never hides the sources it is waiting for. See the [UI guidelines](iptvnator-ui-guidelines.md#network-source-indicators-electron).
+filter never hides the sources it is waiting for. See the [UI guidelines](meddl-ui-guidelines.md#network-source-indicators-electron).
 
 Checks are demand-driven, never a startup readiness barrier: four at a time,
 two per origin, shared between surfaces. Known results remain visible during
@@ -2035,7 +2035,7 @@ The OS-level registration that makes those paths reachable is
 with its own `mimeType`. Electron Builder derives all three platform
 registrations from it: macOS `CFBundleDocumentTypes` (which is what makes
 `open-file` fire from Finder), the NSIS registry entries, and, on Linux, the
-desktop entry's `MimeType` plus `/usr/share/mime/packages/iptvnator.xml` for
+desktop entry's `MimeType` plus `/usr/share/mime/packages/meddl.xml` for
 deb/rpm/pacman. Two traps: it assigns the derived `MimeType` _after_ spreading
 `linux.desktop.entry`, so declaring `MimeType` there is silently overwritten and
 must not be used; and it appends `%U` to `Exec`, so Linux file managers hand

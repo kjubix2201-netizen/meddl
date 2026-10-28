@@ -13,15 +13,15 @@ import {
     FavoritesActions,
     PlaylistActions,
     selectPlaylistEntities,
-} from '@iptvnator/m3u-state';
+} from '@meddl/m3u-state';
 import {
     measureRendererPerformancePhase,
     RENDERER_PERFORMANCE_PHASE,
-} from '@iptvnator/shared/logging';
+} from '@meddl/shared/logging';
 import { filter, firstValueFrom, map, Subscription, take } from 'rxjs';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
-import { PlaylistsService } from '@iptvnator/services';
-import { PlaylistMeta } from '@iptvnator/shared/interfaces';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
+import { PlaylistsService } from '@meddl/services';
+import { PlaylistMeta } from '@meddl/shared/interfaces';
 
 type M3uLoadedSection = 'all' | 'groups';
 

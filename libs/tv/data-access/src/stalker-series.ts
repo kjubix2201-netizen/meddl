@@ -9,15 +9,15 @@ import {
     sortEpisodesByNumber,
     resolveStalkerEpisodeCommand,
     type StalkerEpisodeCommand,
-} from '@iptvnator/portal/stalker/client';
-import { isStalkerSeriesFlag } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/stalker/client';
+import { isStalkerSeriesFlag } from '@meddl/shared/interfaces';
 import {
     Media,
     Source,
     identity,
     rows,
     withSeriesContext,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import { StalkerSession } from './stalker-session';
 export function unwrap(value: unknown): unknown {
     const js = (value as { js?: unknown })?.js;

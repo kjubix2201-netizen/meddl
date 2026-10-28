@@ -34,7 +34,7 @@ for (const mode of ['movie', 'episode', 'unknown-duration'] as const) {
             await page.evaluate(
                 () =>
                     new Promise<void>((resolve, reject) => {
-                        const r = indexedDB.open('iptvnator-tv-user-data', 1);
+                        const r = indexedDB.open('meddl-tv-user-data', 1);
                         r.onsuccess = () => {
                             const db = r.result,
                                 tx = db.transaction('state', 'readwrite'),

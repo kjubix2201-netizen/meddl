@@ -5,19 +5,19 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     selectAllPlaylistsMeta,
     selectPlaylistsLoadingFlag,
-} from '@iptvnator/m3u-state';
+} from '@meddl/m3u-state';
 import { EMPTY, of, Subject } from 'rxjs';
-import { DatabaseService, PlaylistsService } from '@iptvnator/services';
+import { DatabaseService, PlaylistsService } from '@meddl/services';
 import {
     PlaybackPositionData,
     Playlist,
     PlaylistMeta,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     PORTAL_PLAYBACK_POSITIONS,
     getOpenCollectionDetailItemState,
-} from '@iptvnator/portal/shared/util';
-import { XTREAM_DATA_SOURCE } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { XTREAM_DATA_SOURCE } from '@meddl/portal/xtream/data-access';
 import {
     DashboardDataService,
     DashboardFavoriteItem,

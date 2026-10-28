@@ -1,6 +1,6 @@
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
-import type { XtreamSerieEpisode } from '@iptvnator/shared/interfaces';
-import type { SeriesPlaybackEpisodeState } from '@iptvnator/ui/playback';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
+import type { XtreamSerieEpisode } from '@meddl/shared/interfaces';
+import type { SeriesPlaybackEpisodeState } from '@meddl/ui/playback';
 
 export function createSerialPlaybackSessionKey(
     sourceId: string | undefined,

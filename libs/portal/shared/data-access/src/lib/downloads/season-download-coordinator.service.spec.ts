@@ -4,9 +4,9 @@ import {
     DownloadsService,
     type DownloadItem,
     type DownloadStartInput,
-} from '@iptvnator/services';
-import type { ElectronBridgeDownloadStartResult } from '@iptvnator/shared/interfaces';
-import type { EpisodeDownloadIdentity } from '@iptvnator/portal/shared/util';
+} from '@meddl/services';
+import type { ElectronBridgeDownloadStartResult } from '@meddl/shared/interfaces';
+import type { EpisodeDownloadIdentity } from '@meddl/portal/shared/util';
 import type { EpisodeDownloadCandidate } from './season-download.models';
 import { SeasonDownloadCoordinator } from './season-download-coordinator.service';
 

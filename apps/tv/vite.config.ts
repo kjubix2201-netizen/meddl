@@ -44,7 +44,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: Object.keys(paths)
-            .filter((k) => k.startsWith('@iptvnator/'))
+            .filter((k) => k.startsWith('@meddl/'))
             .map((find) => ({
                 find,
                 replacement: resolve(workspace, paths[find][0]),

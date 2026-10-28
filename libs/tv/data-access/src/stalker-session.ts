@@ -2,13 +2,13 @@ import {
     StalkerAuthApi,
     buildStalkerEndpointCandidates,
     classifyStalkerProbeResponse,
-} from '@iptvnator/portal/stalker/client';
+} from '@meddl/portal/stalker/client';
 import {
     isFullStalkerPortalPlaylist,
     isStalkerAuthFailureResponse,
     normalizeStalkerMacAddress,
-} from '@iptvnator/shared/interfaces';
-import { Source } from '@iptvnator/tv/util';
+} from '@meddl/shared/interfaces';
+import { Source } from '@meddl/tv/util';
 import { ProviderRequestError, ProviderTransport } from './transport';
 /** One source, one serialized repair. Credentials never leave this configured backend. */
 export class StalkerSession {

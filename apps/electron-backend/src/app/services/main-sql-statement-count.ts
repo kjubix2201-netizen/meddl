@@ -1,13 +1,13 @@
 import {
     setDatabaseConnectionObserver,
     type DatabaseConnectionObserver,
-} from '@iptvnator/shared/database/connection-observer';
+} from '@meddl/shared/database/connection-observer';
 import { countSqlStatementExecutions } from '../workers/database-worker-sql-statement-count';
 import { PERFORMANCE_COUNTER } from './performance-counters';
 import type { PerformanceCounterRegistry } from './performance-counters';
 
 /**
- * With IPTVNATOR_PERF_CAPTURE=1 and IPTVNATOR_PERF_COUNT_SQL=1, counts the
+ * With MEDDL_PERF_CAPTURE=1 and MEDDL_PERF_COUNT_SQL=1, counts the
  * SQL statements the main process
  * executes into `main.sqlStatements`, next to the database worker's
  * statements that `DatabaseWorkerClient` adds. The shared connection

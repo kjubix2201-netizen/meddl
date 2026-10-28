@@ -2,7 +2,7 @@ import type {
     DownloadEpisodeMetadata,
     DownloadMetadataPerson,
     DownloadMetadataSnapshot,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     getNormalizedDownloadUrlIdentity,
     normalizeDownloadArtworkUrl,

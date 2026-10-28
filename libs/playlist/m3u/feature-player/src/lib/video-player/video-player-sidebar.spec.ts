@@ -20,27 +20,27 @@ import {
     selectChannels,
     selectChannelsLoading,
     selectCurrentEpgProgram,
-} from '@iptvnator/m3u-state';
-import { EpgService } from '@iptvnator/epg/data-access';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
+} from '@meddl/m3u-state';
+import { EpgService } from '@meddl/epg/data-access';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
 import {
     LiveLayoutSidebarStateService,
     liveSidebarStateStorageKey,
     PORTAL_EXTERNAL_PLAYBACK,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     DataService,
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     Channel,
     EpgProgram,
     Settings,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { VideoPlayerComponent as VideoPlayerComponentInstance } from './video-player.component';
 import { translateServiceProvider } from './video-player.spec-harness';
 import { StubSidebarComponent } from './video-player.spec-stubs';

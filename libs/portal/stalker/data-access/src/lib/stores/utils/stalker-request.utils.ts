@@ -1,11 +1,11 @@
 import type { StalkerRequestOptions } from '../../stalker-request-options';
-import { DataService } from '@iptvnator/services';
+import { DataService } from '@meddl/services';
 import {
     isFullStalkerPortalPlaylist,
     Playlist,
     PlaylistMeta,
     STALKER_REQUEST,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { StalkerSessionService } from '../../stalker-session.service';
 
 /**

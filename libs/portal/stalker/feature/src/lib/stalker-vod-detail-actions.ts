@@ -6,14 +6,14 @@ import {
     type PortalExternalPlayback,
     type PortalPlaybackPositions,
     type PortalPlayer,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import type {
     ExternalPlayerName,
     PlaybackPositionData,
     ResolvedPortalPlayback,
     VodDetailsItem,
-} from '@iptvnator/shared/interfaces';
-import type { PlaybackFallbackRequest } from '@iptvnator/ui/playback';
+} from '@meddl/shared/interfaces';
+import type { PlaybackFallbackRequest } from '@meddl/ui/playback';
 
 /** A start the explicit launch joins: superseded by, and superseding, every other start of its host. */
 export interface PendingExternalLaunch {

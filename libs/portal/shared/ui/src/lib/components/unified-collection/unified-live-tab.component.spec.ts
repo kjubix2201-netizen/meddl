@@ -16,28 +16,28 @@ import { UnifiedLiveTabComponent } from './unified-live-tab.component';
 import {
     AudioPlayerComponent,
     WebPlayerViewComponent,
-} from '@iptvnator/ui/playback';
+} from '@meddl/ui/playback';
 import {
     EpgListViewComponent,
     EpgProgramActivationEvent,
     EpgTimelineComponent,
     getTodayEpgDateKey,
     shiftEpgDateKey,
-} from '@iptvnator/ui/epg';
+} from '@meddl/ui/epg';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ResizableDirective } from '@iptvnator/ui/components';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
-import { PlaybackHistoryGate } from '@iptvnator/playback/data-access';
-import { EpgItem, EpgProgram, VideoPlayer } from '@iptvnator/shared/interfaces';
+import { ResizableDirective } from '@meddl/ui/components';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
+import { PlaybackHistoryGate } from '@meddl/playback/data-access';
+import { EpgItem, EpgProgram, VideoPlayer } from '@meddl/shared/interfaces';
 import {
     PORTAL_PLAYER,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     StreamResolverService,
     UnifiedRecentDataService,
-} from '@iptvnator/portal/shared/data-access';
-import { createPlaybackSessionKey as sessionKey } from '@iptvnator/playback/util';
+} from '@meddl/portal/shared/data-access';
+import { createPlaybackSessionKey as sessionKey } from '@meddl/playback/util';
 import {
     StubAudioPlayerComponent,
     StubEpgTimelineComponent,

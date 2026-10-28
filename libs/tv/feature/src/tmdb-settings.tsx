@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { checkTmdbKey } from '@iptvnator/tv/data-access';
+import { checkTmdbKey } from '@meddl/tv/data-access';
 import { TvModel } from './use-tv';
 
 export function TmdbSettings({ tv }: { tv: TvModel }) {

@@ -1,5 +1,5 @@
 export default {
-    displayName: '@iptvnator/pipes',
+    displayName: '@meddl/pipes',
     preset: '../../../jest.preset.js',
     setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
     coverageDirectory: '../../../coverage/libs/ui/pipes',

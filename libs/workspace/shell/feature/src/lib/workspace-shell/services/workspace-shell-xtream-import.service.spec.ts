@@ -1,9 +1,9 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { PlaylistRefreshActionService } from '@iptvnator/playlist/shared/ui';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { PlaylistRefreshActionService } from '@meddl/playlist/shared/ui';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 import { XTREAM_LOCAL_LOAD_OVERLAY_DELAY_MS } from './helpers/workspace-shell-constants';
 import { WorkspaceShellRouteStateService } from './workspace-shell-route-state.service';
 import { WorkspaceShellXtreamImportService } from './workspace-shell-xtream-import.service';

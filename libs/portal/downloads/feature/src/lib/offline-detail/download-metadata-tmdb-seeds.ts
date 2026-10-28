@@ -4,7 +4,7 @@ import type {
     TmdbEnrichedCastMember,
     XtreamSerieInfo,
     XtreamVodInfo,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 const MAX_PEOPLE = 30;
 

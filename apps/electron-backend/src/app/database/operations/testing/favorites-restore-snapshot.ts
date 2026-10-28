@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import { PwaXtreamBackupStorage } from '@iptvnator/services/pwa-xtream-backup-storage';
-import type { XtreamPlaylistBackupEntry } from '@iptvnator/shared/interfaces';
-import * as schema from '@iptvnator/shared/database/schema';
+import { PwaXtreamBackupStorage } from '@meddl/services/pwa-xtream-backup-storage';
+import type { XtreamPlaylistBackupEntry } from '@meddl/shared/interfaces';
+import * as schema from '@meddl/shared/database/schema';
 import type { AppDatabase } from '../../database.types';
 import { createFavoriteTestCatalog } from './favorites-test-catalog';
 import { getFavoritesForBackup } from '../favorites.operations';

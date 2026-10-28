@@ -41,7 +41,7 @@ import {
 } from './app/services/playlist-open-request';
 import { EMBEDDED_MPV_FRAME_COPY, store } from './app/services/store.service';
 
-app.setName('iptvnator');
+app.setName('meddl');
 
 traceStartupPhase('compile-cache', () => readCompileCacheOutcome());
 // Before anything can open the shared database connection.
@@ -53,7 +53,7 @@ countMainProcessSqlStatements(
 // Before the first portal, playlist or update request leaves this process.
 applyElectronNetworkDefaults((line) => {
     if (isStartupTraceEnabled()) {
-        console.log(`[IPTVnator Trace][startup] ${line}`);
+        console.log(`[meddl Trace][startup] ${line}`);
     }
 });
 
@@ -81,11 +81,11 @@ if (
     isEmbeddedMpvFeatureEnabled() &&
     shouldPromotePersistedFrameCopyOptIn(
         store.get(EMBEDDED_MPV_FRAME_COPY, false),
-        process.env.IPTVNATOR_ENABLE_EMBEDDED_MPV_FRAME_COPY,
+        process.env.MEDDL_ENABLE_EMBEDDED_MPV_FRAME_COPY,
         isFrameCopyRuntimeUsable
     )
 ) {
-    process.env.IPTVNATOR_ENABLE_EMBEDDED_MPV_FRAME_COPY = '1';
+    process.env.MEDDL_ENABLE_EMBEDDED_MPV_FRAME_COPY = '1';
 }
 
 /** Set once bootstrapAppEvents() arms the deferred group; read at quit. */
@@ -116,7 +116,7 @@ export default class Main {
      */
     static async bootstrapAppEvents() {
         traceStartupPhase('bootstrap-events:start');
-        // Only with IPTVNATOR_PERF_CAPTURE=1; the preload never exposes it.
+        // Only with MEDDL_PERF_CAPTURE=1; the preload never exposes it.
         registerPerformanceCountersHandler(
             ipcMain,
             performanceCounters,
@@ -206,7 +206,7 @@ runEmbeddedMpvRuntimeDiagnosticOrContinue(process.argv, () => {
         playlistOpenRequests.enqueue(createPlaylistOpenRequest(filePath));
     });
 
-    // Windows/Linux file associations and plain `iptvnator playlist.m3u`
+    // Windows/Linux file associations and plain `meddl playlist.m3u`
     // launches arrive as arguments instead — one per file, since selecting
     // several playlists at once is a single launch. The renderer drains the
     // queue once it is ready.

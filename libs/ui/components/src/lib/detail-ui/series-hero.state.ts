@@ -6,7 +6,7 @@ import {
     shortCountryName,
     splitSeasonSuffix,
     type SeriesQuickStartActionKind,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     seriesStatusLabelKey,
     type PlaybackPositionData,
@@ -14,7 +14,7 @@ import {
     type TmdbEnrichedCastMember,
     type TmdbGenreFacet,
     type TmdbSeriesStatus,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { castMembersFromNames, splitPeopleNames } from './cast-crew.util';
 import type { VodMoreMenuSection } from './vod-more-menu.model';
 

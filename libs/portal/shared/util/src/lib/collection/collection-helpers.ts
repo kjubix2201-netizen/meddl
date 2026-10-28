@@ -1,5 +1,5 @@
-import type { XtreamFavoriteCatalogStatus } from '@iptvnator/shared/interfaces';
-import { StalkerPortalItem } from '@iptvnator/shared/interfaces';
+import type { XtreamFavoriteCatalogStatus } from '@meddl/shared/interfaces';
+import { StalkerPortalItem } from '@meddl/shared/interfaces';
 import { CollectionContentType } from './unified-collection-item.interface';
 
 export interface XtreamFavoriteRow {

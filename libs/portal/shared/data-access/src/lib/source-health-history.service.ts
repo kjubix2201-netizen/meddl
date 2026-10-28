@@ -1,9 +1,9 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { SourceHealthEvidenceService } from '@iptvnator/services';
+import { SourceHealthEvidenceService } from '@meddl/services';
 import {
     SourceHealthHistoryEntry,
     SourceHealthSnapshot,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { isSourceHealthReason } from './source-health-identity';
 import {
     nextSourceHealthHistory,

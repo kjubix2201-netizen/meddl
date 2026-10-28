@@ -4,9 +4,9 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     WorkspaceCommandContribution,
     WorkspaceViewCommandService,
-} from '@iptvnator/portal/shared/util';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
-import { VideoPlayer } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/util';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
+import { VideoPlayer } from '@meddl/shared/interfaces';
 
 type PlayerCommandRequirement = 'none' | 'managed-external' | 'embedded-mpv';
 

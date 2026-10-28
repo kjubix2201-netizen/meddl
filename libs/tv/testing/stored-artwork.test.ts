@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { storedMediaPoster } from '@iptvnator/tv/data-access';
-import { Media, Source } from '@iptvnator/tv/util';
+import { storedMediaPoster } from '@meddl/tv/data-access';
+import { Media, Source } from '@meddl/tv/util';
 test('old Stalker artwork is recovered without mutating identity, command or saved progress; foreign sources cannot resolve it', () => {
     const source: Source = {
         id: 'source',

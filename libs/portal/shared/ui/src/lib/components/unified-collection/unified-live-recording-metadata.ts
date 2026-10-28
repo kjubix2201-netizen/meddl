@@ -1,6 +1,6 @@
 import { computed, inject, Signal } from '@angular/core';
-import { UnifiedCollectionItem } from '@iptvnator/portal/shared/util';
-import { RecordingsService } from '@iptvnator/services';
+import { UnifiedCollectionItem } from '@meddl/portal/shared/util';
+import { RecordingsService } from '@meddl/services';
 import {
     buildStalkerEpgMappingKey,
     buildXtreamEpgMappingKey,
@@ -11,7 +11,7 @@ import {
     RecordingStartMetadata,
     RecordingStoppedEvent,
     toRecordingProgramSnapshot,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 export interface UnifiedLiveRecording {
     /** Channel/EPG snapshot for the embedded-MPV recording tracker. */

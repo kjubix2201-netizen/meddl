@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { SettingsStore } from '@iptvnator/services';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { SettingsStore } from '@meddl/services';
 import {
     PLAYLIST_PARSE_BY_URL,
     type Playlist,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     RENDERER_PERFORMANCE_PHASE_HOOK_KEY,
     type RendererPerformancePhaseEvent,
-} from '@iptvnator/shared/logging';
-import { DialogService } from '@iptvnator/ui/components';
+} from '@meddl/shared/logging';
+import { DialogService } from '@meddl/ui/components';
 import { ElectronService } from './electron.service';
 
 describe('ElectronService performance phases', () => {

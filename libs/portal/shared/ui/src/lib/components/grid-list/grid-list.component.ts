@@ -13,18 +13,18 @@ import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltip } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
-import { applyChannelNameStrip } from '@iptvnator/shared/m3u-utils';
-import { readProviderRating } from '@iptvnator/shared/interfaces';
+import { applyChannelNameStrip } from '@meddl/shared/m3u-utils';
+import { readProviderRating } from '@meddl/shared/interfaces';
 import {
     PortalWatchState,
     getXtreamCatchupDays,
     isXtreamCatchupAvailable,
-} from '@iptvnator/portal/shared/util';
-import { SettingsStore } from '@iptvnator/services';
+} from '@meddl/portal/shared/util';
+import { SettingsStore } from '@meddl/services';
 import {
     ProgressCapsuleComponent,
     WatchedBadgeComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import { CoverTitlesService } from '../../cover-titles/cover-titles.service';
 import { PlaylistErrorViewComponent } from '../playlist-error-view/playlist-error-view.component';
 

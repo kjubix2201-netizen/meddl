@@ -1,15 +1,15 @@
 import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
 import {
     VideoPlayer,
     type ExternalPlayerName,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     buildSeriesMenuSections,
     SERIES_MENU_ACTION,
     type SeasonContainerComponent,
     type VodMoreMenuSection,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import type { StalkerQuickStartButton } from './stalker-series-quick-start';
 
 interface StalkerSeriesMenuBindings {

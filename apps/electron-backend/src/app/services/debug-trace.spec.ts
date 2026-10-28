@@ -68,7 +68,7 @@ describe('debug trace redaction', () => {
 });
 
 describe('startup phase counting', () => {
-    const FLAGS = ['IPTVNATOR_PERF_CAPTURE', 'IPTVNATOR_TRACE_STARTUP'];
+    const FLAGS = ['MEDDL_PERF_CAPTURE', 'MEDDL_TRACE_STARTUP'];
     const original = FLAGS.map((name) => [name, process.env[name]] as const);
 
     afterEach(() => {
@@ -113,8 +113,8 @@ describe('startup phase counting', () => {
         expect(result.payload).not.toHaveBeenCalled();
     });
 
-    it('counts every phase with IPTVNATOR_PERF_CAPTURE=1 without tracing', async () => {
-        const result = await runPhases({ IPTVNATOR_PERF_CAPTURE: '1' });
+    it('counts every phase with MEDDL_PERF_CAPTURE=1 without tracing', async () => {
+        const result = await runPhases({ MEDDL_PERF_CAPTURE: '1' });
 
         expect(result.counters).toEqual({ 'main.startupPhases': 2 });
         expect(result.lines).toEqual([]);
@@ -122,18 +122,18 @@ describe('startup phase counting', () => {
     });
 
     it('keeps the startup trace lines unchanged when tracing is on', async () => {
-        const result = await runPhases({ IPTVNATOR_TRACE_STARTUP: '1' });
+        const result = await runPhases({ MEDDL_TRACE_STARTUP: '1' });
 
         expect(result.counters).toEqual({});
         expect(result.lines).toEqual([
-            '[IPTVnator Trace][startup] bootstrap-app',
-            '[IPTVnator Trace][startup] deferred-events:start {"source":"did-start-loading"}',
+            '[meddl Trace][startup] bootstrap-app',
+            '[meddl Trace][startup] deferred-events:start {"source":"did-start-loading"}',
         ]);
     });
 });
 
 describe('SQL statement count opt-in', () => {
-    const FLAGS = ['IPTVNATOR_PERF_CAPTURE', 'IPTVNATOR_PERF_COUNT_SQL'];
+    const FLAGS = ['MEDDL_PERF_CAPTURE', 'MEDDL_PERF_COUNT_SQL'];
     const original = FLAGS.map((name) => [name, process.env[name]] as const);
 
     afterEach(() => {
@@ -148,9 +148,9 @@ describe('SQL statement count opt-in', () => {
 
     it.each([
         [{}, false],
-        [{ IPTVNATOR_PERF_CAPTURE: '1' }, false],
-        [{ IPTVNATOR_PERF_COUNT_SQL: '1' }, false],
-        [{ IPTVNATOR_PERF_CAPTURE: '1', IPTVNATOR_PERF_COUNT_SQL: '1' }, true],
+        [{ MEDDL_PERF_CAPTURE: '1' }, false],
+        [{ MEDDL_PERF_COUNT_SQL: '1' }, false],
+        [{ MEDDL_PERF_CAPTURE: '1', MEDDL_PERF_COUNT_SQL: '1' }, true],
     ])('needs both flags: %j -> %s', async (env, expected) => {
         for (const name of FLAGS) {
             delete process.env[name];

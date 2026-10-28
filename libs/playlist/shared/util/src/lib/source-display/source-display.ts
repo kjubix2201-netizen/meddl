@@ -3,8 +3,8 @@ import {
     playlistDisplayLabel,
     playlistNameHasCredentials,
     resolvePlaylistSourceKind,
-} from '@iptvnator/shared/interfaces';
-import { decodeFully, findXtreamAccount } from '@iptvnator/shared/logging';
+} from '@meddl/shared/interfaces';
+import { decodeFully, findXtreamAccount } from '@meddl/shared/logging';
 import {
     isDisplaySensitiveKey,
     stripUrlCredentials,

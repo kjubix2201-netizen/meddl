@@ -4,7 +4,7 @@ import {
     GuideProgram,
     Media,
     ProviderClient,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 export interface GridSchedule {
     programs: GuideProgram[];

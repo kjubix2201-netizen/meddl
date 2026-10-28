@@ -1,8 +1,8 @@
 import type { StalkerRequestOptions } from './stalker-request-options';
 import { Injectable, inject } from '@angular/core';
-import { DataService, resetHostConnectivityGuard } from '@iptvnator/services';
-import { STALKER_REQUEST } from '@iptvnator/shared/interfaces';
-import { createLogger } from '@iptvnator/portal/shared/util';
+import { DataService, resetHostConnectivityGuard } from '@meddl/services';
+import { STALKER_REQUEST } from '@meddl/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util';
 import {
     StalkerPortalCredentials,
     StalkerProfileResponse,

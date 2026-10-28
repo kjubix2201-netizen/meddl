@@ -4,13 +4,13 @@ import {
     DataService,
     EpgSourceSettingsService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
-import { EpgItem, Playlist } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
+import { EpgItem, Playlist } from '@meddl/shared/interfaces';
 import { StalkerSessionService } from '../../stalker-session.service';
 import { withStalkerEpg } from './with-stalker-epg.feature';
 
-jest.mock('@iptvnator/portal/shared/util', () => ({
+jest.mock('@meddl/portal/shared/util', () => ({
     createLogger: () => ({
         debug: jest.fn(),
         info: jest.fn(),

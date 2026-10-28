@@ -10,13 +10,13 @@ This document describes the browser PWA and self-hosted Docker path.
 - `docker/` owns the production self-hosted image that bundles the PWA and
   `web-backend` into one container.
 
-The old external `4gray/iptvnator-backend` repository is not required for the
+The old external `kjubix2201-netizen/meddl-backend` repository is not required for the
 default self-hosted deployment. Sync behavior from that repository only when a
 change intentionally restores or imports missing backend capabilities.
 
 ## Runtime Backend Configuration
 
-The PWA reads `window.__IPTVNATOR_CONFIG__.BACKEND_URL` through
+The PWA reads `window.__MEDDL_CONFIG__.BACKEND_URL` through
 `apps/web/src/app/services/runtime-config.ts`. The static placeholder lives at
 `apps/web/src/assets/app-config.js` and keeps hosted builds working without
 Docker-specific values.
@@ -99,8 +99,8 @@ Server storage adds versioned routes under `/v1`, which the PWA uses in
 - `GET|PUT /v1/app-state/:key`
 
 Server storage lives in `apps/web-backend/src/app/storage/`. With
-`IPTVNATOR_STORAGE=server`, `main.ts` opens the shared database through
-`initDatabase()` (path from `IPTVNATOR_DATA_DIR`), so the server has the same
+`MEDDL_STORAGE=server`, `main.ts` opens the shared database through
+`initDatabase()` (path from `MEDDL_DATA_DIR`), so the server has the same
 schema and migrations as the desktop app and writes playlists with the
 shared row codec. It adds two server-only tables: `server_user_state` for
 Xtream user data, and `server_playlist_meta`, a copy of each document
@@ -109,10 +109,10 @@ the payload blobs (filled once on open for rows written without it). ETags
 come from an in-memory revision counter; the server is the only writer of
 its database. Storage errors are logged by error name and code only, because
 Drizzle messages can carry bound values such as portal credentials. With
-`IPTVNATOR_ACCESS_TOKEN`, every route except `/`, `/health`, `/config.js`
+`MEDDL_ACCESS_TOKEN`, every route except `/`, `/health`, `/config.js`
 and `/v1/instance` requires `Authorization: Bearer <token>`, the proxy
 routes included; its 401 carries `WWW-Authenticate: Bearer
-realm="iptvnator"`, which a provider error passed on by the proxy never
+realm="meddl"`, which a provider error passed on by the proxy never
 does; the PWA sends it once its sign-in page has stored it.
 Browser app state written through
 `/v1/app-state` is stored under a `client:` key prefix, apart from
@@ -120,7 +120,7 @@ server-owned keys such as the instance id.
 
 `pnpm nx run web-backend:serve` starts the backend by hand on port 3333 with
 `TSX_TSCONFIG_PATH=tsconfig.base.json`, which `tsx` needs for the
-`@iptvnator/*` path aliases. `apps/web-e2e/playwright.config.ts` does not use
+`@meddl/*` path aliases. `apps/web-e2e/playwright.config.ts` does not use
 that target: it launches `node --import tsx apps/web-backend/src/main.ts` with
 an `env` that mirrors the target's. Nx `run-commands` starts its command in a
 detached process group, and Playwright stops a `webServer` with a
@@ -131,7 +131,7 @@ launches the backend through Nx or its `env` drifts from the `serve` target.
 `WEB_BACKEND_PORT` (default 3333) relocates the E2E backend and the
 `self-hosted.e2e.ts` URLs, like `MOCK_PORT` does for the mocks. Use it when
 another worktree holds 3333. `server-storage.e2e.ts` talks to a second
-backend from the same config, launched with `IPTVNATOR_STORAGE=server` on
+backend from the same config, launched with `MEDDL_STORAGE=server` on
 `STORAGE_BACKEND_PORT` (default 3334) and a data directory named after the
 Playwright process, so every run starts with an empty store; the spec
 accepts at most that one extra launch. The `web:serve` entry can stay on Nx:
@@ -146,7 +146,7 @@ runtime. Electron routes remain owned by the Electron backend and preload
 bridge.
 
 Renderer code that needs to branch by runtime should use
-`RuntimeCapabilitiesService` from `@iptvnator/services` instead of adding new
+`RuntimeCapabilitiesService` from `@meddl/services` instead of adding new
 direct `window.electron` or `DataService.getAppEnvironment()` checks. Keep
 feature decisions expressed as capabilities such as `supportsEpg`,
 `supportsSqlite`, `supportsXtreamSqliteDataSource`, `supportsDownloads`, or
@@ -155,9 +155,9 @@ from one shared boundary. `supportsSqlite` requires the complete playlist
 storage preload API surface used by `PlaylistsService`, `supportsDownloads`
 requires the complete downloads preload API surface used by `DownloadsService`,
 and EPG renderer code should use `EpgRuntimeBridgeService` from
-`@iptvnator/epg/data-access` instead of calling `window.electron` directly.
+`@meddl/epg/data-access` instead of calling `window.electron` directly.
 Playback-position renderer code should use `PlaybackPositionRuntimeBridgeService`
-from `@iptvnator/services` for Electron SQLite persistence and external-player
+from `@meddl/services` for Electron SQLite persistence and external-player
 position update events; `supportsPlaybackPositionStorage` and
 `supportsPlaybackPositionUpdates` describe those surfaces independently so PWA
 and partial Electron bridges can degrade without direct preload checks.
@@ -185,11 +185,11 @@ expose desktop-only actions in the PWA/shared UI.
 ## Server Storage Mode
 
 `main.ts` probes `GET /v1/instance` before bootstrapping, and only when the
-deployment wrote a runtime `BACKEND_URL` into `window.__IPTVNATOR_CONFIG__`
+deployment wrote a runtime `BACKEND_URL` into `window.__MEDDL_CONFIG__`
 (the Docker entrypoint does; hosted builds and Electron never probe). On
 `storage: 'server'` it imports `apps/web/src/app/server-storage/` lazily and
 merges `provideServerStorage()` into the app config, and remembers the
-instance under `iptvnator-server:instance`. When the probe gets no answer
+instance under `meddl-server:instance`. When the probe gets no answer
 (network error, timeout, a 5xx such as nginx's 502 while the backend
 restarts, or a refusal other than 404, such as a proxy's 429), a browser that remembers this backend still starts in server
 mode, offline, and reloads once the server answers; it never falls back to
@@ -198,9 +198,9 @@ an empty browser library. Until that reload it sends no writes
 is null for an unverified instance): the address may lead to another
 server or database by then, which the reload's probe finds out. An answer without server storage, or a 404 from
 an older backend, forgets it (`server-storage-start.ts`). Everything else of the
-client lives behind the `@iptvnator/services/server-storage` sub-entry, so
+client lives behind the `@meddl/services/server-storage` sub-entry, so
 other builds never load it; `ServerStorageStatusService` and the token
-helpers stay in the main `@iptvnator/services` barrel because the rail,
+helpers stay in the main `@meddl/services` barrel because the rail,
 settings and guards read them in every build.
 
 - **Playlists.** `ServerStorageSession.start()` (an app initializer) plugs
@@ -226,7 +226,7 @@ settings and guards read them in every build.
   came from.
 - **Xtream user data.** `USER_DATA_STORAGE` becomes `ServerUserDataStorage`:
   the four synced namespaces are cached per server instance, under
-  `iptvnator-server:cache:<instanceId>:<namespace>` (the legacy unprefixed
+  `meddl-server:cache:<instanceId>:<namespace>` (the legacy unprefixed
   keys are never written in server mode; a tab still open on another
   server never writes over this one's cache) and
   each change sends only the playlist entries that differ, debounced, with a
@@ -240,7 +240,7 @@ settings and guards read them in every build.
   flush (a write saved whose answer was cut off counts as saved on an
   unknown version: only later edits replay on the next conflict), and
   every unconfirmed write (queued or travelling) is saved in `localStorage`
-  per page load (`iptvnator-server:unsent-writes:<instanceId>:<page>`). The
+  per page load (`meddl-server:unsent-writes:<instanceId>:<page>`). The
   tab remembers its page load in `sessionStorage`, so a reload takes its
   writes over and sends them first (the old copy goes only once the new one
   is saved, at the latest with this page's next saved copy; until then the
@@ -269,7 +269,7 @@ settings and guards read them in every build.
   at every later conflict: an item or key changed since, by this tab or
   another device, keeps its newer value. Tabs never clear each other's.
   Cache and saved writes belong to one server database
-  (`iptvnator-server:cache-owner`); another one behind the same address
+  (`meddl-server:cache-owner`); another one behind the same address
   starts clean. Startup waits for the first read only a few seconds;
   `UserDataStorage.ready()` waits for a first read in flight (it starts
   none, so an offline page is not held up) and tells whether one
@@ -313,8 +313,8 @@ settings and guards read them in every build.
   arrives (`applyEdit`): a new device or a stale cache adds its favorite
   instead of replacing the server's list. On this tab's recovered unsent
   write they are kept as their own steps after it. They are saved per page load too
-  (`iptvnator-server:deferred-edits:<instanceId>:<page>`). Records in
-  `localStorage` (`iptvnator-server:unconfirmed:<instanceId>:<page>`, one
+  (`meddl-server:deferred-edits:<instanceId>:<page>`). Records in
+  `localStorage` (`meddl-server:unconfirmed:<instanceId>:<page>`, one
   key per page load so tabs never overwrite each other's, renewed every
   30 s while it has unsent writes, stale after ten minutes) let a re-read
   in one tab keep the cache values another tab is still sending, and a
@@ -335,12 +335,12 @@ settings and guards read them in every build.
   shortcut, an offline banner sits above the workspace content, and failed
   writes raise a snackbar (`SERVER_STORAGE.WRITE_FAILED`, or `TOO_LARGE` for
   a 413), the same one at most every five minutes.
-- **Access token.** With `IPTVNATOR_ACCESS_TOKEN` the instance reports
+- **Access token.** With `MEDDL_ACCESS_TOKEN` the instance reports
   `auth: 'token'` (the backend refuses a token without server storage: the
   PWA has no sign-in flow for a stateless backend); without a stored token, or after a 401, the guards route to
   `/server-sign-in` (the start-up screen lets it through although the
   playlists could not load), which checks the token against `/v1/instance/status`
-  before it stores it under `iptvnator-server:access-token` and reloads (a
+  before it stores it under `meddl-server:access-token` and reloads (a
   browser that refuses to store it is told so instead). The token is stored
   with the instance id it was given for, and a page sends it only to that
   instance: a tab still open on the old backend after `BACKEND_URL` changed
@@ -376,7 +376,7 @@ settings and guards read them in every build.
   replaced since (a new sign-in) changes nothing, nor does one for a page
   that holds its token back until the instance is checked.
 - **Moving browser data.** `ServerMigrationService` offers, once per server
-  instance (marker `iptvnator-server:migration:<instanceId>`), to move the
+  instance (marker `meddl-server:migration:<instanceId>`), to move the
   playlists this browser kept in IndexedDB (`planServerMigration`), Stalker
   rows from before the portal-mode flag normalized first (server rows get
   the same Stalker metadata migration once per server, as a desktop
@@ -460,7 +460,7 @@ before any outbound request:
 - URL credentials are rejected
 - loopback, private, link-local, and reserved network targets are blocked by
   default
-- `IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS=1` explicitly enables trusted
+- `MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS=1` explicitly enables trusted
   local/LAN targets for development, mock servers, or private deployments
 
 ### Provider redirects and connection policy
@@ -540,7 +540,7 @@ and sidecar state in localStorage:
 - `xtream-playback-positions`
 
 `PwaXtreamDataSource` and `PwaCollectionStorage` reach these keys through the
-`USER_DATA_STORAGE` token from `@iptvnator/services` (default:
+`USER_DATA_STORAGE` token from `@meddl/services` (default:
 `localStorage`), never through `localStorage` directly, so server storage
 mode can substitute `ServerUserDataStorage`. The key names are shared as
 `XTREAM_USER_DATA_KEYS` with the playlist backup, which exports and restores
@@ -554,7 +554,7 @@ type, and category IDs after navigation or a page reload without relying on the
 Electron SQLite content table.
 
 Shared collection services that need Xtream favorites or recent data should use
-`XTREAM_DATA_SOURCE` from `@iptvnator/portal/xtream/data-access` from a
+`XTREAM_DATA_SOURCE` from `@meddl/portal/xtream/data-access` from a
 `type:data-access` or `type:feature` boundary. UI libraries in the M3U domain
 must not import Xtream data-access directly; use `PlaylistsService` for source
 metadata changes and let app-level cleanup providers handle portal-specific
@@ -580,11 +580,11 @@ Default runtime values:
 - `BACKEND_URL=/api`
 - `CLIENT_URL=http://localhost:4333`
 - `PORT=3000`
-- `IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS=0`
+- `MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS=0`
 - `NODE_EXTRA_CA_CERTS` unset
-- `IPTVNATOR_STORAGE=server`, `IPTVNATOR_DATA_DIR=/data` (a `VOLUME`)
-- `IPTVNATOR_ACCESS_TOKEN` unset, `IPTVNATOR_MAX_DOCUMENT_MB=64`
-- `IPTVNATOR_BACKEND_START_TIMEOUT=300`: seconds the entrypoint waits for
+- `MEDDL_STORAGE=server`, `MEDDL_DATA_DIR=/data` (a `VOLUME`)
+- `MEDDL_ACCESS_TOKEN` unset, `MEDDL_MAX_DOCUMENT_MB=64`
+- `MEDDL_BACKEND_START_TIMEOUT=300`: seconds the entrypoint waits for
   `/health`; the backend migrates its database before it listens
 
 better-sqlite3 is a native addon, so the Dockerfile builds it in a separate
@@ -594,7 +594,7 @@ produce it for each target platform. nginx raises `client_max_body_size` to
 
 When hosting behind another domain, set `CLIENT_URL` to the browser origin and
 keep `BACKEND_URL=/api` unless the reverse proxy exposes the backend elsewhere.
-Only set `IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS=1` when the self-hosted
+Only set `MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS=1` when the self-hosted
 instance is restricted to trusted users and intentionally needs private network
 IPTV targets. For providers using private certificate authorities, mount the CA
 bundle into the container and set `NODE_EXTRA_CA_CERTS` to that mounted path.
@@ -629,7 +629,7 @@ pnpm nx run web-e2e:e2e -- --project=chromium --grep @self-hosted
 docker compose -f docker/docker-compose.yml config
 ```
 
-Run `docker build -t iptvnator:self-hosted-test -f docker/Dockerfile .` when a
+Run `docker build -t meddl:self-hosted-test -f docker/Dockerfile .` when a
 Docker daemon is available.
 
 For manual Docker smoke testing, run the Xtream and Stalker mock servers plus a
@@ -649,7 +649,7 @@ SQLite bridge, and feature visibility follows `RuntimeCapabilitiesService`.
 The same workspace route tree is used in both runtimes.
 
 Desktop relational data uses the canonical schema/connection in
-`libs/shared/database`; the SQLite path is `~/.iptvnator/databases/iptvnator.db`.
+`libs/shared/database`; the SQLite path is `~/.meddl/databases/meddl.db`.
 Desktop Chromium settings/storage still exist alongside SQLite. PWA data uses
 browser IndexedDB (with browser quotas); its structure is not the SQL schema.
 Browser-selected file uploads remain possible even though native filesystem

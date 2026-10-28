@@ -5,13 +5,13 @@ import { of } from 'rxjs';
 import {
     WorkspaceBackNavigationService,
     WorkspaceBackParent,
-} from '@iptvnator/portal/shared/data-access';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/data-access';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     CatalogTitleMatchService,
     DiscoverTitle,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import { XtreamDiscoverRouteComponent } from './xtream-discover-route.component';
 
 /**

@@ -14,11 +14,11 @@ import { Home, CatalogScreen } from './screens';
 import { Detail } from './detail';
 import { useDetailSeason } from './use-detail-season';
 import { Live } from './live';
-import { Backdrop, TvIcon } from '@iptvnator/tv/ui';
+import { Backdrop, TvIcon } from '@meddl/tv/ui';
 import { useMetadata } from './use-metadata';
 import { useSeriesContext } from './use-series-context';
 import { useSeriesDetails } from './use-series-details';
-import { mediaTitle } from '@iptvnator/tv/util';
+import { mediaTitle } from '@meddl/tv/util';
 import { PersonPage } from './person-page';
 import type { FilmographyMemory } from './use-filmography-search';
 const navigation: [View, string][] = [
@@ -115,7 +115,7 @@ export function TvApp() {
                     class="source-form storage-recovery"
                     aria-label="Saved TV data"
                 >
-                    <h1>IPTVnator TV</h1>
+                    <h1>meddl TV</h1>
                     {tv.storageError ? (
                         <>
                             <p role="alert">{tv.storageError}</p>
@@ -284,7 +284,7 @@ export function TvApp() {
                             <span class="eyebrow">
                                 {current?.season
                                     ? `SEASON ${current.season} · EPISODE ${current.episode}`
-                                    : 'IPTVNATOR TV'}
+                                    : 'MEDDL TV'}
                             </span>
                             <h1>{current && mediaTitle(current)}</h1>
                             {current?.kind === 'episode' ? (

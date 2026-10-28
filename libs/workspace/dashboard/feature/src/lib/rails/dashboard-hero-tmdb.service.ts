@@ -3,13 +3,13 @@ import {
     TmdbEnrichmentService,
     extractYear,
     tmdbBackdropUrl,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     DashboardTmdbAttempt,
     DashboardTmdbLookupItem,
     buildDashboardTmdbAttempts,
     dashboardTmdbLookupKey,
-} from '@iptvnator/workspace/dashboard/data-access';
+} from '@meddl/workspace/dashboard/data-access';
 
 /** TMDB extras for the dashboard hero, patched in after first paint */
 export interface DashboardHeroTmdbExtras {

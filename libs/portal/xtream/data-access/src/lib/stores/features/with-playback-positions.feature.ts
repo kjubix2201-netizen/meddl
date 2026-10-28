@@ -6,8 +6,8 @@ import {
     withMethods,
     withState,
 } from '@ngrx/signals';
-import { PlaybackPositionRuntimeBridgeService } from '@iptvnator/services';
-import { PORTAL_WATCHED_PROGRESS_PERCENT } from '@iptvnator/portal/shared/util/tokens';
+import { PlaybackPositionRuntimeBridgeService } from '@meddl/services';
+import { PORTAL_WATCHED_PROGRESS_PERCENT } from '@meddl/portal/shared/util/tokens';
 import {
     PlaybackPositionData,
     XTREAM_DATA_SOURCE,

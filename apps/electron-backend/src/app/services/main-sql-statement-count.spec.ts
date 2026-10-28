@@ -1,12 +1,12 @@
 import Database from 'better-sqlite3';
-import * as shared from '@iptvnator/shared/database';
+import * as shared from '@meddl/shared/database';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { countMainProcessSqlStatements } from './main-sql-statement-count';
 import { createPerformanceCounterRegistry } from './performance-counters';
 
-const ENV_NAMES = ['IPTVNATOR_E2E_DATA_DIR', 'IPTVNATOR_TRACE_SQL'] as const;
+const ENV_NAMES = ['MEDDL_E2E_DATA_DIR', 'MEDDL_TRACE_SQL'] as const;
 const EXECUTION_METHODS = ['run', 'get', 'all', 'iterate'] as const;
 
 describe('main-process SQL statement count', () => {
@@ -55,9 +55,9 @@ describe('main-process SQL statement count', () => {
     });
 
     it('counts every statement of the shared connection, as the sql-main trace does', async () => {
-        dataDirectory = mkdtempSync(join(tmpdir(), 'iptvnator-main-sql-'));
-        process.env['IPTVNATOR_E2E_DATA_DIR'] = dataDirectory;
-        process.env['IPTVNATOR_TRACE_SQL'] = '1';
+        dataDirectory = mkdtempSync(join(tmpdir(), 'meddl-main-sql-'));
+        process.env['MEDDL_E2E_DATA_DIR'] = dataDirectory;
+        process.env['MEDDL_TRACE_SQL'] = '1';
         const log = jest.spyOn(console, 'log').mockImplementation(() => {
             /* silenced */
         });
@@ -76,7 +76,7 @@ describe('main-process SQL statement count', () => {
         }
 
         const traced = log.mock.calls.filter((call) =>
-            String(call[0]).startsWith('[IPTVnator Trace][sql-main] query')
+            String(call[0]).startsWith('[meddl Trace][sql-main] query')
         ).length;
         const counted = registry.read().counters['main.sqlStatements'];
         expect(traced).toBeGreaterThan(0);

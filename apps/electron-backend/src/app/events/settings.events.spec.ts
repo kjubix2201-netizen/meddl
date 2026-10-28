@@ -1,4 +1,4 @@
-import type { Settings } from '@iptvnator/shared/interfaces';
+import type { Settings } from '@meddl/shared/interfaces';
 
 type ExternalPlayerArgumentsSetting = string | readonly unknown[];
 type SettingsUpdatePayload = Omit<

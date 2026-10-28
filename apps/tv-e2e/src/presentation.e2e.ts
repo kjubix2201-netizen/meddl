@@ -30,7 +30,7 @@ test('remote arrows can leave source fields and reach native disclosure controls
             .getByRole('navigation')
             .getByRole('button', { name: 'Sources', exact: true })
     ).toBeFocused();
-    const backend = page.getByLabel('IPTVnator backend URL');
+    const backend = page.getByLabel('meddl backend URL');
     await backend.focus();
     await page.keyboard.press('ArrowDown');
     await expect(

@@ -2,7 +2,7 @@ import type {
     DatabaseWorkerPerformancePhase,
     PerformancePhaseEvent,
     PerformancePhaseMetadata,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 import type { WorkerRequestPerformanceMetrics } from './m3u-refresh-cancellation-contract';
 

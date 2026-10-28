@@ -1,5 +1,5 @@
 import { ChannelCard } from './channel-card';
-import { Media } from '@iptvnator/tv/util';
+import { Media } from '@meddl/tv/util';
 export * from './focus';
 export function Poster({
     item,

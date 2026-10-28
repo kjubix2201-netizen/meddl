@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import { TmdbPersonDetails } from '@iptvnator/shared/tmdb';
+import { TvMetadata } from '@meddl/tv/data-access';
+import { TmdbPersonDetails } from '@meddl/shared/tmdb';
 
 export function usePerson(id: number | undefined, client: TvMetadata) {
     const [attempt, setAttempt] = useState(0);

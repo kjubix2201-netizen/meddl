@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import {
     CatalogTitleMatchService,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
-import { CatalogTitleMatch } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { CatalogTitleMatch } from '@meddl/shared/interfaces';
 import { DashboardDataService } from './dashboard-data.service';
 import { DashboardRecommendationsService } from './dashboard-recommendations.service';
 

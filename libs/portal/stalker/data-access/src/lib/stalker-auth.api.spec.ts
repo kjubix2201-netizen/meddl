@@ -1,5 +1,5 @@
-import type { DataService } from '@iptvnator/services';
-import type { createLogger } from '@iptvnator/portal/shared/util';
+import type { DataService } from '@meddl/services';
+import type { createLogger } from '@meddl/portal/shared/util';
 import { StalkerAuthApi } from './stalker-auth.api';
 
 /**

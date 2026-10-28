@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { DataService } from '@iptvnator/services';
+import { DataService } from '@meddl/services';
 import {
     CONNECTIVITY_GUARD_RESET,
     STALKER_REQUEST,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { StalkerPortalDiscoveryService } from './stalker-portal-discovery.service';
 import { StalkerSessionService } from './stalker-session.service';
 
-jest.mock('@iptvnator/portal/shared/util', () => ({
+jest.mock('@meddl/portal/shared/util', () => ({
     createLogger: () => ({
         debug: jest.fn(),
         info: jest.fn(),

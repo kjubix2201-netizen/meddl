@@ -6,7 +6,7 @@ import {
     XtreamPendingRestoreService,
     XtreamImportStatus,
     VodSourcePinService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     ContentMetadataPatch,
     PlaybackPositionData,
@@ -16,7 +16,7 @@ import {
     XtreamLiveStream,
     XtreamSerieItem,
     XtreamVodStream,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     CategoryType,
     StreamType,

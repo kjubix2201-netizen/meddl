@@ -1,4 +1,4 @@
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 
 export function selectContentFields() {
     return {

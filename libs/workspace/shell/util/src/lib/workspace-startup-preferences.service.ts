@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { PlaylistsService, SettingsStore } from '@iptvnator/services';
+import { PlaylistsService, SettingsStore } from '@meddl/services';
 import {
     StartupBehavior,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { parseWorkspaceShellRoute } from './navigation/workspace-shell-route.utils';
 
 const LAST_RESTORABLE_ROUTE_STORAGE_KEY = 'workspace-last-restorable-route-v1';

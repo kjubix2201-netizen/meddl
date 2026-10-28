@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
-import { SettingsStorageFailure } from '@iptvnator/services';
+import { SettingsStorageFailure } from '@meddl/services';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()

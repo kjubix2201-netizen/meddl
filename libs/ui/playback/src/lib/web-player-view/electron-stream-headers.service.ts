@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import type { ResolvedPortalPlayback } from '@iptvnator/shared/interfaces';
+import type { ResolvedPortalPlayback } from '@meddl/shared/interfaces';
 
 function getHeaderValue(
     headers: ResolvedPortalPlayback['headers'] | undefined,

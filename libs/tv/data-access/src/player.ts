@@ -1,4 +1,4 @@
-import { Media, Playback, Progress } from '@iptvnator/tv/util';
+import { Media, Playback, Progress } from '@meddl/tv/util';
 /** Owns the only native video element. History begins at `playing`, never at intent. */
 export class NativePlayer {
     item?: Media;

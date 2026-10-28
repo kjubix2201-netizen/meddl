@@ -1,14 +1,14 @@
 import { Component, input, output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { TmdbEnrichmentService } from '@iptvnator/services';
-import { Channel, ResolvedPortalPlayback } from '@iptvnator/shared/interfaces';
+import { TmdbEnrichmentService } from '@meddl/services';
+import { Channel, ResolvedPortalPlayback } from '@meddl/shared/interfaces';
 import {
     TranslateModule,
     TranslatePipe,
     TranslateService,
 } from '@ngx-translate/core';
-import { CastCrewRowComponent } from '@iptvnator/ui/components';
+import { CastCrewRowComponent } from '@meddl/ui/components';
 import { MockPipe } from 'ng-mocks';
 import type { M3uVodDetailComponent as M3uVodDetailComponentType } from './m3u-vod-detail.component';
 

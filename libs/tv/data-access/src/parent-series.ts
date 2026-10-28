@@ -4,7 +4,7 @@ import {
     ProviderClient,
     Source,
     seriesForEpisode,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 /** Recover the exact provider parent; title queries narrow the lookup, never choose it. */
 export async function findParentSeries(

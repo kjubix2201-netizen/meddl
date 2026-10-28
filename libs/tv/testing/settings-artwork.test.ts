@@ -1,12 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { resolveStalkerArtwork } from '@iptvnator/portal/stalker/client';
+import { resolveStalkerArtwork } from '@meddl/portal/stalker/client';
 import {
     applySettingsDraft,
     initialData,
     parseSettingsDraft,
     phoneSettingsDefaults,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 test('Stalker artwork resolves root paths and falls through blank or unsupported fields', () => {
     const base = 'https://portal.example/stalker_portal/server/load.php';
     assert.equal(

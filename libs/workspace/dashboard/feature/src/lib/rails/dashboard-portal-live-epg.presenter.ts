@@ -11,13 +11,13 @@ import {
 import type {
     EpgProgram,
     PortalActivityItem,
-} from '@iptvnator/shared/interfaces';
-import { SettingsStore } from '@iptvnator/services';
+} from '@meddl/shared/interfaces';
+import { SettingsStore } from '@meddl/services';
 import {
     buildDashboardPortalLiveEpgEntry,
     DashboardPortalLiveEpgService,
     type DashboardPortalLiveEpgEntry,
-} from '@iptvnator/workspace/dashboard/data-access';
+} from '@meddl/workspace/dashboard/data-access';
 import type { DashboardRailCard } from './dashboard-rail.component';
 import { DashboardLiveEpgClock } from './dashboard-live-epg-clock';
 

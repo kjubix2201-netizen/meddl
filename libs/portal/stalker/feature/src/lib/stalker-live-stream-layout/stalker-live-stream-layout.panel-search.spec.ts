@@ -4,21 +4,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
 import {
     LiveLayoutSidebarStateService,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     type StalkerCategoryLabel,
     StalkerStore,
-} from '@iptvnator/portal/stalker/data-access';
+} from '@meddl/portal/stalker/data-access';
 import {
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
-import { ElectronStreamHeadersService } from '@iptvnator/ui/playback';
+} from '@meddl/services';
+import { ElectronStreamHeadersService } from '@meddl/ui/playback';
 import { StalkerLiveStreamLayoutComponent } from './stalker-live-stream-layout.component';
 
 const FILL_CHECK_DELAY_MS = 100;

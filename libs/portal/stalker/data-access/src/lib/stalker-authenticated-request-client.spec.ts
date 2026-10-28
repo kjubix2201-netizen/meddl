@@ -1,5 +1,5 @@
-import type { DataService } from '@iptvnator/services';
-import { Playlist } from '@iptvnator/shared/interfaces';
+import type { DataService } from '@meddl/services';
+import { Playlist } from '@meddl/shared/interfaces';
 import { StalkerAuthenticatedRequestClient } from './stalker-authenticated-request-client';
 import { StalkerTokenCache } from './stalker-token-cache';
 

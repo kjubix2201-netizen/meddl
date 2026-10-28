@@ -1,7 +1,7 @@
 import { XtreamEpgNormalizer, EpgResponse } from '../xtream-epg-normalizer';
 import { inject, Injectable } from '@angular/core';
-import { DataService } from '@iptvnator/services';
-import { createLogger } from '@iptvnator/portal/shared/util/logger';
+import { DataService } from '@meddl/services';
+import { createLogger } from '@meddl/portal/shared/util/logger';
 import {
     EpgItem,
     XtreamCategory,
@@ -13,7 +13,7 @@ import {
     XtreamVodStream,
     XTREAM_REQUEST,
     normalizeXtreamServerUrl,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { XtreamAccountInfo } from '../account-info/account-info.interface';
 
 /**

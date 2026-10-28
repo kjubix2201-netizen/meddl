@@ -1,14 +1,14 @@
-import type { SeasonEpisodeDownloadAdapter } from '@iptvnator/portal/shared/data-access';
+import type { SeasonEpisodeDownloadAdapter } from '@meddl/portal/shared/data-access';
 import type {
     StalkerMappedEpisode,
     StalkerSelectedVodItem,
-} from '@iptvnator/portal/stalker/data-access';
+} from '@meddl/portal/stalker/data-access';
 import type {
     Playlist,
     XtreamSerieEpisode,
     XtreamSerieEpisodeInfo,
-} from '@iptvnator/shared/interfaces';
-import { ELECTRON_BRIDGE_EPISODE_IDENTITY_SCOPES } from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
+import { ELECTRON_BRIDGE_EPISODE_IDENTITY_SCOPES } from '@meddl/shared/interfaces';
 import { createStalkerSeriesDownloadSnapshot } from './stalker-series-download-metadata';
 
 type StalkerDownloadPlaylist = Pick<

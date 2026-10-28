@@ -2,7 +2,7 @@
 
 Implemented in `codex/tv-settings-categories`, based on TV revision
 `9841741d35ef50d1c1799df98992f0a30cc2e1e2`, in the dedicated
-`/Users/fourgray/.codex/worktrees/tv-settings-categories/iptvnator` worktree.
+`/Users/fourgray/.codex/worktrees/tv-settings-categories/meddl` worktree.
 No other checkout, device or NAS service is modified.
 
 ## Behavior
@@ -61,7 +61,7 @@ Ignored local evidence:
 - `dist/tv-verification/settings-categories/1280-*.png`
 - `dist/tv-verification/settings-categories-unit.log`
 - `dist/test-results/tv-e2e/results.json`
-- `dist/tv-package/com.iptvnator.tv.prototype_0.1.13_all.ipk`
+- `dist/tv-package/com.meddl.tv.prototype_0.1.13_all.ipk`
 
 IPK SHA-256:
 `efb07540c84f910d859fee760471d62976c05057cfb30a21a55a64a8b472f9e2`.
@@ -100,8 +100,8 @@ Frozen dependencies were reinstalled after rebase. Final local gates:
 - Production build, classic IIFE/ES2018 audit and IPK packaging pass.
 - All 161 release notes, 3 agent guidance files and 8 repository skills validate.
 
-`com.iptvnator.tv.prototype_0.1.15_all.ipk` is installed over 0.1.14 on the
-existing paired `iptvnator-lg-bx` device, without uninstalling the application.
+`com.meddl.tv.prototype_0.1.15_all.ipk` is installed over 0.1.14 on the
+existing paired `meddl-lg-bx` device, without uninstalling the application.
 The installed app's local appinfo confirms 0.1.15; its engine reports
 Chrome 68.0.3440.106 at 1920×1080.
 
@@ -128,7 +128,7 @@ because the app was hidden; bringing the app forward completed it normally.
 Evidence lives under `dist/tv-verification/settings-0.1.15/`: `before.json`,
 `after.json`, `lg-checks.json`, `lg-metadata.png` and `lg-remote.png`. Browser layout
 screenshots remain under `dist/tv-verification/settings-categories/`.
-Package: `dist/tv-package/com.iptvnator.tv.prototype_0.1.15_all.ipk`.
+Package: `dist/tv-package/com.meddl.tv.prototype_0.1.15_all.ipk`.
 SHA-256: `71c758d018df10bef27b437f7ec7d39bd5760304d10ee5c18d60500028a3412f`.
 No NAS service, desktop release, push, PR or merge was performed during this
 local installation. The user subsequently authorizes publication and merging through a PR on

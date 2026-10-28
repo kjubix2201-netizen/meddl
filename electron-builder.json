@@ -1,6 +1,6 @@
 {
-    "appId": "com.fourgray.iptvnator",
-    "productName": "IPTVnator",
+    "appId": "io.github.kjubix2201_netizen.meddl",
+    "productName": "meddl",
     "artifactName": "${name}-${version}-${os}-${arch}.${ext}",
     "fileAssociations": [
         {
@@ -21,8 +21,8 @@
     "publish": [
         {
             "provider": "github",
-            "owner": "4gray",
-            "repo": "iptvnator"
+            "owner": "kjubix2201-netizen",
+            "repo": "meddl"
         }
     ],
     "directories": {
@@ -52,9 +52,9 @@
         "**/embedded-mpv-runtime.json"
     ],
     "extraMetadata": {
-        "name": "iptvnator",
-        "productName": "IPTVnator",
-        "desktopName": "iptvnator",
+        "name": "meddl",
+        "productName": "meddl",
+        "desktopName": "meddl",
         "main": "electron-backend/main.js"
     },
     "extraResources": ["dist/apps/electron-backend/workers"],
@@ -80,7 +80,7 @@
     },
     "linux": {
         "category": "Video",
-        "executableName": "iptvnator",
+        "executableName": "meddl",
         "executableArgs": ["--ozone-platform=x11"],
         "target": [
             {
@@ -114,9 +114,9 @@
     "appImage": {
         "desktop": {
             "entry": {
-                "X-AppImage-Name": "IPTVnator",
-                "X-AppImage-Homepage": "https://github.com/4gray/iptvnator",
-                "X-AppImage-UpdateURL": "https://github.com/4gray/iptvnator"
+                "X-AppImage-Name": "meddl",
+                "X-AppImage-Homepage": "https://github.com/kjubix2201-netizen/meddl",
+                "X-AppImage-UpdateURL": "https://github.com/kjubix2201-netizen/meddl"
             }
         }
     },
@@ -140,8 +140,8 @@
         ],
         "files": [
             [
-                "apps/electron-backend/linux/com.fourgray.iptvnator.metainfo.xml",
-                "/share/metainfo/com.fourgray.iptvnator.metainfo.xml"
+                "apps/electron-backend/linux/io.github.kjubix2201_netizen.meddl.metainfo.xml",
+                "/share/metainfo/io.github.kjubix2201_netizen.meddl.metainfo.xml"
             ]
         ]
     },

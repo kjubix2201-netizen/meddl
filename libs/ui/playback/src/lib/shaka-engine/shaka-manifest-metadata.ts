@@ -3,7 +3,7 @@ import {
     getPlaybackDrmSystem,
     SHAKA_REQUEST_TYPE,
     type PlaybackDrmSystem,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import type {
     ShakaNetworkingEngineLike,
     ShakaResponseFilter,

@@ -1,4 +1,4 @@
-import type { EmbeddedMpvSession } from '@iptvnator/shared/interfaces';
+import type { EmbeddedMpvSession } from '@meddl/shared/interfaces';
 import { embeddedMpvTimelineSegments } from './embedded-mpv-chapter-segments';
 
 function session(

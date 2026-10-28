@@ -53,7 +53,7 @@ import type {
  * docs/architecture/performance-journeys.md.
  */
 export const SEARCH_JOURNEY_MAIN_IPC_STATE_KEY =
-    '__iptvnatorJourneySearchMainIpcCapture';
+    '__meddlJourneySearchMainIpcCapture';
 export const SEARCH_JOURNEY_PORTAL_NAME = 'Journey search portal';
 /**
  * Six characters; on the mock's `large` account (12,000 items) the term
@@ -176,7 +176,7 @@ function sleepUntil(epochMs: number): Promise<void> {
         : Promise.resolve();
 }
 
-const QUERY_TRACE_KEY = '__iptvnatorJourneySearchQueryTrace';
+const QUERY_TRACE_KEY = '__meddlJourneySearchQueryTrace';
 
 /**
  * Records every trace event of the query method in the main process, with
@@ -219,7 +219,7 @@ async function traceQueryCalls(
     );
 }
 
-const SENTINEL_SQL_KEY = '__iptvnatorJourneySearchSentinelSql';
+const SENTINEL_SQL_KEY = '__meddlJourneySearchSentinelSql';
 
 /**
  * Reads `main.sqlStatements` in the main process when the start and the end

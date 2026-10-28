@@ -3,11 +3,11 @@ import type {
     StalkerPlaylistConnectionEditor,
     StalkerPlaylistConnectionResult,
     StalkerResolvedConnectionApplyOptions,
-} from '@iptvnator/playlist/shared/ui/stalker-connection-editor';
+} from '@meddl/playlist/shared/ui/stalker-connection-editor';
 import type {
     PlaylistMeta,
     PlaylistMetaUpdate,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 type EditorModule =
     typeof import('./stalker-playlist-connection-editor.service');

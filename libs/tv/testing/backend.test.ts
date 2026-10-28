@@ -5,7 +5,7 @@ import {
     checkBackend,
     discoveryCandidates,
     identifyBackend,
-} from '@iptvnator/tv/data-access';
+} from '@meddl/tv/data-access';
 test('discovery stays in the actual private /24 or smaller subnet and never scans a public or unknown network', () => {
     const subnet = discoveryCandidates({
         ipAddress: '192.168.1.130',
@@ -61,9 +61,9 @@ test('connected means identity and authorized API checks succeed, with cancellat
             calls.push({ url: String(input), init });
             return Response.json(
                 String(input).endsWith('/check')
-                    ? { service: 'iptvnator', connected: true }
+                    ? { service: 'meddl', connected: true }
                     : {
-                          service: 'iptvnator',
+                          service: 'meddl',
                           protocol: 1,
                           pairing: true,
                           auth: 'token',
@@ -87,7 +87,7 @@ test('connected means identity and authorized API checks succeed, with cancellat
 test('identification rejects malformed advertised capabilities', async (t) => {
     t.mock.method(globalThis, 'fetch', async () =>
         Response.json({
-            service: 'iptvnator',
+            service: 'meddl',
             protocol: 99,
             pairing: true,
             auth: 'none',

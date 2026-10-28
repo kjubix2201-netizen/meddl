@@ -5,7 +5,7 @@ import {
     programmeNow,
     programmeDay,
     programmeWindow,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 test('guide keeps supplied schedule order by time, rejects invalid spans and removes exact duplicates', () => {
     const first = {

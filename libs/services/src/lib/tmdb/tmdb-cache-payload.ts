@@ -1,1 +1,1 @@
-export { trimDetailsForCache } from '@iptvnator/shared/tmdb';
+export { trimDetailsForCache } from '@meddl/shared/tmdb';

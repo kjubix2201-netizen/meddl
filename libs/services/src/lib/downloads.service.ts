@@ -1,7 +1,7 @@
-import type { DownloadRecoveryResult } from '@iptvnator/shared/interfaces';
+import type { DownloadRecoveryResult } from '@meddl/shared/interfaces';
 import { computed, inject, Injectable, OnDestroy, signal } from '@angular/core';
-import type { DownloadMetadataSnapshot } from '@iptvnator/shared/interfaces';
-import type { ElectronBridgeDownloadStartResult } from '@iptvnator/shared/interfaces';
+import type { DownloadMetadataSnapshot } from '@meddl/shared/interfaces';
+import type { ElectronBridgeDownloadStartResult } from '@meddl/shared/interfaces';
 import { DownloadListLoadState } from './download-list-load-state';
 import { updateDownloadMetadata } from './downloads-metadata-update';
 import type { DownloadItem, DownloadStartInput } from './downloads.models';

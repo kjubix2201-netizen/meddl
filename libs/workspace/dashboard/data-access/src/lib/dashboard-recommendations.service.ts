@@ -2,11 +2,11 @@ import { computed, Injectable, inject, signal } from '@angular/core';
 import {
     CatalogTitleMatchService,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     CatalogTitleMatch,
     normalizeTitleKeys,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { DashboardDataService } from './dashboard-data.service';
 import {
     DashboardTmdbLookupItem,

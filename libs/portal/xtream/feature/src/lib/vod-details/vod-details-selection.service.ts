@@ -1,18 +1,18 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
-import { isProviderOnlyDetailState } from '@iptvnator/portal/shared/util';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
+import { isProviderOnlyDetailState } from '@meddl/portal/shared/util';
 import {
     resolveXtreamVodPlaybackSource,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     getXtreamVodInfo,
     XtreamCategory,
     XtreamVodDetails,
     XtreamVodStream,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     buildXtreamVodFallbackViewModel,
     hasUsableXtreamVodMetadata,

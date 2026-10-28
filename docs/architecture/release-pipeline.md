@@ -32,7 +32,7 @@ chosen deliberately by bumping `package.json`.
 
 Run the two stdout commands as `pnpm --silent run …` whenever the output is
 redirected to a file or a clipboard. Without it pnpm prints its lifecycle
-banner (`> iptvnator@0.23.0 release:notes:telegram …`) to the same stdout, and
+banner (`> meddl@0.23.0 release:notes:telegram …`) to the same stdout, and
 the saved post starts with two lines of build noise.
 
 ### The ordering constraint that matters
@@ -178,7 +178,7 @@ and seed its `marketing-demo` portal as a third source, which is why they are
 never part of a release run. That scenario's MAC, `00:1A:79:00:00:07`, is the
 one MAC-shaped string G4 accepts (`FICTIONAL_STALKER_MAC`); every other MAC
 still fails the frame. The scenario's live channels and logos come from
-`@iptvnator/shared/marketing-fixtures`, served by the mock itself, so no
+`@meddl/shared/marketing-fixtures`, served by the mock itself, so no
 third-party image is ever requested.
 
 Output lands in `dist/release-highlight-cards/v<version>/`, outside version
@@ -262,7 +262,7 @@ canonical GitHub repository. AppManager 3.8.0 reads these URL fields and can
 discover GitHub releases and download complete AppImages. Its architecture
 selection recognizes the existing `x86_64`, `arm64` and `armv7l` asset names.
 Other Linux package formats do not inherit these AppImage-specific fields.
-`extraMetadata.desktopName=iptvnator` preserves the existing window class and
+`extraMetadata.desktopName=meddl` preserves the existing window class and
 desktop filename. Do not reintroduce a shared `linux.desktop.entry` object:
 electron-builder 26.15.7's target merge mutates nested defaults, which would
 leak the AppImage URL fields into Snap in the same portable packaging pass.
@@ -305,9 +305,9 @@ lookup failure, a `test-<branch>` draft — is left alone.
 
 ## Nightly channel
 
-Every push to `master` of `4gray/iptvnator` is also a nightly. The same
+Every push to `master` of `kjubix2201-netizen/meddl` is also a nightly. The same
 `build-and-make.yaml` run that builds the matrix publishes its artifacts as a
-**prerelease of `4gray/iptvnator-nightly`** instead of the rolling
+**prerelease of `kjubix2201-netizen/meddl-nightly`** instead of the rolling
 `test-master` draft: a draft is invisible to anyone without write access and
 to electron-updater, while a published prerelease is what the desktop app's
 **Nightly** update channel installs. PR builds keep their `test-pr-<n>`
@@ -351,12 +351,12 @@ frontend and backend builds and before electron-builder reads it
 **Publication** (steps at the end of the `create-release` job):
 
 1. `NIGHTLY_RELEASE_TOKEN` — a fine-grained PAT with *Contents: read/write*
-   on `4gray/iptvnator-nightly` — is required. Without it the run only warns;
+   on `kjubix2201-netizen/meddl-nightly` — is required. Without it the run only warns;
    `GITHUB_TOKEN` cannot write to another repository. The nightly repository
    needs one commit on its default branch, because `gh release create`
    creates the release tag there.
 2. The notes list the master commits since the previous nightly. That
-   nightly's source commit is read back from the `<!-- iptvnator-commit: … -->`
+   nightly's source commit is read back from the `<!-- meddl-commit: … -->`
    marker its own notes carry, then `compare` on the main repository (with
    `GITHUB_TOKEN`) lists the range. A missing marker or a rewritten history
    only drops the list.

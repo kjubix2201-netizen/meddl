@@ -5,17 +5,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { StorageMap } from '@ngx-pwa/local-storage';
 import { of } from 'rxjs';
-import { EpgService } from '@iptvnator/epg/data-access';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
-import { PORTAL_EXTERNAL_PLAYBACK } from '@iptvnator/portal/shared/util';
+import { EpgService } from '@meddl/epg/data-access';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
+import { PORTAL_EXTERNAL_PLAYBACK } from '@meddl/portal/shared/util';
 import {
     DataService,
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
-import { Settings, VideoPlayer } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { Settings, VideoPlayer } from '@meddl/shared/interfaces';
 import type { VideoPlayerComponent as VideoPlayerComponentInstance } from './video-player.component';
 import {
     activeChannel,

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import type { Media } from '@iptvnator/tv/util';
+import { TvMetadata } from '@meddl/tv/data-access';
+import type { Media } from '@meddl/tv/util';
 
 const parent: Media = {
     id: 'show',

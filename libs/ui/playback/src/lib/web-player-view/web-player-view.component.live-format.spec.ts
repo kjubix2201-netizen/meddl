@@ -15,15 +15,15 @@ import {
     PlaybackDiagnosticCode,
     PlaybackDiagnosticSource,
     type PlaybackDiagnostic,
-} from '@iptvnator/playback/util';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
+} from '@meddl/playback/util';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
 import {
     type ExternalPlayerSession,
     STORE_KEY,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
-import { PORTAL_EXTERNAL_PLAYBACK } from '@iptvnator/portal/shared/util';
-import { VodSourceRowComponent } from '@iptvnator/ui/components';
+} from '@meddl/shared/interfaces';
+import { PORTAL_EXTERNAL_PLAYBACK } from '@meddl/portal/shared/util';
+import { VodSourceRowComponent } from '@meddl/ui/components';
 import { of } from 'rxjs';
 import { PlaybackDiagnosticPanelComponent } from '../playback-diagnostic-panel/playback-diagnostic-panel.component';
 import {

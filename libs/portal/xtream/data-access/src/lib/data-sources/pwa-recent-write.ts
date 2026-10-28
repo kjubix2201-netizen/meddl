@@ -6,7 +6,7 @@ import {
     type CollectionKey,
 } from './pwa-collection-identity';
 import type { PwaCollectionStorage } from './pwa-collection-storage';
-import { normalizeContentMetadataPatch } from '@iptvnator/shared/interfaces';
+import { normalizeContentMetadataPatch } from '@meddl/shared/interfaces';
 import type {
     XtreamContentItem,
     XtreamPlayedContent,

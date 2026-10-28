@@ -1,5 +1,5 @@
 import { createConnection } from 'net';
-import { PlayerContentInfo } from '@iptvnator/shared/interfaces';
+import { PlayerContentInfo } from '@meddl/shared/interfaces';
 import { sendPlaybackPositionUpdate } from './external-player-runtime';
 
 /**

@@ -7,9 +7,10 @@ name: Performance ratchet
 # and tolerances are left alone. A manual dispatch on another branch measures
 # and reports but never opens a pull request.
 
+# Reference workflow inherited from the upstream project. Kept because
+# repository tooling tests read it; it only runs when started by hand.
+# Day-to-day builds and releases use build.yml.
 on:
-    schedule:
-        - cron: '41 4 * * 1'
     workflow_dispatch:
 
 permissions:
@@ -22,7 +23,7 @@ concurrency:
 jobs:
     measure:
         name: Measure (run ${{ matrix.run }})
-        if: github.repository == '4gray/iptvnator'
+        if: github.repository == 'kjubix2201-netizen/meddl'
         runs-on: ubuntu-latest
         # Production web build plus the journeys (their electron-performance
         # build and seven Electron processes per journey), and the

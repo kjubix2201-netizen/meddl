@@ -3,7 +3,7 @@ import {
     EmbeddedMpvSession,
     EmbeddedMpvSubtitleStyle,
     RecordingStartMetadata,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 type ElectronBridge = Window['electron'];
 

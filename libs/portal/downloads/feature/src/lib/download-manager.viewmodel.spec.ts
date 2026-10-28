@@ -1,5 +1,5 @@
-import type { DownloadItem } from '@iptvnator/services';
-import type { Playlist } from '@iptvnator/shared/interfaces';
+import type { DownloadItem } from '@meddl/services';
+import type { Playlist } from '@meddl/shared/interfaces';
 import {
     buildDownloadManagerViewModel,
     normalizeDownloadFilter,

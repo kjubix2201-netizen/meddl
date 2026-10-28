@@ -1,6 +1,6 @@
-import type { Logger } from '@iptvnator/portal/shared/util';
-import type { PlaybackPositionData } from '@iptvnator/shared/interfaces';
-import type { SeasonContainerSeriesPlaybackToggleRequest } from '@iptvnator/ui/components';
+import type { Logger } from '@meddl/portal/shared/util';
+import type { PlaybackPositionData } from '@meddl/shared/interfaces';
+import type { SeasonContainerSeriesPlaybackToggleRequest } from '@meddl/ui/components';
 import { StalkerSeriesPositionPartialSaveError } from './stalker-series-position-compatibility';
 
 export interface StalkerWatchToggleFeedback {

@@ -1,4 +1,4 @@
-import { SortBy, SortOptions, SortOrder } from '@iptvnator/services';
+import { SortBy, SortOptions, SortOrder } from '@meddl/services';
 
 export interface SourceSortOption {
     by: SortBy;

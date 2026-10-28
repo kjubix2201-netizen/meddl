@@ -5,10 +5,10 @@ import type {
     SourceHealthSnapshot,
     SourceReachability,
     SourceStatusBucket,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 // Runtime helpers live here, beside the lazily loaded services that use
-// them: in `@iptvnator/shared/interfaces` they rode into a chunk the app
+// them: in `@meddl/shared/interfaces` they rode into a chunk the app
 // preloads at startup.
 
 /**

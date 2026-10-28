@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { StalkerSession, ProviderTransport } from '@iptvnator/tv/data-access';
-import { Source } from '@iptvnator/tv/util';
+import { StalkerSession, ProviderTransport } from '@meddl/tv/data-access';
+import { Source } from '@meddl/tv/util';
 
 const configuration = (): Source => ({
     id: 'watchdog',

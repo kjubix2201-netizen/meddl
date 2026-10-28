@@ -3,7 +3,7 @@ import { pathToFileURL } from 'node:url';
 import type {
     ElectronDownloadItem,
     ElectronRecordingItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { LaunchedElectronApp } from './electron-test-fixtures';
 
 const base: ElectronDownloadItem = {

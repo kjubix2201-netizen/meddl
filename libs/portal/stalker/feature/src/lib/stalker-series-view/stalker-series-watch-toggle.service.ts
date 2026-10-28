@@ -4,20 +4,20 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     createLogger,
     isPortalPlaybackWatched,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     isVodSeasonHydrationPending,
     StalkerStore,
     type StalkerSelectedVodItem,
     type VodSeriesSeasonVm,
-} from '@iptvnator/portal/stalker/data-access';
-import type { XtreamSerieEpisode } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/stalker/data-access';
+import type { XtreamSerieEpisode } from '@meddl/shared/interfaces';
 import {
     buildSeriesWatchToggleRequest,
     type SeasonContainerPlaybackToggleRequest,
     type SeasonContainerSeasonPlaybackToggleRequest,
     type SeasonContainerSeriesPlaybackToggleRequest,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import { StalkerCatalogFacadeService } from '../stalker-catalog-facade.service';
 import { toStalkerSeriesId } from './stalker-series-id';
 import { StalkerSeriesPositionsService } from './stalker-series-positions.service';

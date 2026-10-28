@@ -11,11 +11,11 @@ import {
     type PlaybackDiagnostic,
     type PlaybackRecommendation,
     type PlaybackRecommendationTarget,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import type {
     ResolvedPortalPlayback,
     VodSourceDescriptor,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { PlaybackDiagnosticPanelComponent } from './playback-diagnostic-panel.component';
 import type { ExternalRecoveryStates } from '../web-player-view/external-playback-recovery';
 
@@ -511,7 +511,7 @@ describe('PlaybackDiagnosticPanelComponent', () => {
         expect(button).not.toBeNull();
         const copy = button.injector.get(CdkCopyToClipboard);
         expect(JSON.parse(copy.text)).toMatchObject({
-            app: 'IPTVnator',
+            app: 'meddl',
             code: DIAGNOSTIC.code,
         });
         expect(copy.text).not.toContain('example.com');

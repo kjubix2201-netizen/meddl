@@ -1,4 +1,4 @@
-import { buildHostConnectivityFastFailMessage } from '@iptvnator/shared/interfaces';
+import { buildHostConnectivityFastFailMessage } from '@meddl/shared/interfaces';
 import {
     buildStalkerEndpointCandidates,
     classifyStalkerProbeResponse,

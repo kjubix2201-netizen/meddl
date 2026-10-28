@@ -1,5 +1,5 @@
-import { resolveChannelEpgLookupKey } from '@iptvnator/m3u-state';
-import { Channel } from '@iptvnator/shared/interfaces';
+import { resolveChannelEpgLookupKey } from '@meddl/m3u-state';
+import { Channel } from '@meddl/shared/interfaces';
 
 export function resolveChannelLogo(
     channel: Channel | null | undefined,

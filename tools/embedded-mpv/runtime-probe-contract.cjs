@@ -1,4 +1,4 @@
-// Shared bounds for `iptvnator_mpv_helper --runtime-probe`.
+// Shared bounds for `meddl_mpv_helper --runtime-probe`.
 //
 // The two timeouts differ on purpose, because the two callers pay different
 // costs for waiting:

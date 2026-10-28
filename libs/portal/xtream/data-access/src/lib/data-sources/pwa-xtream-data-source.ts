@@ -10,8 +10,8 @@ import {
     XtreamLiveStream,
     XtreamSerieItem,
     XtreamVodStream,
-} from '@iptvnator/shared/interfaces';
-import { createLogger } from '@iptvnator/portal/shared/util/logger';
+} from '@meddl/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util/logger';
 import {
     CategoryType,
     StreamType,
@@ -24,7 +24,7 @@ import {
     USER_DATA_STORAGE,
     XTREAM_USER_DATA_KEYS,
     writeXtreamUserDataMap,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import { firstValueFrom } from 'rxjs';
 import {
     DbCategoryType,

@@ -3,13 +3,13 @@ import { TestBed } from '@angular/core/testing';
 import {
     VodSourceDiscoveryService,
     VodSourceResolverService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     SettingsStore,
     StreamProbeService,
     VodSourcePinService,
-} from '@iptvnator/services';
-import type { VodSourceCandidate } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import type { VodSourceCandidate } from '@meddl/shared/interfaces';
 import { VodMultiSourceHostService } from './vod-multi-source-host.service';
 import type { VodMultiSourceMovie } from './vod-multi-source-identity';
 

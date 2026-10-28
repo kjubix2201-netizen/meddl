@@ -1,4 +1,4 @@
-import { WINDOW_BACK_REQUESTED } from '@iptvnator/shared/interfaces';
+import { WINDOW_BACK_REQUESTED } from '@meddl/shared/interfaces';
 import { attachWindowBackGestures } from './window-back-gestures';
 
 type GestureListener = (event: unknown, value: string) => void;

@@ -6,7 +6,7 @@ import {
     type APIRequestContext,
 } from '@playwright/test';
 import { addSource, backend, nav, stalker, start, xtream } from './helpers';
-import type { UserData } from '@iptvnator/tv/util';
+import type { UserData } from '@meddl/tv/util';
 const server = tvOrigins.library;
 const headers = { Authorization: 'Bearer tv-library-test' };
 const libraryDocument = (id: string, fields: Record<string, unknown> = {}) => ({
@@ -49,7 +49,7 @@ async function snapshot(page: Page) {
     return page.evaluate(
         async () =>
             new Promise<UserData>((resolve) => {
-                const req = indexedDB.open('iptvnator-tv-user-data');
+                const req = indexedDB.open('meddl-tv-user-data');
                 req.onsuccess = () => {
                     const db = req.result;
                     const tx = db.transaction('state');
@@ -78,7 +78,7 @@ test('source replacement leaves stale details and keeps new playback under the r
             password: 'pass1',
         });
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await connect(page);
     await nav(page, 'Sources');
@@ -139,7 +139,7 @@ test('library removal of the active source resets Live categories for the replac
         macAddress: '00:1a:79:00:00:03',
     });
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await connect(page);
     await nav(page, 'Sources');
@@ -335,7 +335,7 @@ test('auth/offline/replaced instance preserve cache; disconnect restores origina
         if (route.request().url().endsWith('/instance'))
             await route.fulfill({
                 json: {
-                    service: 'iptvnator',
+                    service: 'meddl',
                     apiVersion: 1,
                     storage: 'server',
                     auth: 'token',

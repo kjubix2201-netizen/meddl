@@ -10,11 +10,11 @@ import type {
     PlaybackDiagnosticCode,
     PlaybackFallbackRequest,
     PlaybackRecommendationTarget,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import {
     VideoPlayer,
     type ResolvedPortalPlayback,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { ExternalPlaybackRecoveryCoordinator } from './external-playback-recovery-coordinator';
 import type {
     PlaybackBinding,

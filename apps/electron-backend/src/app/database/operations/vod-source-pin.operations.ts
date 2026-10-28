@@ -1,6 +1,6 @@
 import { eq, inArray } from 'drizzle-orm';
-import * as schema from '@iptvnator/shared/database/schema';
-import type { VodSourcePin } from '@iptvnator/shared/interfaces';
+import * as schema from '@meddl/shared/database/schema';
+import type { VodSourcePin } from '@meddl/shared/interfaces';
 import type { AppDatabase } from '../database.types';
 
 /**

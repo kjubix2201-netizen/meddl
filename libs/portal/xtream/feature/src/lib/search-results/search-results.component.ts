@@ -15,26 +15,26 @@ import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { DatabaseService } from '@iptvnator/services';
-import { ContentCardComponent } from '@iptvnator/portal/shared/ui';
-import { SearchLayoutComponent } from '@iptvnator/portal/shared/ui';
-import { WorkspaceBackNavigationService } from '@iptvnator/portal/shared/data-access';
+import { DatabaseService } from '@meddl/services';
+import { ContentCardComponent } from '@meddl/portal/shared/ui';
+import { SearchLayoutComponent } from '@meddl/portal/shared/ui';
+import { WorkspaceBackNavigationService } from '@meddl/portal/shared/data-access';
 import {
     buildXtreamNavigationTarget,
     queryParamSignal,
     workspacePortalCommands,
-} from '@iptvnator/portal/shared/util';
-import { createLogger } from '@iptvnator/portal/shared/util';
-import { SearchFilters } from '@iptvnator/portal/xtream/data-access';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { createLogger } from '@meddl/portal/shared/util';
+import { SearchFilters } from '@meddl/portal/xtream/data-access';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     ContentType,
     XtreamSearchResultItem,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     GlobalSearchResult,
     isM3uGlobalSearchResult,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 interface GlobalSearchResultGroup {
     playlistId: string;

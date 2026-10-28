@@ -1,13 +1,13 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { findParentSeries } from '@iptvnator/tv/data-access';
+import { findParentSeries } from '@meddl/tv/data-access';
 import {
     identity,
     Media,
     ProviderClient,
     Source,
     withSeriesContext,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 const source: Source = {
     id: 'source',

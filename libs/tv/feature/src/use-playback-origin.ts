@@ -1,5 +1,5 @@
 import { useRef } from 'preact/hooks';
-import { restoreFocus } from '@iptvnator/tv/ui';
+import { restoreFocus } from '@meddl/tv/ui';
 import { navigationOrigin, type NavigationOrigin } from './use-route-history';
 
 /** Capture before asynchronous resolution; fullscreen hides the original scroll pane. */

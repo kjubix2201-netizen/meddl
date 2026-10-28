@@ -1,7 +1,7 @@
 import {
     PlaylistMeta,
     StalkerPortalActions,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { StalkerItvChannel } from './models';
 import { firstNonBlankStalkerIdText } from './stalker-vod.utils';
 import {

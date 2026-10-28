@@ -5,16 +5,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
     PORTAL_PLAYER,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     StreamResolverService,
     UnifiedRecentDataService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
-import { VideoPlayer } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { VideoPlayer } from '@meddl/shared/interfaces';
 import { UnifiedLiveTabComponent } from './unified-live-tab.component';
 
 /**

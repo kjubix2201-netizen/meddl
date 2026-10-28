@@ -75,7 +75,7 @@ public:
         window_ = CreateWindowExW(
             WS_EX_TRANSPARENT,
             windowClassName(),
-            L"IPTVnator Embedded MPV",
+            L"meddl Embedded MPV",
             WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
             0,
             0,
@@ -143,7 +143,7 @@ public:
 private:
     static const wchar_t* windowClassName()
     {
-        return L"IPTVnatorEmbeddedMpvHostWindow";
+        return L"meddlEmbeddedMpvHostWindow";
     }
 
     static bool registerWindowClass()

@@ -39,11 +39,11 @@ describe('Electron launch environment isolation', () => {
 
     it('inherits only portable runtime keys for a profiled benchmark child', () => {
         const environment = buildElectronLaunchEnvironment(
-            '/tmp/iptvnator-performance',
+            '/tmp/meddl-performance',
             {
                 environmentInheritance: 'runtime-only',
                 env: {
-                    IPTVNATOR_PERF_CAPTURE: '1',
+                    MEDDL_PERF_CAPTURE: '1',
                 },
             },
             {
@@ -51,10 +51,10 @@ describe('Electron launch environment isolation', () => {
                 ELECTRON_RUN_AS_NODE: '1',
                 GITHUB_TOKEN: 'github-secret',
                 HTTPS_PROXY: 'https://user:password@proxy.invalid',
-                IPTVNATOR_ALLOW_PRIVATE_NETWORK_URLS: '0',
-                IPTVNATOR_REAL_PROVIDER_URL: 'https://provider.invalid',
-                IPTVNATOR_XTREAM_MOCK_CONTROL: '1',
-                IPTVNATOR_XTREAM_MOCK_CONTROL_TOKEN: 'secret-token',
+                MEDDL_ALLOW_PRIVATE_NETWORK_URLS: '0',
+                MEDDL_REAL_PROVIDER_URL: 'https://provider.invalid',
+                MEDDL_XTREAM_MOCK_CONTROL: '1',
+                MEDDL_XTREAM_MOCK_CONTROL_TOKEN: 'secret-token',
                 NODE_OPTIONS: '--require credential-dumper.js',
                 PATH: '/usr/bin',
                 REAL_PROVIDER_PASSWORD: 'provider-password',
@@ -63,8 +63,8 @@ describe('Electron launch environment isolation', () => {
             }
         );
 
-        assert.equal(environment['IPTVNATOR_PERF_CAPTURE'], '1');
-        assert.equal(environment['IPTVNATOR_ALLOW_PRIVATE_NETWORK_URLS'], '1');
+        assert.equal(environment['MEDDL_PERF_CAPTURE'], '1');
+        assert.equal(environment['MEDDL_ALLOW_PRIVATE_NETWORK_URLS'], '1');
         assert.equal(environment['PATH'], '/usr/bin');
         assert.equal(environment['TMPDIR'], '/tmp/runtime');
         for (const key of [
@@ -72,9 +72,9 @@ describe('Electron launch environment isolation', () => {
             'ELECTRON_RUN_AS_NODE',
             'GITHUB_TOKEN',
             'HTTPS_PROXY',
-            'IPTVNATOR_REAL_PROVIDER_URL',
-            'IPTVNATOR_XTREAM_MOCK_CONTROL',
-            'IPTVNATOR_XTREAM_MOCK_CONTROL_TOKEN',
+            'MEDDL_REAL_PROVIDER_URL',
+            'MEDDL_XTREAM_MOCK_CONTROL',
+            'MEDDL_XTREAM_MOCK_CONTROL_TOKEN',
             'NODE_OPTIONS',
             'REAL_PROVIDER_PASSWORD',
             'REAL_PROVIDER_URL',
@@ -85,7 +85,7 @@ describe('Electron launch environment isolation', () => {
 
     it('drops undefined overrides instead of serializing them into the child', () => {
         const environment = buildElectronLaunchEnvironment(
-            '/tmp/iptvnator-performance',
+            '/tmp/meddl-performance',
             { env: { OPTIONAL_DEBUG_FLAG: undefined } },
             { OPTIONAL_DEBUG_FLAG: 'inherited' }
         );
@@ -97,12 +97,12 @@ describe('Electron launch environment isolation', () => {
         const allowed = [
             ...ELECTRON_RUNTIME_ENVIRONMENT_KEYS,
             'ELECTRON_IS_DEV',
-            'IPTVNATOR_ALLOW_PRIVATE_NETWORK_URLS',
-            'IPTVNATOR_DB_WORKER_BATCH_DELAY_MS',
-            'IPTVNATOR_E2E_DATA_DIR',
-            'IPTVNATOR_PERF_CAPTURE',
-            'IPTVNATOR_PERF_WORKER_PROFILING',
-            'IPTVNATOR_TRACE_RENDERER_CONSOLE',
+            'MEDDL_ALLOW_PRIVATE_NETWORK_URLS',
+            'MEDDL_DB_WORKER_BATCH_DELAY_MS',
+            'MEDDL_E2E_DATA_DIR',
+            'MEDDL_PERF_CAPTURE',
+            'MEDDL_PERF_WORKER_PROFILING',
+            'MEDDL_TRACE_RENDERER_CONSOLE',
             'NODE_ENV',
         ];
 

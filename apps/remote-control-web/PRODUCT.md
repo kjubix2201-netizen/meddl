@@ -1,4 +1,4 @@
-# IPTVnator Remote Control
+# meddl Remote Control
 
 <!-- impeccable:product-schema 1 -->
 
@@ -8,7 +8,7 @@ web
 
 ## Users
 
-Viewers controlling an already-running IPTVnator desktop player from a phone or
+Viewers controlling an already-running meddl desktop player from a phone or
 another browser on the local network. The primary task is operating the current
 live viewing session without returning to the desktop computer.
 
@@ -59,7 +59,7 @@ It does not have an independent media library or player.
 
 ## Brand Commitments
 
-Use the IPTVnator identity and clear, direct control labels. The maintainer
+Use the meddl identity and clear, direct control labels. The maintainer
 prohibits decorative vertical side borders or accent strips, including shadow
 and pseudo-element imitations.
 

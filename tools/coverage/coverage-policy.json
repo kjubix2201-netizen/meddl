@@ -265,10 +265,10 @@
                 "e2eTags": ["@epg"]
             },
             {
-                "name": "@iptvnator/pipes",
+                "name": "@meddl/pipes",
                 "root": "libs/ui/pipes",
                 "sourceRoot": "libs/ui/pipes/src",
-                "validationCommand": "pnpm nx test @iptvnator/pipes",
+                "validationCommand": "pnpm nx test @meddl/pipes",
                 "e2eTags": ["@epg", "@settings"]
             },
             {

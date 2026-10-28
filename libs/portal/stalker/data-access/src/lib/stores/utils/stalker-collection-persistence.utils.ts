@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { PlaylistMeta, StalkerPortalItem } from '@iptvnator/shared/interfaces';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { PlaylistMeta, StalkerPortalItem } from '@meddl/shared/interfaces';
 import { firstNonBlankStalkerIdText } from '../../stalker-vod.utils';
 import {
     StalkerContentType,

@@ -1,4 +1,4 @@
-import { httpUrl } from '@iptvnator/tv/util';
+import { httpUrl } from '@meddl/tv/util';
 export interface BackendInfo {
     url: string;
     pairing: boolean;
@@ -54,12 +54,12 @@ export async function identifyBackend(
         timeout
     );
     if (
-        info.service !== 'iptvnator' ||
+        info.service !== 'meddl' ||
         info.protocol !== 1 ||
         info.pairing !== true ||
         !['none', 'token'].includes(info.auth)
     )
-        throw new Error('This address is not a compatible IPTVnator backend.');
+        throw new Error('This address is not a compatible meddl backend.');
     return { url, pairing: true, auth: info.auth };
 }
 export async function checkBackend(
@@ -75,7 +75,7 @@ export async function checkBackend(
             headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
     );
-    if (response.service !== 'iptvnator' || response.connected !== true)
+    if (response.service !== 'meddl' || response.connected !== true)
         throw new Error('Backend API check failed.');
     return info;
 }
@@ -139,9 +139,9 @@ export async function localNetwork(
 /** At most one RFC1918 /24, narrowed further for smaller subnets. Never scan public addresses. */
 export function discoveryCandidates(network?: Network) {
     const candidates = [
-        'http://iptvnator.local:3333',
-        'http://iptvnator.local:3335',
-        'http://iptvnator.local:4333/api',
+        'http://meddl.local:3333',
+        'http://meddl.local:3335',
+        'http://meddl.local:4333/api',
     ];
     const ip = network?.ipAddress?.split('.').map(Number);
     const mask = network?.netmask?.split('.').map(Number);

@@ -12,10 +12,10 @@ import {
     SeasonDownloadCoordinator,
     type EpisodeDownloadCandidate,
     type SeasonEpisodeDownloadAdapter,
-} from '@iptvnator/portal/shared/data-access';
-import { isEpisodeDownloadEligible } from '@iptvnator/portal/shared/util';
-import { XtreamSerieEpisode } from '@iptvnator/shared/interfaces';
-import { DownloadsService, type DownloadItem } from '@iptvnator/services';
+} from '@meddl/portal/shared/data-access';
+import { isEpisodeDownloadEligible } from '@meddl/portal/shared/util';
+import { XtreamSerieEpisode } from '@meddl/shared/interfaces';
+import { DownloadsService, type DownloadItem } from '@meddl/services';
 
 const EPISODE_DOWNLOAD_ACTIONS = {
     Blocked: 'blocked',

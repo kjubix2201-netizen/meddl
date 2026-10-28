@@ -1,7 +1,7 @@
 import {
     ExternalPlayerSession,
     tagExternalPlayerError,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { ExternalPlayerSessionRegistry } from './external-player-session-registry';
 
 describe('ExternalPlayerSessionRegistry', () => {

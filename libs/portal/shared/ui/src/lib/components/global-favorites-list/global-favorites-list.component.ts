@@ -1,8 +1,8 @@
-import { isCatalogUnavailable } from '@iptvnator/shared/interfaces';
+import { isCatalogUnavailable } from '@meddl/shared/interfaces';
 import {
     ChannelContextMenuComponent,
     ChannelScrollFocusDirective,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     CdkDragDrop,
     DragDropModule,
@@ -23,18 +23,18 @@ import { MatIconModule } from '@angular/material/icon';
 import {
     ChannelDetailsDialogComponent,
     ChannelListItemComponent,
-} from '@iptvnator/ui/components';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
+} from '@meddl/ui/components';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
 import {
     buildStalkerEpgMappingKey,
     buildXtreamEpgMappingKey,
     EpgProgram,
     epgProviderClockMs,
     playlistDisplayLabel,
-} from '@iptvnator/shared/interfaces';
-import { resolveChannelEpgLookupKey } from '@iptvnator/m3u-state';
-import { EpgMappingDialogComponent } from '@iptvnator/ui/components';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
+} from '@meddl/shared/interfaces';
+import { resolveChannelEpgLookupKey } from '@meddl/m3u-state';
+import { EpgMappingDialogComponent } from '@meddl/ui/components';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
 import {
     DEFAULT_FAVORITES_CHANNEL_SORT_MODE,
     deriveVisibleFavoriteChannels,
@@ -44,7 +44,7 @@ import {
     isXtreamCatchupAvailable,
     UnifiedFavoriteChannel,
     collectionEpgKey,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface EnrichedUnifiedFavorite extends UnifiedFavoriteChannel {

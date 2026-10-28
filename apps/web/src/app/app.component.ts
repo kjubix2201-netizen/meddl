@@ -6,7 +6,7 @@ import {
     signal,
     ChangeDetectionStrategy,
 } from '@angular/core';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { Router, RouterOutlet } from '@angular/router';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
@@ -14,16 +14,16 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     EpgRuntimeBridgeService,
     EpgService,
-} from '@iptvnator/epg/data-access';
+} from '@meddl/epg/data-access';
 import {
     WorkspaceShellContextDrawerService,
     WORKSPACE_SHELL_ACTIONS,
-} from '@iptvnator/workspace/shell/util';
-import { EpgProgressPanelComponent } from '@iptvnator/ui/epg/progress-panel';
-// File-level entry: the @iptvnator/ui/components barrel would put the whole
+} from '@meddl/workspace/shell/util';
+import { EpgProgressPanelComponent } from '@meddl/ui/epg/progress-panel';
+// File-level entry: the @meddl/ui/components barrel would put the whole
 // library (channel lists, EPG, forms, date-fns) on the initial path.
-import { WindowControlsComponent } from '@iptvnator/ui/components/window-controls';
-import { PlaylistActions, selectAllPlaylistsMeta } from '@iptvnator/m3u-state';
+import { WindowControlsComponent } from '@meddl/ui/components/window-controls';
+import { PlaylistActions, selectAllPlaylistsMeta } from '@meddl/m3u-state';
 import { filter, take } from 'rxjs';
 import {
     DataService,
@@ -31,7 +31,7 @@ import {
     RuntimeCapabilitiesService,
     SettingsStore,
     EpgSourceSettingsService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     AUTO_UPDATE_PLAYLISTS,
     Language,
@@ -40,7 +40,7 @@ import {
     Theme,
     createDevLogger,
     normalizeAppLanguage,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { AppDateLocaleService } from './app-date-locales';
 import { SettingsService } from './services/settings.service';
 import { ParentalLockEnforcementService } from './services/parental-lock-enforcement.service';

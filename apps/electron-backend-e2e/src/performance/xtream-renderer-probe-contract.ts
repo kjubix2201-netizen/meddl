@@ -1,10 +1,10 @@
-import type { RendererPerformancePhaseEvent } from '@iptvnator/shared/logging';
+import type { RendererPerformancePhaseEvent } from '@meddl/shared/logging';
 
 import type { XtreamScenarioId } from './xtream-benchmark-contract';
 
-export const XTREAM_RENDERER_STATE_KEY = '__iptvnatorXtreamRendererCapture';
+export const XTREAM_RENDERER_STATE_KEY = '__meddlXtreamRendererCapture';
 export const XTREAM_RENDERER_STOPPED_KEY =
-    '__iptvnatorXtreamRendererCaptureStopped';
+    '__meddlXtreamRendererCaptureStopped';
 
 export interface XtreamRendererDbEvent {
     readonly current: number | null;

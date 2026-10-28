@@ -21,20 +21,20 @@ import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideStore } from '@ngrx/store';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { PlaylistEffects, playlistReducer } from '@iptvnator/m3u-state';
+import { PlaylistEffects, playlistReducer } from '@meddl/m3u-state';
 import { NgxIndexedDBModule } from 'ngx-indexed-db';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import {
     PORTAL_EXTERNAL_PLAYBACK,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util/tokens';
-import { STALKER_PLAYLIST_CONNECTION_EDITOR } from '@iptvnator/playlist/shared/ui/stalker-connection-editor';
-import { provideXtreamDataSource } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util/tokens';
+import { STALKER_PLAYLIST_CONNECTION_EDITOR } from '@meddl/playlist/shared/ui/stalker-connection-editor';
+import { provideXtreamDataSource } from '@meddl/portal/xtream/data-access';
 import {
     provideParentalLockPlaylistCleanup,
     DataService,
-} from '@iptvnator/services';
-import { dbConfig } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { dbConfig } from '@meddl/shared/interfaces';
 import { getInitialLanguage } from './app-language-preference';
 import { storeDevtoolsProviders } from '../environments/store-devtools.providers';
 import { routes } from './app.routes';

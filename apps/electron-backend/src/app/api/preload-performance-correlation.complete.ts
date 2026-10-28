@@ -2,7 +2,7 @@ import {
     PRELOAD_PERFORMANCE_CORRELATION_STATE,
     PRELOAD_PERFORMANCE_INVALID_REASON,
     PRELOAD_PERFORMANCE_METHOD,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     PRELOAD_PERFORMANCE_SEQUENCE_STAGE,
     closeInvalidPreloadPerformanceSequenceWhenSettled,

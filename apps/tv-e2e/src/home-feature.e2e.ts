@@ -221,7 +221,7 @@ test('historical Home episodes recover exact series details and cover without re
     await page.evaluate(
         () =>
             new Promise<void>((resolve, reject) => {
-                const r = indexedDB.open('iptvnator-tv-user-data', 1);
+                const r = indexedDB.open('meddl-tv-user-data', 1);
                 r.onsuccess = () => {
                     const db = r.result,
                         tx = db.transaction('state', 'readwrite'),
@@ -325,7 +325,7 @@ for (const action of ['exit', 'play'] as const) {
         await page.evaluate(
             () =>
                 new Promise<void>((resolve, reject) => {
-                    const request = indexedDB.open('iptvnator-tv-user-data', 1);
+                    const request = indexedDB.open('meddl-tv-user-data', 1);
                     request.onsuccess = () => {
                         const db = request.result;
                         const tx = db.transaction('state', 'readwrite');
@@ -378,7 +378,7 @@ for (const action of ['exit', 'play'] as const) {
                         () =>
                             new Promise<boolean>((resolve) => {
                                 const request = indexedDB.open(
-                                    'iptvnator-tv-user-data',
+                                    'meddl-tv-user-data',
                                     1
                                 );
                                 request.onsuccess = () => {
@@ -555,7 +555,7 @@ test('Home retains saved series-wide artwork without using episode stills and pr
     await page.evaluate(
         (still) =>
             new Promise<void>((resolve, reject) => {
-                const request = indexedDB.open('iptvnator-tv-user-data', 1);
+                const request = indexedDB.open('meddl-tv-user-data', 1);
                 request.onsuccess = () => {
                     const db = request.result;
                     const tx = db.transaction('state', 'readwrite');
@@ -615,7 +615,7 @@ test('Home retains saved series-wide artwork without using episode stills and pr
                 (poster) =>
                     new Promise<boolean>((resolve) => {
                         const request = indexedDB.open(
-                            'iptvnator-tv-user-data',
+                            'meddl-tv-user-data',
                             1
                         );
                         request.onsuccess = () => {

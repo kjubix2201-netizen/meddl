@@ -2,8 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import {
     EpgQueueService,
     XtreamCredentials,
-} from '@iptvnator/portal/xtream/data-access';
-import { createLogger } from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/xtream/data-access';
+import { createLogger } from '@meddl/portal/shared/util';
 
 /** How often the rows on screen re-check the programme they are showing. */
 export const EPG_REFRESH_INTERVAL_MS = 60_000;

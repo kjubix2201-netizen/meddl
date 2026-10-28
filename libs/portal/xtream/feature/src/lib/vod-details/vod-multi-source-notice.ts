@@ -1,8 +1,8 @@
-import { audioDiffersFactually } from '@iptvnator/portal/shared/data-access';
+import { audioDiffersFactually } from '@meddl/portal/shared/data-access';
 import {
     playlistDisplayLabel,
     type VodSourceCandidate,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 /** What a switch tells the user. Lives with the code that builds it. */
 export interface VodMultiSourceSwitchNotice {

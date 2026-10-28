@@ -11,12 +11,12 @@ import { TranslatePipe } from '@ngx-translate/core';
 import {
     GridListComponent,
     InfiniteScrollDirective,
-} from '@iptvnator/portal/shared/ui';
+} from '@meddl/portal/shared/ui';
 import {
     StalkerItvChannel,
     StalkerItvLoadProgress,
-} from '@iptvnator/portal/stalker/data-access';
-import { foldSearchText } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/stalker/data-access';
+import { foldSearchText } from '@meddl/shared/interfaces';
 
 /** Initial render window and per-`loadMore` growth over the cached list. */
 const RENDER_CHUNK = 50;

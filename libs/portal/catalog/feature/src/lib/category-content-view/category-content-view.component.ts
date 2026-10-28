@@ -24,11 +24,11 @@ import {
     GridListComponent,
     InfiniteScrollDirective,
     PlaylistErrorViewComponent,
-} from '@iptvnator/portal/shared/ui';
+} from '@meddl/portal/shared/ui';
 import {
     MenuItemRadioCheckDirective,
     MenuItemRadioDirective,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     clearNavigationStateKeys,
     consumeStalkerReturnMarker,
@@ -42,7 +42,7 @@ import {
     PORTAL_CATALOG_FACADE,
     PROVIDER_ONLY_DETAIL_PRESENTATION_STATE_KEY,
     PortalCatalogSortMode,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     CATALOG_SORT_OPTIONS,
     catalogSortLabels,

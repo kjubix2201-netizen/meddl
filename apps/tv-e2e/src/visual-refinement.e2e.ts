@@ -53,7 +53,7 @@ test('compact page headers leave room for posters and remove prototype chrome at
         'THE EVENING IS YOURS'
     );
     await expect(page.locator('main')).not.toContainText(
-        'IPTVnator TV · Prototype'
+        'meddl TV · Prototype'
     );
     await expect(page.locator('main')).not.toContainText('Arrows · OK · Back');
     await expect(page.locator('[data-focus="detail-back"]')).toBeVisible();
@@ -220,7 +220,7 @@ test('historical Stalker favorites and progress recover raw covers without rewri
     await page.evaluate(
         () =>
             new Promise<void>((resolve, reject) => {
-                const request = indexedDB.open('iptvnator-tv-user-data', 1);
+                const request = indexedDB.open('meddl-tv-user-data', 1);
                 request.onsuccess = () => {
                     const db = request.result;
                     const tx = db.transaction('state', 'readwrite');

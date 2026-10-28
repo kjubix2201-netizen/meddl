@@ -1,15 +1,15 @@
 import { Injector } from '@angular/core';
-import { SourceHealthService } from '@iptvnator/portal/shared/data-access';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { SourceHealthService } from '@meddl/portal/shared/data-access';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import { normalizeStoredStalkerAccountInfo } from '@iptvnator/portal/stalker/data-access';
-import { PlaylistsService, PortalStatusService } from '@iptvnator/services';
+import { normalizeStoredStalkerAccountInfo } from '@meddl/portal/stalker/data-access';
+import { PlaylistsService, PortalStatusService } from '@meddl/services';
 import {
     PlaylistMeta,
     isStalkerAccountPlaylist,
     isXtreamAccountPlaylist,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { SourceExpiryFacts } from './dashboard-source-expiry.util';
 
 /**

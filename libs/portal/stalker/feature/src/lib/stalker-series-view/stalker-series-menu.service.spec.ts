@@ -1,8 +1,8 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
-import { VideoPlayer } from '@iptvnator/shared/interfaces';
-import { SERIES_MENU_ACTION } from '@iptvnator/ui/components';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
+import { VideoPlayer } from '@meddl/shared/interfaces';
+import { SERIES_MENU_ACTION } from '@meddl/ui/components';
 import { StalkerSeriesMenuService } from './stalker-series-menu.service';
 import type { StalkerQuickStartButton } from './stalker-series-quick-start';
 

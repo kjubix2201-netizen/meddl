@@ -13,16 +13,16 @@ import { TranslateModule } from '@ngx-translate/core';
 import {
     registerWorkspaceBack,
     WorkspaceBackNavigationService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     WorkspaceShellContextDrawerService,
     WorkspaceStartupPreferencesService,
-} from '@iptvnator/workspace/shell/util';
+} from '@meddl/workspace/shell/util';
 import {
     SettingsContextService,
     SettingsNavItem,
-} from '@iptvnator/workspace/shell/util/settings-context';
-import { SETTINGS_NAV_GROUPS } from '@iptvnator/workspace/shell/util/settings-search';
+} from '@meddl/workspace/shell/util/settings-context';
+import { SETTINGS_NAV_GROUPS } from '@meddl/workspace/shell/util/settings-search';
 
 interface SettingsNavGroupView {
     readonly id: string;

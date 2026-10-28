@@ -36,7 +36,7 @@ import {
     normalizeParentalLockRelockMinutes,
     normalizeStartupWindowMode,
     DEFAULT_PARENTAL_LOCK_RELOCK_MINUTES,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 import {
     DEFAULT_SETTINGS,

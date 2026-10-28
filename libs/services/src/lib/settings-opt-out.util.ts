@@ -1,4 +1,4 @@
-import { Settings } from '@iptvnator/shared/interfaces';
+import { Settings } from '@meddl/shared/interfaces';
 
 /**
  * Boolean settings that default ON and are stored as an explicit opt-out.

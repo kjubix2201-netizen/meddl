@@ -13,15 +13,15 @@ import {
     clearServerAccessToken,
     readServerAccessToken,
     writeServerAccessToken,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     SERVER_STORAGE_CONFIG,
     ServerApiError,
     ServerStorageSession,
-} from '@iptvnator/services/server-storage';
+} from '@meddl/services/server-storage';
 import { rememberServer } from './server-storage-start';
-import { provideFormFieldDefaults } from '@iptvnator/ui/components/form-field-defaults';
-import { PasswordVisibilityToggleDirective } from '@iptvnator/ui/components/password-visibility-toggle';
+import { provideFormFieldDefaults } from '@meddl/ui/components/form-field-defaults';
+import { PasswordVisibilityToggleDirective } from '@meddl/ui/components/password-visibility-toggle';
 
 export type ServerSignInFeedback = 'rejected' | 'unreachable' | 'storage';
 

@@ -17,18 +17,18 @@ import {
     mapPersonFilmography,
     mapPersonProfile,
     pickTitleMatch,
-} from '@iptvnator/services';
-import { CatalogTitleMatch } from '@iptvnator/shared/interfaces';
-import { WorkspaceBackNavigationService } from '@iptvnator/portal/shared/data-access';
+} from '@meddl/services';
+import { CatalogTitleMatch } from '@meddl/shared/interfaces';
+import { WorkspaceBackNavigationService } from '@meddl/portal/shared/data-access';
 import {
     createLatestRequestGuard,
     workspacePortalCommands,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     ActorViewComponent,
     ActorViewItem,
     ActorViewScope,
-} from '@iptvnator/ui/shared-portals';
+} from '@meddl/ui/shared-portals';
 
 /**
  * Actor page inside a Stalker portal. The portal catalog is

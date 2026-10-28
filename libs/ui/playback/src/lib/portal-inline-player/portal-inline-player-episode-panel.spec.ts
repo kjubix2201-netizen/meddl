@@ -1,8 +1,8 @@
 import { Component, input, output, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { SettingsStore } from '@iptvnator/services';
-import type { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+import { SettingsStore } from '@meddl/services';
+import type { PlaybackPositionData } from '@meddl/shared/interfaces';
 import { FULLSCREEN_CHANNEL_PANEL } from '../fullscreen-channel-panel/fullscreen-channel-panel.model';
 import type { PortalInlinePlayerComponent as PortalInlinePlayerComponentInstance } from './portal-inline-player.component';
 

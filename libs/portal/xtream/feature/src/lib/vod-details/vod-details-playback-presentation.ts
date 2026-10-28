@@ -1,7 +1,7 @@
 import {
     getXtreamVodInfo,
     XtreamVodDetails,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 type XtreamVodPresentationItem = XtreamVodDetails & {
     readonly name?: string;

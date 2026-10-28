@@ -64,7 +64,7 @@ test('@settings @electron @persistence Portuguese regions and legacy preferences
                 transaction.onerror = () => reject(transaction.error);
             });
             database.close();
-            localStorage.setItem('iptvnator:preferred-language', 'pt');
+            localStorage.setItem('meddl:preferred-language', 'pt');
         });
         app = await restartElectronApp(app, dataDir);
         await expect(app.mainWindow.locator('html')).toHaveAttribute(
@@ -77,7 +77,7 @@ test('@settings @electron @persistence Portuguese regions and legacy preferences
         ).toContainText('Português (Brasil)');
         expect(
             await app.mainWindow.evaluate(() =>
-                localStorage.getItem('iptvnator:preferred-language')
+                localStorage.getItem('meddl:preferred-language')
             )
         ).toBe('pt-BR');
         // A subsequent save canonicalizes the stored code without losing other settings.

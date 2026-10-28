@@ -102,8 +102,8 @@ export function resolveFrameCopyHelperPath(): string | null {
         : [getLocalBuildAddonPath(), ...getDistAddonPaths()];
     const helperFileName =
         process.platform === 'win32'
-            ? 'iptvnator_mpv_helper.exe'
-            : 'iptvnator_mpv_helper';
+            ? 'meddl_mpv_helper.exe'
+            : 'meddl_mpv_helper';
     return (
         addonCandidates
             .map((candidatePath) => path.dirname(candidatePath))

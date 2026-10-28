@@ -1,4 +1,4 @@
-import { extractStalkerAuthFailureBody } from '@iptvnator/shared/interfaces';
+import { extractStalkerAuthFailureBody } from '@meddl/shared/interfaces';
 import { StalkerPortalError } from './stalker-portal-error';
 
 /**

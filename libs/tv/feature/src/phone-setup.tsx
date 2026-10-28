@@ -8,14 +8,14 @@ import {
     pairingState,
     PairingSession,
     PairingState,
-} from '@iptvnator/tv/data-access';
+} from '@meddl/tv/data-access';
 import {
     parseSourceDraft,
     applySettingsDraft,
     phoneSettingsDefaults,
     SetupPurpose,
-} from '@iptvnator/tv/util';
-import { restoreFocus } from '@iptvnator/tv/ui';
+} from '@meddl/tv/util';
+import { restoreFocus } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
 export function PhoneSetup({
     tv,
@@ -178,7 +178,7 @@ export function PhoneSetup({
                                       ...data.sources.filter(
                                           (s) => s.id !== source.id
                                       ),
-                                      source as import('@iptvnator/tv/util').Source,
+                                      source as import('@meddl/tv/util').Source,
                                   ],
                               }
                     )

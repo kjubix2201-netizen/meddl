@@ -1,4 +1,4 @@
-import type { XtreamFavoriteCatalogStatus } from '@iptvnator/shared/interfaces';
+import type { XtreamFavoriteCatalogStatus } from '@meddl/shared/interfaces';
 import { InjectionToken } from '@angular/core';
 import {
     ContentMetadataPatch,
@@ -8,8 +8,8 @@ import {
     XtreamLiveStream,
     XtreamSerieItem,
     XtreamVodStream,
-} from '@iptvnator/shared/interfaces';
-import type { DbOperationEvent } from '@iptvnator/services';
+} from '@meddl/shared/interfaces';
+import type { DbOperationEvent } from '@meddl/services';
 import {
     CategoryType,
     StreamType,

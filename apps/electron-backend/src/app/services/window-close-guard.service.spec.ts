@@ -22,7 +22,7 @@ import {
     WINDOW_CLOSE_REQUESTED,
     WINDOW_CONFIRM_CLOSE,
     WINDOW_SET_CLOSE_GUARD,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     bootstrapWindowCloseGuard,
     CloseGuardApp,

@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
-import { NativePlayer } from '@iptvnator/tv/data-access';
-import { Media, Progress } from '@iptvnator/tv/util';
+import { NativePlayer } from '@meddl/tv/data-access';
+import { Media, Progress } from '@meddl/tv/util';
 
 function fixture() {
     const dom = new JSDOM('<video></video>');

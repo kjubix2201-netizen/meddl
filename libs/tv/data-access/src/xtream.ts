@@ -2,7 +2,7 @@ import {
     XtreamClient,
     xtreamCatalogTimestamp,
     resolveXtreamVodPlaybackSource,
-} from '@iptvnator/portal/xtream/client';
+} from '@meddl/portal/xtream/client';
 import {
     Catalog,
     CatalogSort,
@@ -17,8 +17,8 @@ import {
     artwork,
     identity,
     withSeriesContext,
-} from '@iptvnator/tv/util';
-import type { XtreamVodDetails } from '@iptvnator/shared/interfaces';
+} from '@meddl/tv/util';
+import type { XtreamVodDetails } from '@meddl/shared/interfaces';
 import { ProviderTransport } from './transport';
 export class XtreamProvider implements ProviderClient {
     readonly capabilities = {

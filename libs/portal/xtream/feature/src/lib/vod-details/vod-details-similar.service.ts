@@ -7,15 +7,15 @@ import {
     signal,
     untracked,
 } from '@angular/core';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     CrossPortalSimilarItem,
     CrossPortalSimilarService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     normalizeTitleKeys,
     XtreamVodInfo,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     SimilarCatalogItem,
     matchRecommendationsToCatalog,

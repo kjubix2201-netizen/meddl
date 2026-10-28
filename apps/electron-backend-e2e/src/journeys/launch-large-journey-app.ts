@@ -31,10 +31,10 @@ import { journeyLaunchOptions, runLaunchJourney } from './launch-journey-app';
  * the renderer's own storage); every iteration then copies that template and
  * spawns a fresh process on it, as J1 does.
  */
-export const LAUNCH_LARGE_JOURNEY_ENV = 'IPTVNATOR_JOURNEY_LARGE_LIBRARY';
+export const LAUNCH_LARGE_JOURNEY_ENV = 'MEDDL_JOURNEY_LARGE_LIBRARY';
 /** A pre-fix profile reached its rails after 97 s cold on the real database. */
 export const LAUNCH_LARGE_ITERATION_TIMEOUT_MS = 300_000;
-const SENTINEL_SQL_STATE_KEY = '__iptvnatorJourneyLaunchLargeSentinelSql';
+const SENTINEL_SQL_STATE_KEY = '__meddlJourneyLaunchLargeSentinelSql';
 const FIRST_CARD_SELECTOR =
     '[data-test-id="dashboard-recent-sources-rail-card"]';
 const RAILS_SELECTOR = '[data-test-id="dashboard-continue-watching-rail-card"]';
@@ -72,7 +72,7 @@ function removeDirectory(directory: string): Promise<void> {
 export async function seedLaunchLargeTemplate(): Promise<LaunchLargeSeed> {
     const profile = await ensureLargeLibraryProfile(workspaceRoot);
     const templateDirectory = await mkdtemp(
-        join(tmpdir(), 'iptvnator-journey-launch-large-seed-')
+        join(tmpdir(), 'meddl-journey-launch-large-seed-')
     );
     try {
         await cp(profile.directory, templateDirectory, { recursive: true });

@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { UserDataRepository } from '@iptvnator/tv/data-access';
-import { initialData } from '@iptvnator/tv/util';
+import { UserDataRepository } from '@meddl/tv/data-access';
+import { initialData } from '@meddl/tv/util';
 
 test('failed initial reads forbid writes until the existing snapshot is recovered', async () => {
     let saved = {

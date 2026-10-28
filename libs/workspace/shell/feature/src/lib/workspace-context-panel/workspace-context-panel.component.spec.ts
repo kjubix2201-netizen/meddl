@@ -8,15 +8,15 @@ import { MatDialog } from '@angular/material/dialog';
 import {
     StalkerPortalError,
     StalkerStore,
-} from '@iptvnator/portal/stalker/data-access';
-import { WORKSPACE_CATEGORY_SORT_STORAGE_KEY } from '@iptvnator/portal/shared/util';
-import { WorkspaceShellContextDrawerService } from '@iptvnator/workspace/shell/util';
+} from '@meddl/portal/stalker/data-access';
+import { WORKSPACE_CATEGORY_SORT_STORAGE_KEY } from '@meddl/portal/shared/util';
+import { WorkspaceShellContextDrawerService } from '@meddl/workspace/shell/util';
 import {
     XtreamContentLoadState,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
-import { LiveLayoutSidebarStateService } from '@iptvnator/portal/shared/util';
-import { ParentalLockService } from '@iptvnator/services';
+} from '@meddl/portal/xtream/data-access';
+import { LiveLayoutSidebarStateService } from '@meddl/portal/shared/util';
+import { ParentalLockService } from '@meddl/services';
 import { WorkspaceContextPanelComponent } from './workspace-context-panel.component';
 
 const translations: Record<string, string> = {

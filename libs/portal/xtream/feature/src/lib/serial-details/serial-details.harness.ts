@@ -11,19 +11,19 @@ import {
     PORTAL_PLAYBACK_POSITIONS,
     PORTAL_PLAYER,
     SeriesResumeTarget,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     DownloadsService,
     PlaybackPositionRuntimeBridgeService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PlaybackPositionData,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
-import { SeasonContainerComponent } from '@iptvnator/ui/components';
-import { PortalInlinePlayerComponent } from '@iptvnator/ui/playback';
+} from '@meddl/shared/interfaces';
+import { SeasonContainerComponent } from '@meddl/ui/components';
+import { PortalInlinePlayerComponent } from '@meddl/ui/playback';
 import { BehaviorSubject, EMPTY, of } from 'rxjs';
 import { SerialDetailsComponent } from './serial-details.component';
 import { XTREAM_SERIES_RESUME_TARGET } from './serial-details-resume-target.token';

@@ -6,20 +6,20 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import {
     AudioPlayerComponent,
     WebPlayerViewComponent,
-} from '@iptvnator/ui/playback';
-import { EpgListViewComponent, EpgTimelineComponent } from '@iptvnator/ui/epg';
-import { ResizableDirective } from '@iptvnator/ui/components';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
-import { PlaybackHistoryGate } from '@iptvnator/playback/data-access';
-import { EpgProgram, VideoPlayer } from '@iptvnator/shared/interfaces';
+} from '@meddl/ui/playback';
+import { EpgListViewComponent, EpgTimelineComponent } from '@meddl/ui/epg';
+import { ResizableDirective } from '@meddl/ui/components';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
+import { PlaybackHistoryGate } from '@meddl/playback/data-access';
+import { EpgProgram, VideoPlayer } from '@meddl/shared/interfaces';
 import {
     PORTAL_PLAYER,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     StreamResolverService,
     UnifiedRecentDataService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import { GlobalFavoritesListComponent } from '../global-favorites-list/global-favorites-list.component';
 import { UnifiedLiveTabComponent } from './unified-live-tab.component';
 import { createUnifiedLivePlaybackSessionKey } from './unified-live-playback-session-key';

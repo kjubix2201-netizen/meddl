@@ -1,14 +1,14 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { Source, Media, identity } from '@iptvnator/tv/util';
+import { Source, Media, identity } from '@meddl/tv/util';
 import {
     ProviderTransport,
     ProviderRequestError,
     createProvider,
-} from '@iptvnator/tv/data-access';
-import { StalkerPagedCatalog } from '@iptvnator/portal/stalker/client';
-import { StalkerSession } from '@iptvnator/tv/data-access';
-import { stalkerEpisodes } from '@iptvnator/tv/data-access';
+} from '@meddl/tv/data-access';
+import { StalkerPagedCatalog } from '@meddl/portal/stalker/client';
+import { StalkerSession } from '@meddl/tv/data-access';
+import { stalkerEpisodes } from '@meddl/tv/data-access';
 class Transport extends ProviderTransport {
     calls: string[] = [];
     invalid = false;

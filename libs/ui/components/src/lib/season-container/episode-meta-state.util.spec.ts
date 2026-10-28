@@ -1,4 +1,4 @@
-import { XtreamSerieEpisode } from '@iptvnator/shared/interfaces';
+import { XtreamSerieEpisode } from '@meddl/shared/interfaces';
 import {
     resolveEpisodeMetaState,
     usableStillUrl,

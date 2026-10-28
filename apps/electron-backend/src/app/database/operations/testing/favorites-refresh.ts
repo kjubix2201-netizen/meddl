@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 import type { AppDatabase } from '../../database.types';
 import { createFavoriteTestCatalog } from './favorites-test-catalog';
 import {

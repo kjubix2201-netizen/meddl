@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
 import { catchError, map, tap, timeout } from 'rxjs/operators';
@@ -8,8 +8,8 @@ import {
     EpgChannelMetadata,
     EpgProgram,
     epgProviderClockMs,
-} from '@iptvnator/shared/interfaces';
-import { EpgSourceSettingsService, SettingsStore } from '@iptvnator/services';
+} from '@meddl/shared/interfaces';
+import { EpgSourceSettingsService, SettingsStore } from '@meddl/services';
 import {
     EpgLookupOptions,
     EpgRuntimeBridgeService,
@@ -25,7 +25,7 @@ import {
     normalizeLookupChannelIds,
     normalizeLookupSourceUrls,
 } from './epg-lookup-normalization.util';
-import { normalizeEpgUrls } from '@iptvnator/shared/m3u-utils';
+import { normalizeEpgUrls } from '@meddl/shared/m3u-utils';
 
 const debugEpgService = createDevLogger('EpgService');
 

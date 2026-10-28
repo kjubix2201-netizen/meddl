@@ -41,7 +41,7 @@ import {
     SimilarRailComponent,
     VodMoreMenuComponent,
     scrollToCastCrewRow,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     ExternalPlayerName,
     ExternalPlayerSession,
@@ -52,7 +52,7 @@ import {
     XtreamSerieEpisode,
     pickSeasonMarkedTitle,
     seriesStatusLabelKey,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     isLiveExternalPlayerSession,
     replaceOwnedExternalSession,
@@ -62,7 +62,7 @@ import {
     consumeStalkerReturnMarker,
     createDiscoverFacetNavigation,
     resolveStalkerBackNavigation,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     getVodSeasonLoadStates,
     getVodSeriesSeasonKey,
@@ -81,7 +81,7 @@ import {
     StalkerStore,
     StalkerEpisodeResolver,
     StalkerVodSource,
-} from '@iptvnator/portal/stalker/data-access';
+} from '@meddl/portal/stalker/data-access';
 import {
     buildUpNextRailItems,
     getSeriesEpisodeMetadata,
@@ -90,14 +90,14 @@ import {
     PortalInlinePlayerComponent,
     type SeriesPlaybackEpisodeState,
     type UpNextRailItem,
-} from '@iptvnator/ui/playback';
+} from '@meddl/ui/playback';
 import {
     CrossPortalSimilarItem,
     CrossPortalSimilarService,
     PlaybackPositionRuntimeBridgeService,
     TmdbEnrichmentService,
     injectTranslationTick,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import { StalkerSeriesTmdbSeasonsService } from './stalker-series-tmdb-seasons.service';
 import { StalkerSeriesHeroPresenter } from './stalker-series-hero.presenter';
 import { StalkerSeriesLaunchQueue } from './stalker-series-launch-queue';

@@ -3,10 +3,10 @@ import { TestBed } from '@angular/core/testing';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
 import { EMPTY, Subject } from 'rxjs';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
-import { ChannelActions } from '@iptvnator/m3u-state';
-import { SettingsStore } from '@iptvnator/services';
-import { Channel, EpgProgram } from '@iptvnator/shared/interfaces';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
+import { ChannelActions } from '@meddl/m3u-state';
+import { SettingsStore } from '@meddl/services';
+import { Channel, EpgProgram } from '@meddl/shared/interfaces';
 import { M3uEpgGuideSourceService } from './m3u-epg-guide-source.service';
 
 function makeChannel(

@@ -46,7 +46,7 @@ is mounted or copied. The SSH account has read-only passwordless Docker access;
 installation therefore needs the user's administrator command on the NAS.
 The prepared installer verifies package hashes before loading/starting the image.
 The user completed that administrator installation on 2026-10-25. The companion
-`iptvnator-tv:0.1.9` on port 4335 and the original PWA on port 4333 are both healthy.
+`meddl-tv:0.1.9` on port 4335 and the original PWA on port 4333 are both healthy.
 Health, TV discovery, connection check and library instance endpoints return 200;
 TV-origin CORS is present. The phone setup HTML also returns 200.
 

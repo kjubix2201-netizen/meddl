@@ -6,12 +6,12 @@ import {
 import {
     IXtreamDataSource,
     XTREAM_DATA_SOURCE,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     PlaybackPositionRuntimeBridgeService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
-import type { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import type { PlaybackPositionData } from '@meddl/shared/interfaces';
 import { AppPortalPlaybackPositionsService } from './portal-playback-positions.service';
 
 interface PersistenceMocks {

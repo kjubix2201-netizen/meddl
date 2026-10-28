@@ -5,7 +5,7 @@ import {
     type PreloadPerformanceMarker,
     type PreloadPerformanceMethod,
     type PreloadPerformancePhase,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     advancePreloadPerformanceCorrelation,
     createPreloadPerformanceCorrelationState,

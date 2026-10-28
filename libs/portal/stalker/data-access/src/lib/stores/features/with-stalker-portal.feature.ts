@@ -5,9 +5,9 @@ import {
     withMethods,
     withState,
 } from '@ngrx/signals';
-import { PlaylistMeta } from '@iptvnator/shared/interfaces';
-import { createLogger } from '@iptvnator/portal/shared/util';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { PlaylistMeta } from '@meddl/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 import { StalkerPortalRepairService } from '../../stalker-portal-repair.service';
 import { StalkerSessionService } from '../../stalker-session.service';
 import { toStalkerSessionPlaylist } from '../utils';

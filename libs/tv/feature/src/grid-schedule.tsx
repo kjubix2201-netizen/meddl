@@ -11,8 +11,8 @@ import {
     gridProgramAt,
     gridTime,
     guideWindow,
-} from '@iptvnator/tv/util';
-import { restoreFocus } from '@iptvnator/tv/ui';
+} from '@meddl/tv/util';
+import { restoreFocus } from '@meddl/tv/ui';
 import { useGridGuide, useGridRows } from './use-grid-guide';
 import { useGridNavigation } from './use-grid-navigation';
 import { GridGuideRows } from './grid-guide-rows';

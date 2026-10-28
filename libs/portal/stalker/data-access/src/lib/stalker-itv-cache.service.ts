@@ -1,7 +1,7 @@
 import { Injectable, WritableSignal, inject, signal } from '@angular/core';
-import { createLogger } from '@iptvnator/portal/shared/util';
-import { DataService, resetHostConnectivityGuard } from '@iptvnator/services';
-import { PlaylistMeta } from '@iptvnator/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util';
+import { DataService, resetHostConnectivityGuard } from '@meddl/services';
+import { PlaylistMeta } from '@meddl/shared/interfaces';
 import { StalkerItvChannel } from './models';
 import {
     StalkerItvLoadProgress,

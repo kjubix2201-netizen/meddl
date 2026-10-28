@@ -2,7 +2,7 @@ import {
     GlobalFavoriteItem as DbGlobalFavoriteItem,
     GlobalRecentlyAddedItem as DbGlobalRecentlyAddedItem,
     GlobalRecentItem as DbGlobalRecentItem,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     PortalAddedItem,
     PlaylistMeta,
@@ -18,7 +18,7 @@ import {
     extractStalkerItemType,
     isStalkerSeriesItem,
     normalizeStalkerDate,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 // ────── Type / label helpers ──────
 

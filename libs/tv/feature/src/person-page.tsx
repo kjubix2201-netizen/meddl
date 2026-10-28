@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'preact/hooks';
-import { mapPersonFilmography, mapPersonProfile } from '@iptvnator/shared/tmdb';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import { Empty, Poster, VirtualCollection } from '@iptvnator/tv/ui';
+import { mapPersonFilmography, mapPersonProfile } from '@meddl/shared/tmdb';
+import { TvMetadata } from '@meddl/tv/data-access';
+import { Empty, Poster, VirtualCollection } from '@meddl/tv/ui';
 import type { TvModel } from './use-tv';
 import { PersonAvatar } from './person-avatar';
 import { usePerson } from './use-person';

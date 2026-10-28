@@ -7,14 +7,14 @@ import {
     untracked,
     type Signal,
 } from '@angular/core';
-import { isPortalPlaybackWatched } from '@iptvnator/portal/shared/util';
+import { isPortalPlaybackWatched } from '@meddl/portal/shared/util';
 import {
     resolvePortalActivityWatchKind,
     type PlaybackPositionData,
     type PlaylistMeta,
     type PortalActivityItem,
     type PortalRecentItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     CONTINUE_WATCHING_SERIES_LOOKUP_WAIT_MS,
     dashboardRecentItemKey,

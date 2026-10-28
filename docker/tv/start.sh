@@ -6,4 +6,4 @@ set -eu
 envsubst '${LIBRARY_UPSTREAM} ${TV_WEB_ORIGIN}' \
     < /etc/nginx/http.d/tv.conf.template \
     > /etc/nginx/http.d/default.conf.template
-exec iptvnator-entrypoint
+exec meddl-entrypoint

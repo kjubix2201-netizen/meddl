@@ -4,11 +4,11 @@ import {
     shouldResolveMovieFileId,
     StalkerPagedCatalog,
     resolveStalkerArtwork,
-} from '@iptvnator/portal/stalker/client';
+} from '@meddl/portal/stalker/client';
 import {
     isStalkerSeriesItem,
     isStalkerStreamCredentialSafe,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     Catalog,
     CatalogSort,
@@ -19,7 +19,7 @@ import {
     rows,
     text,
     identity,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import { StalkerSession } from './stalker-session';
 import { StalkerEpgBulk } from './stalker-epg-bulk';
 import {

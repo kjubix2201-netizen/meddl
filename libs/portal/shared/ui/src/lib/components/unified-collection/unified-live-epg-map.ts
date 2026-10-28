@@ -1,7 +1,7 @@
 import { effect, inject, Signal, signal, untracked } from '@angular/core';
-import { StreamResolverService } from '@iptvnator/portal/shared/data-access';
-import { UnifiedCollectionItem } from '@iptvnator/portal/shared/util';
-import { EpgProgram } from '@iptvnator/shared/interfaces';
+import { StreamResolverService } from '@meddl/portal/shared/data-access';
+import { UnifiedCollectionItem } from '@meddl/portal/shared/util';
+import { EpgProgram } from '@meddl/shared/interfaces';
 
 export interface UnifiedLiveEpgMap {
     /** What is on now, per collection row, for the channel rail. */

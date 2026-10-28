@@ -4,8 +4,8 @@ import {
     LibraryError,
     mergeLibrary,
     ServerLibrary,
-} from '@iptvnator/tv/data-access';
-import { LatestRequest, type UserData } from '@iptvnator/tv/util';
+} from '@meddl/tv/data-access';
+import { LatestRequest, type UserData } from '@meddl/tv/util';
 
 export function useLibrary(
     data: UserData,

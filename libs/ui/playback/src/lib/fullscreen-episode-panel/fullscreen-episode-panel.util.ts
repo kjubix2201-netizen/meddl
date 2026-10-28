@@ -1,8 +1,8 @@
 import {
     getPortalPlaybackProgressPercent,
     isPortalPlaybackWatched,
-} from '@iptvnator/portal/shared/util';
-import type { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/util';
+import type { PlaybackPositionData } from '@meddl/shared/interfaces';
 import { formatSeriesEpisodeLabel } from '../portal-inline-player/series-playback-navigation';
 import type { UpNextRailItem } from '../portal-inline-player/up-next-rail.util';
 

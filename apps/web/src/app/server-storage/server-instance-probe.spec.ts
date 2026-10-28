@@ -1,8 +1,8 @@
-import { markSlowStart } from '@iptvnator/services';
+import { markSlowStart } from '@meddl/services';
 import { probeServerInstance } from './server-instance-probe';
 
 const instance = {
-    service: 'iptvnator',
+    service: 'meddl',
     apiVersion: 1,
     instanceId: 'i-1',
     storage: 'server',

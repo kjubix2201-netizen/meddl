@@ -5,9 +5,9 @@ import {
     RecordingStartMetadata,
     RecordingStoppedEvent,
     VideoPlayer,
-} from '@iptvnator/shared/interfaces';
-import type { PlaybackFallbackRequest } from '@iptvnator/ui/playback';
-import { LiveEpgPanelSummary } from '@iptvnator/ui/shared-portals';
+} from '@meddl/shared/interfaces';
+import type { PlaybackFallbackRequest } from '@meddl/ui/playback';
+import { LiveEpgPanelSummary } from '@meddl/ui/shared-portals';
 
 /**
  * Stand-in for the live EPG panel. Matches both selectors so the host's

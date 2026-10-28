@@ -3,7 +3,7 @@ import type {
     DownloadContentType,
     DownloadMetadataSnapshot,
     ElectronBridgeEpisodeIdentityScope,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { extname } from 'node:path';
 
 export interface StartDownloadRequest {

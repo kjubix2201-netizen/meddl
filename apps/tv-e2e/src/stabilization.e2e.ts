@@ -173,7 +173,7 @@ test('one home server address can explicitly connect its shared sources', async 
     await page.route(`${backend}/v1/instance`, (route) =>
         route.fulfill({
             json: {
-                service: 'iptvnator',
+                service: 'meddl',
                 apiVersion: 1,
                 storage: 'server',
                 instanceId: 'home-server-fixture',
@@ -185,7 +185,7 @@ test('one home server address can explicitly connect its shared sources', async 
         libraryReads++;
         return route.fulfill({ json: [] });
     });
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(
         page.getByRole('button', { name: 'Use this server’s sources' })

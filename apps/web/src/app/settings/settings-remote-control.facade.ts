@@ -1,5 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 
 /**
  * Backs the remote-control section: the reachable LAN addresses and which of

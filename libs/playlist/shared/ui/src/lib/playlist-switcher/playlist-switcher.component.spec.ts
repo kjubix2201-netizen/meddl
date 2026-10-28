@@ -7,9 +7,9 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-import { SourceStatusService } from '@iptvnator/portal/shared/data-access';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
-import { PlaylistMeta } from '@iptvnator/shared/interfaces';
+import { SourceStatusService } from '@meddl/portal/shared/data-access';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
+import { PlaylistMeta } from '@meddl/shared/interfaces';
 import { PlaylistSwitcherOpenService } from './playlist-switcher-open.service';
 import { PlaylistSwitcherPanelComponent } from './playlist-switcher-panel.component';
 import { PlaylistSwitcherComponent } from './playlist-switcher.component';

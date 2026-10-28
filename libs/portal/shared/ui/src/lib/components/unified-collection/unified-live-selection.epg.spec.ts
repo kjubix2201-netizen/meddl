@@ -1,17 +1,17 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { PlaybackHistoryGate } from '@iptvnator/playback/data-access';
+import { PlaybackHistoryGate } from '@meddl/playback/data-access';
 import {
     ResolvedLiveCollectionDetail,
     StreamResolverService,
     UnifiedRecentDataService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     PORTAL_PLAYER,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
-import { ElectronStreamHeadersService } from '@iptvnator/ui/playback';
-import { EpgItem } from '@iptvnator/shared/interfaces';
+} from '@meddl/portal/shared/util';
+import { ElectronStreamHeadersService } from '@meddl/ui/playback';
+import { EpgItem } from '@meddl/shared/interfaces';
 import { createUnifiedLiveSelection } from './unified-live-selection';
 import { createUnifiedLiveSelectionGeneration } from './unified-live-selection-generation';
 import {

@@ -2,7 +2,7 @@ import {
     titleLanguagePrefix,
     vodSourceLanguage,
     type VodSourceDescriptor,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 /**
  * Filter logic for the sources popover's chip row.

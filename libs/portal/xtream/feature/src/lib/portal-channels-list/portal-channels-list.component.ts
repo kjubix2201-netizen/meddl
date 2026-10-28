@@ -1,7 +1,7 @@
 import {
     ChannelContextMenuComponent,
     ChannelScrollFocusDirective,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     CdkVirtualScrollViewport,
     ScrollingModule,
@@ -37,27 +37,27 @@ import {
     epgProviderClockMs,
     XtreamCategory,
     XtreamItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     ChannelListItemComponent,
     ChannelListSkeletonComponent,
     EpgMappingDialogComponent,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     createLogger,
     getXtreamCatchupDays,
     isXtreamCatchupAvailable,
     PortalChannelSortMode,
     sortPortalChannelItems,
-} from '@iptvnator/portal/shared/util';
-import { EpgQueueService } from '@iptvnator/portal/xtream/data-access';
-import { FavoritesService } from '@iptvnator/portal/xtream/data-access';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { EpgQueueService } from '@meddl/portal/xtream/data-access';
+import { FavoritesService } from '@meddl/portal/xtream/data-access';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     EpgSourceSettingsService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     epgProgramProgressPercent,
     hasEpgProgramEnded,

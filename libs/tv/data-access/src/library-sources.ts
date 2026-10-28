@@ -1,11 +1,11 @@
-import { sourceIdentity, type Playlist } from '@iptvnator/shared/interfaces';
+import { sourceIdentity, type Playlist } from '@meddl/shared/interfaces';
 import {
     httpUrl,
     rows,
     type Source,
     type UserData,
     type LibrarySettings,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 const identityFields = {
     serialNumber: 'stalkerSerialNumber',

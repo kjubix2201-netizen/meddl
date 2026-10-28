@@ -27,7 +27,7 @@ import {
     EmbeddedMpvBounds,
     EmbeddedMpvRecordingStartOptions,
     ResolvedPortalPlayback,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     EmbeddedMpvNativeService,
     embeddedMpvNativeService,

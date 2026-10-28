@@ -1,4 +1,4 @@
-import type { RendererPerformancePhaseEvent } from '@iptvnator/shared/logging';
+import type { RendererPerformancePhaseEvent } from '@meddl/shared/logging';
 
 import {
     XTREAM_SCENARIO_ID,

@@ -6,7 +6,7 @@ import {
     gridVisiblePrograms,
     guidePrograms,
     guideWindow,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 
 test('grid clips by overlap and selects the same clock position across channels, including midnight', () => {
     const axis = { startMs: 1000, endMs: 3000 };

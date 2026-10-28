@@ -1,7 +1,7 @@
 import type {
     EpgProgram,
     PortalActivityItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     buildDashboardPortalLiveEpgEntry,
     buildDashboardPortalLiveEpgKey,

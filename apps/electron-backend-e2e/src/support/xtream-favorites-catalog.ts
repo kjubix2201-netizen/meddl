@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import type { Page } from '@playwright/test';
-import type { ElectronBridgeXtreamFavorite } from '@iptvnator/shared/interfaces';
+import type { ElectronBridgeXtreamFavorite } from '@meddl/shared/interfaces';
 import {
     expect,
     openSources,

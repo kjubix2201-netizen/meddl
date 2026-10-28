@@ -1,4 +1,4 @@
-import type { PairingState } from '@iptvnator/tv/data-access';
+import type { PairingState } from '@meddl/tv/data-access';
 export function PhoneReview({
     state,
     busy,

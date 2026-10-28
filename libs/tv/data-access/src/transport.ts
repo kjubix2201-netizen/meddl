@@ -1,4 +1,4 @@
-import { httpUrl, Source } from '@iptvnator/tv/util';
+import { httpUrl, Source } from '@meddl/tv/util';
 export class ProviderRequestError extends Error {
     constructor(
         readonly status: number,

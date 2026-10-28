@@ -17,7 +17,7 @@ import {
 export const LAUNCH_LARGE_JOURNEY_ID = 'launch-large';
 export const LAUNCH_LARGE_RAILS_PHASE = 'dashboardRailsSettled';
 export const LAUNCH_LARGE_RAILS_SENTINEL_ID =
-    '__iptvnator-journey-launch-large-rails-settled__';
+    '__meddl-journey-launch-large-rails-settled__';
 /** Names of the two SQL samples the main process stamps. */
 export const LAUNCH_LARGE_SQL_SAMPLE = {
     FIRST_CARD: 'firstCard',

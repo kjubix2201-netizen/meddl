@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { closeDatabase, initDatabase } from '@iptvnator/shared/database';
+import { closeDatabase, initDatabase } from '@meddl/shared/database';
 import type { AppDatabase } from '../../database.types';
 import { createFavoriteTestCatalog } from './favorites-test-catalog';
 import {

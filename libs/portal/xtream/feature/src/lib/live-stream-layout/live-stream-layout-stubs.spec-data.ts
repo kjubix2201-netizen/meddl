@@ -9,12 +9,12 @@ import {
     EpgProgram,
     RecordingStartMetadata,
     RecordingStoppedEvent,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     EpgProgramActivationEvent,
     EpgTimelineSummary,
-} from '@iptvnator/ui/epg';
-import { PlaybackFallbackRequest } from '@iptvnator/ui/playback';
+} from '@meddl/ui/epg';
+import { PlaybackFallbackRequest } from '@meddl/ui/playback';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,

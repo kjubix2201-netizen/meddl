@@ -3,7 +3,7 @@ import {
     CatalogTitleMatch,
     normalizeTitleKeys,
     TmdbRecommendation,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     CatalogTitleLookup,
     CatalogTitleMatchService,

@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { normalizeCatalogSort } from '@iptvnator/tv/util';
+import { normalizeCatalogSort } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function CatalogOrder({
     tv,

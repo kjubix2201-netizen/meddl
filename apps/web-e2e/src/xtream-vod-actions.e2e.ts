@@ -30,7 +30,7 @@ for (const mode of ['catalog', 'missing', 'direct'] as const) {
         await page.route('**/assets/app-config.js', (route) =>
             route.fulfill({
                 contentType: 'application/javascript',
-                body: 'window.__IPTVNATOR_CONFIG__ = { BACKEND_URL: "http://localhost:3000" };',
+                body: 'window.__MEDDL_CONFIG__ = { BACKEND_URL: "http://localhost:3000" };',
             })
         );
         await page.goto('/');

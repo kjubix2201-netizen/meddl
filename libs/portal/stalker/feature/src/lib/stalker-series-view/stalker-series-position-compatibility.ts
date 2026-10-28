@@ -1,9 +1,9 @@
-import type { StalkerMappedEpisode } from '@iptvnator/portal/stalker/data-access';
-import type { PortalPlaybackPositions } from '@iptvnator/portal/shared/util';
+import type { StalkerMappedEpisode } from '@meddl/portal/stalker/data-access';
+import type { PortalPlaybackPositions } from '@meddl/portal/shared/util';
 import type {
     PlaybackPositionData,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 export interface ReconciledStalkerSeriesPositions {
     positionsByTrackingId: Map<number, PlaybackPositionData>;

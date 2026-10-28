@@ -145,9 +145,9 @@ test('@playback @xtream @electron @embedded-mpv resumes an episode whose connect
 
     const app = await launchElectronApp(dataDir, {
         env: {
-            IPTVNATOR_ENABLE_EMBEDDED_MPV_EXPERIMENT: '1',
-            IPTVNATOR_ENABLE_EMBEDDED_MPV_FRAME_COPY: '0',
-            IPTVNATOR_EMBEDDED_MPV_ALLOW_HOMEBREW: '1',
+            MEDDL_ENABLE_EMBEDDED_MPV_EXPERIMENT: '1',
+            MEDDL_ENABLE_EMBEDDED_MPV_FRAME_COPY: '0',
+            MEDDL_EMBEDDED_MPV_ALLOW_HOMEBREW: '1',
         },
     });
     try {

@@ -12,28 +12,28 @@ import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, of } from 'rxjs';
-import { PlaylistContextFacade } from '@iptvnator/playlist/shared/util';
+import { PlaylistContextFacade } from '@meddl/playlist/shared/util';
 import {
     PORTAL_EXTERNAL_PLAYBACK,
     PORTAL_PLAYBACK_POSITIONS,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     StalkerPortalRepairService,
     StalkerSessionService,
     StalkerStore,
-} from '@iptvnator/portal/stalker/data-access';
-import { createPlaybackSessionKey } from '@iptvnator/playback/util';
+} from '@meddl/portal/stalker/data-access';
+import { createPlaybackSessionKey } from '@meddl/playback/util';
 import {
     DataService,
     ParentalLockService,
     PlaylistsService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     ALL_CATEGORIES_WITHHELD,
     CONNECTIVITY_GUARD_RESET,
-} from '@iptvnator/shared/interfaces';
-import type { ResolvedPortalPlayback } from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
+import type { ResolvedPortalPlayback } from '@meddl/shared/interfaces';
 import { StalkerSearchComponent } from './stalker-search.component';
 
 function deferred<T>() {

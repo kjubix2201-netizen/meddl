@@ -6,21 +6,21 @@ import {
     shortCountryList,
     shortCountryName,
     type RemainingTimeLabel,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import type {
     NormalizedVodMeta,
     TmdbCountryFacet,
     TmdbEnrichedCastMember,
     TmdbGenreFacet,
-} from '@iptvnator/shared/interfaces';
-import type { CrossPortalSimilarItem } from '@iptvnator/services';
+} from '@meddl/shared/interfaces';
+import type { CrossPortalSimilarItem } from '@meddl/services';
 import {
     castMembersFromNames,
     splitPeopleNames,
     type DetailActionButtonState,
     type SimilarRailItem,
     type VodMoreMenuSection,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 
 /** Pure view-model helpers of the shared VOD details page. */
 

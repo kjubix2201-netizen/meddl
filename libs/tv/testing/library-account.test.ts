@@ -5,8 +5,8 @@ import {
     identity,
     type Source,
     type UserData,
-} from '@iptvnator/tv/util';
-import { mergeLibrary } from '@iptvnator/tv/data-access';
+} from '@meddl/tv/util';
+import { mergeLibrary } from '@meddl/tv/data-access';
 const settings = {
     url: 'https://library.invalid',
     token: '',

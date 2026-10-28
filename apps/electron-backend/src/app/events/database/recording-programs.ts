@@ -1,4 +1,4 @@
-import type { RecordingProgramSnapshot } from '@iptvnator/shared/interfaces';
+import type { RecordingProgramSnapshot } from '@meddl/shared/interfaces';
 
 // A recording rarely spans more than a handful of programs; the cap is a
 // hostile-input bound, not a product limit.

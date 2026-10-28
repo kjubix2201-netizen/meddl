@@ -1,5 +1,5 @@
 import { Signal, effect } from '@angular/core';
-import { ContentMetadataPatch } from '@iptvnator/shared/interfaces';
+import { ContentMetadataPatch } from '@meddl/shared/interfaces';
 import {
     XtreamDetailMetadataSource,
     xtreamContentMetadataKey,

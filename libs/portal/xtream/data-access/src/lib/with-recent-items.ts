@@ -11,15 +11,15 @@ import {
     DatabaseService,
     PlaylistsService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     buildPlaylistRecentItems,
     ContentMetadataPatch,
     normalizeContentMetadataPatch,
     Playlist,
     PortalRecentItem,
-} from '@iptvnator/shared/interfaces';
-import { createLogger } from '@iptvnator/portal/shared/util/logger';
+} from '@meddl/shared/interfaces';
+import { createLogger } from '@meddl/portal/shared/util/logger';
 import {
     XTREAM_DATA_SOURCE,
     type XtreamPlayedContent,

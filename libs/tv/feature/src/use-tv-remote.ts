@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
-import type { NativePlayer } from '@iptvnator/tv/data-access';
-import { installRemote } from '@iptvnator/tv/ui';
+import type { NativePlayer } from '@meddl/tv/data-access';
+import { installRemote } from '@meddl/tv/ui';
 
 export function useTvRemote(state: {
     back: () => void;

@@ -2,27 +2,27 @@ import { computed, inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { injectTranslationTick } from '@iptvnator/services';
+import { injectTranslationTick } from '@meddl/services';
 import {
     PlaylistInfoComponent,
     PlaylistRefreshActionService,
-} from '@iptvnator/playlist/shared/ui';
+} from '@meddl/playlist/shared/ui';
 import {
     LiveLayoutSidebarStateService,
     resolveRouteLiveSidebarSurface,
     WorkspaceHeaderAction,
     WorkspaceHeaderContextService,
-} from '@iptvnator/portal/shared/util';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/shared/util';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     isStalkerAccountPlaylist,
     isXtreamAccountPlaylist,
     PlaylistMeta,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     WorkspaceAccountInfoData,
     WORKSPACE_SHELL_ACTIONS,
-} from '@iptvnator/workspace/shell/util';
+} from '@meddl/workspace/shell/util';
 import { WorkspaceHeaderSidebarToggle } from './helpers/workspace-shell-constants';
 import { WorkspaceShellRouteStateService } from './workspace-shell-route-state.service';
 

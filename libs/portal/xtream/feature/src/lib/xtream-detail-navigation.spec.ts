@@ -1,11 +1,11 @@
 import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
 import {
     CrossPortalSimilarService,
     TmdbEnrichmentService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     injectXtreamDetailNavigation,
     type XtreamDetailNavigation,

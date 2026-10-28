@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { signalStore } from '@ngrx/signals';
-import { PlaybackPositionRuntimeBridgeService } from '@iptvnator/services';
-import type { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+import { PlaybackPositionRuntimeBridgeService } from '@meddl/services';
+import type { PlaybackPositionData } from '@meddl/shared/interfaces';
 import { XTREAM_DATA_SOURCE } from '../../data-sources/xtream-data-source.interface';
 import { withPlaybackPositions } from './with-playback-positions.feature';
 

@@ -1,4 +1,4 @@
-import type { ServerUserStateNamespace } from '@iptvnator/shared/interfaces';
+import type { ServerUserStateNamespace } from '@meddl/shared/interfaces';
 import {
     behind,
     type EditStep,

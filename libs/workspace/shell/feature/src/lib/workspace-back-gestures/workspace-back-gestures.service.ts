@@ -1,9 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import { DestroyRef, inject, Injectable } from '@angular/core';
-import { WorkspaceBackNavigationService } from '@iptvnator/portal/shared/data-access';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
-import type { ElectronBridgeBackGestureSource } from '@iptvnator/shared/interfaces';
-import { WorkspaceShellContextDrawerService } from '@iptvnator/workspace/shell/util';
+import { WorkspaceBackNavigationService } from '@meddl/portal/shared/data-access';
+import { RuntimeCapabilitiesService } from '@meddl/services';
+import type { ElectronBridgeBackGestureSource } from '@meddl/shared/interfaces';
+import { WorkspaceShellContextDrawerService } from '@meddl/workspace/shell/util';
 
 /** What asked for Back, other than the mouse Back button. */
 export type WorkspaceBackGestureSource =

@@ -4,20 +4,20 @@ import { of } from 'rxjs';
 import {
     XtreamApiService,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     StalkerPortalRepairService,
     StalkerSessionService,
-} from '@iptvnator/portal/stalker/data-access';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
+} from '@meddl/portal/stalker/data-access';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
 import {
     DataService,
     PlaylistsService,
     RuntimeCapabilitiesService,
     SettingsStore,
-} from '@iptvnator/services';
-import { Playlist } from '@iptvnator/shared/interfaces';
-import { UnifiedCollectionItem } from '@iptvnator/portal/shared/util';
+} from '@meddl/services';
+import { Playlist } from '@meddl/shared/interfaces';
+import { UnifiedCollectionItem } from '@meddl/portal/shared/util';
 import {
     ResolvedLiveCollectionDetail,
     StreamResolverService,
@@ -116,7 +116,7 @@ describe('StreamResolverService', () => {
                             },
                             http: {
                                 referrer: 'https://ref.example.com',
-                                'user-agent': 'IPTVnator',
+                                'user-agent': 'meddl',
                                 origin: 'https://origin.example.com',
                             },
                             radio: 'false',
@@ -158,7 +158,7 @@ describe('StreamResolverService', () => {
             }),
             playback: expect.objectContaining({
                 streamUrl: 'https://example.com/live.m3u8',
-                userAgent: 'IPTVnator',
+                userAgent: 'meddl',
                 referer: 'https://ref.example.com',
                 origin: 'https://origin.example.com',
             }),
@@ -187,7 +187,7 @@ describe('StreamResolverService', () => {
                             },
                             http: {
                                 referrer: 'https://ref.example.com',
-                                'user-agent': 'IPTVnator',
+                                'user-agent': 'meddl',
                                 origin: 'https://origin.example.com',
                             },
                             radio: 'false',
@@ -656,7 +656,7 @@ describe('StreamResolverService', () => {
                 portalUrl: 'https://stalker.example.com/portal.php',
                 macAddress: '00:11:22:33:44:55',
                 isFullStalkerPortal: false,
-                userAgent: 'IPTVnator',
+                userAgent: 'meddl',
                 referrer: 'https://ref.example.com',
                 origin: 'https://origin.example.com',
             } satisfies Partial<Playlist>)

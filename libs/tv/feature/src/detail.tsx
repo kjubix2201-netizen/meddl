@@ -1,7 +1,7 @@
-import { Empty, VirtualCollection } from '@iptvnator/tv/ui';
+import { Empty, VirtualCollection } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import { mediaTitle } from '@iptvnator/tv/util';
+import { TvMetadata } from '@meddl/tv/data-access';
+import { mediaTitle } from '@meddl/tv/util';
 import { MetadataCredits } from './metadata-credits';
 import { useEpisodeMetadata } from './use-episode-metadata';
 export function Detail({

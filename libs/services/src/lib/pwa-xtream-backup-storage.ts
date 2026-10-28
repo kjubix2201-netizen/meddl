@@ -6,8 +6,8 @@ import type {
     XtreamBackupRecentlyViewedItem,
     XtreamPendingRestoreState,
     XtreamPlaylistBackupEntry,
-} from '@iptvnator/shared/interfaces';
-import { normalizeXtreamPendingRestoreState } from '@iptvnator/shared/interfaces/xtream-restore-state';
+} from '@meddl/shared/interfaces';
+import { normalizeXtreamPendingRestoreState } from '@meddl/shared/interfaces/xtream-restore-state';
 import type { UserDataStorage } from './user-data-storage';
 import { XTREAM_USER_DATA_KEYS } from './xtream-user-data-keys';
 import { PwaXtreamRestoreProgress } from './pwa-xtream-restore-progress';

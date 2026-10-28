@@ -1,5 +1,5 @@
-import { EpgArchiveDownloadService } from '@iptvnator/ui/epg';
-import { EpgArchiveCopyService } from '@iptvnator/ui/epg';
+import { EpgArchiveDownloadService } from '@meddl/ui/epg';
+import { EpgArchiveCopyService } from '@meddl/ui/epg';
 import {
     Component,
     input,
@@ -18,19 +18,19 @@ import {
     LiveLayoutSidebarStateService,
     liveSidebarStateStorageKey,
     PORTAL_PLAYER,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     ChannelListHiddenStateComponent,
     GridListComponent,
-} from '@iptvnator/portal/shared/ui';
+} from '@meddl/portal/shared/ui';
 import {
     FavoritesService,
     XtreamStore,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
-import { RuntimeCapabilitiesService, SettingsStore } from '@iptvnator/services';
-import { EpgListViewComponent, EpgTimelineComponent } from '@iptvnator/ui/epg';
-import { WebPlayerViewComponent } from '@iptvnator/ui/playback';
+} from '@meddl/portal/xtream/data-access';
+import { RuntimeCapabilitiesService, SettingsStore } from '@meddl/services';
+import { EpgListViewComponent, EpgTimelineComponent } from '@meddl/ui/epg';
+import { WebPlayerViewComponent } from '@meddl/ui/playback';
 import { PortalChannelsListComponent } from '../portal-channels-list/portal-channels-list.component';
 import { LiveStreamLayoutComponent } from './live-stream-layout.component';
 

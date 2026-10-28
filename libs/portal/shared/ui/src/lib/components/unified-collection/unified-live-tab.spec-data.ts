@@ -1,5 +1,5 @@
-import { EpgItem, EpgProgram } from '@iptvnator/shared/interfaces';
-import { UnifiedCollectionItem } from '@iptvnator/portal/shared/util';
+import { EpgItem, EpgProgram } from '@meddl/shared/interfaces';
+import { UnifiedCollectionItem } from '@meddl/portal/shared/util';
 
 export function buildLiveItem(
     sourceType: 'm3u' | 'xtream' | 'stalker'

@@ -4,7 +4,7 @@ import {
     CatalogSort,
     ProviderClient,
     LatestRequest,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import { Route } from './navigation';
 const empty = (): Catalog => ({ items: [], total: 0, page: 0, categories: [] });
 /** One active query survives detail navigation; a new query cancels its append lane. */

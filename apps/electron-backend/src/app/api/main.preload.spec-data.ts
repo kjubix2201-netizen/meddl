@@ -1,4 +1,4 @@
-import type { ElectronBridgeApi } from '@iptvnator/shared/interfaces';
+import type { ElectronBridgeApi } from '@meddl/shared/interfaces';
 
 type ElectronBridgeMethodName = Extract<
     {

@@ -1,4 +1,4 @@
-import { Media } from '@iptvnator/tv/util';
+import { Media } from '@meddl/tv/util';
 
 /** Paint-only stage: no clipping/filter layer on the page scroller. */
 export function Backdrop({ item }: { item?: Media }) {

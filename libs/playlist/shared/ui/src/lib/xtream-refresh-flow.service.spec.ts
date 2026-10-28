@@ -3,18 +3,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { DialogService } from '@iptvnator/ui/components';
+import { DialogService } from '@meddl/ui/components';
 import {
     DataService,
     DatabaseService,
     DbOperationEvent,
     PlaybackPositionService,
     SourceActivityService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     CONNECTIVITY_GUARD_RESET,
     PlaylistMeta,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     XtreamRefreshFlowService,
     type XtreamRefreshProgressReporter,

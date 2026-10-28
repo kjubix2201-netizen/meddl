@@ -1,13 +1,13 @@
 import { BackendConnection } from './backend-connection';
 import { PhoneSetup } from './phone-setup';
-import { normalizeStalkerMacAddress } from '@iptvnator/shared/interfaces';
+import { normalizeStalkerMacAddress } from '@meddl/shared/interfaces';
 import { useState } from 'preact/hooks';
 import {
     httpUrl,
     removeSourceData,
     Source,
     Provider,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function Sources({ tv }: { tv: TvModel }) {
     const [type, setType] = useState<Provider>('xtream');

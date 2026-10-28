@@ -2,8 +2,8 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import {
     ELECTRON_BRIDGE_SECURITY_ERROR_CODES,
     normalizeHost,
-} from '@iptvnator/shared/interfaces';
-import { SettingsStore, EpgSourceSettingsService } from '@iptvnator/services';
+} from '@meddl/shared/interfaces';
+import { SettingsStore, EpgSourceSettingsService } from '@meddl/services';
 import {
     EpgImportProgress,
     EpgRuntimeBridgeService,

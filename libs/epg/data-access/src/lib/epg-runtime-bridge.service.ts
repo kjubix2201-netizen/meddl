@@ -17,8 +17,8 @@ import {
     ElectronBridgeTrustOptions,
     EpgChannelMetadata,
     EpgProgram,
-} from '@iptvnator/shared/interfaces';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+} from '@meddl/shared/interfaces';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 
 export const EPG_IMPORT_STATUS = ELECTRON_BRIDGE_EPG_PROGRESS_STATUSES;
 export type EpgImportStatus = ElectronBridgeEpgProgressStatus;

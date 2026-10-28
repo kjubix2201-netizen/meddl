@@ -1,4 +1,4 @@
-import { EmbeddedMpvBounds } from '@iptvnator/shared/interfaces';
+import { EmbeddedMpvBounds } from '@meddl/shared/interfaces';
 
 export interface NativeViewBoundsContext {
     platform: NodeJS.Platform;

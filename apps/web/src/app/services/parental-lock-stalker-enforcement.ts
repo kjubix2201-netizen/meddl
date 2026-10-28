@@ -1,8 +1,8 @@
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { StalkerStore } from '@iptvnator/portal/stalker/data-access';
-import { ParentalLockService } from '@iptvnator/services';
-import { toParentalLockStalkerCategoryType } from '@iptvnator/shared/interfaces';
+import { StalkerStore } from '@meddl/portal/stalker/data-access';
+import { ParentalLockService } from '@meddl/services';
+import { toParentalLockStalkerCategoryType } from '@meddl/shared/interfaces';
 import { STALKER_ROUTE } from './parental-lock-enforcement.service';
 
 /**

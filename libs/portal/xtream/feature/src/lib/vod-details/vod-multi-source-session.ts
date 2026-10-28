@@ -1,10 +1,10 @@
-import type { VodMultiSourceController } from '@iptvnator/portal/shared/data-access';
+import type { VodMultiSourceController } from '@meddl/portal/shared/data-access';
 import type {
     ResolvedPortalPlayback,
     VodSourceCandidate,
     VodSourceMatchKind,
     VodSourcePin,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     buildSwitchNotice,
     type VodMultiSourceSwitchNotice,

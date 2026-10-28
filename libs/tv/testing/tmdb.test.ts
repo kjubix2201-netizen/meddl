@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { TvMetadata } from '@iptvnator/tv/data-access';
-import { hydrateUserData, initialData, Media } from '@iptvnator/tv/util';
+import { TvMetadata } from '@meddl/tv/data-access';
+import { hydrateUserData, initialData, Media } from '@meddl/tv/util';
 const item: Media = {
     id: 'source:movie:42',
     sourceId: 'source',

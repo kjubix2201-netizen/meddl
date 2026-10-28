@@ -5,10 +5,10 @@ import {
     UnifiedFavoriteChannel,
     getAdjacentChannelItem,
     getChannelItemByNumber,
-} from '@iptvnator/portal/shared/util';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
-import { isCatalogUnavailable } from '@iptvnator/shared/interfaces';
-import { LiveEpgPanelSummary } from '@iptvnator/ui/shared-portals';
+} from '@meddl/portal/shared/util';
+import { RuntimeCapabilitiesService } from '@meddl/services';
+import { isCatalogUnavailable } from '@meddl/shared/interfaces';
+import { LiveEpgPanelSummary } from '@meddl/ui/shared-portals';
 
 /**
  * Remote-control integration for the unified live tab (portal favorites,

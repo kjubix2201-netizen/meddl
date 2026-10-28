@@ -1,16 +1,16 @@
-import { isCatalogUnavailable } from '@iptvnator/shared/interfaces';
+import { isCatalogUnavailable } from '@meddl/shared/interfaces';
 import { inject, WritableSignal } from '@angular/core';
 import {
     ResolvedLiveCollectionDetail,
     StreamResolverService,
     UnifiedRecentDataService,
-} from '@iptvnator/portal/shared/data-access';
+} from '@meddl/portal/shared/data-access';
 import {
     PORTAL_PLAYER,
     UnifiedCollectionItem,
-} from '@iptvnator/portal/shared/util';
-import { PlaybackHistoryGate } from '@iptvnator/playback/data-access';
-import { ElectronStreamHeadersService } from '@iptvnator/ui/playback';
+} from '@meddl/portal/shared/util';
+import { PlaybackHistoryGate } from '@meddl/playback/data-access';
+import { ElectronStreamHeadersService } from '@meddl/ui/playback';
 import { UnifiedLiveTimeshift } from './unified-live-catchup';
 import { createUnifiedLivePlaybackSessionKey } from './unified-live-playback-session-key';
 import { UnifiedLiveSelectionGeneration } from './unified-live-selection-generation';

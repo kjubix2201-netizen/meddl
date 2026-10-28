@@ -1,7 +1,7 @@
 import type {
     PlaybackPositionData,
     XtreamPendingRestoreState,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     type CollectionKey,
     normalizeStoredBackdrop,

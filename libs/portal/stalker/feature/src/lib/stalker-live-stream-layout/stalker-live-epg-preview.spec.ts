@@ -1,4 +1,4 @@
-import type { EpgProgram } from '@iptvnator/shared/interfaces';
+import type { EpgProgram } from '@meddl/shared/interfaces';
 import {
     StalkerEpgPreviewQueue,
     mergeEpgProgramLists,

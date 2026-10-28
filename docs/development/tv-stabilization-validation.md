@@ -73,9 +73,9 @@ target rebuilds the Electron main process and Angular renderer first.
 ## Hardware and publication boundary
 
 The paired LG is reachable. The initial read-only debugger inspection found
-IPTVnator in the background with no active media, on the 0.1.11 bundle.
+meddl in the background with no active media, on the 0.1.11 bundle.
 Following the user's explicit installation request on 2026-10-25, the package
-below was installed and launched on `iptvnator-lg-bx` (192.168.178.44).
+below was installed and launched on `meddl-lg-bx` (192.168.178.44).
 The device's installed-app metadata confirms version 0.1.12. Installation and
 launch succeeded; playback acceptance remains with the user and is not implied
 by these deployment checks.
@@ -89,8 +89,8 @@ favorites/progress remain separate follow-ups.
 
 No push, PR publication, merge into master, paid CI or NAS service change is part
 of this validation. Local evidence is held outside tracked source under
-`/tmp/iptvnator-tv-*.log`; the build artifact is
-`dist/tv-package/com.iptvnator.tv.prototype_0.1.12_all.ipk`.
+`/tmp/meddl-tv-*.log`; the build artifact is
+`dist/tv-package/com.meddl.tv.prototype_0.1.12_all.ipk`.
 
 IPK SHA-256: `431e18f2b784ac568041715a11a5960fb3344ddedea1b1f2f211489543ddde7c`.
 The local Greptile CLI is unavailable; no installation or account setup was

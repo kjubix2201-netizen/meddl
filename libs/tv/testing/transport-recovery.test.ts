@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { ProviderTransport } from '@iptvnator/tv/data-access';
-import type { Source } from '@iptvnator/tv/util';
+import { ProviderTransport } from '@meddl/tv/data-access';
+import type { Source } from '@meddl/tv/util';
 const source: Source = {
     id: 'test',
     provider: 'm3u',

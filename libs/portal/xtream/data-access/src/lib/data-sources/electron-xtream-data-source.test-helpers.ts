@@ -4,7 +4,7 @@ import {
     PlaybackPositionService,
     VodSourcePinService,
     XtreamPendingRestoreService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     XtreamApiService,
     XtreamCredentials,

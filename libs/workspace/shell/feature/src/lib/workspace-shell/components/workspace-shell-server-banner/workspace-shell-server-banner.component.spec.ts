@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { ServerStorageStatusService } from '@iptvnator/services';
+import { ServerStorageStatusService } from '@meddl/services';
 import { WorkspaceShellServerBannerComponent } from './workspace-shell-server-banner.component';
 
 const instance = {
-    service: 'iptvnator',
+    service: 'meddl',
     apiVersion: 1,
     instanceId: 'i',
     storage: 'server',

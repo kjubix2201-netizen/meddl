@@ -5,7 +5,7 @@ import type {
     ExternalPlayerName,
     ExternalPlayerSession,
     PlayerContentInfo,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     channelItemByTitle,
     closeElectronApp,
@@ -685,7 +685,7 @@ test('@electron @dash ClearKey DASH filters DRM fallback and reports external la
             clipboard.readText()
         );
         expect(JSON.parse(drmReport)).toMatchObject({
-            app: 'IPTVnator',
+            app: 'meddl',
             runtime: 'electron',
             code: 'drm-or-encryption',
             drmSystems: ['widevine'],

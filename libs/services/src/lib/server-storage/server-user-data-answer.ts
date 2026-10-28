@@ -1,7 +1,7 @@
 import type {
     ServerUserStateCurrent,
     ServerUserStateNamespace,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     entryKey,
     type PendingEntry,

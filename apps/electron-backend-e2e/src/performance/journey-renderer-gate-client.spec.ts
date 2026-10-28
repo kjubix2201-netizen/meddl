@@ -25,7 +25,7 @@ function gate(
 }
 
 test('the client and the hook agree on the global key', () => {
-    assert.equal(JOURNEY_RENDERER_GATE_KEY, '__iptvnatorJourneyGate');
+    assert.equal(JOURNEY_RENDERER_GATE_KEY, '__meddlJourneyGate');
 });
 
 test('accepts a gate that held the load until the test released it', () => {

@@ -48,7 +48,7 @@ import type {
  * docs/architecture/performance-journeys.md.
  */
 export const PLAYBACK_JOURNEY_MAIN_IPC_STATE_KEY =
-    '__iptvnatorJourneyPlaybackMainIpcCapture';
+    '__meddlJourneyPlaybackMainIpcCapture';
 export const PLAYBACK_JOURNEY_PORTAL_NAME = 'Journey live portal';
 const ERROR_PREFIX = 'playback-journey';
 

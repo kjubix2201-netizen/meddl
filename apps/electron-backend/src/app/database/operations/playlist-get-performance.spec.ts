@@ -1,10 +1,10 @@
 import type {
     AppPlaylistGetPerformancePhase,
     PerformancePhaseMetadata,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     APP_PLAYLIST_GET_PERFORMANCE_PHASE,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 import type { AppDatabase } from '../database.types';
 import { getAppPlaylist } from './playlist.operations';

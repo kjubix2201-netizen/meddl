@@ -1,5 +1,5 @@
 import { useRef } from 'preact/hooks';
-import { focusKey, restoreFocus } from '@iptvnator/tv/ui';
+import { focusKey, restoreFocus } from '@meddl/tv/ui';
 import type { Route } from './navigation';
 
 export interface NavigationOrigin {

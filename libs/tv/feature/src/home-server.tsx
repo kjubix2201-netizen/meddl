@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks';
-import { ServerLibrary } from '@iptvnator/tv/data-access';
+import { ServerLibrary } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
 
 /** Optional source-library capability of the already selected, trusted server. */

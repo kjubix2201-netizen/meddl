@@ -1,8 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
-import { NativePlayer } from '@iptvnator/tv/data-access';
-import { Media } from '@iptvnator/tv/util';
+import { NativePlayer } from '@meddl/tv/data-access';
+import { Media } from '@meddl/tv/util';
 
 test('native HLS selects its transport before loading and clears sources when switching or stopping', async () => {
     const dom = new JSDOM('<video></video>');

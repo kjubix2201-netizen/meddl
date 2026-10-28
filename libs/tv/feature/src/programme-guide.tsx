@@ -5,7 +5,7 @@ import {
     Program,
     programmeNow,
     programmeWindow,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import {
     useEffect,
     useLayoutEffect,

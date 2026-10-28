@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { eq } from 'drizzle-orm';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 import type { AppDatabase } from '../../database.types';
 import { setParentalLockActive } from '../../parental-lock-state';
 import { createFavoriteTestCatalog } from './favorites-test-catalog';

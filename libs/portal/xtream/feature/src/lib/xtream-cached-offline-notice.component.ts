@@ -8,8 +8,8 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { DataService, resetHostConnectivityGuard } from '@iptvnator/services';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { DataService, resetHostConnectivityGuard } from '@meddl/services';
 
 const NOTICE_STATES = {
     unavailable: {

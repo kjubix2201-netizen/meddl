@@ -4,8 +4,8 @@ import {
     ProviderClient,
     recoverSeriesContext,
     seriesForEpisode,
-} from '@iptvnator/tv/util';
-import { findParentSeries } from '@iptvnator/tv/data-access';
+} from '@meddl/tv/util';
+import { findParentSeries } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
 
 export function useSeriesContext(tv: TvModel) {

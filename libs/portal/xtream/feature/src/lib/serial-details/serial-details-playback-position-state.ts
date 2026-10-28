@@ -2,13 +2,13 @@ import { signal } from '@angular/core';
 import {
     stampPlaybackPositionNow,
     type SeriesResumeTarget,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import type {
     ExternalPlayerSession,
     PlaybackPositionData,
     ResolvedPortalPlayback,
     XtreamSerieEpisode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import type { XtreamSerieDetailsView } from './serial-details-playback.service';
 
 interface ResumeEpisodeRequest {

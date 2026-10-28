@@ -1,4 +1,4 @@
-import type { ZoomLevelAction } from '@iptvnator/shared/interfaces';
+import type { ZoomLevelAction } from '@meddl/shared/interfaces';
 import {
     APP_KEYBOARD_SHORTCUTS,
     KEYBOARD_SHORTCUT_GROUPS,

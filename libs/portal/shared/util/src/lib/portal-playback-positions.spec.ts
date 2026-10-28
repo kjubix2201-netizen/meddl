@@ -1,4 +1,4 @@
-import type { PlaybackPositionData } from '@iptvnator/shared/interfaces';
+import type { PlaybackPositionData } from '@meddl/shared/interfaces';
 import {
     isPortalPlaybackInProgress,
     isPortalPlaybackWatched,

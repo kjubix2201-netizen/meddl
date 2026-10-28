@@ -4,8 +4,8 @@ import {
     seriesForEpisode,
     withSeriesContext,
     type Media,
-} from '@iptvnator/tv/util';
-import { storedMediaPoster } from '@iptvnator/tv/data-access';
+} from '@meddl/tv/util';
+import { storedMediaPoster } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
 
 /** The selection survives detail/player return; another source starts at its latest title. */

@@ -1,4 +1,4 @@
-import { EpgProgram } from '@iptvnator/shared/interfaces';
+import { EpgProgram } from '@meddl/shared/interfaces';
 import {
     buildGuideDayAxis,
     buildGuideRowBlocks,

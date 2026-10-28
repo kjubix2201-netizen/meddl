@@ -1,7 +1,7 @@
-import { normalizeContentMetadataPatch } from '@iptvnator/shared/interfaces';
+import { normalizeContentMetadataPatch } from '@meddl/shared/interfaces';
 import { inject, Injector, signal } from '@angular/core';
-import { PlaybackHistoryGate } from '@iptvnator/playback/data-access';
-import { RuntimeCapabilitiesService } from '@iptvnator/services';
+import { PlaybackHistoryGate } from '@meddl/playback/data-access';
+import { RuntimeCapabilitiesService } from '@meddl/services';
 import {
     type IXtreamDataSource,
     type XtreamPlayedContent,
@@ -9,7 +9,7 @@ import {
     xtreamDetailContentMetadata,
     XTREAM_DATA_SOURCE,
     XtreamStore,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 
 export interface XtreamRecentItemRequest {
     readonly xtreamId: number | string;

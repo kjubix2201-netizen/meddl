@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
-import { TimelineAxis } from '@iptvnator/shared/epg';
+import { TimelineAxis } from '@meddl/shared/epg';
 import {
     GUIDE_SPAN,
     gridProgramAt,
     GuideProgram,
     Media,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import type { GridSchedule } from './use-grid-guide';
 export interface GridSelection {
     row: number;

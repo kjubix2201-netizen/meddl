@@ -1,6 +1,6 @@
-import { storedMediaPoster } from '@iptvnator/tv/data-access';
-import { Empty, Poster, VirtualCollection } from '@iptvnator/tv/ui';
-import { Kind } from '@iptvnator/tv/util';
+import { storedMediaPoster } from '@meddl/tv/data-access';
+import { Empty, Poster, VirtualCollection } from '@meddl/tv/ui';
+import { Kind } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function favoritesFor(tv: TvModel, kind: Kind) {
     return tv.data.favorites.filter(

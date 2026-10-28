@@ -7,14 +7,14 @@ import {
     withProps,
     withState,
 } from '@ngrx/signals';
-import { createLogger } from '@iptvnator/portal/shared/util';
+import { createLogger } from '@meddl/portal/shared/util';
 import {
     DataService,
     ParentalLockService,
     resetHostConnectivityGuard,
-} from '@iptvnator/services';
-import type { PlaylistMeta } from '@iptvnator/shared/interfaces';
-import { ALL_CATEGORIES_WITHHELD } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import type { PlaylistMeta } from '@meddl/shared/interfaces';
+import { ALL_CATEGORIES_WITHHELD } from '@meddl/shared/interfaces';
 import {
     StalkerCategoryItem,
     StalkerContentItem,

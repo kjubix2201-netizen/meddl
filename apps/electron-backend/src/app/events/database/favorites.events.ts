@@ -1,13 +1,13 @@
 import type {
     ElectronBridgeFavoriteReorderUpdate,
     XtreamFavoriteRemovalRef,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 /**
  * Favorites IPC event handlers
  * Operations for managing user's favorite content
  */
 
-import type { XtreamBackupFavoriteItem } from '@iptvnator/shared/interfaces';
+import type { XtreamBackupFavoriteItem } from '@meddl/shared/interfaces';
 import { handleWorkerRequest } from './worker-events.utils';
 
 handleWorkerRequest(

@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import type { ParentalLockPinThrottle } from '@iptvnator/shared/interfaces';
+import type { ParentalLockPinThrottle } from '@meddl/shared/interfaces';
 
 export type ParentalLockPromptMode = 'unlock' | 'set';
 

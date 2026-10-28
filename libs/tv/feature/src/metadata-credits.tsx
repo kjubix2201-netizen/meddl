@@ -1,4 +1,4 @@
-import type { Media } from '@iptvnator/tv/util';
+import type { Media } from '@meddl/tv/util';
 import { PersonAvatar } from './person-avatar';
 
 export function MetadataCredits({

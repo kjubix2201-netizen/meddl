@@ -1,4 +1,4 @@
-# IPTVnator TV prototype
+# meddl TV prototype
 
 The TV client is a separate Preact 10 application (`apps/tv`), with feature,
 UI, data-access and pure contracts under `libs/tv`. It does not load the Angular
@@ -18,7 +18,7 @@ A successful desktop browser test is not device certification.
   JSON tuple containing source identity, provider, content type and provider ID.
   Episode keys additionally preserve parent and season/episode coordinates.
 - Framework-free clients live in their provider domains and are exposed via
-  `@iptvnator/portal/xtream/client` and `@iptvnator/portal/stalker/client`.
+  `@meddl/portal/xtream/client` and `@meddl/portal/stalker/client`.
   Angular imports must continue to use the existing data-access wrappers.
 
 The Vite build targets `chrome68`, emits a single classic deferred IIFE and
@@ -84,7 +84,7 @@ token invalidates the indicator and cancels stale checks. This TV package needs
 the matching backend version; older backends without these routes must be updated.
 
 With no saved address, the TV reads its current network through the read-only
-webOS connection-manager service. Discovery probes only `iptvnator.local` and,
+webOS connection-manager service. Discovery probes only `meddl.local` and,
 when a private IPv4 /24 or smaller subnet is available, that local subnet on
 ports 3333, 3335 and 4333 (`/api`). Twelve concurrent requests, 750 ms per probe
 and a 55-second search deadline bound the work. Discovery sends no credentials.
@@ -294,7 +294,7 @@ windows outside supplied data display an empty state, not fabricated listings.
 This does not add archive/catch-up playback, date-specific provider requests,
 XMLTV, or extend Xtream's existing short-guide coverage.
 
-`@iptvnator/shared/epg` is the pure `shared-epg` Nx utility (shared-contracts domain).
+`@meddl/shared/epg` is the pure `shared-epg` Nx utility (shared-contracts domain).
 Both Angular EPG and TV use its epoch-ms axis projection, half-hour ticks and
 render clipping. The Angular module preserves its existing exports and adapters;
 `src/timeline.ts` owns implementation and coverage; `src/index.ts` only re-exports.
@@ -389,7 +389,7 @@ Chromium 68 does not promise stable native sorting. M3U without addition dates
 keeps playlist order with a visible explanation; alphabetical VOD remains
 available. Live channel order and season/episode numbering are unaffected.
 
-`iptvnator-tv-user-data` is a separate IndexedDB database (schema 1 and payload
+`meddl-tv-user-data` is a separate IndexedDB database (schema 1 and payload
 version 1). Sources, active source, backend settings, favorites, history and
 positions survive browser relaunch. Updates serialize and become visible only
 when the read/write transaction completes. Quota, open and write failures are
@@ -482,7 +482,7 @@ survive relaunch in the same atomic IndexedDB snapshot; older snapshots default
 to disabled. The TV requires a user-entered key, even in builds with an injected
 desktop default. Requests go directly to TMDB, independently of the provider backend.
 
-`@iptvnator/shared/tmdb` owns the framework-free API client, title/year confidence
+`@meddl/shared/tmdb` owns the framework-free API client, title/year confidence
 matching, dead provider-ID recovery, language fallback and metadata orchestration.
 The TV adapter enriches the Home feature and selected movie/series details for
 all providers, including episode features with saved parent titles. Artwork,

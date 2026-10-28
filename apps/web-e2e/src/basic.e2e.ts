@@ -13,7 +13,7 @@ test('@web @m3u basic playlist import flow', async ({ page }) => {
     await page.goto('/');
 
     // Basic checks
-    expect(await page.title()).toBe('IPTVnator');
+    expect(await page.title()).toBe('meddl');
 
     // Upload playlist test
     await page.getByRole('button', { name: 'Add playlist' }).click();
@@ -147,7 +147,7 @@ test('@web @m3u reads an existing v1 IndexedDB playlist after application upgrad
     await page.evaluate(
         (id) =>
             new Promise<void>((resolve, reject) => {
-                const request = indexedDB.open('iptvnator', 1);
+                const request = indexedDB.open('meddl', 1);
                 request.onerror = () => reject(request.error);
                 request.onupgradeneeded = () => {
                     const store = request.result.createObjectStore(
@@ -250,7 +250,7 @@ test('@web @m3u reads an existing v1 IndexedDB playlist after application upgrad
     const persisted = await page.evaluate(
         (id) =>
             new Promise((resolve, reject) => {
-                const request = indexedDB.open('iptvnator');
+                const request = indexedDB.open('meddl');
                 request.onerror = () => reject(request.error);
                 request.onsuccess = () => {
                     const db = request.result;

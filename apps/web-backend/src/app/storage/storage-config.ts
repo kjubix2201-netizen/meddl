@@ -1,9 +1,9 @@
 export interface ServerStorageConfig {
-    /** `IPTVNATOR_STORAGE=server`; the Docker image sets it. */
+    /** `MEDDL_STORAGE=server`; the Docker image sets it. */
     readonly enabled: boolean;
-    /** `IPTVNATOR_ACCESS_TOKEN`; guards every non-public route when set. */
+    /** `MEDDL_ACCESS_TOKEN`; guards every non-public route when set. */
     readonly accessToken: string | null;
-    /** Largest accepted playlist document (`IPTVNATOR_MAX_DOCUMENT_MB`). */
+    /** Largest accepted playlist document (`MEDDL_MAX_DOCUMENT_MB`). */
     readonly maxDocumentBytes: number;
 }
 
@@ -19,16 +19,16 @@ export function serverStorageConfigProblem(
     config: ServerStorageConfig
 ): string | null {
     return config.accessToken && !config.enabled
-        ? 'IPTVNATOR_ACCESS_TOKEN needs IPTVNATOR_STORAGE=server: the browser app asks for the token only when the server stores its playlists. Unset the token, or protect a stateless backend in your reverse proxy.'
+        ? 'MEDDL_ACCESS_TOKEN needs MEDDL_STORAGE=server: the browser app asks for the token only when the server stores its playlists. Unset the token, or protect a stateless backend in your reverse proxy.'
         : null;
 }
 
 export function readServerStorageConfig(
     env: Record<string, string | undefined> = process.env
 ): ServerStorageConfig {
-    const mode = env['IPTVNATOR_STORAGE']?.trim().toLowerCase();
-    const token = env['IPTVNATOR_ACCESS_TOKEN']?.trim();
-    const megabytes = Number(env['IPTVNATOR_MAX_DOCUMENT_MB']);
+    const mode = env['MEDDL_STORAGE']?.trim().toLowerCase();
+    const token = env['MEDDL_ACCESS_TOKEN']?.trim();
+    const megabytes = Number(env['MEDDL_MAX_DOCUMENT_MB']);
 
     return {
         enabled: mode === 'server',

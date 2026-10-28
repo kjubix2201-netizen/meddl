@@ -151,11 +151,11 @@ function writeWindowsHelperFixture(helperPath, importedDllName) {
 }
 
 test('Linux package identity does not expose the internal Electron backend project name', () => {
-    assert.equal(electronBuilderConfig.productName, 'IPTVnator');
-    assert.equal(electronBuilderConfig.extraMetadata?.name, 'iptvnator');
-    assert.equal(electronBuilderConfig.extraMetadata?.productName, 'IPTVnator');
-    assert.equal(electronBuilderConfig.linux?.executableName, 'iptvnator');
-    assert.equal(electronBuilderConfig.extraMetadata?.desktopName, 'iptvnator');
+    assert.equal(electronBuilderConfig.productName, 'meddl');
+    assert.equal(electronBuilderConfig.extraMetadata?.name, 'meddl');
+    assert.equal(electronBuilderConfig.extraMetadata?.productName, 'meddl');
+    assert.equal(electronBuilderConfig.linux?.executableName, 'meddl');
+    assert.equal(electronBuilderConfig.extraMetadata?.desktopName, 'meddl');
     assert.ok(
         electronBuilderConfig.linux?.executableArgs?.includes(
             '--ozone-platform=x11'
@@ -211,17 +211,17 @@ test('AppImage desktop metadata supports AppManager without changing other Linux
                     ];
                 })
         );
-        assert.equal(fields['X-AppImage-Name'], 'IPTVnator');
+        assert.equal(fields['X-AppImage-Name'], 'meddl');
         assert.equal(fields['X-AppImage-Version'], version);
         assert.equal(
             fields['X-AppImage-Homepage'],
-            'https://github.com/4gray/iptvnator'
+            'https://github.com/kjubix2201-netizen/meddl'
         );
         assert.equal(
             fields['X-AppImage-UpdateURL'],
-            'https://github.com/4gray/iptvnator'
+            'https://github.com/kjubix2201-netizen/meddl'
         );
-        assert.equal(fields.StartupWMClass, 'iptvnator');
+        assert.equal(fields.StartupWMClass, 'meddl');
         assert.equal(fields.Exec, 'AppRun --ozone-platform=x11 %U');
         assert.equal(
             fields.MimeType,
@@ -231,16 +231,16 @@ test('AppImage desktop metadata supports AppManager without changing other Linux
         assert.equal(fields['X-AppImage-Arch'], undefined);
         const otherDesktop = await helper.computeDesktopEntry(
             config.linux,
-            'iptvnator %U'
+            'meddl %U'
         );
         assert.doesNotMatch(otherDesktop, /^X-AppImage-/m);
-        assert.match(otherDesktop, /^StartupWMClass=iptvnator$/m);
-        assert.equal(helper.getDesktopFileName(), 'iptvnator');
+        assert.match(otherDesktop, /^StartupWMClass=meddl$/m);
+        assert.equal(helper.getDesktopFileName(), 'meddl');
     }
 });
 
 test('playlist file associations are registered with the operating system', () => {
-    // Without these the OS never offers IPTVnator as a handler, so every
+    // Without these the OS never offers meddl as a handler, so every
     // runtime path for an OS-supplied playlist is unreachable by double-click.
     assert.deepEqual(electronBuilderConfig.fileAssociations, [
         {
@@ -291,8 +291,8 @@ test('GitHub Releases auto-update metadata is generated and uploaded', () => {
     assert.deepEqual(electronBuilderConfig.publish, [
         {
             provider: 'github',
-            owner: '4gray',
-            repo: 'iptvnator',
+            owner: 'kjubix2201-netizen',
+            repo: 'meddl',
         },
     ]);
     assert.deepEqual(electronBuilderConfig.mac?.target, [
@@ -425,7 +425,7 @@ test('package layout verifier uses canonical helpers and direct dependencies', (
         packageLayoutVerifier,
         /builderEffectiveConfigPath && fileExists\(builderEffectiveConfigPath\)/
     );
-    assert.match(packageLayoutVerifier, /IPTVNATOR_LINUX_FRAME_COPY_PROFILE/);
+    assert.match(packageLayoutVerifier, /MEDDL_LINUX_FRAME_COPY_PROFILE/);
     assert.match(packageLayoutVerifier, /profile:\s*linuxFrameCopyProfile/);
     assert.match(packageLayoutVerifier, /targetNames:\s*linuxTargetNames/);
     assert.match(
@@ -580,7 +580,7 @@ test('embedded MPV native payload is owned exclusively by afterPack outside app.
 });
 
 test('embedded MPV package validation accepts Windows runtime files and Linux process isolation', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         for (const [platform, runtimeFile] of [
@@ -618,7 +618,7 @@ test('embedded MPV package validation accepts Windows runtime files and Linux pr
             );
             assert.ok(
                 missingWindowsFrameCopyErrors.some((error) =>
-                    error.includes('iptvnator_mpv_helper.exe')
+                    error.includes('meddl_mpv_helper.exe')
                 )
             );
             assert.ok(
@@ -628,7 +628,7 @@ test('embedded MPV package validation accepts Windows runtime files and Linux pr
             );
 
             writeWindowsHelperFixture(
-                join(nativeDir, 'iptvnator_mpv_helper.exe'),
+                join(nativeDir, 'meddl_mpv_helper.exe'),
                 runtimeFile
             );
             fs.writeFileSync(
@@ -668,7 +668,7 @@ test('embedded MPV package validation accepts Windows runtime files and Linux pr
         );
         assert.ok(
             missingFrameCopyErrors.some((error) =>
-                error.includes('iptvnator_mpv_helper')
+                error.includes('meddl_mpv_helper')
             )
         );
         assert.ok(
@@ -677,7 +677,7 @@ test('embedded MPV package validation accepts Windows runtime files and Linux pr
             )
         );
 
-        fs.writeFileSync(join(darwinNativeDir, 'iptvnator_mpv_helper'), '');
+        fs.writeFileSync(join(darwinNativeDir, 'meddl_mpv_helper'), '');
         fs.writeFileSync(
             join(darwinNativeDir, 'embedded_mpv_frame_reader.node'),
             ''
@@ -734,7 +734,7 @@ test('embedded MPV package validation accepts Windows runtime files and Linux pr
 });
 
 test('Windows frame-copy packages reject an mpv DLL that exists only under native/lib', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         for (const runtimeFile of [
@@ -757,7 +757,7 @@ test('Windows frame-copy packages reject an mpv DLL that exists only under nativ
                 JSON.stringify({ origin: 'vendored-lgpl' })
             );
             writeWindowsHelperFixture(
-                join(nativeDir, 'iptvnator_mpv_helper.exe'),
+                join(nativeDir, 'meddl_mpv_helper.exe'),
                 runtimeFile
             );
             fs.writeFileSync(
@@ -787,7 +787,7 @@ test('Windows frame-copy packages reject an mpv DLL that exists only under nativ
 });
 
 test('Windows frame-copy packages require the DLL imported by the helper', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         const nativeDir = join(
@@ -803,7 +803,7 @@ test('Windows frame-copy packages require the DLL imported by the helper', () =>
             JSON.stringify({ origin: 'vendored-lgpl' })
         );
         writeWindowsHelperFixture(
-            join(nativeDir, 'iptvnator_mpv_helper.exe'),
+            join(nativeDir, 'meddl_mpv_helper.exe'),
             'mpv-2.dll'
         );
         fs.writeFileSync(join(nativeDir, 'embedded_mpv_frame_reader.node'), '');
@@ -828,7 +828,7 @@ test('Windows frame-copy packages require the DLL imported by the helper', () =>
 });
 
 test('Windows frame-copy package validation fails closed for a malformed helper', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         const nativeDir = join(
@@ -843,7 +843,7 @@ test('Windows frame-copy package validation fails closed for a malformed helper'
             join(nativeDir, 'embedded-mpv-runtime.json'),
             JSON.stringify({ origin: 'vendored-lgpl' })
         );
-        fs.writeFileSync(join(nativeDir, 'iptvnator_mpv_helper.exe'), 'MZ');
+        fs.writeFileSync(join(nativeDir, 'meddl_mpv_helper.exe'), 'MZ');
         fs.writeFileSync(join(nativeDir, 'embedded_mpv_frame_reader.node'), '');
         fs.writeFileSync(join(nativeDir, 'mpv-2.dll'), '');
 
@@ -928,8 +928,8 @@ test('frame-copy packaging file operations enforce modes and remove stale artifa
     const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'impv-fc-files-'));
 
     try {
-        const helperPath = join(tempDir, 'iptvnator_mpv_helper');
-        const windowsHelperPath = join(tempDir, 'iptvnator_mpv_helper.exe');
+        const helperPath = join(tempDir, 'meddl_mpv_helper');
+        const windowsHelperPath = join(tempDir, 'meddl_mpv_helper.exe');
         const readerPath = join(tempDir, 'embedded_mpv_frame_reader.node');
         fs.writeFileSync(helperPath, '#!/bin/sh\n');
         fs.chmodSync(helperPath, 0o644);
@@ -970,7 +970,7 @@ test('frame-copy packaging file operations enforce modes and remove stale artifa
 test('Windows CI packages embedded MPV from a staged x64 runtime', () => {
     const requireEmbeddedMpvLines = buildAndMakeWorkflow
         .split(/\r?\n/)
-        .filter((line) => line.includes('IPTVNATOR_REQUIRE_EMBEDDED_MPV:'));
+        .filter((line) => line.includes('MEDDL_REQUIRE_EMBEDDED_MPV:'));
 
     assert.equal(
         packageMetadata.scripts?.['embedded-mpv:stage-runtime:windows-archive'],
@@ -999,7 +999,7 @@ test('Windows CI packages embedded MPV from a staged x64 runtime', () => {
     );
     assert.doesNotMatch(
         buildAndMakeWorkflow,
-        /(?:vars|secrets)\.IPTVNATOR_WINDOWS_EMBEDDED_MPV_RUNTIME/
+        /(?:vars|secrets)\.MEDDL_WINDOWS_EMBEDDED_MPV_RUNTIME/
     );
     assert.doesNotMatch(buildAndMakeWorkflow, /zhongfly\/mpv-winbuild/);
     assert.equal(windowsRuntimePin.repository, 'zhongfly/mpv-winbuild');
@@ -1044,7 +1044,7 @@ test('Windows CI packages embedded MPV from a staged x64 runtime', () => {
     );
     assert.match(
         buildAndMakeWorkflow,
-        /IPTVNATOR_REQUIRE_EMBEDDED_MPV:\s+\$\{\{\s*\(matrix\.os == 'linux' \|\| matrix\.os == 'windows'/
+        /MEDDL_REQUIRE_EMBEDDED_MPV:\s+\$\{\{\s*\(matrix\.os == 'linux' \|\| matrix\.os == 'windows'/
     );
     assert.match(embeddedMpvStageRuntimeSource, /\.dll\.a/);
     assert.match(embeddedMpvBuildSource, /\.dll\.a/);
@@ -1074,7 +1074,7 @@ test('Windows embedded MPV native build uses wide Win32 cursor resources', () =>
 });
 
 test('embedded MPV package validation rejects missing required Windows runtime', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         const nativeDir = join(
@@ -1102,7 +1102,7 @@ test('embedded MPV package validation rejects missing required Windows runtime',
 });
 
 test('embedded MPV package validation rejects bundled Linux libmpv', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         const nativeDir = join(
@@ -1131,7 +1131,7 @@ test('embedded MPV package validation rejects bundled Linux libmpv', () => {
 });
 
 test('embedded MPV package validation rejects frame-copy helpers in Linux packages', () => {
-    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'iptvnator-mpv-package-'));
+    const tempDir = fs.mkdtempSync(join(os.tmpdir(), 'meddl-mpv-package-'));
 
     try {
         const nativeDir = join(
@@ -1146,8 +1146,8 @@ test('embedded MPV package validation rejects frame-copy helpers in Linux packag
             join(nativeDir, 'embedded-mpv-runtime.json'),
             JSON.stringify({ origin: 'external-mpv-process' })
         );
-        fs.writeFileSync(join(nativeDir, 'iptvnator_mpv_helper'), '');
-        fs.writeFileSync(join(nativeDir, 'iptvnator_mpv_helper.exe'), '');
+        fs.writeFileSync(join(nativeDir, 'meddl_mpv_helper'), '');
+        fs.writeFileSync(join(nativeDir, 'meddl_mpv_helper.exe'), '');
 
         const errors = validatePackagedEmbeddedMpv(tempDir, {
             platform: 'linux',
@@ -1156,8 +1156,8 @@ test('embedded MPV package validation rejects frame-copy helpers in Linux packag
 
         const message = errors.join('\n');
         assert.match(message, /must not ship frame-copy helpers/);
-        assert.match(message, /iptvnator_mpv_helper\n/);
-        assert.match(message, /iptvnator_mpv_helper\.exe/);
+        assert.match(message, /meddl_mpv_helper\n/);
+        assert.match(message, /meddl_mpv_helper\.exe/);
     } finally {
         fs.rmSync(tempDir, { recursive: true, force: true });
     }

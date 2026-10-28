@@ -19,7 +19,7 @@ async function newServerPage(browser: Browser): Promise<Page> {
     await page.route('**/assets/app-config.js', (route) =>
         route.fulfill({
             contentType: 'application/javascript',
-            body: `window.__IPTVNATOR_CONFIG__ = { BACKEND_URL: ${JSON.stringify(STORAGE_BACKEND_URL)} };\n`,
+            body: `window.__MEDDL_CONFIG__ = { BACKEND_URL: ${JSON.stringify(STORAGE_BACKEND_URL)} };\n`,
         })
     );
     return page;
@@ -38,7 +38,7 @@ async function seedBrowserPlaylist(
     await page.evaluate(
         ([playlistId, playlistTitle]) =>
             new Promise<void>((resolve, reject) => {
-                const request = indexedDB.open('iptvnator', 1);
+                const request = indexedDB.open('meddl', 1);
                 request.onerror = () => reject(request.error);
                 request.onupgradeneeded = () => {
                     const store = request.result.createObjectStore(
@@ -205,7 +205,7 @@ test.describe('server storage @self-hosted @persistence', () => {
             );
 
             const manifest = {
-                kind: 'iptvnator-playlist-backup',
+                kind: 'meddl-playlist-backup',
                 version: 1,
                 exportedAt: new Date().toISOString(),
                 includeSecrets: true,

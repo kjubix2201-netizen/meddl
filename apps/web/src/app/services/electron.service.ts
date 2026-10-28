@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { LazySnackBar } from '@iptvnator/services/lazy-snack-bar';
+import { LazySnackBar } from '@meddl/services/lazy-snack-bar';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { PlaylistActions } from '@iptvnator/m3u-state';
-import { DialogService } from '@iptvnator/ui/components/confirm-dialog';
+import { PlaylistActions } from '@meddl/m3u-state';
+import { DialogService } from '@meddl/ui/components/confirm-dialog';
 import {
     DataService,
     SettingsStore,
     SourceActivityService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     AUTO_UPDATE_PLAYLISTS,
     AutoUpdatePlaylistsResult,
@@ -33,18 +33,18 @@ import {
     XTREAM_RESPONSE,
     XtreamCodeActions,
     SourceProbeContext,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     measureRendererPerformancePhase,
     RENDERER_PERFORMANCE_PHASE,
-} from '@iptvnator/shared/logging';
+} from '@meddl/shared/logging';
 import { AppConfig } from '../../environments/environment';
 import { buildAutoUpdatePlaylistsFeedback } from './auto-update-playlists-feedback';
 import {
     createLogger,
     createPortalDebugRequestContext,
     logPortalDebugEvent,
-} from '@iptvnator/portal/shared/util/logger';
+} from '@meddl/portal/shared/util/logger';
 
 interface PlayerLaunchPayload {
     readonly headers?: Record<string, string>;

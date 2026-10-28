@@ -23,9 +23,9 @@ export default defineConfig({
             env: {
                 PORT: String(tvPorts.library),
                 CLIENT_URL: `${tvOrigins.app},null`,
-                IPTVNATOR_STORAGE: 'server',
-                IPTVNATOR_ACCESS_TOKEN: 'tv-library-test',
-                IPTVNATOR_DATA_DIR: `${workspaceRoot}/tmp/tv-library-e2e-${process.pid}`,
+                MEDDL_STORAGE: 'server',
+                MEDDL_ACCESS_TOKEN: 'tv-library-test',
+                MEDDL_DATA_DIR: `${workspaceRoot}/tmp/tv-library-e2e-${process.pid}`,
                 TSX_TSCONFIG_PATH: 'tsconfig.base.json',
             },
             url: `${tvOrigins.library}/health`,
@@ -43,7 +43,7 @@ export default defineConfig({
             env: {
                 PORT: String(tvPorts.backend),
                 CLIENT_URL: `${tvOrigins.app},null`,
-                IPTVNATOR_PROXY_ALLOW_PRIVATE_NETWORKS: '1',
+                MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS: '1',
                 TSX_TSCONFIG_PATH: 'tsconfig.base.json',
             },
             url: `${tvOrigins.backend}/health`,

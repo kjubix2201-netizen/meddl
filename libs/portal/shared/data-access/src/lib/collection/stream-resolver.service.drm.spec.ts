@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
-import { EpgRuntimeBridgeService } from '@iptvnator/epg/data-access';
-import { StalkerSessionService } from '@iptvnator/portal/stalker/data-access';
-import { UnifiedCollectionItem } from '@iptvnator/portal/shared/util';
+import { EpgRuntimeBridgeService } from '@meddl/epg/data-access';
+import { StalkerSessionService } from '@meddl/portal/stalker/data-access';
+import { UnifiedCollectionItem } from '@meddl/portal/shared/util';
 import {
     XtreamApiService,
     XtreamUrlService,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 import {
     DataService,
     PlaylistsService,
     SettingsStore,
-} from '@iptvnator/services';
-import { Channel, ChannelDrm } from '@iptvnator/shared/interfaces';
+} from '@meddl/services';
+import { Channel, ChannelDrm } from '@meddl/shared/interfaces';
 import { StreamResolverService } from './stream-resolver.service';
 
 // The main resolver spec is at the test line cap.

@@ -1,10 +1,10 @@
-import { DataService } from '@iptvnator/services';
+import { DataService } from '@meddl/services';
 import {
     isStalkerStreamCredentialSafe,
     PlaylistMeta,
     StalkerPortalActions,
     StalkerPortalItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { StalkerSessionService } from '../../stalker-session.service';
 import { StalkerContentTypes } from '../../stalker-content-types';
 import { StalkerContentType } from '../stalker-store.contracts';

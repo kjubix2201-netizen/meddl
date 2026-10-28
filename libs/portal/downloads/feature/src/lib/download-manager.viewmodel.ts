@@ -1,5 +1,5 @@
-import type { DownloadItem } from '@iptvnator/services';
-import type { Playlist } from '@iptvnator/shared/interfaces';
+import type { DownloadItem } from '@meddl/services';
+import type { Playlist } from '@meddl/shared/interfaces';
 import {
     buildDownloadLibrary,
     compareDownloadIds,
@@ -9,7 +9,7 @@ import {
     type DownloadLibraryEntity,
     type DownloadLibraryRow,
 } from './download-library.viewmodel';
-import { foldSearchText } from '@iptvnator/shared/interfaces';
+import { foldSearchText } from '@meddl/shared/interfaces';
 
 export type {
     DownloadCatchupCardViewModel,

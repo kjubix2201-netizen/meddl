@@ -67,7 +67,7 @@ export async function addSource(
     await page
         .getByRole('button', { name: type.toUpperCase(), exact: true })
         .click();
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByLabel('Name', { exact: true }).fill(`TV ${type}`);
     await page
         .getByLabel(type === 'm3u' ? 'Playlist URL' : 'Provider URL')

@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import {
     epgDisplayTimeMs,
     type EpgProgram,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { EPG_DATE_KEY_FORMAT } from './epg-date';
 
 /**

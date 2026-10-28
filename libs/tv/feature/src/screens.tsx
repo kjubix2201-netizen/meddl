@@ -1,5 +1,5 @@
 import type { HomeFeature } from './use-home-feature';
-import { storedMediaPoster } from '@iptvnator/tv/data-access';
+import { storedMediaPoster } from '@meddl/tv/data-access';
 import { CatalogOrder, CatalogSortNotice } from './catalog-order';
 import {
     Empty,
@@ -7,8 +7,8 @@ import {
     VirtualCollection,
     Poster,
     ResumeCard,
-} from '@iptvnator/tv/ui';
-import { Media } from '@iptvnator/tv/util';
+} from '@meddl/tv/ui';
+import { Media } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function Home({
     tv,

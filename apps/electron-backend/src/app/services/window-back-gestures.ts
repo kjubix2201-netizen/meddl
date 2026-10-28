@@ -1,7 +1,7 @@
 import {
     ElectronBridgeBackGestureSource,
     WINDOW_BACK_REQUESTED,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 /** `app-command` for mouse Back buttons and the Browser Back key. */
 const APP_COMMAND_BACK = 'browser-backward';

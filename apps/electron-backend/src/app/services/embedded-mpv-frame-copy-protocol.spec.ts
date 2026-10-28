@@ -1,4 +1,4 @@
-import { ResolvedPortalPlayback } from '@iptvnator/shared/interfaces';
+import { ResolvedPortalPlayback } from '@meddl/shared/interfaces';
 import { buildLoadPlaybackCommand } from './embedded-mpv-frame-copy-protocol';
 
 describe('buildLoadPlaybackCommand', () => {

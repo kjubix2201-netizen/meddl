@@ -3,7 +3,7 @@ import {
     classifyNativePlaybackIssue,
     classifyVhsPlaybackIssue,
     createPlaybackSourceMetadata,
-} from '@iptvnator/playback/util';
+} from '@meddl/playback/util';
 import {
     getVideoJsPlaybackCodecs,
     hasActiveVhsSourceHandler,

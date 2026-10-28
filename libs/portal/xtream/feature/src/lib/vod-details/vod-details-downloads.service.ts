@@ -1,15 +1,15 @@
 import { Injectable, Signal, computed, inject, signal } from '@angular/core';
-import { XtreamStore } from '@iptvnator/portal/xtream/data-access';
-import { createMovieDownloadSnapshot } from '@iptvnator/portal/shared/util';
-import { DownloadsService } from '@iptvnator/services';
-import { DialogService } from '@iptvnator/ui/components';
-import { resolveXtreamVodPlaybackSource } from '@iptvnator/portal/xtream/data-access';
+import { XtreamStore } from '@meddl/portal/xtream/data-access';
+import { createMovieDownloadSnapshot } from '@meddl/portal/shared/util';
+import { DownloadsService } from '@meddl/services';
+import { DialogService } from '@meddl/ui/components';
+import { resolveXtreamVodPlaybackSource } from '@meddl/portal/xtream/data-access';
 import {
     getXtreamVodInfo,
     XTREAM_CLIENT_USER_AGENT,
     XtreamVodDetails,
     type XtreamVodInfo,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { TranslateService } from '@ngx-translate/core';
 import { resolveXtreamVodPlaybackPresentation } from './vod-details-playback-presentation';
 

@@ -1,11 +1,11 @@
-import type { ServerInstanceInfo } from '@iptvnator/shared/interfaces';
+import type { ServerInstanceInfo } from '@meddl/shared/interfaces';
 import {
     REMEMBERED_SERVER_KEY,
     resolveServerStorageStart,
 } from './server-storage-start';
 
 const instance: ServerInstanceInfo = {
-    service: 'iptvnator',
+    service: 'meddl',
     apiVersion: 1,
     instanceId: 'i-1',
     storage: 'server',
@@ -46,7 +46,7 @@ describe('resolveServerStorageStart', () => {
     });
 
     it('keeps the token only for the same server and database', () => {
-        const token = 'iptvnator-server:access-token';
+        const token = 'meddl-server:access-token';
         resolveServerStorageStart({ kind: 'server', instance }, '/api');
         localStorage.setItem(token, 'secret');
 
@@ -68,12 +68,12 @@ describe('resolveServerStorageStart', () => {
     });
 
     it('forgets the token of a server that no longer offers storage', () => {
-        localStorage.setItem('iptvnator-server:access-token', 'old');
+        localStorage.setItem('meddl-server:access-token', 'old');
 
         resolveServerStorageStart({ kind: 'none' }, '/api');
 
         expect(
-            localStorage.getItem('iptvnator-server:access-token')
+            localStorage.getItem('meddl-server:access-token')
         ).toBeNull();
     });
 

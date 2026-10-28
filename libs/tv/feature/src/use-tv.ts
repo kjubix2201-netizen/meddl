@@ -11,8 +11,8 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { useProvider } from './use-provider';
 import { useSourceNavigation } from './use-source-navigation';
 import { useTvRemote } from './use-tv-remote';
-import { LatestRequest, Media, Source } from '@iptvnator/tv/util';
-import { focusKey, platformBack, restoreFocus } from '@iptvnator/tv/ui';
+import { LatestRequest, Media, Source } from '@meddl/tv/util';
+import { focusKey, platformBack, restoreFocus } from '@meddl/tv/ui';
 export function useTv(video: { current: HTMLVideoElement | null }) {
     const [route, setRoute] = useState(firstRoute);
     const { error, errorRetry, errorRetryLabel, setError, clearError } =

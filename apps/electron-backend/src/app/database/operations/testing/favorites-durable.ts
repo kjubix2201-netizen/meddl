@@ -7,8 +7,8 @@ import { verifyUnlockedFavoriteDuplicate } from './favorites-locked-duplicate';
 import { verifyRestoredFavoriteSnapshot } from './favorites-restore-snapshot';
 import { createFavoriteTestCatalog } from './favorites-test-catalog';
 import { eq, sql } from 'drizzle-orm';
-import { closeDatabase, initDatabase } from '@iptvnator/shared/database';
-import * as schema from '@iptvnator/shared/database/schema';
+import { closeDatabase, initDatabase } from '@meddl/shared/database';
+import * as schema from '@meddl/shared/database/schema';
 import { setParentalLockActive } from '../../parental-lock-state';
 import {
     addFavorite,
@@ -29,7 +29,7 @@ import { persistContentMetadataIfMissing } from '../content-metadata.operations'
 import { setAppState } from '../playlist.operations';
 
 async function main() {
-    assert(process.env['IPTVNATOR_E2E_DATA_DIR']);
+    assert(process.env['MEDDL_E2E_DATA_DIR']);
     console.log = () => undefined;
     const db = await initDatabase();
     await db.insert(schema.playlists).values([

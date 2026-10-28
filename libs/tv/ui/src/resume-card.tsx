@@ -1,4 +1,4 @@
-import { Media, Progress, mediaTitle } from '@iptvnator/tv/util';
+import { Media, Progress, mediaTitle } from '@meddl/tv/util';
 import { TvIcon } from './icon';
 export function ResumeCard({
     progress,

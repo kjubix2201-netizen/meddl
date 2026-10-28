@@ -2,8 +2,8 @@ import { ChildProcess } from 'child_process';
 import {
     ExternalPlayerSession,
     PlayerContentInfo,
-} from '@iptvnator/shared/interfaces';
-import { redactSensitiveData } from '@iptvnator/shared/logging';
+} from '@meddl/shared/interfaces';
+import { redactSensitiveData } from '@meddl/shared/logging';
 import { joinMpvHeaderFields } from '../util/mpv-string-list.util';
 import { externalPlayerProcessTeardownGate } from './external-player-process';
 import {

@@ -3,7 +3,7 @@ import {
     SettingsDraft,
     SetupPurpose,
     PhoneSettingsDefaults,
-} from '@iptvnator/tv/util';
+} from '@meddl/tv/util';
 import { backendJson } from './backend';
 export interface PairingSession {
     id: string;

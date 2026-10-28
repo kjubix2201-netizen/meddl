@@ -14,10 +14,10 @@ import {
 } from './favorites-table';
 import { xtreamCacheUniqueIndexesExist } from './xtream-cache-unique-indexes';
 /**
- * Database connection and initialization for IPTVnator
+ * Database connection and initialization for meddl
  * Uses Drizzle ORM with better-sqlite3
- * Stores database file under ~/.iptvnator/databases/ by default.
- * E2E tests can override the root with IPTVNATOR_E2E_DATA_DIR.
+ * Stores database file under ~/.meddl/databases/ by default.
+ * E2E tests can override the root with MEDDL_E2E_DATA_DIR.
  *
  * Provides two connection modes:
  * - Full access (for electron-backend): creates tables, read-write
@@ -30,9 +30,9 @@ import { drizzle } from 'drizzle-orm/better-sqlite3';
 import {
     redactSensitiveData,
     summarizeSqlStatementForTrace,
-} from '@iptvnator/shared/logging';
+} from '@meddl/shared/logging';
 import * as schema from './schema';
-import { getIptvnatorDatabasePath } from './path-utils';
+import { getMeddlDatabasePath } from './path-utils';
 import { notifyDatabaseConnectionOpened } from './connection-observer';
 
 export type DatabaseInstance = BetterSQLite3Database<typeof schema>;
@@ -67,20 +67,20 @@ function readTraceFlag(name: string): boolean {
 
 function isSqlTraceEnabled(): boolean {
     return (
-        readTraceFlag('IPTVNATOR_TRACE_STARTUP') ||
-        readTraceFlag('IPTVNATOR_TRACE_DB') ||
-        readTraceFlag('IPTVNATOR_TRACE_SQL')
+        readTraceFlag('MEDDL_TRACE_STARTUP') ||
+        readTraceFlag('MEDDL_TRACE_DB') ||
+        readTraceFlag('MEDDL_TRACE_SQL')
     );
 }
 
 function traceSql(scope: string, message: string, payload?: unknown): void {
     if (payload === undefined) {
-        console.log(`[IPTVnator Trace][${scope}] ${message}`);
+        console.log(`[meddl Trace][${scope}] ${message}`);
         return;
     }
 
     console.log(
-        `[IPTVnator Trace][${scope}] ${message} ${JSON.stringify(
+        `[meddl Trace][${scope}] ${message} ${JSON.stringify(
             redactSensitiveData(payload)
         )}`
     );
@@ -94,7 +94,7 @@ function traceSqlStatement(sql: unknown): void {
  * Get the database file path
  */
 export function getDatabasePath(): string {
-    return getIptvnatorDatabasePath();
+    return getMeddlDatabasePath();
 }
 
 /**

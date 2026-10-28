@@ -1,12 +1,12 @@
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
-import { findParentSeries } from '@iptvnator/tv/data-access';
+import { findParentSeries } from '@meddl/tv/data-access';
 import {
     LatestRequest,
     Media,
     recoverSeriesContext,
     seriesForEpisode,
-} from '@iptvnator/tv/util';
-import { restoreFocus } from '@iptvnator/tv/ui';
+} from '@meddl/tv/util';
+import { restoreFocus } from '@meddl/tv/ui';
 import { navigationOrigin, type NavigationOrigin } from './use-route-history';
 import type { TvModel } from './use-tv';
 

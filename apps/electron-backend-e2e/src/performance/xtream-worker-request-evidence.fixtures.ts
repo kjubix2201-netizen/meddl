@@ -1,7 +1,7 @@
 import type {
     DatabaseWorkerPerformancePhase,
     PerformancePhaseEvent,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 import {
     expectedXtreamWorkerRequestInventory,

@@ -19,7 +19,7 @@ import { Worker } from 'worker_threads';
 import {
     ElectronBridgeSecurityErrorCode,
     ElectronBridgeTrustOptions,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 
 export type EpgProgressStatus =
     'queued' | 'loading' | 'complete' | 'error' | 'cancelled';

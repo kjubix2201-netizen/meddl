@@ -1,5 +1,5 @@
-import type { Playlist } from '@iptvnator/shared/interfaces';
-import type { Source, LibrarySettings } from '@iptvnator/tv/util';
+import type { Playlist } from '@meddl/shared/interfaces';
+import type { Source, LibrarySettings } from '@meddl/tv/util';
 import { backendUrl } from './backend';
 import {
     librarySource,
@@ -70,7 +70,7 @@ export class ServerLibrary {
         // Never send a saved token or write before verifying the public instance identity.
         const info = await this.request('/instance', signal, {}, true);
         if (
-            info?.service !== 'iptvnator' ||
+            info?.service !== 'meddl' ||
             info.apiVersion !== 1 ||
             info.storage !== 'server' ||
             typeof info.instanceId !== 'string' ||

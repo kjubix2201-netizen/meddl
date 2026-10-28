@@ -1,4 +1,4 @@
-import { mediaTitle, type Media, type Progress } from '@iptvnator/tv/util';
+import { mediaTitle, type Media, type Progress } from '@meddl/tv/util';
 export function Hero({
     item,
     open,

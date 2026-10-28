@@ -2,7 +2,7 @@ import {
     getXtreamVodInfo,
     XtreamVodDetails,
     XtreamVodStream,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     resolveXtreamVodPlaybackSource,
     XtreamVodPlaybackItem,

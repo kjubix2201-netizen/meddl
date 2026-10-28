@@ -2,7 +2,7 @@ import {
     clearCompletedDownloadsRequest,
     removeDownloadRequest,
 } from './download-removal-requests';
-import type { DownloadMetadataSnapshot } from '@iptvnator/shared/interfaces';
+import type { DownloadMetadataSnapshot } from '@meddl/shared/interfaces';
 import { eq } from 'drizzle-orm';
 import { app, dialog, ipcMain, shell } from 'electron';
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';

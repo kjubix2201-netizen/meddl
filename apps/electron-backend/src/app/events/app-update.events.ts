@@ -8,7 +8,7 @@ import {
     ElectronBridgeAppUpdateReleaseNotes,
     ElectronBridgeAppUpdateReleaseNotesRequest,
     ElectronBridgeAppUpdateStatus,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import { AppUpdateService } from '../services/app-update.service';
 
 export interface AppUpdateServiceContract {

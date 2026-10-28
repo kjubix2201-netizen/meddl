@@ -10,7 +10,7 @@ jest.mock('../app', () => ({
     },
 }));
 
-import { readExternalPlayerErrorCode } from '@iptvnator/shared/interfaces';
+import { readExternalPlayerErrorCode } from '@meddl/shared/interfaces';
 import {
     buildPlayerStartError,
     classifyPlayerError,

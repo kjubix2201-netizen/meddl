@@ -4,7 +4,7 @@ import type { ElectronApplication } from '@playwright/test';
  * Test-side client for the main-process gate in
  * `../performance/journey-renderer-gate.cjs`.
  */
-export const JOURNEY_RENDERER_GATE_KEY = '__iptvnatorJourneyGate';
+export const JOURNEY_RENDERER_GATE_KEY = '__meddlJourneyGate';
 
 export interface JourneyRendererGateState {
     readonly blankLoadedEpochMs: number | null;

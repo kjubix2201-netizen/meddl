@@ -1,10 +1,10 @@
 import { and, eq, or, sql, type SQL } from 'drizzle-orm';
 import type { SQLiteColumn } from 'drizzle-orm/sqlite-core';
-import * as schema from '@iptvnator/shared/database/schema';
+import * as schema from '@meddl/shared/database/schema';
 import {
     ContentMetadataPatch,
     normalizeContentMetadataPatch,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     favoriteMatchesContentId,
     reconcileFavoriteIdentity,

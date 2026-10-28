@@ -263,7 +263,7 @@ Both write the lists first and require the nested favorite snapshots to persist
 before consuming pending state. A quota or storage failure keeps the archive
 parked for another attempt, including when the provider returns an empty catalog.
 Each browser list write stores its restore receipt in the same JSON blob, under
-`__iptvnator_xtream_restore_receipts__` outside the playlist arrays. Ordinary
+`__meddl_xtream_restore_receipts__` outside the playlist arrays. Ordinary
 list edits preserve that internal metadata, so retries skip completed list writes
 and cannot undo later removals, reordering, history updates or playback progress.
 A bounded per-playlist receipt remembers the imported keys still owned by the
@@ -371,7 +371,7 @@ collection load.
 ## Connection Input
 
 Xtream server URLs are normalized through
-`normalizeXtreamServerUrl` from `@iptvnator/shared/interfaces`.
+`normalizeXtreamServerUrl` from `@meddl/shared/interfaces`.
 
 Rules:
 
@@ -392,7 +392,7 @@ the normalized `serverUrl` plus trimmed credentials.
 ### Explicit protocol discovery
 
 Add and Edit source share `XtreamConnectionTestService` and form-owned
-`createXtreamConnectionTestState` (`@iptvnator/services`). The explicit
+`createXtreamConnectionTestState` (`@meddl/services`). The explicit
 **Test HTTPS and HTTP** button has a visible, accessible pre-request notice
 that credentials may be sent over unencrypted HTTP. Clicking that action supplies
 `allowHttpFallback`; the service defaults it to false, so an ordinary programmatic
@@ -444,7 +444,7 @@ carrying `status`; catalog calls get the usual `{ type: ERROR, status, message }
 result — status 499 and no snackbar for a cancellation, the real 401/403
 (previously lost as `[object Object]`) for a refusal. The main process logs a
 refusal as one credential-free `console.warn` (unless `suppressErrorLog`), a
-cancellation only under `IPTVNATOR_TRACE_IPC`, and everything else as before
+cancellation only under `MEDDL_TRACE_IPC`, and everything else as before
 at error level with a rejection.
 
 The saved base drives catalog refresh, provider EPG, live/VOD/series/catch-up URL
@@ -695,7 +695,7 @@ therefore counts as sparse and gets the fallback page above.
 
 ## Catch-Up Playback URLs
 
-Xtream-compatible portals differ on archive playback URL shape. IPTVnator
+Xtream-compatible portals differ on archive playback URL shape. meddl
 supports these catch-up variants:
 
 1. REST-style `/timeshift/{username}/{password}/{duration}/{start}/{streamId}.ts`

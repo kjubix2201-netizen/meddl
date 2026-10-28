@@ -10,7 +10,7 @@ import {
     PlaylistActions,
     selectPlaylistsLoadFailed,
     selectPlaylistsLoadingFlag,
-} from '@iptvnator/m3u-state';
+} from '@meddl/m3u-state';
 import { provideRouter, Router } from '@angular/router';
 import { AppStartupStatusComponent } from './app-startup-status.component';
 

@@ -1,7 +1,7 @@
 import {
     createScrollPositionPreserver,
     focusLiveChannels,
-} from '@iptvnator/ui/components';
+} from '@meddl/ui/components';
 import {
     afterRenderEffect,
     ChangeDetectionStrategy,

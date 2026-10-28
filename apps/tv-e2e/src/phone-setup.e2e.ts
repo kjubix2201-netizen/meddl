@@ -2,7 +2,7 @@ import { expect, test, Page } from '@playwright/test';
 import { backend, nav, stalker, start, xtream } from './helpers';
 async function connect(page: Page) {
     await start(page);
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(page.locator('.connection-status')).toHaveText('Connected');
 }
@@ -183,10 +183,10 @@ test('cancelled and expired links cannot add a source', async ({
 test('automatic discovery verifies a candidate and manual edits retire its connected status', async ({
     page,
 }) => {
-    await page.route('http://iptvnator.local:3335/tv/connection', (route) =>
+    await page.route('http://meddl.local:3335/tv/connection', (route) =>
         route.fulfill({
             json: {
-                service: 'iptvnator',
+                service: 'meddl',
                 protocol: 1,
                 pairing: true,
                 auth: 'none',
@@ -194,23 +194,23 @@ test('automatic discovery verifies a candidate and manual edits retire its conne
         })
     );
     await page.route(
-        'http://iptvnator.local:3335/tv/connection/check',
+        'http://meddl.local:3335/tv/connection/check',
         (route) =>
-            route.fulfill({ json: { service: 'iptvnator', connected: true } })
+            route.fulfill({ json: { service: 'meddl', connected: true } })
     );
-    await page.route('http://iptvnator.local:3333/**', (route) =>
+    await page.route('http://meddl.local:3333/**', (route) =>
         route.abort()
     );
-    await page.route('http://iptvnator.local:4333/**', (route) =>
+    await page.route('http://meddl.local:4333/**', (route) =>
         route.abort()
     );
     await page.goto('/');
     await expect(page.locator('.connection-status')).toHaveText('Connected');
-    await expect(page.getByLabel('IPTVnator backend URL')).toHaveValue(
-        'http://iptvnator.local:3335'
+    await expect(page.getByLabel('meddl backend URL')).toHaveValue(
+        'http://meddl.local:3335'
     );
     await page
-        .getByLabel('IPTVnator backend URL')
+        .getByLabel('meddl backend URL')
         .fill('http://unrelated.example');
     await expect(page.locator('.connection-status')).toHaveText('Not checked');
     await expect(
@@ -229,11 +229,11 @@ test('multiple discovered backends require a choice and late checks cannot overr
 }) => {
     for (const port of [3333, 3335]) {
         await page.route(
-            `http://iptvnator.local:${port}/tv/connection`,
+            `http://meddl.local:${port}/tv/connection`,
             (route) =>
                 route.fulfill({
                     json: {
-                        service: 'iptvnator',
+                        service: 'meddl',
                         protocol: 1,
                         pairing: true,
                         auth: 'none',
@@ -241,14 +241,14 @@ test('multiple discovered backends require a choice and late checks cannot overr
                 })
         );
         await page.route(
-            `http://iptvnator.local:${port}/tv/connection/check`,
+            `http://meddl.local:${port}/tv/connection/check`,
             (route) =>
                 route.fulfill({
-                    json: { service: 'iptvnator', connected: true },
+                    json: { service: 'meddl', connected: true },
                 })
         );
     }
-    await page.route('http://iptvnator.local:4333/**', (route) =>
+    await page.route('http://meddl.local:4333/**', (route) =>
         route.abort()
     );
     await page.goto('/');
@@ -262,7 +262,7 @@ test('multiple discovered backends require a choice and late checks cannot overr
     await page
         .locator('.backend-results')
         .getByRole('button', {
-            name: 'http://iptvnator.local:3335',
+            name: 'http://meddl.local:3335',
             exact: true,
         })
         .click();
@@ -276,7 +276,7 @@ test('multiple discovered backends require a choice and late checks cannot overr
         try {
             await route.fulfill({
                 json: {
-                    service: 'iptvnator',
+                    service: 'meddl',
                     protocol: 1,
                     pairing: true,
                     auth: 'none',
@@ -286,16 +286,16 @@ test('multiple discovered backends require a choice and late checks cannot overr
             /* cancelled */
         }
     });
-    await page.getByLabel('IPTVnator backend URL').fill('http://slow.example');
+    await page.getByLabel('meddl backend URL').fill('http://slow.example');
     const started = page.waitForRequest('http://slow.example/tv/connection');
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await started;
-    await page.getByLabel('IPTVnator backend URL').fill(backend);
+    await page.getByLabel('meddl backend URL').fill(backend);
     release();
     await expect(page.locator('.connection-status')).toHaveText('Not checked');
     await page.getByRole('button', { name: 'Check and connect' }).click();
     await expect(page.locator('.connection-status')).toHaveText('Connected');
-    await expect(page.getByLabel('IPTVnator backend URL')).toHaveValue(backend);
+    await expect(page.getByLabel('meddl backend URL')).toHaveValue(backend);
 });
 
 test('leaving Sources during a committed write still delivers the saved receipt', async ({

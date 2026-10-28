@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'preact/hooks';
-import { restoreFocus } from '@iptvnator/tv/ui';
+import { restoreFocus } from '@meddl/tv/ui';
 import { firstRoute, type Route } from './navigation';
 
 /** Server refresh can replace a source without going through the source picker. */

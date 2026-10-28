@@ -1,14 +1,14 @@
-import type { ElectronBridgeFavoriteReorderUpdate } from '@iptvnator/shared/interfaces';
+import type { ElectronBridgeFavoriteReorderUpdate } from '@meddl/shared/interfaces';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import { PlaylistActions, selectAllPlaylistsMeta } from '@iptvnator/m3u-state';
+import { PlaylistActions, selectAllPlaylistsMeta } from '@meddl/m3u-state';
 import { firstValueFrom, map } from 'rxjs';
 import {
     DatabaseService,
     PlaylistsService,
     RuntimeCapabilitiesService,
-} from '@iptvnator/services';
+} from '@meddl/services';
 import {
     Channel,
     extractStalkerItemId,
@@ -20,7 +20,7 @@ import {
     Playlist,
     PlaylistMeta,
     StalkerPortalItem,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     buildCollectionUid,
     buildXtreamCollectionUid,
@@ -29,11 +29,11 @@ import {
     UnifiedCollectionItem,
     xtreamContentType,
     XtreamFavoriteRow,
-} from '@iptvnator/portal/shared/util';
+} from '@meddl/portal/shared/util';
 import {
     XTREAM_DATA_SOURCE,
     XtreamFavoriteItem,
-} from '@iptvnator/portal/xtream/data-access';
+} from '@meddl/portal/xtream/data-access';
 
 const GLOBAL_FAVORITES_ORDER_KEY = 'global-favorites-channel-order-v1';
 

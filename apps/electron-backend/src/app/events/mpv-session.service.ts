@@ -3,7 +3,7 @@ import {
     ExternalPlayerSession,
     PlayerContentInfo,
     readExternalPlayerErrorCode,
-} from '@iptvnator/shared/interfaces';
+} from '@meddl/shared/interfaces';
 import {
     MPV_PLAYER_ARGUMENTS,
     MPV_PLAYER_PATH,

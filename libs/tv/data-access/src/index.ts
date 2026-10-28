@@ -1,4 +1,4 @@
-import { Source, ProviderClient } from '@iptvnator/tv/util';
+import { Source, ProviderClient } from '@meddl/tv/util';
 import { ProviderTransport } from './transport';
 import { XtreamProvider } from './xtream';
 import { StalkerProvider } from './stalker';
