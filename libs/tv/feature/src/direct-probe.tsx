@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useState } from 'preact/hooks';
 import { probeDirect } from '@meddl/tv/data-access';
 import { TvModel } from './use-tv';
@@ -7,12 +8,9 @@ export function DirectAccessProbe({ tv }: { tv: TvModel }) {
     const source = tv.data.sources.find((s) => s.id === tv.data.activeId);
     return (
         <section class="probe">
-            <h2>Direct access check</h2>
+            <h2>{t('Direct access check')}</h2>
             <p class="muted">
-                This optional check sends one catalog request directly to your
-                selected provider from this device, including Xtream login
-                details. It checks media HTTP headers separately using the last
-                stream address. The backend remains selected.
+                {t('This optional check sends one catalog request directly to your selected provider from this device, including Xtream login details. It checks media HTTP headers separately using the last stream address. The backend remains selected.')}
             </p>
             <button
                 data-focus="settings:direct-probe"
@@ -35,7 +33,7 @@ export function DirectAccessProbe({ tv }: { tv: TvModel }) {
                     }
                 }}
             >
-                {busy ? 'Checking…' : 'Test direct access'}
+                {busy ? t('Checking…') : t('Test direct access')}
             </button>
             {result ? (
                 <div role="status">

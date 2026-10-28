@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { ActorFilmographyCredit } from '@meddl/shared/tmdb';
 import {
@@ -68,7 +69,7 @@ export function useFilmographySearch(tv: TvModel, memory: FilmographyMemory) {
             }
         }, 15000);
         try {
-            if (!provider) throw new Error('Provider unavailable.');
+            if (!provider) throw new Error(t('Provider unavailable.'));
             const result = await findFilmographyTitle(
                 provider,
                 tv.data.activeId,

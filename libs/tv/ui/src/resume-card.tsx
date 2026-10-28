@@ -1,4 +1,4 @@
-import { Media, Progress, mediaTitle } from '@meddl/tv/util';
+import { Media, Progress, mediaTitle, t } from '@meddl/tv/util';
 import { TvIcon } from './icon';
 export function ResumeCard({
     progress,
@@ -44,10 +44,10 @@ export function ResumeCard({
                 ) : null}
                 <span class="resume-position">
                     {item.season ? `S${item.season} · E${item.episode} · ` : ''}
-                    {Math.floor(seconds / 60)} min watched
+                    {t('{minutes} min watched', { minutes: Math.floor(seconds / 60) })}
                 </span>
                 <progress
-                    aria-label={`${mediaTitle(item)}: viewing progress`}
+                    aria-label={t('{title}: viewing progress', { title: mediaTitle(item) })}
                     max={knownDuration ? duration : undefined}
                     value={
                         knownDuration
@@ -55,7 +55,7 @@ export function ResumeCard({
                             : undefined
                     }
                 />
-                <span class="resume-action">Resume →</span>
+                <span class="resume-action">{t('Resume →')}</span>
             </span>
         </button>
     );

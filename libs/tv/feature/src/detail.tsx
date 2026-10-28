@@ -1,7 +1,7 @@
 import { Empty, VirtualCollection } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
 import { TvMetadata } from '@meddl/tv/data-access';
-import { mediaTitle } from '@meddl/tv/util';
+import { mediaTitle, t } from '@meddl/tv/util';
 import { MetadataCredits } from './metadata-credits';
 import { useEpisodeMetadata } from './use-episode-metadata';
 export function Detail({
@@ -56,7 +56,7 @@ export function Detail({
                     ) : null}
                     <p>
                         {item.description ||
-                            'Your provider has not supplied a description for this title.'}
+                            t('Your provider has not supplied a description for this title.')}
                     </p>
                     <div class="actions">
                         {item.kind !== 'series' ? (
@@ -66,8 +66,8 @@ export function Detail({
                                 onClick={() => tv.play(item)}
                             >
                                 {tv.data.positions[item.id]?.seconds
-                                    ? 'Resume'
-                                    : 'Watch now'}{' '}
+                                    ? t('Resume')
+                                    : t('Watch now')}{' '}
                                 ▶
                             </button>
                         ) : null}
@@ -80,7 +80,7 @@ export function Detail({
                             aria-pressed={saved}
                             onClick={() => tv.favorite(item)}
                         >
-                            {saved ? '♥ Saved' : '♡ Add to favorites'}
+                            {saved ? t('♥ Saved') : t('♡ Add to favorites')}
                         </button>
                     </div>
                 </div>
@@ -95,11 +95,11 @@ export function Detail({
                     }
                 >
                     <div class="section-title">
-                        <h2>Episodes</h2>
+                        <h2>{t('Episodes')}</h2>
                         <label>
-                            Season
+                            {t('Season')}
                             <select
-                                aria-label="Season"
+                                aria-label={t('Season')}
                                 value={currentSeason}
                                 onChange={(e) => {
                                     selectSeason(Number(e.currentTarget.value));
@@ -113,10 +113,9 @@ export function Detail({
                     </div>
                     {metadata.failed ? (
                         <p role="status" class="metadata-notice">
-                            Episode metadata is unavailable. Showing provider
-                            episodes.{' '}
+                            {t('Episode metadata is unavailable. Showing provider episodes.')}{' '}
                             <button onClick={metadata.retry}>
-                                Retry episode metadata
+                                {t('Retry episode metadata')}
                             </button>
                         </p>
                     ) : null}
@@ -159,8 +158,8 @@ export function Detail({
                                     ) : null}
                                     <small>
                                         {tv.data.positions[e.id]?.seconds
-                                            ? 'Resume episode'
-                                            : 'Watch episode'}{' '}
+                                            ? t('Resume episode')
+                                            : t('Watch episode')}{' '}
                                         →
                                     </small>
                                 </span>
@@ -169,7 +168,7 @@ export function Detail({
                     />
                     {!tv.busy && !episodes.length ? (
                         <Empty>
-                            No episodes were supplied for this series.
+                            {t('No episodes were supplied for this series.')}
                         </Empty>
                     ) : null}
                 </section>

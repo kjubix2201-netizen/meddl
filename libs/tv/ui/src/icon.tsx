@@ -10,6 +10,16 @@ const paths: Record<string, string> = {
     check: 'M4 12l5 5L20 6',
     volume: 'M4 9h4l5-4v14l-5-4H4z M16 9a4 4 0 0 1 0 6 M18.5 6.5a7.5 7.5 0 0 1 0 11',
     muted: 'M4 9h4l5-4v14l-5-4H4z M16 9l5 6 M21 9l-5 6',
+    star: 'M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z',
+    play: 'M8 5v14l11-7z',
+    pause: 'M8 5v14 M16 5v14',
+    previous: 'M6 5v14 M19 5L9 12l10 7z',
+    next: 'M18 5v14 M5 5l10 7-10 7z',
+    back: 'M15 5l-7 7 7 7',
+    rewind: 'M11 6l-7 6 7 6z M20 6l-7 6 7 6z',
+    forward: 'M13 6l7 6-7 6z M4 6l7 6-7 6z',
+    guide: 'M3 4h18v16H3z M3 9h18 M9 9v11',
+    list: 'M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01',
 };
 export function TvIcon({ name }: { name: string }) {
     return (

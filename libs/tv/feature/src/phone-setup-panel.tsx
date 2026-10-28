@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useLayoutEffect, useRef } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
 
@@ -42,7 +43,7 @@ export function PhoneSetupPanel({
             data-tv-modal={compact || undefined}
             role={compact ? 'dialog' : undefined}
             aria-modal={compact || undefined}
-            aria-label={compact ? 'Set up from phone' : undefined}
+            aria-label={compact ? t('Set up from phone') : undefined}
             onKeyDown={(event) => {
                 if (!compact) return;
                 if (
@@ -107,8 +108,8 @@ export function PhoneInstructions({
                 alt="Scan this QR code to set up your TV from your phone"
             />
             <div>
-                <h3>Open your phone’s camera</h3>
-                <p>Keep your phone on the same home network.</p>
+                <h3>{t('Open your phone’s camera')}</h3>
+                <p>{t('Keep your phone on the same home network.')}</p>
                 <p class="muted" role="status">
                     Waiting for your phone · {Math.floor(remaining / 60)}:
                     {String(remaining % 60).padStart(2, '0')}

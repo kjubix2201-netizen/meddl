@@ -5,8 +5,7 @@ import {
     LatestRequest,
     Media,
     Program,
-    ProviderClient,
-} from '@meddl/tv/util';
+    ProviderClient, t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
 import type { Route } from './navigation';
 import { useCatalog } from './use-catalog';
@@ -38,6 +37,13 @@ export function useContent(
     );
     const home = homeState.key === key ? homeState.value : [];
     const setHome = (value: Media[]) => setHomeState({ key, value });
+    // Titles per section for the home tiles; read from the same catalog
+    // requests the home rails already make, so no extra provider traffic.
+    const [countState, setCountState] = useState<{
+        key: string;
+        value: Partial<Record<Kind, number>>;
+    }>({ key: '', value: {} });
+    const homeCounts = countState.key === key ? countState.value : {};
     const [episodes, setEpisodes] = useState<Media[]>([]);
     const [guideState, setGuideState] = useState<{
         id?: string;
@@ -62,7 +68,7 @@ export function useContent(
     };
     const report = () =>
         setError(
-            'The request failed. Check your source and backend, then retry.'
+            t('The request failed. Check your source and backend, then retry.')
         );
     useLayoutEffect(() => {
         const client = provider.current;
@@ -83,21 +89,26 @@ export function useContent(
         const load = async () => {
             if (route.view === 'home') {
                 let failed = 0;
+                const counts: Partial<Record<Kind, number>> = {};
                 const lists = await Promise.all(
                     (['movie', 'series', 'live'] as Kind[]).map((kind) =>
                         client
                             .catalog(kind, '', 0, '', job.signal)
-                            .then((c) => c.items.slice(0, 12))
+                            .then((c) => {
+                                counts[kind] = c.total;
+                                return c.items.slice(0, 12);
+                            })
                             .catch(() => {
                                 failed++;
                                 return [];
                             })
                     )
                 );
-                if (failed === 3) throw new Error('Catalog unavailable');
+                if (failed === 3) throw new Error(t('Catalog unavailable'));
                 if (lane.owns(job)) {
                     const items = [...lists[0], ...lists[1], ...lists[2]];
                     setHome(items);
+                    setCountState({ key, value: counts });
                     // Catalog rows often have only posters. Fill the featured
                     // title's actual provider backdrop without holding the page.
                     const hero = items.find((item) => item.kind === 'movie');
@@ -174,7 +185,7 @@ export function useContent(
                 .catch(() => {
                     if (lane.owns(job))
                         setEpgError(
-                            'Programme information is unavailable. Playback remains available.'
+                            t('Programme information is unavailable. Playback remains available.')
                         );
                 });
         }, 180);
@@ -199,6 +210,7 @@ export function useContent(
         finishFocus,
         cancelBrowse: () => browse.current.cancel(),
         home,
+        homeCounts,
         episodes,
         epg,
         epgError,

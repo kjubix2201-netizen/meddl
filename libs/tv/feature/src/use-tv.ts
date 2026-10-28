@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { useProvider } from './use-provider';
 import { useSourceNavigation } from './use-source-navigation';
 import { useTvRemote } from './use-tv-remote';
-import { LatestRequest, Media, Source } from '@meddl/tv/util';
+import { LatestRequest, Media, Source, t } from '@meddl/tv/util';
 import { focusKey, platformBack, restoreFocus } from '@meddl/tv/ui';
 export function useTv(video: { current: HTMLVideoElement | null }) {
     const [route, setRoute] = useState(firstRoute);
@@ -44,17 +44,17 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         update,
     } = useUserData(
         video,
-        (message) => setError(message, retryPlayback, 'Retry playback'),
+        (message) => setError(message, retryPlayback, t('Retry playback')),
         () => tick((t) => t + 1),
         (message, retrySave) =>
             setError(
                 message,
                 () => {
                     void retrySave()
-                        .then(() => clearError('Retry saving progress'))
+                        .then(() => clearError(t('Retry saving progress')))
                         .catch(() => undefined);
                 },
-                'Retry saving progress'
+                t('Retry saving progress')
             )
     );
     useSourceNavigation(data.activeId, route, setRoute, () => {
@@ -93,8 +93,8 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
     );
     function reportConnection(message: string) {
         setConnectionFailed(!!message);
-        if (message) setError(message, retryConnection, 'Retry connection');
-        else clearError('Retry connection');
+        if (message) setError(message, retryConnection, t('Retry connection'));
+        else clearError(t('Retry connection'));
     }
     function retryConnection() {
         recovery.resetReconnect();
@@ -117,7 +117,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         retry: () => setRetry((n) => n + 1),
     });
     function stop() {
-        clearError('Retry playback');
+        clearError(t('Retry playback'));
         failedResolution.current = undefined;
         playback.current.cancel();
         player.current?.stop();
@@ -221,9 +221,9 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
             if (lane.owns(job)) {
                 failedResolution.current = { item, category, origin };
                 setError(
-                    'Playback could not be resolved. Check the source and retry.',
+                    t('Playback could not be resolved. Check the source and retry.'),
                     retryPlayback,
-                    'Retry playback'
+                    t('Retry playback')
                 );
             }
             return false;
@@ -264,9 +264,9 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
                 .catch(() => {
                     if (playback.current.owns(job))
                         setError(
-                            'Playback could not be restarted.',
+                            t('Playback could not be restarted.'),
                             retryPlayback,
-                            'Retry playback'
+                            t('Retry playback')
                         );
                 });
         }
@@ -310,12 +310,12 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
                     ? d.favorites.filter((m) => m.id !== item.id)
                     : [...d.favorites, item],
             }));
-            clearError('Retry saving favorite');
+            clearError(t('Retry saving favorite'));
         } catch {
             setError(
-                'Favorite was not saved. Free TV storage and retry.',
+                t('Favorite was not saved. Free TV storage and retry.'),
                 () => void favorite(item),
-                'Retry saving favorite'
+                t('Retry saving favorite')
             );
         }
     }
@@ -323,13 +323,13 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         stop();
         try {
             await update((d) => ({ ...d, activeId }));
-            clearError('Retry source selection');
+            clearError(t('Retry source selection'));
             navigate('home');
         } catch {
             setError(
-                'Source selection was not saved.',
+                t('Source selection was not saved.'),
                 () => void switchSource(activeId),
-                'Retry source selection'
+                t('Retry source selection')
             );
         }
     }
@@ -345,13 +345,13 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
                 activeId: source.id,
             }));
             setRetry((n) => n + 1);
-            clearError('Retry saving source');
+            clearError(t('Retry saving source'));
             navigate('home');
         } catch {
             setError(
-                'Source was not saved. Free TV storage and retry.',
+                t('Source was not saved. Free TV storage and retry.'),
                 () => void saveSource(source, address),
-                'Retry saving source'
+                t('Retry saving source')
             );
         }
     }

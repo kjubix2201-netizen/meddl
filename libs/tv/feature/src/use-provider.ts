@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { createProvider, ProviderTransport } from '@meddl/tv/data-access';
 import type { ProviderClient, UserData } from '@meddl/tv/util';
@@ -82,7 +83,7 @@ export function useProvider(
             .catch(() => {
                 if (!abort.signal.aborted)
                     callbacks.current.report(
-                        'The request failed. Check your source and backend, then retry.'
+                        t('The request failed. Check your source and backend, then retry.')
                     );
             })
             .finally(() => {

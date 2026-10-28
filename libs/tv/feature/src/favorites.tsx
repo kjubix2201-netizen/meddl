@@ -1,6 +1,6 @@
 import { storedMediaPoster } from '@meddl/tv/data-access';
 import { Empty, Poster, VirtualCollection } from '@meddl/tv/ui';
-import { Kind } from '@meddl/tv/util';
+import { Kind, t } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function favoritesFor(tv: TvModel, kind: Kind) {
     return tv.data.favorites.filter(
@@ -20,7 +20,7 @@ export function Favorites({ tv }: { tv: TvModel }) {
     const items = favoritesFor(tv, kind);
     return (
         <>
-            <div class="favorite-types" role="group" aria-label="Favorite type">
+            <div class="favorite-types" role="group" aria-label={t('Favorite type')}>
                 {tabs.map(([value, label]) => (
                     <button
                         data-focus={`favorites:${value}`}
@@ -30,7 +30,7 @@ export function Favorites({ tv }: { tv: TvModel }) {
                             document.querySelector('main')?.scrollTo(0, 0);
                         }}
                     >
-                        {label} <span>{favoritesFor(tv, value).length}</span>
+                        {t(label)} <span>{favoritesFor(tv, value).length}</span>
                     </button>
                 ))}
             </div>
@@ -59,10 +59,10 @@ export function Favorites({ tv }: { tv: TvModel }) {
             {!items.length ? (
                 <Empty>
                     {kind === 'live'
-                        ? 'Save a channel to see it here.'
+                        ? t('Save a channel to see it here.')
                         : kind === 'series'
-                          ? 'Save a series or episode to see it here.'
-                          : 'Save a movie to see it here.'}
+                          ? t('Save a series or episode to see it here.')
+                          : t('Save a movie to see it here.')}
                 </Empty>
             ) : null}
         </>

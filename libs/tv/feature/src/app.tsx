@@ -4,11 +4,10 @@ import { useHomeFeature } from './use-home-feature';
 import { PageHeader } from './page-header';
 import { Favorites } from './favorites';
 import { usePlayerControls } from './player-controls';
-import { VolumeControl } from './player-volume';
-import { AudioNotice } from './player-audio-notice';
+import { PlayerOverlay } from './player-overlay';
+import { TopBar } from './top-bar';
 import { useEffect, useRef } from 'preact/hooks';
 import { useTv } from './use-tv';
-import type { View } from './navigation';
 import { Sources } from './forms';
 import { Settings } from './settings';
 import type { SettingsMemory } from './settings-navigation';
@@ -16,23 +15,13 @@ import { Home, CatalogScreen } from './screens';
 import { Detail } from './detail';
 import { useDetailSeason } from './use-detail-season';
 import { Live } from './live';
-import { Backdrop, TvIcon } from '@meddl/tv/ui';
+import { Backdrop } from '@meddl/tv/ui';
 import { useMetadata } from './use-metadata';
 import { useSeriesContext } from './use-series-context';
 import { useSeriesDetails } from './use-series-details';
-import { mediaTitle } from '@meddl/tv/util';
+import { t } from '@meddl/tv/util';
 import { PersonPage } from './person-page';
 import type { FilmographyMemory } from './use-filmography-search';
-const navigation: [View, string][] = [
-    ['home', 'Home'],
-    ['live', 'TV'],
-    ['movies', 'Movies'],
-    ['series', 'Series'],
-    ['favorites', 'Favorites'],
-    ['search', 'Search'],
-    ['sources', 'Sources'],
-    ['settings', 'Settings'],
-];
 export function TvApp() {
     const personMemory = useRef<FilmographyMemory>(new WeakMap());
     const settingsMemory = useRef<SettingsMemory>({
@@ -98,10 +87,6 @@ export function TvApp() {
         tv.fullscreen,
         !!overlay.panel || (element?.paused ?? true)
     );
-    const time = (seconds: number) =>
-        Number.isFinite(seconds)
-            ? `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`
-            : 'LIVE';
     return (
         <div
             class={`tv-app ${tv.data.layout}`}
@@ -115,7 +100,7 @@ export function TvApp() {
             {!tv.storageReady ? (
                 <section
                     class="source-form storage-recovery"
-                    aria-label="Saved TV data"
+                    aria-label={t('Saved TV data')}
                 >
                     <h1>meddl TV</h1>
                     {tv.storageError ? (
@@ -125,41 +110,15 @@ export function TvApp() {
                                 autoFocus
                                 onClick={() => void tv.retryStorage()}
                             >
-                                Retry reading saved data
+                                {t('Retry reading saved data')}
                             </button>
                         </>
                     ) : (
-                        <p role="status">Loading saved TV data…</p>
+                        <p role="status">{t('Loading saved TV data…')}</p>
                     )}
                 </section>
             ) : null}
-            <aside hidden={tv.fullscreen || !tv.storageReady}>
-                <div class="wordmark">
-                    <img class="wordmark-logo" src="icon.png" alt="" />
-                    <span class="wordmark-text">
-                        meddl<small>TV</small>
-                    </span>
-                </div>
-                <nav aria-label="Main navigation">
-                    {navigation.map(([view, label]) => (
-                        <button
-                            data-focus={`nav:${view}`}
-                            aria-current={r.view === view ? 'page' : undefined}
-                            onClick={() => tv.navigate(view)}
-                        >
-                            <span class="nav-icon" aria-hidden="true">
-                                <TvIcon name={view} />
-                            </span>
-                            {label}
-                        </button>
-                    ))}
-                </nav>
-                <div class="side-caption">
-                    YOUR SOURCES.
-                    <br />
-                    YOUR SCREEN.
-                </div>
-            </aside>
+            <TopBar tv={tv} />
             <main
                 hidden={tv.fullscreen || !tv.storageReady}
                 class={
@@ -176,8 +135,8 @@ export function TvApp() {
                 <PageHeader tv={tv} />
                 {metadata.failed ? (
                     <div class="metadata-notice" role="status">
-                        TMDB is unavailable. Showing provider information.
-                        <button onClick={metadata.retry}>Retry metadata</button>
+                        {t('TMDB is unavailable. Showing provider information.')}
+                        <button onClick={metadata.retry}>{t('Retry metadata')}</button>
                     </div>
                 ) : null}
                 {tv.error ? (
@@ -188,9 +147,9 @@ export function TvApp() {
                                 {tv.errorRetryLabel}
                             </button>
                         ) : null}
-                        <button onClick={() => tv.setError('')}>Dismiss</button>
+                        <button onClick={() => tv.setError('')}>{t('Dismiss')}</button>
                         <button onClick={() => tv.navigate('sources')}>
-                            Edit sources
+                            {t('Edit sources')}
                         </button>
                     </div>
                 ) : null}
@@ -199,16 +158,11 @@ export function TvApp() {
                 ) : null}
                 {tv.busy ? (
                     <div class="loading" role="status">
-                        Connecting to your source…
+                        {t('Connecting to your source…')}
                     </div>
                 ) : null}
                 {r.view === 'home' ? (
-                    <Home
-                        tv={display}
-                        feature={{ ...feature, item: metadata.item }}
-                        openSeries={seriesDetails.open}
-                        detailsBusy={seriesDetails.busy}
-                    />
+                    <Home tv={display} history={feature.history} />
                 ) : r.view === 'sources' ? (
                     <Sources tv={tv} />
                 ) : r.view === 'settings' ? (
@@ -249,144 +203,12 @@ export function TvApp() {
             >
                 <video ref={video} playsInline preload="metadata" />
                 {tv.fullscreen ? (
-                    <div
-                        class={`player-controls ${controlsVisible || tv.error ? '' : 'dormant'}`}
-                        hidden={!!overlay.panel}
-                    >
-                        <div class="player-top">
-                            <button data-focus="player-back" onClick={tv.back}>
-                                ← Back
-                            </button>
-                            {current?.kind === 'live' ? (
-                                <div class="actions">
-                                    <button
-                                        data-focus="player-channels"
-                                        onClick={overlay.openChannels}
-                                    >
-                                        Channels
-                                    </button>
-                                    <button
-                                        data-focus="player-grid"
-                                        onClick={overlay.openGrid}
-                                    >
-                                        TV Guide
-                                    </button>
-                                    <button
-                                        data-focus="player-guide"
-                                        onClick={overlay.openGuide}
-                                    >
-                                        Programme
-                                    </button>
-                                </div>
-                            ) : null}
-                            <span>
-                                {current?.kind === 'live'
-                                    ? 'LIVE TELEVISION'
-                                    : 'NOW WATCHING'}
-                            </span>
-                        </div>
-                        <div class="player-bottom">
-                            <span class="eyebrow">
-                                {current?.season
-                                    ? `SEASON ${current.season} · EPISODE ${current.episode}`
-                                    : 'MEDDL TV'}
-                            </span>
-                            <h1>{current && mediaTitle(current)}</h1>
-                            {current?.kind === 'episode' ? (
-                                <p>{current.title}</p>
-                            ) : null}
-                            <div class="actions">
-                                <button
-                                    data-focus="player-toggle"
-                                    class="primary"
-                                    onClick={() => tv.player.current?.toggle()}
-                                >
-                                    {element?.paused ? 'Play ▶' : 'Pause Ⅱ'}
-                                </button>
-                                {current?.kind === 'episode' ? (
-                                    <button
-                                        data-focus="player-series-details"
-                                        disabled={seriesDetails.busy}
-                                        onClick={() =>
-                                            void seriesDetails.open(current)
-                                        }
-                                    >
-                                        {seriesDetails.busy
-                                            ? 'Finding series…'
-                                            : 'Series details →'}
-                                    </button>
-                                ) : null}
-                                {current?.kind !== 'live' ? (
-                                    <>
-                                        <button
-                                            onClick={() =>
-                                                tv.player.current?.seek(-10)
-                                            }
-                                        >
-                                            −10 sec
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                tv.player.current?.seek(10)
-                                            }
-                                        >
-                                            +10 sec
-                                        </button>
-                                        <span>
-                                            {time(element?.currentTime ?? 0)} /{' '}
-                                            {time(element?.duration ?? 0)}
-                                        </span>
-                                    </>
-                                ) : null}
-                                <button
-                                    onClick={() =>
-                                        current && tv.favorite(current)
-                                    }
-                                >
-                                    ♡ Save
-                                </button>
-                                <VolumeControl video={element} />
-                            </div>
-                            <AudioNotice video={element} />
-                            {current?.kind !== 'live' ? (
-                                <label class="seek">
-                                    Playback position
-                                    <input
-                                        aria-label="Playback position"
-                                        type="range"
-                                        min="0"
-                                        max={
-                                            Number.isFinite(element?.duration)
-                                                ? element!.duration
-                                                : 0
-                                        }
-                                        value={element?.currentTime ?? 0}
-                                        onInput={(e) => {
-                                            tv.player.current?.seekTo(
-                                                Number(e.currentTarget.value)
-                                            );
-                                        }}
-                                    />
-                                </label>
-                            ) : null}
-                            {tv.player.current?.restoringPosition ? (
-                                <p role="status">Restoring saved position…</p>
-                            ) : null}
-                            {tv.error ? (
-                                <div role="alert" class="error">
-                                    {tv.error}
-                                    {tv.errorRetry ? (
-                                        <button onClick={tv.errorRetry}>
-                                            {tv.errorRetryLabel}
-                                        </button>
-                                    ) : null}
-                                    <button onClick={() => tv.setError('')}>
-                                        Dismiss
-                                    </button>
-                                </div>
-                            ) : null}
-                        </div>
-                    </div>
+                    <PlayerOverlay
+                        tv={tv}
+                        overlay={overlay}
+                        visible={controlsVisible}
+                        seriesDetails={seriesDetails}
+                    />
                 ) : null}
             </div>
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />

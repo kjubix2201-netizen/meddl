@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useState } from 'preact/hooks';
 import { TvIcon } from '@meddl/tv/ui';
 
@@ -75,7 +76,7 @@ export function VolumeControl({ video }: { video: HTMLVideoElement | null }) {
         <div class="player-volume">
             <button
                 data-focus="player-mute"
-                aria-label={silent ? 'Unmute' : 'Mute'}
+                aria-label={silent ? t('Unmute') : t('Mute')}
                 aria-pressed={silent}
                 onClick={() =>
                     update({
@@ -92,7 +93,7 @@ export function VolumeControl({ video }: { video: HTMLVideoElement | null }) {
                 min="0"
                 max="100"
                 step="5"
-                aria-label="Volume"
+                aria-label={t('Volume')}
                 value={silent ? 0 : state.level}
                 onInput={(event) =>
                     update({

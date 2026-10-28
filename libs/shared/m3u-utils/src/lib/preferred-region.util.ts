@@ -181,7 +181,8 @@ function stripDiacritics(value: string): string {
     return value.normalize('NFD').replace(COMBINING_MARKS, '');
 }
 
-function tokenize(value: string): string[] {
+/** Name tokens as the region matchers see them (letters, digits, "+"). */
+export function regionTokens(value: string): string[] {
     return stripDiacritics(value).split(TOKEN_SEPARATORS).filter(Boolean);
 }
 
@@ -196,7 +197,7 @@ export function matchesPreferredRegion(
 
     if (compiled.flags.some((flag) => name.includes(flag))) return true;
 
-    const tokens = tokenize(name);
+    const tokens = regionTokens(name);
     const upper = tokens.map((token) => token.toUpperCase());
     for (let index = 0; index < tokens.length; index++) {
         if (compiled.codes.has(tokens[index])) return true;

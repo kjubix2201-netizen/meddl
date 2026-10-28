@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useState } from 'preact/hooks';
 
 type DecodeCounters = HTMLVideoElement & {
@@ -43,10 +44,7 @@ export function AudioNotice({ video }: { video: HTMLVideoElement | null }) {
     if (!silent) return null;
     return (
         <p role="status" class="audio-notice">
-            No sound: this stream's audio format (probably Dolby Digital or
-            DTS) is not supported by this browser. It plays with sound on
-            TVs and Fire TV, and in the meddl desktop app with MPV or VLC as
-            player.
+            {t("No sound: this stream's audio format (probably Dolby Digital or DTS) is not supported by this browser. It plays with sound on TVs and Fire TV, and in the meddl desktop app with MPV or VLC as player.")}
         </p>
     );
 }

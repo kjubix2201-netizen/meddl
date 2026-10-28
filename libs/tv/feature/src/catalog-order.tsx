@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import { normalizeCatalogSort } from '@meddl/tv/util';
+import { normalizeCatalogSort, t } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function CatalogOrder({
     tv,
@@ -12,9 +12,9 @@ export function CatalogOrder({
     const sort = tv.data.catalogSort[kind];
     return (
         <label>
-            Sort by
+            {t('Sort by')}
             <select
-                aria-label="Sort by"
+                aria-label={t('Sort by')}
                 data-focus="catalog-sort"
                 value={sort}
                 disabled={saving}
@@ -32,7 +32,7 @@ export function CatalogOrder({
                         document.querySelector('main')?.scrollTo(0, 0);
                     } catch {
                         tv.setError(
-                            'Sort order was not saved. Free TV storage and retry.'
+                            t('Sort order was not saved. Free TV storage and retry.')
                         );
                     } finally {
                         setSaving(false);
@@ -46,9 +46,9 @@ export function CatalogOrder({
                     }
                 }}
             >
-                <option value="recent">Recently added</option>
-                <option value="title">Title · A–Z</option>
-                <option value="provider">Provider order</option>
+                <option value="recent">{t('Recently added')}</option>
+                <option value="title">{t('Title · A–Z')}</option>
+                <option value="provider">{t('Provider order')}</option>
             </select>
         </label>
     );
@@ -65,9 +65,9 @@ export function CatalogSortNotice({ tv }: { tv: TvModel }) {
     )?.provider;
     const message =
         provider === 'm3u'
-            ? 'No added dates in M3U; playlist order is used.'
+            ? t('No added dates in M3U; playlist order is used.')
             : provider === 'xtream' && kind === 'series'
-              ? 'Uses update dates when added dates are unavailable.'
+              ? t('Uses update dates when added dates are unavailable.')
               : '';
     return message ? <p class="muted">{message}</p> : null;
 }

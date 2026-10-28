@@ -245,3 +245,5 @@ export * from './series-context';
 export * from './programme-guide';
 
 export * from './grid-guide';
+export * from './i18n';
+export { channelBadges } from './channel-badges';

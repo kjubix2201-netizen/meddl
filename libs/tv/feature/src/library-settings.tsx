@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useLayoutEffect, useState } from 'preact/hooks';
 import type { TvModel } from './use-tv';
 
@@ -12,11 +13,10 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
         setToken(saved?.token ?? '');
     }, [saved?.url, saved?.token]);
     return (
-        <section class="source-form" aria-label="Server library">
-            <h2>Server library</h2>
+        <section class="source-form" aria-label={t('Server library')}>
+            <h2>{t('Server library')}</h2>
             <p class="muted">
-                Share sources with your self-hosted PWA. Favorites and viewing
-                progress stay on this TV.
+                {t('Share sources with your self-hosted PWA. Favorites and viewing progress stay on this TV.')}
             </p>
             <form
                 onSubmit={(event) => {
@@ -25,7 +25,7 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                 }}
             >
                 <label>
-                    Library server URL
+                    {t('Library server URL')}
                     <input
                         type="url"
                         data-focus="library:url"
@@ -39,7 +39,7 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                     />
                 </label>
                 <label>
-                    Library access token (if required)
+                    {t('Library access token (if required)')}
                     <input
                         type="password"
                         data-focus="library:token"
@@ -53,7 +53,7 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                     class="primary"
                     data-focus="library:connect"
                 >
-                    Connect library
+                    {t('Connect library')}
                 </button>
             </form>
             {tv.library.status ? (
@@ -74,20 +74,17 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                             data-focus="library:refresh"
                             onClick={() => void tv.library.refresh()}
                         >
-                            Refresh library now
+                            {t('Refresh library now')}
                         </button>
                         <button
                             data-focus="library:disconnect"
                             onClick={() => void tv.library.disconnect()}
                         >
-                            Disconnect library
+                            {t('Disconnect library')}
                         </button>
                     </div>
                     <p class="muted">
-                        Manage server sources in the PWA. Disconnecting keeps
-                        downloaded sources on this TV. Removing a server source
-                        removes its linked TV entry after refresh; viewing data
-                        is retained.
+                        {t('Manage server sources in the PWA. Disconnecting keeps downloaded sources on this TV. Removing a server source removes its linked TV entry after refresh; viewing data is retained.')}
                     </p>
                     {local.length ? (
                         <form
@@ -97,7 +94,7 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                             }}
                         >
                             <label>
-                                Local source to copy to server
+                                {t('Local source to copy to server')}
                                 <select
                                     data-focus="library:source"
                                     required
@@ -106,16 +103,14 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                                         setSourceId(event.currentTarget.value)
                                     }
                                 >
-                                    <option value="">Choose a source</option>
+                                    <option value="">{t('Choose a source')}</option>
                                     {local.map((s) => (
                                         <option value={s.id}>{s.name}</option>
                                     ))}
                                 </select>
                             </label>
                             <p class="muted">
-                                Copies connection details to this server.
-                                Existing server sources are kept; favorites and
-                                history are not uploaded.
+                                {t('Copies connection details to this server. Existing server sources are kept; favorites and history are not uploaded.')}
                             </p>
                             <button
                                 data-focus="library:upload"
@@ -123,7 +118,7 @@ export function LibrarySettings({ tv }: { tv: TvModel }) {
                                     !sourceId || tv.library.busy || !!tv.playing
                                 }
                             >
-                                Copy source to server
+                                {t('Copy source to server')}
                             </button>
                         </form>
                     ) : null}

@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { restoreFocus, VirtualCollection } from '@meddl/tv/ui';
 import { useCatalog } from './use-catalog';
@@ -22,11 +23,11 @@ export function GridGuide({ tv, close }: { tv: TvModel; close: () => void }) {
     if (catalog.catalog.categories.length)
         categories.current = catalog.catalog.categories;
     const choices = [
-        { id: '', name: 'All channels' },
+        { id: '', name: t('All channels') },
         ...categories.current.filter((c) => c.id),
     ];
     const categoryName =
-        choices.find((c) => c.id === category)?.name ?? 'Channels';
+        choices.find((c) => c.id === category)?.name ?? t('Channels');
     const root = useRef<HTMLDivElement>(null);
     useLayoutEffect(() => {
         const back = (event: Event) => {
@@ -44,8 +45,8 @@ export function GridGuide({ tv, close }: { tv: TvModel; close: () => void }) {
         <div class="grid-guide" ref={root}>
             <header class="grid-guide-header">
                 <div>
-                    <span class="muted">LIVE TELEVISION</span>
-                    <h1>TV Guide</h1>
+                    <span class="muted">{t('LIVE TELEVISION')}</span>
+                    <h1>{t('TV Guide')}</h1>
                 </div>
                 <button
                     data-focus="grid-category"
@@ -60,7 +61,7 @@ export function GridGuide({ tv, close }: { tv: TvModel; close: () => void }) {
                     {categoryName} ↓
                 </button>
                 <button data-focus="grid-close" onClick={close}>
-                    Close guide ×
+                    {t('Close guide ×')}
                 </button>
             </header>
             {categoriesOpen ? (
@@ -72,7 +73,7 @@ export function GridGuide({ tv, close }: { tv: TvModel; close: () => void }) {
                             restoreFocus('grid-category');
                         }}
                     >
-                        ← Back to guide
+                        {t('← Back to guide')}
                     </button>
                     <div class="channels">
                         <VirtualCollection

@@ -1,20 +1,20 @@
+import { t } from '@meddl/tv/util';
 import { TvIcon } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
 import { HomeServer } from './home-server';
 export function BackendConnection({
     tv,
-    label = 'meddl backend URL',
+    label = t('meddl backend URL'),
 }: {
     tv: TvModel;
     label?: string;
 }) {
     const b = tv.backend;
     return (
-        <section class="backend-connection" aria-label="Backend connection">
-            <h2>Connect your home server</h2>
+        <section class="backend-connection" aria-label={t('Backend connection')}>
+            <h2>{t('Connect your home server')}</h2>
             <p class="muted">
-                Find meddl on your home network, or enter your server
-                address below.
+                {t('Find meddl on your home network, or enter your server address below.')}
             </p>
             <div
                 class={`connection-status ${b.connected ? 'connected' : ''}`}
@@ -41,10 +41,10 @@ export function BackendConnection({
             </label>
             <details>
                 <summary data-focus="backend:token-details">
-                    Backend access token (if required)
+                    {t('Backend access token (if required)')}
                 </summary>
                 <label>
-                    Backend access token
+                    {t('Backend access token')}
                     <input
                         data-focus="backend:token"
                         name="backendToken"
@@ -64,14 +64,14 @@ export function BackendConnection({
                     onClick={() => void b.connect()}
                     disabled={!b.url}
                 >
-                    Check and connect
+                    {t('Check and connect')}
                 </button>
                 <button
                     type="button"
                     data-focus="backend:find"
                     onClick={() => (b.searching ? b.cancel() : void b.find())}
                 >
-                    {b.searching ? 'Cancel search' : 'Find backend'}
+                    {b.searching ? t('Cancel search') : t('Find backend')}
                 </button>
             </div>
             {b.found.length ? (
@@ -84,15 +84,13 @@ export function BackendConnection({
                             onClick={() => b.choose(info)}
                         >
                             {info.url}
-                            {info.auth === 'token' ? ' · token required' : ''}
+                            {info.auth === 'token' ? ' ' + t('· token required') : ''}
                         </button>
                     ))}
                 </div>
             ) : null}
             <p class="muted">
-                Use a backend you trust: source login details go to this
-                address. Local search checks standard meddl ports; you can
-                always enter another address.
+                {t('Use a backend you trust: source login details go to this address. Local search checks standard meddl ports; you can always enter another address.')}
             </p>
             <HomeServer tv={tv} />
         </section>

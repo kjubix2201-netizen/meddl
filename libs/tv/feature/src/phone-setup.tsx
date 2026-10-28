@@ -13,8 +13,7 @@ import {
     parseSourceDraft,
     applySettingsDraft,
     phoneSettingsDefaults,
-    SetupPurpose,
-} from '@meddl/tv/util';
+    SetupPurpose, t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
 export function PhoneSetup({
@@ -92,7 +91,7 @@ export function PhoneSetup({
         } catch {
             if (!abort.signal.aborted)
                 setError(
-                    'Phone setup could not start. Check the backend connection.'
+                    t('Phone setup could not start. Check the backend connection.')
                 );
         } finally {
             if (!abort.signal.aborted) setBusy(false);
@@ -111,7 +110,7 @@ export function PhoneSetup({
             setRemaining(seconds);
             if (!seconds) {
                 setError(
-                    'This QR code expired. Close it and create a new one.'
+                    t('This QR code expired. Close it and create a new one.')
                 );
                 return;
             }
@@ -133,7 +132,7 @@ export function PhoneSetup({
             } catch {
                 if (!abort.signal.aborted)
                     setError(
-                        'Connection interrupted. Retrying until this code expires.'
+                        t('Connection interrupted. Retrying until this code expires.')
                     );
             }
             if (!abort.signal.aborted) timer = setTimeout(poll, 1200);
@@ -207,8 +206,8 @@ export function PhoneSetup({
             if (!abort.signal.aborted)
                 setError(
                     saved.current
-                        ? 'Saved on this TV. Retry to deliver confirmation to your phone.'
-                        : 'Changes were not saved. Check TV storage, connection and required fields, then retry.'
+                        ? t('Saved on this TV. Retry to deliver confirmation to your phone.')
+                        : t('Changes were not saved. Check TV storage, connection and required fields, then retry.')
                 );
         } finally {
             if (!abort.signal.aborted) setBusy(false);
@@ -217,18 +216,18 @@ export function PhoneSetup({
     return (
         <section
             class={`phone-setup ${compact ? 'compact-phone-setup' : ''}`}
-            aria-label={settings ? 'Settings from phone' : 'Add from phone'}
+            aria-label={settings ? t('Settings from phone') : t('Add from phone')}
         >
             <div hidden={compact}>
                 <h2>
                     {settings
-                        ? 'Set up from your phone'
-                        : 'Add from your phone'}
+                        ? t('Set up from your phone')
+                        : t('Add from your phone')}
                 </h2>
                 <p class="muted">
                     {settings
-                        ? 'Paste your TMDB key and adjust TV settings, then confirm here.'
-                        : 'Scan, paste your source details, then confirm here.'}
+                        ? t('Paste your TMDB key and adjust TV settings, then confirm here.')
+                        : t('Scan, paste your source details, then confirm here.')}
                 </p>
             </div>
             {!session ? (
@@ -240,10 +239,10 @@ export function PhoneSetup({
                     onClick={() => void start()}
                 >
                     {busy
-                        ? 'Preparing QR…'
+                        ? t('Preparing QR…')
                         : settings
-                          ? 'Set up from phone'
-                          : 'Add from phone'}
+                          ? t('Set up from phone')
+                          : t('Add from phone')}
                 </button>
             ) : (
                 <PhoneSetupPanel compact={compact}>
@@ -274,12 +273,12 @@ export function PhoneSetup({
                             } else void finish('cancelled');
                         }}
                     >
-                        Close setup
+                        {t('Close setup')}
                     </button>
                 </PhoneSetupPanel>
             )}
             {!tv.backend.connected && !session ? (
-                <p class="muted">Connect a backend to enable phone setup.</p>
+                <p class="muted">{t('Connect a backend to enable phone setup.')}</p>
             ) : null}
             {error ? <p role="alert">{error}</p> : null}
         </section>

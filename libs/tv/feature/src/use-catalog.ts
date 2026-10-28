@@ -3,8 +3,7 @@ import {
     Catalog,
     CatalogSort,
     ProviderClient,
-    LatestRequest,
-} from '@meddl/tv/util';
+    LatestRequest, t } from '@meddl/tv/util';
 import {
     DEFAULT_PREFERRED_REGION,
     orderPreferredRegionFirst,
@@ -127,12 +126,12 @@ export function useCatalog(
             if (lane.current.owns(job)) {
                 if (!append)
                     current.reportConnection(
-                        'Could not load titles. Check the connection and retry.'
+                        t('Could not load titles. Check the connection and retry.')
                     );
                 setState((s) => ({
                     ...s,
                     busy: false,
-                    error: 'Could not load titles. Check the connection and retry.',
+                    error: t('Could not load titles. Check the connection and retry.'),
                 }));
             }
         } finally {

@@ -1,7 +1,40 @@
-import { LiveChannels } from './live-channels';
+import { LiveColumns } from './live-columns';
 import { useLiveBrowse } from './use-live-browse';
 import { useEffect, useRef } from 'preact/hooks';
+import { TvIcon } from '@meddl/tv/ui';
+import { t, tvLocale, type Program } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
+
+const clock = (value: number) =>
+    new Date(value).toLocaleTimeString(tvLocale(), {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+function NowPlaying({ programme }: { programme: Program }) {
+    const span = programme.end - programme.start;
+    const share = span > 0 ? Math.min(1, Math.max(0, (Date.now() - programme.start) / span)) : 0;
+    return (
+        <div class="now-playing">
+            <span class="eyebrow">{t('Now playing')}</span>
+            <h2>{programme.title}</h2>
+            {programme.description ? <p>{programme.description}</p> : null}
+            <div class="now-progress" aria-hidden="true">
+                <span style={{ width: `${Math.round(share * 100)}%` }} />
+            </div>
+            <div class="now-times">
+                <time>{clock(programme.start)}</time>
+                <time>{clock(programme.end)}</time>
+            </div>
+        </div>
+    );
+}
+
+/**
+ * Live TV page: categories (flags) · channels · preview with the running
+ * programme and the upcoming schedule. While the fullscreen channel overlay
+ * is open, the columns step aside so only the overlay's list takes focus.
+ */
 export function Live({
     tv,
     browse,
@@ -20,6 +53,10 @@ export function Live({
         if (guide.current) guide.current.scrollTop = 0;
     }, [tv.selected?.id]);
     const selected = tv.selected;
+    const now = Date.now();
+    const running = tv.epg.find((p) => p.start <= now && p.end > now);
+    const upcoming = tv.epg.filter((p) => p !== running && p.end > now).slice(0, 10);
+    const saved = !!selected && tv.data.favorites.some((m) => m.id === selected.id);
     return (
         <div
             class="live-layout"
@@ -28,9 +65,7 @@ export function Live({
                     !tv.fullscreen &&
                     !browse.categoriesOpen &&
                     (event.keyCode === 461 ||
-                        ['Escape', 'BrowserBack', 'Backspace'].includes(
-                            event.key
-                        ))
+                        ['Escape', 'BrowserBack', 'Backspace'].includes(event.key))
                 ) {
                     event.preventDefault();
                     event.stopPropagation();
@@ -38,7 +73,12 @@ export function Live({
                 }
             }}
         >
-            {!overlayOpen ? <LiveChannels tv={tv} browse={browse} /> : <div />}
+            {!overlayOpen ? (
+                <LiveColumns tv={tv} browse={browse} />
+            ) : (
+                // The fullscreen channel overlay renders its own list.
+                <div class="live-columns-placeholder" />
+            )}
             <section class="live-information">
                 <div class="preview-placeholder">
                     {tv.playing ? (
@@ -48,37 +88,35 @@ export function Live({
                             onClick={() => {
                                 if (tv.playing) void tv.play(tv.playing);
                             }}
-                            aria-label="Open fullscreen"
+                            aria-label={t('Open fullscreen')}
                         >
-                            Fullscreen ↗
+                            {t('Fullscreen')} ↗
                         </button>
                     ) : (
-                        <span>Select a channel to start preview</span>
+                        <span>{t('Select a channel to start preview')}</span>
                     )}
                 </div>
                 <div class="section-title">
-                    <h2>{selected?.title ?? 'Programme guide'}</h2>
+                    <h2>{selected?.title ?? t('Programme guide')}</h2>
                     <div class="actions">
                         <button data-focus="live-grid-guide" onClick={openGrid}>
-                            TV Guide
+                            <TvIcon name="guide" /> {t('TV Guide')}
                         </button>
                         <button
                             data-focus="live-expand-guide"
                             onClick={openGuide}
                             disabled={!selected}
                         >
-                            Expand guide ↗
+                            {t('Programme')} ↗
                         </button>
                         {selected ? (
                             <button
-                                aria-label="Favorite channel"
+                                class={`round ${saved ? 'is-favorite' : ''}`}
+                                aria-label={saved ? t('Remove from favorites') : t('Add to favorites')}
+                                aria-pressed={saved}
                                 onClick={() => tv.favorite(selected)}
                             >
-                                {tv.data.favorites.some(
-                                    (m) => m.id === selected.id
-                                )
-                                    ? '♥ Saved'
-                                    : '♡ Save channel'}
+                                <TvIcon name="star" />
                             </button>
                         ) : null}
                     </div>
@@ -90,13 +128,11 @@ export function Live({
                     data-tv-scroll
                     data-focus="live-guide"
                     role="region"
-                    aria-label="Programme guide"
+                    aria-label={t('Programme guide')}
                     onKeyDown={(event) => {
                         const pane = event.currentTarget;
-                        const down =
-                            event.key === 'ArrowDown' || event.keyCode === 40;
-                        const up =
-                            event.key === 'ArrowUp' || event.keyCode === 38;
+                        const down = event.key === 'ArrowDown' || event.keyCode === 40;
+                        const up = event.key === 'ArrowUp' || event.keyCode === 38;
                         if (down || (up && pane.scrollTop > 0)) {
                             event.preventDefault();
                             event.stopPropagation();
@@ -106,37 +142,21 @@ export function Live({
                 >
                     {tv.data.epg ? (
                         <>
-                            {tv.epg.slice(0, 12).map((p) => (
+                            {running ? <NowPlaying programme={running} /> : null}
+                            {upcoming.map((p) => (
                                 <div class="programme">
-                                    <time>
-                                        {new Date(p.start).toLocaleTimeString(
-                                            [],
-                                            {
-                                                hour: '2-digit',
-                                                minute: '2-digit',
-                                            }
-                                        )}
-                                    </time>
+                                    <time>{clock(p.start)}</time>
                                     <div>
                                         <strong>{p.title}</strong>
                                         <small>
-                                            {p.start <= Date.now() &&
-                                            p.end > Date.now()
-                                                ? 'Now playing'
-                                                : new Date(
-                                                      p.end
-                                                  ).toLocaleTimeString([], {
-                                                      hour: '2-digit',
-                                                      minute: '2-digit',
-                                                  })}
+                                            {t('until {time}', { time: clock(p.end) })}
                                         </small>
                                     </div>
                                 </div>
                             ))}
                             {!tv.epg.length ? (
                                 <p class="muted">
-                                    {tv.epgError ||
-                                        'No programme information supplied.'}
+                                    {tv.epgError || t('No programme information supplied.')}
                                 </p>
                             ) : null}
                         </>

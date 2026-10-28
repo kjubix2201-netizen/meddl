@@ -1,4 +1,4 @@
-import { mediaTitle, type Media, type Progress } from '@meddl/tv/util';
+import { mediaTitle, type Media, type Progress, t } from '@meddl/tv/util';
 export function Hero({
     item,
     open,
@@ -23,15 +23,15 @@ export function Hero({
     return (
         <section
             class={`hero ${compact ? 'compact' : ''}`}
-            aria-label="Featured title"
+            aria-label={t('Featured title')}
         >
             <div class="hero-copy">
                 <span class="eyebrow">
                     {progress
-                        ? 'PICK UP WHERE YOU LEFT OFF'
-                        : 'YOUR OWN CINEMA'}
+                        ? t('PICK UP WHERE YOU LEFT OFF')
+                        : t('YOUR OWN CINEMA')}
                 </span>
-                <h1>{item ? mediaTitle(item) : 'Make yourself at home.'}</h1>
+                <h1>{item ? mediaTitle(item) : t('Make yourself at home.')}</h1>
                 {progress ? (
                     <div class="hero-position">
                         {progress.item.kind === 'episode'
@@ -40,7 +40,7 @@ export function Hero({
                         {Math.floor(progress.seconds / 60)} min watched
                         {progress.duration > 0 ? (
                             <progress
-                                aria-label="Featured viewing progress"
+                                aria-label={t('Featured viewing progress')}
                                 max={progress.duration}
                                 value={progress.seconds}
                             />
@@ -50,8 +50,8 @@ export function Hero({
                 <p>
                     {item?.description ||
                         (progress
-                            ? 'Your next scene is waiting. Continue from your saved position.'
-                            : 'Live television, films and stories from your own sources. Pick something worth staying in for.')}
+                            ? t('Your next scene is waiting. Continue from your saved position.')
+                            : t('Live television, films and stories from your own sources. Pick something worth staying in for.'))}
                 </p>
                 {item ? (
                     <div class="actions">
@@ -61,7 +61,7 @@ export function Hero({
                                 data-focus="hero-resume"
                                 onClick={() => play(progress.item)}
                             >
-                                Continue watching ▷
+                                {t('Continue watching ▷')}
                             </button>
                         ) : null}
                         <button
@@ -71,10 +71,10 @@ export function Hero({
                             onClick={() => open(item)}
                         >
                             {detailsBusy
-                                ? 'Finding series…'
+                                ? t('Finding series…')
                                 : progress
-                                  ? 'Details →'
-                                  : 'Explore title →'}
+                                  ? t('Details →')
+                                  : t('Explore title →')}
                         </button>
                     </div>
                 ) : null}
@@ -82,11 +82,11 @@ export function Hero({
                     <div
                         class="hero-switcher"
                         role="group"
-                        aria-label="Unfinished titles"
+                        aria-label={t('Unfinished titles')}
                     >
                         <button
                             data-focus="hero-previous"
-                            aria-label="Previous unfinished title"
+                            aria-label={t('Previous unfinished title')}
                             onClick={() => select(index - 1)}
                         >
                             ←
@@ -96,7 +96,7 @@ export function Hero({
                         </span>
                         <button
                             data-focus="hero-next"
-                            aria-label="Next unfinished title"
+                            aria-label={t('Next unfinished title')}
                             onClick={() => select(index + 1)}
                         >
                             →
@@ -106,7 +106,7 @@ export function Hero({
             </div>
             {!progress ? (
                 <span class="hero-number">
-                    MEDDL<span> TV</span>
+                    MEDDL<span> {t('TV')}</span>
                 </span>
             ) : null}
         </section>

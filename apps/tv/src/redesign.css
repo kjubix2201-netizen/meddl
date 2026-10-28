@@ -1,0 +1,551 @@
+/*
+ * meddl TV layout: top bar instead of the side rail, glass launcher tiles on
+ * Home, three-column Live TV and a centred transport bar in the player.
+ * Loaded after theme.css and overrides its layout rules only. Glass effects
+ * use backdrop-filter where available (newer TVs, Android TV, desktop);
+ * Chromium 68 (webOS 5) falls back to the semi-opaque fill.
+ */
+:root {
+    --tv-glass: rgba(255, 255, 255, 0.07);
+    --tv-glass-strong: rgba(255, 255, 255, 0.13);
+    --tv-glass-line: rgba(255, 255, 255, 0.14);
+    --top-bar-height: 108px;
+}
+
+/* ---------- Top bar ---------- */
+.top-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--top-bar-height);
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    padding: 0 56px;
+    background: linear-gradient(180deg, rgba(13, 11, 20, 0.95) 0%, rgba(13, 11, 20, 0.6) 70%, rgba(13, 11, 20, 0) 100%);
+}
+.top-bar .wordmark {
+    margin: 0 44px 0 0;
+    padding: 0;
+}
+.top-tabs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.top-tabs button {
+    position: relative;
+    background: transparent;
+    color: var(--tv-muted);
+    font-size: 21px;
+    font-weight: 500;
+    padding: 12px 20px;
+    margin-right: 6px;
+    min-height: 52px;
+    border-radius: 26px;
+}
+.top-tabs button:hover {
+    background: var(--tv-glass);
+}
+.top-tabs button[aria-current='page'] {
+    color: var(--tv-text);
+    background: var(--tv-glass-strong);
+}
+.top-tools {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+.top-tools .clock {
+    margin-left: 22px;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--tv-text);
+    font-variant-numeric: tabular-nums;
+}
+button.round {
+    width: 56px;
+    height: 56px;
+    min-height: 56px;
+    padding: 0;
+    margin-left: 12px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: var(--tv-glass);
+    border: 1px solid var(--tv-glass-line);
+    flex: none;
+}
+button.round:hover {
+    background: var(--tv-glass-strong);
+}
+button.round svg {
+    width: 26px;
+    height: 26px;
+}
+button.round[aria-current='page'] {
+    background: var(--tv-gradient);
+    border-color: transparent;
+}
+button.round.is-favorite svg,
+.channel-favorite svg {
+    fill: #ffb547;
+    color: #ffb547;
+}
+
+/* The side rail is gone: content uses the full width under the top bar. */
+main {
+    margin-left: 0;
+    padding: calc(var(--top-bar-height) + 4px) 56px 38px;
+}
+.cinematic-page > .page-backdrop {
+    height: 100vh;
+}
+.home-page > .page-backdrop img {
+    filter: blur(6px) brightness(0.55);
+    transform: scale(1.06);
+}
+
+/* ---------- Home launcher ---------- */
+.home-launcher {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 470px;
+    margin: 10px 0 44px;
+}
+.launcher-tiles {
+    display: flex;
+    align-items: flex-end;
+}
+.launcher-tile {
+    position: relative;
+    width: 280px;
+    height: 360px;
+    margin-right: 26px;
+    padding: 32px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-align: left;
+    border-radius: 16px;
+    border: 1px solid var(--tv-glass-line);
+    background: rgba(26, 23, 38, 0.72);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+    transition: transform 0.18s ease, background 0.18s ease, height 0.18s ease;
+}
+.launcher-tile:hover {
+    background: rgba(40, 34, 58, 0.8);
+}
+.launcher-tile:focus {
+    outline: none;
+    height: 420px;
+    transform: translateY(-6px);
+    background: rgba(48, 39, 70, 0.86);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+.launcher-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: auto;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    background: var(--tv-glass-strong);
+}
+.launcher-tile:focus .launcher-icon {
+    background: var(--tv-gradient);
+}
+.launcher-icon svg {
+    width: 34px;
+    height: 34px;
+}
+.launcher-tile strong {
+    font-size: 34px;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--tv-text);
+}
+.launcher-tile small {
+    margin-top: 8px;
+    font-size: 18px;
+    color: var(--tv-muted);
+}
+.launcher-focus-bar {
+    position: absolute;
+    left: 50%;
+    bottom: -14px;
+    width: 64px;
+    height: 5px;
+    margin-left: -32px;
+    border-radius: 3px;
+    background: #ffffff;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+.launcher-tile:focus .launcher-focus-bar {
+    opacity: 1;
+}
+.clock-large {
+    text-align: right;
+    color: var(--tv-text);
+}
+.clock-large time {
+    display: block;
+    font-size: 96px;
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -2px;
+    font-variant-numeric: tabular-nums;
+}
+.clock-large span {
+    display: block;
+    margin-top: 14px;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--tv-muted);
+}
+
+/* ---------- Live TV: categories · channels · preview ---------- */
+.live-layout {
+    grid-template-columns: 300px minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-gap: 28px;
+}
+.live-columns-placeholder {
+    grid-column: span 2;
+}
+.category-column,
+.channel-column {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+.category-column > h2 {
+    margin: 0 8px 14px;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+}
+.category-list .live-category {
+    min-height: 72px;
+    justify-content: flex-start;
+    padding: 10px 14px;
+    border-radius: 14px;
+}
+.live-category .flag {
+    width: 40px;
+    height: 40px;
+    margin-right: 16px;
+}
+.live-category-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.live-category-copy strong {
+    font-size: 19px;
+}
+.live-category-copy small {
+    margin-top: 4px;
+    font-size: 14px;
+}
+.live-category[aria-pressed='true'] {
+    background: var(--tv-glass-strong);
+}
+.live-category[aria-pressed='true'] strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+.flag {
+    display: inline-flex;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.18);
+    background: var(--tv-surface);
+    align-items: center;
+    justify-content: center;
+    color: var(--tv-muted);
+}
+.flag-generic svg {
+    width: 60%;
+    height: 60%;
+}
+.channel-pane-header button {
+    display: flex;
+    align-items: center;
+}
+.channel-pane-header button .flag {
+    margin-right: 12px;
+}
+.channel-tile {
+    min-height: 112px;
+    padding: 14px 18px 14px 14px;
+    border-radius: 14px;
+    background: rgba(26, 23, 38, 0.55);
+    border: 1px solid transparent;
+    position: relative;
+}
+.channel-tile[aria-pressed='true'] {
+    background: var(--tv-glass-strong);
+    border-color: var(--tv-glass-line);
+}
+.channel-tile .channel-logo {
+    width: 84px;
+    height: 84px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff10;
+}
+.channel-tile .channel-logo img {
+    padding: 8px;
+    background: transparent;
+}
+.channel-tile-copy {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.channel-tile-copy strong {
+    font-size: 21px;
+    font-weight: 600;
+}
+.channel-badges {
+    display: flex;
+    margin-top: 8px;
+}
+.badge {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    margin-right: 6px;
+    border-radius: 4px;
+    color: #0d0b14;
+    background: #d9d4e4;
+}
+.channel-favorite {
+    flex: none;
+    margin-left: 12px;
+}
+.channel-favorite svg {
+    width: 24px;
+    height: 24px;
+}
+.channel.is-playing {
+    background: rgba(230, 36, 94, 0.22);
+}
+.preview-placeholder {
+    border-radius: 14px;
+    overflow: hidden;
+    border-color: var(--tv-glass-line);
+}
+.live-information .section-title .actions button {
+    display: inline-flex;
+    align-items: center;
+}
+.live-information .section-title .actions button svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+.now-playing {
+    padding: 6px 0 22px;
+    border-bottom: 1px solid var(--tv-line);
+}
+.now-playing .eyebrow {
+    color: var(--tv-accent);
+    margin-bottom: 6px;
+}
+.now-playing h2 {
+    margin: 0 0 8px;
+    font-size: 30px;
+}
+.now-playing p {
+    margin: 0 0 16px;
+    font-size: 17px;
+    color: var(--tv-muted);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.now-progress {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--tv-line);
+    overflow: hidden;
+}
+.now-progress span {
+    display: block;
+    height: 100%;
+    background: #ffffff;
+}
+.now-times {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 15px;
+    color: var(--tv-muted);
+}
+
+/* ---------- Player ---------- */
+.player-controls {
+    padding: 44px 64px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, transparent 26%, transparent 50%, rgba(0, 0, 0, 0.88) 100%);
+}
+.player-top-left {
+    display: flex;
+    align-items: center;
+}
+.player-top-left button.round {
+    margin-left: 0;
+}
+.player-top-left .channel-logo {
+    width: 72px;
+    height: 72px;
+    margin-left: 22px;
+    background: transparent;
+}
+.player-live-actions button {
+    display: inline-flex;
+    align-items: center;
+    font-size: 17px;
+    background: rgba(0, 0, 0, 0.35);
+}
+.player-live-actions button svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+.player-top .clock {
+    font-size: 24px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+.player-bottom {
+    left: 64px;
+    right: 64px;
+    bottom: 44px;
+}
+.live-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #e5243f;
+}
+.player-bottom h1 {
+    margin: 12px 0 4px;
+    font-size: 44px;
+}
+.player-subtitle {
+    margin: 0 0 18px;
+    font-size: 19px;
+    color: #d6d1e0;
+    min-height: 1em;
+}
+.player-seek {
+    width: 100%;
+    margin: 0 0 18px;
+    accent-color: var(--tv-accent);
+}
+.player-transport {
+    display: flex;
+    align-items: center;
+}
+.player-time {
+    flex: 1;
+    font-size: 24px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+.transport-center {
+    display: flex;
+    align-items: center;
+}
+.transport-center button.round {
+    margin: 0 12px;
+    background: rgba(255, 255, 255, 0.12);
+}
+.transport-center .play-toggle {
+    width: 76px;
+    height: 76px;
+}
+.transport-center .play-toggle svg {
+    width: 32px;
+    height: 32px;
+}
+.transport-right {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.transport-right > button:not(.round) {
+    margin-left: 12px;
+}
+.transport-right .player-volume {
+    margin-left: 8px;
+}
+
+/* ---------- Smaller screens (720p TVs, laptop windows) ---------- */
+@media (max-width: 1400px) {
+    main {
+        margin-left: 0;
+        padding: calc(var(--top-bar-height) + 4px) 35px 30px;
+    }
+    .top-bar {
+        padding: 0 35px;
+    }
+    .launcher-tile {
+        width: 230px;
+        height: 300px;
+    }
+    .launcher-tile:focus {
+        height: 350px;
+    }
+    .clock-large time {
+        font-size: 72px;
+    }
+    .live-layout {
+        grid-template-columns: 240px minmax(0, 1fr) minmax(0, 1fr);
+        grid-gap: 18px;
+    }
+}
+@media (max-width: 900px) {
+    :root {
+        --top-bar-height: 84px;
+    }
+    main {
+        margin-left: 0;
+    }
+    .top-tabs button {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    .top-bar .wordmark-text {
+        display: none;
+    }
+    .launcher-tiles {
+        flex-wrap: wrap;
+    }
+    .clock-large {
+        display: none;
+    }
+}

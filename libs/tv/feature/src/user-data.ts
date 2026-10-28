@@ -4,7 +4,7 @@ import {
     UserDataRepository,
     UserDataStorage,
 } from '@meddl/tv/data-access';
-import { initialData, recordProgress, UserData } from '@meddl/tv/util';
+import { initialData, recordProgress, UserData, t } from '@meddl/tv/util';
 /** Persisted state is published only after its transaction commits. */
 export function useUserData(
     video: { current: HTMLVideoElement | null },
@@ -34,7 +34,7 @@ export function useUserData(
             setStorageReady(true);
         } catch {
             setStorageError(
-                'Saved TV data could not be read. Your data has not been replaced. Free storage if needed, then retry.'
+                t('Saved TV data could not be read. Your data has not been replaced. Free storage if needed, then retry.')
             );
         } finally {
             loading.current = false;

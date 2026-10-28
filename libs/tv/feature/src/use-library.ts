@@ -5,7 +5,7 @@ import {
     mergeLibrary,
     ServerLibrary,
 } from '@meddl/tv/data-access';
-import { LatestRequest, type UserData } from '@meddl/tv/util';
+import { LatestRequest, type UserData, t } from '@meddl/tv/util';
 
 export function useLibrary(
     data: UserData,
@@ -24,7 +24,7 @@ export function useLibrary(
     async function sync(url?: string, token?: string, sourceId?: string) {
         const snapshot = latest.current;
         if (snapshot.playing) {
-            setError('Stop playback before refreshing the server library.');
+            setError(t('Stop playback before refreshing the server library.'));
             return;
         }
         const saved = snapshot.data.library;
@@ -33,7 +33,7 @@ export function useLibrary(
         running.current = true;
         setBusy(true);
         setError('');
-        setStatus('Connecting…');
+        setStatus(t('Connecting…'));
         try {
             const client = new ServerLibrary(
                 url ?? saved!.url,
@@ -53,7 +53,7 @@ export function useLibrary(
                 if (!lane.current.owns(job)) throw new Error('Cancelled');
                 if (latest.current.playing)
                     throw new LibraryError(
-                        'Library refresh deferred while playing. Saved sources are unchanged.'
+                        t('Library refresh deferred while playing. Saved sources are unchanged.')
                     );
                 const same =
                     current.library?.instanceId ===
@@ -70,15 +70,17 @@ export function useLibrary(
             });
             if (lane.current.owns(job))
                 setStatus(
-                    `Connected · ${result.sources.length} server sources`
+                    t('Connected · {count} server sources', {
+                        count: result.sources.length,
+                    })
                 );
         } catch (failure) {
             if (lane.current.owns(job)) {
-                setStatus('Not synchronized');
+                setStatus(t('Not synchronized'));
                 setError(
                     failure instanceof LibraryError
                         ? failure.message
-                        : 'Library was not saved. Check TV storage and retry.'
+                        : t('Library was not saved. Check TV storage and retry.')
                 );
             }
         } finally {
@@ -95,9 +97,9 @@ export function useLibrary(
         try {
             await latest.current.update(disconnectLibrary);
             setError('');
-            setStatus('Disconnected. Sources remain on this TV.');
+            setStatus(t('Disconnected. Sources remain on this TV.'));
         } catch {
-            setError('Library settings could not be saved.');
+            setError(t('Library settings could not be saved.'));
         }
     }
     const refresh = useRef(() => void sync());

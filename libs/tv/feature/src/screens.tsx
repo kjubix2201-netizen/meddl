@@ -1,60 +1,29 @@
-import type { HomeFeature } from './use-home-feature';
 import { storedMediaPoster } from '@meddl/tv/data-access';
 import { CatalogOrder, CatalogSortNotice } from './catalog-order';
-import {
-    Empty,
-    Hero,
-    VirtualCollection,
-    Poster,
-    ResumeCard,
-} from '@meddl/tv/ui';
-import { Media } from '@meddl/tv/util';
+import { Empty, VirtualCollection, Poster, ResumeCard } from '@meddl/tv/ui';
+import { Media, Progress, t } from '@meddl/tv/util';
+import { HomeLauncher } from './home-launcher';
 import { TvModel } from './use-tv';
-export function Home({
-    tv,
-    feature,
-    openSeries,
-    detailsBusy,
-}: {
-    tv: TvModel;
-    feature: HomeFeature;
-    openSeries: (item: Media) => Promise<void>;
-    detailsBusy: boolean;
-}) {
+export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
     const items = tv.home;
     const sourceId = tv.data.activeId;
-    const history = feature.history;
     const rails: [string, Media[]][] = [
         [
-            'Favorite channels',
+            t('Favorite channels'),
             tv.data.favorites
                 .filter((m) => m.sourceId === sourceId && m.kind === 'live')
                 .slice(0, 8),
         ],
-        ['Films from your source', items.filter((m) => m.kind === 'movie')],
-        ['Series from your source', items.filter((m) => m.kind === 'series')],
-        ['On television', items.filter((m) => m.kind === 'live')],
+        [t('Movies from your source'), items.filter((m) => m.kind === 'movie')],
+        [t('Series from your source'), items.filter((m) => m.kind === 'series')],
+        [t('On TV now'), items.filter((m) => m.kind === 'live')],
     ];
     return (
         <>
-            <Hero
-                item={feature.item}
-                progress={feature.progress}
-                play={tv.play}
-                index={feature.index}
-                count={feature.count}
-                select={feature.select}
-                open={(item) =>
-                    item.kind === 'episode'
-                        ? void openSeries(item)
-                        : tv.open(item)
-                }
-                detailsBusy={detailsBusy}
-                compact={tv.data.layout === 'shelf'}
-            />
+            <HomeLauncher tv={tv} />
             {history.length ? (
                 <section>
-                    <h2>Continue watching</h2>
+                    <h2>{t('Continue watching')}</h2>
                     <div class="rail">
                         {history.map((p) => (
                             <ResumeCard
@@ -92,15 +61,15 @@ export function Home({
             {!tv.busy && !items.length ? (
                 <Empty>
                     {tv.data.sources.length ? (
-                        'This source has no titles available here. Browse TV or check your source.'
+                        t('This source has no titles available here. Browse TV or check your source.')
                     ) : (
                         <>
-                            <h2>Your screen, your sources.</h2>
+                            <h2>{t('Your screen, your sources.')}</h2>
                             <button
                                 class="primary"
                                 onClick={() => tv.navigate('sources')}
                             >
-                                Add your first source
+                                {t('Add your first source')}
                             </button>
                         </>
                     )}
@@ -116,10 +85,10 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
         <>
             <div class="catalog-filters">
                 <label>
-                    Search this source
+                    {t('Search this source')}
                     <input
                         type="search"
-                        aria-label="Search this source"
+                        aria-label={t('Search this source')}
                         value={r.query}
                         onInput={(e) =>
                             tv.setRoute({
@@ -132,9 +101,9 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                 </label>
                 {r.view === 'search' ? (
                     <label>
-                        Content
+                        {t('Content')}
                         <select
-                            aria-label="Content type"
+                            aria-label={t('Content type')}
                             value={r.kind}
                             onChange={(e) =>
                                 tv.setRoute({
@@ -146,14 +115,14 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                                 })
                             }
                         >
-                            <option value="movie">Movies</option>
-                            <option value="series">Series</option>
-                            <option value="live">Live TV</option>
+                            <option value="movie">{t('Movies')}</option>
+                            <option value="series">{t('Series')}</option>
+                            <option value="live">{t('Live TV')}</option>
                         </select>
                     </label>
                 ) : null}
                 <label>
-                    Category
+                    {t('Category')}
                     <select
                         value={r.category}
                         onChange={(e) =>
@@ -164,7 +133,7 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                             })
                         }
                     >
-                        <option value="">All categories</option>
+                        <option value="">{t('All categories')}</option>
                         {tv.catalog.categories.map((c) => (
                             <option value={c.id}>{c.name}</option>
                         ))}
@@ -189,7 +158,7 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
             />
             {!tv.busy && !list.length ? (
                 <Empty>
-                    No titles in this category. Try another category or search.
+                    {t('No titles in this category. Try another category or search.')}
                 </Empty>
             ) : null}
         </>

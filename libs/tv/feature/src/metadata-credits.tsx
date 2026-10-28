@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import type { Media } from '@meddl/tv/util';
 import { PersonAvatar } from './person-avatar';
 
@@ -11,11 +12,11 @@ export function MetadataCredits({
     const metadata = item.metadata;
     if (!metadata) return null;
     const groups: [string, NonNullable<Media['metadata']>['cast']][] = [
-        [metadata.authorRole, metadata.authors],
-        ['Cast', metadata.cast],
+        [t(metadata.authorRole), metadata.authors],
+        [t('Cast'), metadata.cast],
     ];
     return (
-        <section class="metadata-credits" aria-label="TMDB credits">
+        <section class="metadata-credits" aria-label={t('TMDB credits')}>
             {groups.map(([label, members]) => {
                 return members.length ? (
                     <div>
@@ -27,7 +28,7 @@ export function MetadataCredits({
                                         class="person-chip"
                                         data-focus={`person:${label}:${person.tmdbPersonId}`}
                                         disabled={!person.tmdbPersonId}
-                                        aria-label={`View filmography: ${person.name}`}
+                                        aria-label={t('View filmography: {name}', { name: person.name })}
                                         onClick={() => {
                                             if (person.tmdbPersonId)
                                                 open({

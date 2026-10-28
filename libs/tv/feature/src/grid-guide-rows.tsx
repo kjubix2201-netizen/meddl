@@ -5,7 +5,7 @@ import {
     guideXForMs,
     TimelineAxis,
 } from '@meddl/shared/epg';
-import { gridTime, gridVisiblePrograms, Media } from '@meddl/tv/util';
+import { gridTime, gridVisiblePrograms, Media, t } from '@meddl/tv/util';
 import { ChannelLogo } from '@meddl/tv/ui';
 import type { GridSchedule } from './use-grid-guide';
 import type { useGridNavigation } from './use-grid-navigation';
@@ -42,7 +42,7 @@ export function GridGuideRows({
     return (
         <>
             <div class="grid-axis" aria-hidden="true">
-                <span>Channel</span>
+                <span>{t('Channel')}</span>
                 <div>
                     {buildGuideTicks(axis, 50).map((tick) => (
                         <time key={tick.ms} style={{ left: `${tick.leftPx}%` }}>
@@ -111,7 +111,7 @@ export function GridGuideRows({
                                         <strong>{item.title}</strong>
                                         <small>
                                             {playingId === item.id
-                                                ? '● Playing'
+                                                ? t('● Playing')
                                                 : String(row + 1).padStart(
                                                       2,
                                                       '0'
@@ -184,12 +184,12 @@ export function GridGuideRows({
                                         >
                                             {message ||
                                                 (schedule?.status === 'error'
-                                                    ? 'Programme unavailable · Retry below'
+                                                    ? t('Programme unavailable · Retry below')
                                                     : !schedule ||
                                                         schedule.status ===
                                                             'loading'
-                                                      ? 'Loading programme…'
-                                                      : 'No programme supplied for this time')}
+                                                      ? t('Loading programme…')
+                                                      : t('No programme supplied for this time'))}
                                         </button>
                                     ) : null}
                                 </div>
@@ -199,14 +199,14 @@ export function GridGuideRows({
                 </div>
                 {busy || error ? (
                     <div class="grid-loading" role="status">
-                        {error || 'Loading channels…'}
+                        {error || t('Loading channels…')}
                         {error ? (
-                            <button onClick={loadMore}>Retry channels</button>
+                            <button onClick={loadMore}>{t('Retry channels')}</button>
                         ) : null}
                     </div>
                 ) : null}
                 {!busy && !error && !items.length ? (
-                    <p>No channels in this category.</p>
+                    <p>{t('No channels in this category.')}</p>
                 ) : null}
             </div>
         </>

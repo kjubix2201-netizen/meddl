@@ -1,11 +1,17 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import { focusKey, restoreFocus } from '@meddl/tv/ui';
+import { t } from '@meddl/tv/util';
 import type { TvModel } from './use-tv';
 function visibleChannels() {
     return (
         document.querySelector('[data-tv-modal] .channels') ??
+        // Three-column page: the channel list, not the category list.
+        document.querySelector('main .channel-column .channels') ??
         document.querySelector('main .channels')
     );
+}
+function visibleCategories() {
+    return document.querySelector('main .category-list') ?? visibleChannels();
 }
 export const categoryKey = (id: string) => `live-category:${id}`;
 export function useLiveBrowse(tv: TvModel) {
@@ -60,12 +66,24 @@ export function useLiveBrowse(tv: TvModel) {
         }
     }, [tv.data.activeId, tv.route.view]);
     function choose(id: string) {
-        categoryScroll.current = visibleChannels()?.scrollTop ?? 0;
+        categoryScroll.current = visibleCategories()?.scrollTop ?? 0;
         const same = id === tv.route.category;
         pending.current = same ? channel.current.key : '';
         setChannelScroll(same ? channel.current.scroll : 0);
         setCategoriesOpen(false);
         tv.setRoute({ ...tv.route, category: id, page: 0 });
+    }
+    /**
+     * Focus moved into the channel column on its own (arrow key or pointer
+     * in the three-column layout): the categories are no longer the active
+     * pane, but focus stays where the viewer put it.
+     */
+    const entering = useRef(false);
+    function enterChannels() {
+        if (!categoriesOpen) return;
+        entering.current = true;
+        pending.current = null;
+        setCategoriesOpen(false);
     }
     function back() {
         returning.current = true;
@@ -94,7 +112,9 @@ export function useLiveBrowse(tv: TvModel) {
         pending.current = null;
     }, [categoriesOpen, tv.catalog.items, tv.catalogError]);
     useLayoutEffect(() => {
-        if (!categoriesOpen) restoreFocus('live-categories');
+        if (!categoriesOpen && !entering.current)
+            restoreFocus('live-categories');
+        entering.current = false;
         if (categoriesOpen && returning.current) {
             returning.current = false;
             restoreFocus(categoryKey(tv.route.category), categoryKey(''));
@@ -105,7 +125,7 @@ export function useLiveBrowse(tv: TvModel) {
         showPlaying,
         categoriesOpen,
         categories: [
-            { id: '', name: 'All channels' },
+            { id: '', name: t('All channels') },
             ...categories.current,
         ].map((c) => ({
             ...c,
@@ -114,11 +134,12 @@ export function useLiveBrowse(tv: TvModel) {
         })),
         categoryName:
             categories.current.find((c) => c.id === tv.route.category)?.name ??
-            'All channels',
+            t('All channels'),
         categoryScroll: categoryScroll.current,
         channelScroll,
         channelKey: pending.current || channel.current.key,
         choose,
         back,
+        enterChannels,
     };
 }

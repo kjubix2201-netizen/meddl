@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useState } from 'preact/hooks';
 
 /** A notice owns its recovery action; a storage failure must never reconnect a portal. */
@@ -7,7 +8,7 @@ export function useNotice() {
         retry?: () => void;
         label?: string;
     }>({ message: '' });
-    function setError(message: string, retry?: () => void, label = 'Retry') {
+    function setError(message: string, retry?: () => void, label = t('Retry')) {
         setNotice({ message, retry, label });
     }
     return {

@@ -4,8 +4,7 @@ import {
     LatestRequest,
     Media,
     recoverSeriesContext,
-    seriesForEpisode,
-} from '@meddl/tv/util';
+    seriesForEpisode, t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
 import { navigationOrigin, type NavigationOrigin } from './use-route-history';
 import type { TvModel } from './use-tv';
@@ -19,7 +18,7 @@ export function useSeriesDetails(tv: TvModel) {
     useLayoutEffect(() => {
         setBusy(false);
         // Obsolete notices must not retain a retry from a previous route/source.
-        if (tv.errorRetryLabel === 'Retry series details') tv.setError('');
+        if (tv.errorRetryLabel === t('Retry series details')) tv.setError('');
         return () => {
             lane.current.cancel();
             playerLookup.current = undefined;
@@ -55,9 +54,9 @@ export function useSeriesDetails(tv: TvModel) {
                 : navigationOrigin());
         const report = () =>
             tv.setError(
-                'Could not find the series details. You can still continue this episode.',
+                t('Could not find the series details. You can still continue this episode.'),
                 () => void retryOpen.current(episode, origin),
-                'Retry series details'
+                t('Retry series details')
             );
         const timer = setTimeout(() => {
             if (lane.current.owns(job)) {
@@ -84,7 +83,7 @@ export function useSeriesDetails(tv: TvModel) {
                     job.signal
                 );
             if (!lane.current.owns(job)) return;
-            if (!parent) throw new Error('Parent unavailable');
+            if (!parent) throw new Error(t('Parent unavailable'));
             const selected = parent;
             // Parent lookup is complete; our own stop must not cancel navigation.
             playerLookup.current = undefined;

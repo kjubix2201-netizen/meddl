@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { focusKey, restoreFocus } from '@meddl/tv/ui';
 import { LiveChannels } from './live-channels';
@@ -116,10 +117,10 @@ export function LiveOverlay({
                 aria-modal="true"
                 aria-label={
                     overlay.panel === 'grid'
-                        ? 'Multi-channel programme guide'
+                        ? t('Multi-channel programme guide')
                         : overlay.panel === 'guide'
-                          ? 'Expanded programme guide'
-                          : 'Channel browser'
+                          ? t('Expanded programme guide')
+                          : t('Channel browser')
                 }
                 data-tv-modal
             >
@@ -140,24 +141,24 @@ export function LiveOverlay({
                                 data-focus="channels-close"
                                 onClick={overlay.close}
                             >
-                                Close ×
+                                {t('Close ×')}
                             </button>
                             <button onClick={overlay.openGuide}>
-                                Programme
+                                {t('Programme')}
                             </button>
                         </div>
                         <button
                             class="drawer-grid-button"
                             onClick={overlay.openGrid}
                         >
-                            TV Guide
+                            {t('TV Guide')}
                         </button>
                         <LiveChannels tv={tv} browse={browse} overlay />
                         {tv.error ? (
                             <p role="alert">
                                 {tv.error}
                                 <button onClick={tv.retryPlayback}>
-                                    Retry playback
+                                    {t('Retry playback')}
                                 </button>
                             </p>
                         ) : null}

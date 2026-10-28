@@ -1,15 +1,17 @@
 import { TvModel } from './use-tv';
 import { favoritesFor } from './favorites';
+import { t, tn } from '@meddl/tv/util';
 export function PageHeader({ tv }: { tv: TvModel }) {
     const view = tv.route.view;
     const title = {
-        movies: 'Movies',
-        series: 'Series',
-        favorites: 'Favorites',
-        search: 'Find your next story.',
-        live: 'Live television',
-        sources: 'Sources',
-        settings: 'Settings',
+        movies: t('Movies'),
+        series: t('Series'),
+        favorites: t('Favorites'),
+        search: t('Find your next story.'),
+        // The Live TV page titles its category column instead.
+        live: '',
+        sources: t('Sources'),
+        settings: t('Settings'),
         home: '',
         detail: '',
         person: '',
@@ -29,29 +31,29 @@ export function PageHeader({ tv }: { tv: TvModel }) {
                     }
                     onClick={tv.back}
                 >
-                    ← Back
+                    ← {t('Back')}
                 </button>
             ) : (
                 <div class="page-heading">
                     {title ? <h1>{title}</h1> : null}
-                    {count !== undefined ? (
+                    {count !== undefined && view !== 'live' ? (
                         <span class="catalog-count">
-                            {count}{' '}
-                            {tv.route.kind === 'live' ? 'channel' : 'title'}
-                            {count === 1 ? '' : 's'}
+                            {tv.route.kind === 'live'
+                                ? tn(count, '{count} channel', '{count} channels')
+                                : tn(count, '{count} title', '{count} titles')}
                         </span>
                     ) : null}
                 </div>
             )}
             <select
-                aria-label="Active source"
+                aria-label={t('Active source')}
                 value={tv.data.activeId}
                 onChange={(event) => {
                     void tv.switchSource(event.currentTarget.value);
                 }}
             >
                 {!tv.data.sources.length ? (
-                    <option value="">No source connected</option>
+                    <option value="">{t('No source connected')}</option>
                 ) : null}
                 {tv.data.sources.map((s) => (
                     <option value={s.id}>

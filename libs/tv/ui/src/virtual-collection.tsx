@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { cloneElement, VNode } from 'preact';
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
 
@@ -293,11 +294,11 @@ export function VirtualCollection<T extends { id: string }>({
             />
             {busy ? (
                 <p class="load-more-status" role="status">
-                    Loading more…
+                    {t('Loading more…')}
                 </p>
             ) : error ? (
                 <div class="load-more-status" role="alert">
-                    {error} <button onClick={loadMore}>Retry loading</button>
+                    {error} <button onClick={loadMore}>{t('Retry loading')}</button>
                 </div>
             ) : null}
         </div>

@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useState } from 'preact/hooks';
 import { ServerLibrary } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
@@ -29,12 +30,12 @@ export function HomeServer({ tv }: { tv: TvModel }) {
     if (!url || capability?.url !== url) return null;
     const linked = tv.data.library?.url === url;
     return (
-        <section aria-label="Home server sources">
-            <h3>Your home server</h3>
+        <section aria-label={t('Home server sources')}>
+            <h3>{t('Your home server')}</h3>
             <p class="muted">
                 {capability.available
-                    ? 'This server supports playback requests, phone setup and a shared source library.'
-                    : 'This server supports phone setup and playback requests. A shared source library is not available at this address.'}
+                    ? t('This server supports playback requests, phone setup and a shared source library.')
+                    : t('This server supports phone setup and playback requests. A shared source library is not available at this address.')}
             </p>
             {capability.available ? (
                 <>
@@ -47,8 +48,8 @@ export function HomeServer({ tv }: { tv: TvModel }) {
                         }
                     >
                         {linked
-                            ? 'Server sources connected'
-                            : 'Use this server’s sources'}
+                            ? t('Server sources connected')
+                            : t('Use this server’s sources')}
                     </button>
                     <p class="muted">
                         Sources are shared; favorites and viewing progress stay
@@ -66,8 +67,7 @@ export function HomeServer({ tv }: { tv: TvModel }) {
                 </>
             ) : (
                 <p class="muted">
-                    Add a source from your phone, or connect a separate source
-                    library in Settings.
+                    {t('Add a source from your phone, or connect a separate source library in Settings.')}
                 </p>
             )}
         </section>

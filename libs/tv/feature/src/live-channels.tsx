@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { ChannelLogo, Empty, VirtualCollection } from '@meddl/tv/ui';
 import type { TvModel } from './use-tv';
 import { categoryKey, useLiveBrowse } from './use-live-browse';
@@ -22,17 +23,17 @@ export function LiveChannels({
         <section
             class="channel-pane"
             aria-label={
-                browse.categoriesOpen ? 'Channel categories' : 'Channels'
+                browse.categoriesOpen ? t('Channel categories') : t('Channels')
             }
         >
             <div class="channel-pane-header">
                 {browse.categoriesOpen ? (
-                    <h2>Categories</h2>
+                    <h2>{t('Categories')}</h2>
                 ) : (
                     <button
                         data-focus="live-categories"
                         onClick={browse.back}
-                        aria-label="Back to categories"
+                        aria-label={t('Back to categories')}
                     >
                         <span aria-hidden="true">← </span>
                         {browse.categoryName}
@@ -40,10 +41,10 @@ export function LiveChannels({
                 )}
                 <span class="muted">
                     {browse.categoriesOpen
-                        ? 'Choose a category'
+                        ? t('Choose a category')
                         : overlay
-                          ? 'OK: switch channel · Back: close'
-                          : 'OK: preview · OK again: fullscreen'}
+                          ? t('OK: switch channel · Back: close')
+                          : t('OK: preview · OK again: fullscreen')}
                 </span>
             </div>
             <div
@@ -107,9 +108,9 @@ export function LiveChannels({
                                         {tv.playing?.id === item.id
                                             ? tv.player.current
                                                   ?.hasConfirmedPlayback
-                                                ? '● Playing'
-                                                : 'Starting / paused'
-                                            : 'Live channel'}
+                                                ? t('● Playing')
+                                                : t('Starting / paused')
+                                            : t('Live channel')}
                                     </small>
                                 </span>
                             </button>
@@ -120,12 +121,12 @@ export function LiveChannels({
                 !tv.busy &&
                 !tv.catalogError &&
                 !items.length ? (
-                    <Empty>No channels in this category.</Empty>
+                    <Empty>{t('No channels in this category.')}</Empty>
                 ) : null}
                 {browse.categoriesOpen && tv.catalogError ? (
                     <div role="alert" class="load-more-status">
                         {tv.catalogError}{' '}
-                        <button onClick={tv.loadMore}>Retry loading</button>
+                        <button onClick={tv.loadMore}>{t('Retry loading')}</button>
                     </div>
                 ) : null}
             </div>

@@ -5,7 +5,7 @@ import {
     checkBackend,
     discoverBackends,
 } from '@meddl/tv/data-access';
-import { LatestRequest, UserData } from '@meddl/tv/util';
+import { LatestRequest, UserData, t } from '@meddl/tv/util';
 export function useBackend(
     data: UserData,
     ready: boolean,
@@ -13,7 +13,7 @@ export function useBackend(
 ) {
     const [url, setUrl] = useState('');
     const [token, setToken] = useState('');
-    const [status, setStatus] = useState('Not connected');
+    const [status, setStatus] = useState(t('Not connected'));
     const [connected, setConnected] = useState(false);
     const [searching, setSearching] = useState(false);
     const [found, setFound] = useState<BackendInfo[]>([]);
@@ -25,7 +25,7 @@ export function useBackend(
         lane.current.cancel();
         setSearching(false);
         setConnected(false);
-        setStatus('Not checked');
+        setStatus(t('Not checked'));
         setUrl(value);
         if (value.replace(/\/$/, '') !== data.backend.replace(/\/$/, ''))
             setToken('');
@@ -34,14 +34,14 @@ export function useBackend(
         lane.current.cancel();
         setSearching(false);
         setConnected(false);
-        setStatus('Not checked');
+        setStatus(t('Not checked'));
         setToken(value);
     }
     async function connect(value = url, secret = token, persist = true) {
         const job = lane.current.start();
         setSearching(false);
         setConnected(false);
-        setStatus('Checking backend…');
+        setStatus(t('Checking backend…'));
         try {
             const info = await checkBackend(value, secret, job.signal);
             if (!lane.current.owns(job)) return false;
@@ -63,7 +63,7 @@ export function useBackend(
                 setStatus(
                     error instanceof Error
                         ? error.message
-                        : 'Backend is unavailable.'
+                        : t('Backend is unavailable.')
                 );
             return false;
         }
@@ -73,7 +73,7 @@ export function useBackend(
         setSearching(true);
         setConnected(false);
         setFound([]);
-        setStatus('Looking for meddl in your local network…');
+        setStatus(t('Looking for meddl in your local network…'));
         const matches: BackendInfo[] = [];
         await discoverBackends(job.signal, (info) => {
             if (
@@ -93,14 +93,14 @@ export function useBackend(
         } else
             setStatus(
                 matches.length
-                    ? 'Choose your backend below.'
-                    : 'No backend found. Enter its address manually.'
+                    ? t('Choose your backend below.')
+                    : t('No backend found. Enter its address manually.')
             );
     }
     function cancel() {
         lane.current.cancel();
         setSearching(false);
-        setStatus('Search cancelled. Enter an address or search again.');
+        setStatus(t('Search cancelled. Enter an address or search again.'));
     }
     useEffect(() => {
         if (!ready || initialized.current) return;
@@ -147,7 +147,7 @@ export function useBackend(
             setFound([]);
             if (info.auth === 'token') {
                 setConnected(false);
-                setStatus('Enter this backend’s access token, then connect.');
+                setStatus(t('Enter this backend’s access token, then connect.'));
             } else void connect(info.url, '');
         },
         normalized: () => backendUrl(url),

@@ -1,4 +1,4 @@
-import { Media } from '@meddl/tv/util';
+import { Media, t } from '@meddl/tv/util';
 import { TvIcon } from './icon';
 /** A local vector remains visible when a channel has no logo or its URL fails. */
 export function ChannelLogo({ src }: { src?: string }) {
@@ -38,7 +38,7 @@ export function ChannelCard({
             <ChannelLogo src={item.poster} />
             <span class="channel-card-copy">
                 <strong>{item.title}</strong>
-                <small>Live TV</small>
+                <small>{t('Live TV')}</small>
             </span>
         </button>
     );

@@ -1,5 +1,5 @@
 import { ChannelCard } from './channel-card';
-import { Media } from '@meddl/tv/util';
+import { Media, t } from '@meddl/tv/util';
 export * from './focus';
 export function Poster({
     item,
@@ -43,7 +43,7 @@ export function Poster({
             </span>
             <strong>{item.title}</strong>
             <span class="muted">
-                {saved ? '♥ Saved' : item.year || 'From your source'}
+                {saved ? t('♥ Saved') : item.year || t('From your source')}
             </span>
         </button>
     );

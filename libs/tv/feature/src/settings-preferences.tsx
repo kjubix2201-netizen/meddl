@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useState } from 'preact/hooks';
 import type { TvModel } from './use-tv';
 
@@ -35,9 +36,9 @@ export function SettingsPreferences({
                 tv.setError('');
             } catch {
                 tv.setError(
-                    'Settings could not be saved.',
+                    t('Settings could not be saved.'),
                     () => void persist(),
-                    'Retry saving settings'
+                    t('Retry saving settings')
                 );
             } finally {
                 setSaving(false);
@@ -48,15 +49,15 @@ export function SettingsPreferences({
     };
     return (
         <form class="source-form" onSubmit={save}>
-            <h2>{field === 'layout' ? 'Appearance' : 'Programme guide'}</h2>
+            <h2>{field === 'layout' ? t('Appearance') : t('Programme guide')}</h2>
             <p class="muted">
                 {field === 'layout'
-                    ? 'Choose how titles appear on Home.'
-                    : 'Show programme information supplied by your TV provider.'}
+                    ? t('Choose how titles appear on Home.')
+                    : t('Show programme information supplied by your TV provider.')}
             </p>
             {field === 'layout' ? (
                 <label>
-                    Home composition
+                    {t('Home composition')}
                     <select
                         name="layout"
                         data-focus="settings:layout:value"
@@ -70,8 +71,8 @@ export function SettingsPreferences({
                             setSaved(false);
                         }}
                     >
-                        <option value="cinema">Кинозал · Cinema</option>
-                        <option value="shelf">Витрина · Showcase</option>
+                        <option value="cinema">{t('Кинозал · Cinema')}</option>
+                        <option value="shelf">{t('Витрина · Showcase')}</option>
                     </select>
                 </label>
             ) : (
@@ -86,7 +87,7 @@ export function SettingsPreferences({
                             setSaved(false);
                         }}
                     />
-                    Show provider programme guide
+                    {t('Show provider programme guide')}
                 </label>
             )}
             <button
@@ -94,9 +95,9 @@ export function SettingsPreferences({
                 disabled={saving}
                 data-focus={`settings:${field}:save`}
             >
-                {saving ? 'Saving…' : 'Save settings'}
+                {saving ? t('Saving…') : t('Save settings')}
             </button>
-            {saved ? <p role="status">Settings saved on this TV.</p> : null}
+            {saved ? <p role="status">{t('Settings saved on this TV.')}</p> : null}
         </form>
     );
 }

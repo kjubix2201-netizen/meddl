@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useMemo } from 'preact/hooks';
 import { mapPersonFilmography, mapPersonProfile } from '@meddl/shared/tmdb';
 import { TvMetadata } from '@meddl/tv/data-access';
@@ -42,25 +43,25 @@ export function PersonPage({
     if (!tv.data.tmdb.enabled)
         return (
             <Empty>
-                Enable TMDB metadata in Settings to view filmographies.
+                {t('Enable TMDB metadata in Settings to view filmographies.')}
             </Empty>
         );
     return (
-        <section class="person-page" aria-label="Person filmography">
+        <section class="person-page" aria-label={t('Person filmography')}>
             <div class="person-profile">
                 <PersonAvatar
                     name={profile?.name || selected.name}
                     photo={profile?.photoUrl}
                 />
                 <div>
-                    <span class="eyebrow">FILMS & SERIES</span>
+                    <span class="eyebrow">{t('FILMS & SERIES')}</span>
                     <h1>{profile?.name || selected.name}</h1>
                     {profile?.biography ? (
                         <p
                             data-tv-scroll
                             data-focus="person-biography"
                             tabIndex={0}
-                            aria-label="Biography"
+                            aria-label={t('Biography')}
                             onKeyDown={(event) => {
                                 const direction =
                                     event.key === 'ArrowDown' ||
@@ -85,11 +86,11 @@ export function PersonPage({
                 </div>
             </div>
             {resource.loading ? (
-                <p role="status">Loading filmography…</p>
+                <p role="status">{t('Loading filmography…')}</p>
             ) : !person ? (
                 <div role="alert">
                     Filmography is unavailable.{' '}
-                    <button onClick={resource.retry}>Retry filmography</button>
+                    <button onClick={resource.retry}>{t('Retry filmography')}</button>
                 </div>
             ) : (
                 <>
@@ -99,7 +100,7 @@ export function PersonPage({
                             <span class="muted">{credits.length}</span>
                         </h2>
                         <span class="muted">
-                            Choose a title to find it in this portal
+                            {t('Choose a title to find it in this portal')}
                         </span>
                     </div>
                     {lookup.state ? (
@@ -110,16 +111,15 @@ export function PersonPage({
                         >
                             {lookup.state.busy ? (
                                 <>
-                                    Searching this portal for “
+                                    {t('Searching this portal for “')}
                                     {lookup.state.credit.title}”…{' '}
                                     <button onClick={lookup.cancel}>
-                                        Cancel search
+                                        {t('Cancel search')}
                                     </button>
                                 </>
                             ) : lookup.state.error ? (
                                 <>
-                                    Could not finish the portal search. Check
-                                    the connection and retry.{' '}
+                                    {t('Could not finish the portal search. Check the connection and retry.')}{' '}
                                     <button
                                         onClick={() =>
                                             lookup.state &&
@@ -129,7 +129,7 @@ export function PersonPage({
                                             )
                                         }
                                     >
-                                        Retry portal search
+                                        {t('Retry portal search')}
                                     </button>
                                 </>
                             ) : lookup.state.result?.status === 'missing' ? (
@@ -138,12 +138,12 @@ export function PersonPage({
                                     available in this portal.
                                 </>
                             ) : lookup.state.result?.status === 'choices' ? (
-                                'Choose a version available in this portal:'
+                                t('Choose a version available in this portal:')
                             ) : null}
                         </div>
                     ) : null}
                     {lookup.state?.result?.status === 'choices' ? (
-                        <div class="rail" aria-label="Available versions">
+                        <div class="rail" aria-label={t('Available versions')}>
                             {lookup.state.result.items.map((item) => (
                                 <Poster
                                     key={item.id}
@@ -187,7 +187,7 @@ export function PersonPage({
                                 </span>
                                 <strong>{credit.title}</strong>
                                 <span class="muted">
-                                    {credit.year || 'Year unavailable'}
+                                    {credit.year || t('Year unavailable')}
                                     {credit.crewJob
                                         ? ` · ${credit.crewJob}`
                                         : credit.character
@@ -199,7 +199,7 @@ export function PersonPage({
                     />
                     {!credits.length ? (
                         <Empty>
-                            No filmography is available for this person.
+                            {t('No filmography is available for this person.')}
                         </Empty>
                     ) : null}
                 </>

@@ -4,8 +4,7 @@ import {
     Media,
     Program,
     programmeNow,
-    programmeWindow,
-} from '@meddl/tv/util';
+    programmeWindow, t } from '@meddl/tv/util';
 import {
     useEffect,
     useLayoutEffect,
@@ -44,18 +43,18 @@ export function ProgrammeGuide({
         <div class="programme-guide">
             <header class="programme-guide-header">
                 <div>
-                    <span class="muted">Programme guide</span>
-                    <h1>{channel?.title ?? 'Live TV'}</h1>
+                    <span class="muted">{t('Programme guide')}</span>
+                    <h1>{channel?.title ?? t('Live TV')}</h1>
                 </div>
                 <button data-focus="guide-close" onClick={close}>
-                    Close programme ×
+                    {t('Close programme ×')}
                 </button>
             </header>
             {!enabled || !rows.length ? (
                 <p role="status" class="muted">
                     {!enabled
-                        ? 'Programme guide is disabled in Settings.'
-                        : error || 'No programme information supplied.'}
+                        ? t('Programme guide is disabled in Settings.')
+                        : error || t('No programme information supplied.')}
                 </p>
             ) : (
                 <ProgrammeSchedule key={channel?.id ?? ''} rows={rows} />
@@ -128,7 +127,7 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
     const current = selected.start <= now && selected.end > now;
     return (
         <>
-            <div class="programme-guide-days" aria-label="Programme dates">
+            <div class="programme-guide-days" aria-label={t('Programme dates')}>
                 <button
                     data-focus="guide-now"
                     onClick={() => {
@@ -136,11 +135,11 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
                         choose(programmeNow(rows, Date.now()) ?? rows[0], true);
                     }}
                 >
-                    Now
+                    {t('Now')}
                 </button>
                 {dayStart > 0 ? (
                     <button
-                        aria-label="Earlier dates"
+                        aria-label={t('Earlier dates')}
                         onClick={() => choose(days[dayStart - 1])}
                     >
                         ‹
@@ -158,7 +157,7 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
                 ))}
                 {dayStart + 7 < days.length ? (
                     <button
-                        aria-label="Later dates"
+                        aria-label={t('Later dates')}
                         onClick={() => choose(days[dayStart + 7])}
                     >
                         ›
@@ -170,7 +169,7 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
                     class="programme-guide-schedule"
                     ref={list}
                     role="region"
-                    aria-label="Programmes"
+                    aria-label={t('Programmes')}
                     onScroll={(event) =>
                         setScroll(event.currentTarget.scrollTop)
                     }
@@ -226,7 +225,7 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
                                         </time>
                                         <strong>{row.title}</strong>
                                         {row.start <= now && row.end > now ? (
-                                            <small>Now playing</small>
+                                            <small>{t('Now playing')}</small>
                                         ) : null}
                                     </button>
                                 );
@@ -241,7 +240,7 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
                     data-tv-scroll
                     data-focus="guide-description"
                     role="region"
-                    aria-label="Programme description"
+                    aria-label={t('Programme description')}
                     onKeyDown={(event) => {
                         if (event.key === 'ArrowLeft' || event.keyCode === 37) {
                             event.preventDefault();
@@ -261,13 +260,13 @@ function ProgrammeSchedule({ rows }: { rows: GuideProgram[] }) {
                     }}
                 >
                     <span class="programme-guide-state">
-                        {current ? 'Now playing' : date(selected.start)}
+                        {current ? t('Now playing') : date(selected.start)}
                     </span>
                     <h2>{selected.title}</h2>
                     <p class="muted">
                         {time(selected.start)} – {time(selected.end)}
                     </p>
-                    <p>{selected.description || 'No description supplied.'}</p>
+                    <p>{selected.description || t('No description supplied.')}</p>
                 </div>
             </div>
         </>

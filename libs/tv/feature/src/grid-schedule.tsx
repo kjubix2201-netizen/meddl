@@ -10,8 +10,7 @@ import {
     GUIDE_SPAN,
     gridProgramAt,
     gridTime,
-    guideWindow,
-} from '@meddl/tv/util';
+    guideWindow, t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
 import { useGridGuide, useGridRows } from './use-grid-guide';
 import { useGridNavigation } from './use-grid-navigation';
@@ -99,9 +98,9 @@ export function GridSchedule({
             navigation.selection.time
         );
     const unavailable = !tv.data.epg
-        ? 'Programme guide is disabled in Settings.'
+        ? t('Programme guide is disabled in Settings.')
         : !guide.supported
-          ? 'This source does not supply a programme guide.'
+          ? t('This source does not supply a programme guide.')
           : '';
     const shift = (hours: number) =>
         setAxis({
@@ -164,16 +163,16 @@ export function GridSchedule({
                         );
                     }}
                 >
-                    Now
+                    {t('Now')}
                 </button>
-                <button aria-label="Previous day" onClick={() => shiftDay(-1)}>
-                    −1 day
+                <button aria-label={t('Previous day')} onClick={() => shiftDay(-1)}>
+                    {t('−1 day')}
                 </button>
                 <button
-                    aria-label="Earlier programmes"
+                    aria-label={t('Earlier programmes')}
                     onClick={() => shift(-GUIDE_SPAN / GUIDE_HOUR)}
                 >
-                    ← Earlier
+                    {t('← Earlier')}
                 </button>
                 <span class="grid-date">
                     {new Date(axis.startMs).toLocaleDateString([], {
@@ -184,13 +183,13 @@ export function GridSchedule({
                     · {gridTime(axis.startMs)}–{gridTime(axis.endMs)}
                 </span>
                 <button
-                    aria-label="Later programmes"
+                    aria-label={t('Later programmes')}
                     onClick={() => shift(GUIDE_SPAN / GUIDE_HOUR)}
                 >
-                    Later →
+                    {t('Later →')}
                 </button>
-                <button aria-label="Next day" onClick={() => shiftDay(1)}>
-                    +1 day
+                <button aria-label={t('Next day')} onClick={() => shiftDay(1)}>
+                    {t('+1 day')}
                 </button>
             </div>
             <GridGuideRows
@@ -213,22 +212,22 @@ export function GridSchedule({
                     {tv.error}
                 </p>
             ) : null}
-            {starting ? <p role="status">Opening channel…</p> : null}
+            {starting ? <p role="status">{t('Opening channel…')}</p> : null}
             <footer class="grid-details">
                 <div>
                     <small>
-                        {channel?.title ?? 'Choose a channel'}
+                        {channel?.title ?? t('Choose a channel')}
                         {program
                             ? ` · ${gridTime(program.start)}–${gridTime(program.end)}`
                             : ''}
                     </small>
-                    <h2>{program?.title ?? 'Live TV'}</h2>
+                    <h2>{program?.title ?? t('Live TV')}</h2>
                     <div
                         class="grid-description"
                         tabIndex={0}
                         data-tv-scroll
                         data-focus="grid-description"
-                        aria-label="Programme description"
+                        aria-label={t('Programme description')}
                         key={program?.id}
                         onKeyDown={(event) => {
                             if (
@@ -243,11 +242,11 @@ export function GridSchedule({
                         }}
                     >
                         {schedule?.status === 'error'
-                            ? 'Programme refresh failed. Use Refresh guide to retry. '
+                            ? t('Programme refresh failed. Use Refresh guide to retry.') + ' '
                             : ''}
                         {program?.description ||
                             unavailable ||
-                            'Only programmes supplied by this source are shown. Watch live opens the current broadcast.'}
+                            t('Only programmes supplied by this source are shown. Watch live opens the current broadcast.')}
                     </div>
                 </div>
                 <div class="grid-details-actions">
@@ -257,7 +256,7 @@ export function GridSchedule({
                         disabled={!channel || starting}
                         onClick={watch}
                     >
-                        Watch live ▶
+                        {t('Watch live ▶')}
                     </button>
                     <button
                         onClick={() =>
@@ -268,10 +267,10 @@ export function GridSchedule({
                             )
                         }
                     >
-                        Back to programmes ↑
+                        {t('Back to programmes ↑')}
                     </button>
                     {!unavailable ? (
-                        <button onClick={guide.retry}>Refresh guide</button>
+                        <button onClick={guide.retry}>{t('Refresh guide')}</button>
                     ) : null}
                 </div>
             </footer>

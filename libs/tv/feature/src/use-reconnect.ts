@@ -1,3 +1,4 @@
+import { t } from '@meddl/tv/util';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 export const RECONNECT_DELAYS = [2000, 5000, 10000, 30000];
@@ -59,18 +60,22 @@ export function useReconnect(options: {
             return;
         }
         if (document.hidden || navigator.onLine === false) {
-            setStatus('Waiting for the TV network.');
+            setStatus(t('Waiting for the TV network.'));
             return;
         }
         const delay = RECONNECT_DELAYS[attempts.current];
         if (delay === undefined) {
             setStatus(
-                'Automatic retries stopped. Check your server or source, then retry.'
+                t('Automatic retries stopped. Check your server or source, then retry.')
             );
             return;
         }
         setStatus(
-            `Reconnecting in ${delay / 1000} seconds (${attempts.current + 1}/${RECONNECT_DELAYS.length})…`
+            t('Reconnecting in {seconds} seconds ({attempt}/{total})…', {
+                seconds: delay / 1000,
+                attempt: attempts.current + 1,
+                total: RECONNECT_DELAYS.length,
+            })
         );
         const timer = setTimeout(() => {
             const current = latest.current;

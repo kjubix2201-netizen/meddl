@@ -6,8 +6,7 @@ import {
     httpUrl,
     removeSourceData,
     Source,
-    Provider,
-} from '@meddl/tv/util';
+    Provider, t } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 export function Sources({ tv }: { tv: TvModel }) {
     const [type, setType] = useState<Provider>('xtream');
@@ -61,7 +60,7 @@ export function Sources({ tv }: { tv: TvModel }) {
             await tv.saveSource(source, httpUrl(field('backend')));
         } catch {
             setFailure(
-                'Check the URL fields. Use HTTP or HTTPS addresses without embedded login credentials.'
+                t('Check the URL fields. Use HTTP or HTTPS addresses without embedded login credentials.')
             );
         } finally {
             setSaving(false);
@@ -70,7 +69,7 @@ export function Sources({ tv }: { tv: TvModel }) {
     return (
         <>
             <p class="muted">
-                Your subscriptions. Server sources are managed in the PWA.
+                {t('Your subscriptions. Server sources are managed in the PWA.')}
             </p>
             <div class="source-list">
                 {tv.data.sources.map((source) => (
@@ -88,27 +87,27 @@ export function Sources({ tv }: { tv: TvModel }) {
                             onClick={() => edit(source)}
                         >
                             {source.libraryId
-                                ? 'Server source'
+                                ? t('Server source')
                                 : source.m3uItems
-                                  ? 'Stored playlist'
-                                  : 'Edit'}
+                                  ? t('Stored playlist')
+                                  : t('Edit')}
                         </button>
                         <button
                             disabled={!!source.libraryId}
                             onClick={() => {
                                 if (
                                     confirm(
-                                        `Remove ${source.name} and its local viewing data?`
+                                        t('Remove {name} and its local viewing data?', { name: source.name })
                                     )
                                 )
                                     tv.update((d) =>
                                         removeSourceData(d, source.id)
                                     ).catch(() =>
-                                        tv.setError('Source was not removed.')
+                                        tv.setError(t('Source was not removed.'))
                                     );
                             }}
                         >
-                            Remove
+                            {t('Remove')}
                         </button>
                     </div>
                 ))}
@@ -132,14 +131,14 @@ export function Sources({ tv }: { tv: TvModel }) {
                 onSubmit={submit}
                 key={`${type}:${editing?.id ?? 'new'}`}
             >
-                <h2>{editing ? 'Edit source' : 'Add a source'}</h2>
+                <h2>{editing ? t('Edit source') : t('Add a source')}</h2>
                 <BackendConnection tv={tv} />
                 <label>
-                    Name
+                    {t('Name')}
                     <input name="name" required defaultValue={editing?.name} />
                 </label>
                 <label>
-                    {type === 'm3u' ? 'Playlist URL' : 'Provider URL'}
+                    {type === 'm3u' ? t('Playlist URL') : t('Provider URL')}
                     <input
                         name="url"
                         type="url"
@@ -151,7 +150,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                 {type !== 'm3u' ? (
                     <>
                         <label>
-                            Username{type === 'stalker' ? ' (if required)' : ''}
+                            {t('Username')}{type === 'stalker' ? ' ' + t('(if required)') : ''}
                             <input
                                 name="username"
                                 required={type === 'xtream'}
@@ -160,7 +159,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                             />
                         </label>
                         <label>
-                            Password
+                            {t('Password')}
                             <input
                                 name="password"
                                 type="password"
@@ -174,7 +173,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                 {type === 'stalker' ? (
                     <>
                         <label>
-                            MAC address
+                            {t('MAC address')}
                             <input
                                 name="macAddress"
                                 required
@@ -183,18 +182,16 @@ export function Sources({ tv }: { tv: TvModel }) {
                             />
                         </label>
                         <details>
-                            <summary>Existing MAG device identity</summary>
+                            <summary>{t('Existing MAG device identity')}</summary>
                             <p class="muted">
-                                Enter identity values supplied for your account.
-                                Values are sent exactly as entered; IDs are
-                                never generated automatically.
+                                {t('Enter identity values supplied for your account. Values are sent exactly as entered; IDs are never generated automatically.')}
                             </p>
                             {[
-                                ['serialNumber', 'Serial number'],
-                                ['deviceId1', 'Device ID'],
-                                ['deviceId2', 'Device ID 2'],
-                                ['signature1', 'Signature'],
-                                ['signature2', 'Signature 2'],
+                                ['serialNumber', t('Serial number')],
+                                ['deviceId1', t('Device ID')],
+                                ['deviceId2', t('Device ID 2')],
+                                ['signature1', t('Signature')],
+                                ['signature2', t('Signature 2')],
                             ].map(([key, label]) => (
                                 <label>
                                     {label}
@@ -213,7 +210,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                 ) : null}
                 {failure ? <p role="alert">{failure}</p> : null}
                 <button class="primary" disabled={saving}>
-                    {saving ? 'Saving…' : 'Save and connect'}
+                    {saving ? t('Saving…') : t('Save and connect')}
                 </button>
             </form>
         </>
