@@ -1,0 +1,6 @@
+.gradle/
+build/
+app/build/
+local.properties
+# Filled by CI / `pnpm run android-tv:assets` from dist/apps/tv
+app/src/main/assets/www/

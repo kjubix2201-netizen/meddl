@@ -122,7 +122,10 @@ export function platformBack() {
     const platform = window as unknown as {
         webOS?: { platformBack?: () => void };
         PalmSystem?: { platformBack?: () => void };
+        /** Android TV / Fire TV shell (apps/android-tv). */
+        MeddlAndroid?: { exitApp?: () => void };
     };
     if (platform.webOS?.platformBack) platform.webOS.platformBack();
+    else if (platform.MeddlAndroid?.exitApp) platform.MeddlAndroid.exitApp();
     else platform.PalmSystem?.platformBack?.();
 }

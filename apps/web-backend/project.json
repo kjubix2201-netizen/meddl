@@ -75,7 +75,7 @@
                 "color": true,
                 "env": {
                     "PORT": "3333",
-                    "CLIENT_URL": "http://localhost:4200,http://localhost:4310",
+                    "CLIENT_URL": "http://localhost:4200,http://localhost:4310,https://appassets.androidplatform.net",
                     "BACKEND_URL": "/api",
                     "MEDDL_PROXY_ALLOW_PRIVATE_NETWORKS": "1",
                     "TSX_TSCONFIG_PATH": "tsconfig.base.json"
