@@ -21,6 +21,9 @@ describe('transcode arguments', () => {
         });
         expect(args[args.indexOf('-ss') + 1]).toBe('754.3');
         expect(args.indexOf('-ss')).toBeLessThan(args.indexOf('-i'));
+        // Sound starts at the same keyframe as the copied picture (lip sync).
+        expect(args.indexOf('-noaccurate_seek')).toBeLessThan(args.indexOf('-ss'));
+        expect(args[args.indexOf('-avoid_negative_ts') + 1]).toBe('make_zero');
         expect(args[args.indexOf('-protocol_whitelist') + 1]).toBe(PROTOCOLS);
         expect(PROTOCOLS.split(',')).not.toContain('file');
         expect(args[args.indexOf('-user_agent') + 1]).toBe('meddl');

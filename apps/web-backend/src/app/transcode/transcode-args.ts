@@ -17,6 +17,12 @@ export interface TranscodeInput {
  * Picture is passed through untouched (no CPU cost, no quality loss); the
  * first audio track becomes stereo AAC, which every browser, TV and box
  * decodes. Output is fragmented MP4 so playback starts while it streams.
+ *
+ * Lip sync when starting mid-title: a copied picture can only begin at a
+ * keyframe, often seconds before the requested second, while FFmpeg would
+ * trim the re-encoded sound to the exact second, so picture and sound end
+ * up seconds apart. `-noaccurate_seek` starts the sound at that same
+ * keyframe; both tracks then share one zero point (`make_zero`).
  */
 export function transcodeArgs(input: TranscodeInput): string[] {
     const start = Number.isFinite(input.start) && input.start > 0 ? input.start : 0;
@@ -34,7 +40,7 @@ export function transcodeArgs(input: TranscodeInput): string[] {
         '-reconnect_delay_max',
         '5',
         ...(input.userAgent ? ['-user_agent', input.userAgent] : []),
-        ...(start ? ['-ss', start.toFixed(1)] : []),
+        ...(start ? ['-noaccurate_seek', '-ss', start.toFixed(1)] : []),
         '-i',
         input.url,
         '-map',
@@ -49,6 +55,13 @@ export function transcodeArgs(input: TranscodeInput): string[] {
         '2',
         '-b:a',
         '192k',
+        // Small gaps in live sound are filled instead of shifting what follows.
+        '-af',
+        'aresample=async=1:first_pts=0',
+        '-avoid_negative_ts',
+        'make_zero',
+        '-max_muxing_queue_size',
+        '1024',
         '-f',
         'mp4',
         '-movflags',
