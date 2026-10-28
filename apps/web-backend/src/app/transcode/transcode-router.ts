@@ -6,6 +6,7 @@ import {
     validateProviderUrl,
 } from '../provider-url-policy';
 import { parseProbe, probeArgs, transcodeArgs, type ProbeResult } from './transcode-args';
+import { createFfmpegTools } from './ffmpeg-provision';
 
 /**
  * "Sound for every device": browsers drop Dolby Digital (AC-3/E-AC-3) and
@@ -20,15 +21,14 @@ import { parseProbe, probeArgs, transcodeArgs, type ProbeResult } from './transc
  *    It cannot send an Authorization header, so the random id is the
  *    capability; ids expire after six idle hours.
  *
- * FFmpeg is found via MEDDL_FFMPEG / MEDDL_FFPROBE or on the PATH. Stream
- * URLs carry provider credentials and are never logged.
+ * FFmpeg is found or, on Windows, downloaded once (ffmpeg-provision.ts).
+ * Stream URLs carry provider credentials and are never logged.
  */
 export interface TranscodeOptions {
     corsMiddleware: RequestHandler;
     providerUrlPolicy: ProviderUrlPolicy;
     spawn?: typeof nodeSpawn;
-    ffmpegPath?: string;
-    ffprobePath?: string;
+    tools?: ReturnType<typeof createFfmpegTools>;
     now?: () => number;
     /** Simultaneous conversions; the oldest stops when a new one starts. */
     maxProcesses?: number;
@@ -48,13 +48,11 @@ export const TRANSCODE_STREAM_PREFIX = '/transcode/stream/';
 
 export function mountTranscode(app: Express, options: TranscodeOptions): void {
     const spawn = options.spawn ?? nodeSpawn;
-    const ffmpeg = options.ffmpegPath ?? process.env['MEDDL_FFMPEG'] ?? 'ffmpeg';
-    const ffprobe = options.ffprobePath ?? process.env['MEDDL_FFPROBE'] ?? 'ffprobe';
+    const tools = options.tools ?? createFfmpegTools({ spawn });
     const now = options.now ?? Date.now;
     const maxProcesses = options.maxProcesses ?? 3;
     const sessions = new Map<string, Session>();
     const running: Session[] = [];
-    let available: Promise<boolean> | undefined;
 
     function run(command: string, args: string[], timeoutMs: number): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -81,12 +79,7 @@ export function mountTranscode(app: Express, options: TranscodeOptions): void {
             });
         });
     }
-    const ffmpegAvailable = () =>
-        (available ??= run(ffmpeg, ['-version'], 5000).then(
-            () => true,
-            () => false
-        ));
-    async function probe(url: string, userAgent?: string): Promise<ProbeResult> {
+    async function probe(ffprobe: string, url: string, userAgent?: string): Promise<ProbeResult> {
         try {
             return parseProbe(await run(ffprobe, probeArgs(url, userAgent), PROBE_TIMEOUT_MS));
         } catch {
@@ -107,7 +100,8 @@ export function mountTranscode(app: Express, options: TranscodeOptions): void {
 
     app.options('/transcode/status', options.corsMiddleware);
     app.get('/transcode/status', options.corsMiddleware, async (_req, res) => {
-        res.json({ available: await ffmpegAvailable() });
+        const ready = !!(await tools.ready());
+        res.json({ available: ready, setup: tools.state() });
     });
 
     app.options('/transcode/session', options.corsMiddleware);
@@ -122,10 +116,17 @@ export function mountTranscode(app: Express, options: TranscodeOptions): void {
                 typeof body.userAgent === 'string' && body.userAgent.length < 300
                     ? body.userAgent
                     : undefined;
-            if (!(await ffmpegAvailable())) {
+            const paths = await tools.ready();
+            if (!paths) {
+                const setup = tools.state();
+                // Windows fetches FFmpeg once in the background: ask again.
+                const preparing = setup.phase === 'downloading' || process.platform === 'win32';
                 res.status(503).json({
-                    message: 'FFmpeg is not installed on the meddl server.',
-                    code: 'ffmpeg-missing',
+                    message: preparing
+                        ? 'The meddl server is setting up the sound conversion.'
+                        : 'FFmpeg is not installed on the meddl server.',
+                    code: preparing ? 'ffmpeg-preparing' : 'ffmpeg-missing',
+                    setup,
                 });
                 return;
             }
@@ -136,7 +137,7 @@ export function mountTranscode(app: Express, options: TranscodeOptions): void {
             }
             sweep();
             const url = target.url.href;
-            const info = await probe(url, userAgent);
+            const info = await probe(paths.ffprobe, url, userAgent);
             const id = randomBytes(18).toString('base64url');
             sessions.set(id, { url, userAgent, duration: info.duration, touched: now() });
             res.json({
@@ -155,6 +156,16 @@ export function mountTranscode(app: Express, options: TranscodeOptions): void {
             return;
         }
         session.touched = now();
+        void streamSession(session, req, res);
+    });
+
+    async function streamSession(session: Session, req: express.Request, res: express.Response) {
+        const paths = await tools.ready();
+        if (!paths) {
+            res.status(503).json({ message: 'FFmpeg is not available.' });
+            return;
+        }
+        const ffmpeg = paths.ffmpeg;
         const start = Math.max(0, Number(req.query['start']) || 0);
         // A seek opens a new request for the same session: end the old one.
         stopProcess(session);
@@ -198,5 +209,5 @@ export function mountTranscode(app: Express, options: TranscodeOptions): void {
         });
         // The viewer left, seeked or closed the player.
         req.on('close', finish);
-    });
+    }
 }

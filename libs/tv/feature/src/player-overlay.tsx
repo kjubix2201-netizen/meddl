@@ -179,7 +179,12 @@ export function PlayerOverlay({
                         <VolumeControl video={element} />
                     </div>
                 </div>
-                <AudioNotice video={element} phase={sound.phase} onSilent={() => void sound.silent()} />
+                <AudioNotice
+                    video={element}
+                    phase={sound.phase}
+                    progress={sound.progress}
+                    onSilent={() => void sound.silent()}
+                />
                 {tv.player.current?.restoringPosition ? (
                     <p role="status">{t('Restoring saved position…')}</p>
                 ) : null}

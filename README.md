@@ -41,11 +41,18 @@ Danach läuft meddl unter <http://localhost:4333>. Details:
 
 ### Ton bei Dolby / DTS (FFmpeg)
 
-Browser spielen Dolby Digital und DTS ohne Ton ab. Ist auf dem Rechner mit
-dem meddl-Server [FFmpeg](https://ffmpeg.org/) installiert, wandelt der
-Server den Ton solcher Streams automatisch in AAC um (Bild unverändert).
-Windows: `winget install Gyan.FFmpeg`, danach den Server neu starten. Ein
-anderer Pfad lässt sich mit `MEDDL_FFMPEG` / `MEDDL_FFPROBE` setzen.
+Browser spielen Dolby Digital und DTS ohne Ton ab. Der meddl-Server wandelt
+den Ton solcher Streams automatisch in AAC um (Bild unverändert) – ohne dass
+jemand etwas installieren muss:
+
+- **Docker:** FFmpeg ist im Image enthalten.
+- **Windows:** Beim ersten Bedarf lädt der Server einmalig die freie
+  LGPL-Version von FFmpeg (ca. 100 MB) nach `%LOCALAPPDATA%\meddl\ffmpeg`.
+- **Linux ohne Docker:** FFmpeg aus der Paketverwaltung, z. B.
+  `sudo apt install ffmpeg`.
+
+Ein eigenes FFmpeg lässt sich mit `MEDDL_FFMPEG` / `MEDDL_FFPROBE` setzen.
+Die Android-TV-/Fire-TV-App und die Desktop-App spielen Dolby/DTS selbst ab.
 
 ## Entwicklung
 

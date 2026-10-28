@@ -46,7 +46,8 @@ RUN BETTER_SQLITE3_VERSION="$(node -p 'require("./root-package.json").dependenci
 
 FROM node:24-alpine
 
-RUN apk add --no-cache gettext nginx
+# ffmpeg: converts Dolby / DTS sound for browsers (transcode routes).
+RUN apk add --no-cache gettext nginx ffmpeg
 
 WORKDIR /opt/meddl
 

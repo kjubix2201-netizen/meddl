@@ -19,10 +19,12 @@ type DecodeCounters = HTMLVideoElement & {
 export function AudioNotice({
     video,
     phase,
+    progress,
     onSilent,
 }: {
     video: HTMLVideoElement | null;
     phase: SoundPhase;
+    progress?: number;
     onSilent: () => void;
 }) {
     const [silent, setSilent] = useState(false);
@@ -56,6 +58,10 @@ export function AudioNotice({
     const message =
         phase === 'converting'
             ? t('Converting the sound for this device…')
+            : phase === 'preparing'
+              ? progress !== undefined
+                  ? t('Setting up the sound conversion once on your meddl server… {percent} %', { percent: progress })
+                  : t('Setting up the sound conversion once on your meddl server…')
             : phase === 'native'
               ? t('Opening the meddl player with Dolby / DTS sound…')
               : phase === 'server'

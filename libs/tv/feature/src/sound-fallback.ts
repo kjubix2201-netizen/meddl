@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { startConversion } from '@meddl/tv/data-access';
+import { ConversionPreparing, startConversion, type Conversion } from '@meddl/tv/data-access';
 import { mediaTitle } from '@meddl/tv/util';
 import type { TvModel } from './use-tv';
 
-export type SoundPhase = 'idle' | 'converting' | 'server' | 'native' | 'unavailable';
+export type SoundPhase = 'idle' | 'converting' | 'preparing' | 'server' | 'native' | 'unavailable';
+
+const PREPARE_POLL_MS = 3000;
+const PREPARE_LIMIT_MS = 15 * 60 * 1000;
 
 /** Android TV / Fire TV shell (apps/android-tv) with its own decoders. */
 type AndroidBridge = { playNative?: (request: string) => void };
@@ -20,9 +23,13 @@ function androidBridge(): AndroidBridge | undefined {
  * sound to AAC and the title continues at the same position.
  */
 export function useSoundFallback(tv: TvModel) {
-    const [state, setState] = useState<{ id: string; phase: SoundPhase }>({ id: '', phase: 'idle' });
+    const [state, setState] = useState<{ id: string; phase: SoundPhase; progress?: number }>({
+        id: '',
+        phase: 'idle',
+    });
     const item = tv.playing;
     const phase: SoundPhase = item && state.id === item.id ? state.phase : 'idle';
+    const progress = item && state.id === item.id ? state.progress : undefined;
     const latest = useRef(tv);
     latest.current = tv;
 
@@ -67,20 +74,39 @@ export function useSoundFallback(tv: TvModel) {
             return;
         }
         setState({ id, phase: 'converting' });
+        const deadline = Date.now() + PREPARE_LIMIT_MS;
         try {
-            const conversion = await startConversion(
-                tv.data.backend,
-                tv.data.backendToken,
-                url,
-                new AbortController().signal,
-                source?.userAgent
-            );
-            if (latest.current.playing?.id !== id) return;
+            let conversion: Conversion | undefined;
+            for (;;) {
+                try {
+                    conversion = await startConversion(
+                        tv.data.backend,
+                        tv.data.backendToken,
+                        url,
+                        new AbortController().signal,
+                        source?.userAgent
+                    );
+                    break;
+                } catch (error) {
+                    // First use on a Windows server: it fetches FFmpeg once.
+                    if (!(error instanceof ConversionPreparing) || Date.now() > deadline) throw error;
+                    if (latest.current.playing?.id !== id) return;
+                    setState({
+                        id,
+                        phase: 'preparing',
+                        progress: error.total ? Math.round((error.received / error.total) * 100) : undefined,
+                    });
+                    await new Promise((resolve) => setTimeout(resolve, PREPARE_POLL_MS));
+                    if (latest.current.playing?.id !== id) return;
+                }
+            }
+            if (!conversion) return;
+            setState({ id, phase: 'converting' });
             await player.playConverted(item, conversion.url, position, conversion.duration ?? knownLength);
             setState({ id, phase: 'server' });
         } catch {
             if (latest.current.playing?.id === id) setState({ id, phase: 'unavailable' });
         }
     }
-    return { phase, silent };
+    return { phase, progress, silent };
 }

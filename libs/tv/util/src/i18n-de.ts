@@ -481,4 +481,6 @@ export const DE: Readonly<Record<string, string>> = {
     'Opening the meddl player with Dolby / DTS sound…': 'Der meddl-Player mit Dolby-/DTS-Ton wird geöffnet …',
     'Sound converted by your meddl server.': 'Ton wird von deinem meddl-Server umgewandelt.',
     'No sound: this stream uses Dolby Digital or DTS. Install FFmpeg on the computer running the meddl server to convert it automatically, or use the meddl desktop app.': 'Kein Ton: Dieser Stream nutzt Dolby Digital oder DTS. Installiere FFmpeg auf dem Rechner mit dem meddl-Server, dann wird der Ton automatisch umgewandelt – oder nutze die meddl-Desktop-App.',
+    'Setting up the sound conversion once on your meddl server… {percent} %': 'Ton-Umwandlung wird einmalig auf deinem meddl-Server eingerichtet … {percent} %',
+    'Setting up the sound conversion once on your meddl server…': 'Ton-Umwandlung wird einmalig auf deinem meddl-Server eingerichtet …',
 };
