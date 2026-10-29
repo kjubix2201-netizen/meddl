@@ -54,6 +54,9 @@ class PlayerActivity : Activity() {
     private var live = false
     private var liveRetries = 0
     private var nextTitle = ""
+    private lateinit var channelBanner: TextView
+    private val hideBanner = Runnable { channelBanner.visibility = View.GONE }
+    private var lastZapAt = 0L
     private lateinit var nextBanner: LinearLayout
     private lateinit var nextText: TextView
     private lateinit var nextNow: Button
@@ -105,8 +108,62 @@ class PlayerActivity : Activity() {
             FrameLayout.LayoutParams.WRAP_CONTENT,
             Gravity.BOTTOM or Gravity.END,
         ).apply { setMargins(0, 0, dp(48), dp(48)) })
+        channelBanner = TextView(this).apply {
+            setTextColor(Color.WHITE)
+            textSize = 22f
+            setPadding(dp(22), dp(12), dp(22), dp(12))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(12).toFloat()
+                setColor(0xE61F1D2B.toInt())
+            }
+            visibility = View.GONE
+        }
+        root.addView(channelBanner, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            Gravity.TOP or Gravity.START,
+        ).apply { setMargins(dp(48), dp(40), 0, 0) })
         setContentView(root)
         hideSystemBars()
+        current = this
+        if (live) showBanner(intent.getStringExtra(EXTRA_TITLE).orEmpty())
+    }
+
+    private fun showBanner(text: String) {
+        if (text.isEmpty()) return
+        channelBanner.text = text
+        channelBanner.visibility = View.VISIBLE
+        countdown.removeCallbacks(hideBanner)
+        countdown.postDelayed(hideBanner, 3500)
+    }
+
+    /** The page chose another channel (zapping): play it here without closing. */
+    fun switchTo(next: Intent) {
+        setIntent(next)
+        live = next.getBooleanExtra(EXTRA_LIVE, false)
+        nextTitle = next.getStringExtra(EXTRA_NEXT_TITLE).orEmpty()
+        liveRetries = 0
+        cancelNext()
+        player?.release()
+        player = null
+        view.player = null
+        startPlayer()
+        showBanner(next.getStringExtra(EXTRA_TITLE).orEmpty())
+    }
+
+    /** Channel up / down: asks the page for the neighbouring channel. */
+    private fun zap(direction: Int) {
+        val now = System.currentTimeMillis()
+        if (now - lastZapAt < 400) return
+        lastZapAt = now
+        showBanner("…")
+        onZap?.invoke(direction)
+    }
+
+    override fun onDestroy() {
+        if (current === this) current = null
+        countdown.removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 
     private fun label(extra: String, fallback: String) =
@@ -301,6 +358,19 @@ class PlayerActivity : Activity() {
                     finish()
                     return true
                 }
+                KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_PAGE_UP -> if (live) {
+                    zap(1)
+                    return true
+                }
+                KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> if (live) {
+                    zap(-1)
+                    return true
+                }
+                // Up / Down with the controls hidden switch channels, like a TV.
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live && !view.isControllerFullyVisible) {
+                    zap(if (event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) 1 else -1)
+                    return true
+                }
                 KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> if (!live && seeksHere()) {
                     steadySeek(exo, if (event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1, event.repeatCount > 0)
                     return true
@@ -386,6 +456,12 @@ class PlayerActivity : Activity() {
         const val EXTRA_POSITION_MS = "positionMs"
         const val EXTRA_DURATION_MS = "durationMs"
         const val EXTRA_NEXT = "next"
+
+        /** The open player, so a zap can switch it in place (MainActivity.playNative). */
+        @Volatile var current: PlayerActivity? = null
+
+        /** Set by MainActivity: asks the page for the channel before (-1) or after (1). */
+        @Volatile var onZap: ((Int) -> Unit)? = null
         const val EXTRA_NEXT_TITLE = "nextTitle"
         const val EXTRA_NEXT_LABEL = "nextLabel"
         const val EXTRA_PLAY_NOW_LABEL = "playNowLabel"

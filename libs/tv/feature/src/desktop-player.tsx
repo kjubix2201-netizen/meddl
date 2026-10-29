@@ -57,6 +57,7 @@ export function DesktopPlayer({
     onEnded,
     onNext,
     onCancelNext,
+    onZap,
 }: {
     playback: DesktopMpvPlayback;
     onClose: (positionSeconds: number, durationSeconds: number) => void;
@@ -65,6 +66,8 @@ export function DesktopPlayer({
     onEnded?: (positionSeconds: number, durationSeconds: number) => void;
     onNext?: (positionSeconds: number, durationSeconds: number) => void;
     onCancelNext?: () => void;
+    /** Live: switches to the channel before (-1) or after (1) in the list. */
+    onZap?: (direction: number) => boolean;
 }) {
     const [state, setState] = useState<DesktopMpvState | null>(null);
     const [failure, setFailure] = useState('');
@@ -78,8 +81,8 @@ export function DesktopPlayer({
     const closed = useRef(false);
     const latestClose = useRef(onClose);
     latestClose.current = onClose;
-    const latestNext = useRef({ next, onEnded, onNext });
-    latestNext.current = { next, onEnded, onNext };
+    const latestNext = useRef({ next, onEnded, onNext, onZap });
+    latestNext.current = { next, onEnded, onNext, onZap };
     const countdown = next?.countdown != null;
 
     const close = () => {
@@ -142,8 +145,11 @@ export function DesktopPlayer({
             if (PAUSE_KEYS.includes(event.key) || [415, 19, 179].includes(event.keyCode)) mpv.togglePause();
             else if (event.key === 'ArrowLeft' && !playback.isLive) mpv.seekBy(-SEEK_SECONDS);
             else if (event.key === 'ArrowRight' && !playback.isLive) mpv.seekBy(SEEK_SECONDS);
-            else if (event.key === 'ArrowUp' || event.key === 'AudioVolumeUp') mpv.changeVolume(0.1);
-            else if (event.key === 'ArrowDown' || event.key === 'AudioVolumeDown') mpv.changeVolume(-0.1);
+            // Live: Up / Down (and Page / Channel keys) switch channels, like a TV.
+            else if (playback.isLive && upcoming.onZap && ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'ChannelUp', 'ChannelDown'].includes(event.key))
+                upcoming.onZap(['ArrowDown', 'PageDown', 'ChannelDown'].includes(event.key) ? 1 : -1);
+            else if (['ArrowUp', 'AudioVolumeUp', '+'].includes(event.key)) mpv.changeVolume(0.1);
+            else if (['ArrowDown', 'AudioVolumeDown', '-'].includes(event.key)) mpv.changeVolume(-0.1);
             else if (event.key === 'm' || event.key === 'AudioVolumeMute') toggleMute();
             else if (event.key === 'a') cycleAudio();
             else if (event.key === 's' || event.key === 'c') cycleSubtitles();
@@ -295,7 +301,7 @@ export function DesktopPlayer({
                 ) : null}
                 <p class="desktop-player-keys muted">
                     {playback.isLive
-                        ? t('Space: pause · ↑↓: volume · A: audio · S: subtitles · Esc: back')
+                        ? t('Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back')
                         : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back')}
                 </p>
             </div>

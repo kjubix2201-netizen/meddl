@@ -525,4 +525,6 @@ export const DE: Readonly<Record<string, string>> = {
     'Always use the meddl player': 'Immer den meddl-Player verwenden',
     'Films, series and live TV in full screen start in the app’s own player, which plays Dolby / DTS sound and every stream format. Off: it takes over only when needed.':
         'Filme, Serien und Live-TV im Vollbild starten direkt im eigenen Player der App. Er spielt Dolby-/DTS-Ton und alle Stream-Formate. Aus: Er springt nur ein, wenn nötig.',
+    'Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back':
+        'Leertaste: Pause · ↑↓: Sender · +/−: Lautstärke · A: Ton · S: Untertitel · Esc: zurück',
 };

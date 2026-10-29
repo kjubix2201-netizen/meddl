@@ -90,6 +90,11 @@ class MainActivity : Activity() {
         setContentView(web)
         hideSystemBars()
 
+        // Channel up / down in the native player: the page picks the channel.
+        PlayerActivity.onZap = { direction ->
+            runOnUiThread { web.evaluateJavascript("window.meddlZap&&window.meddlZap($direction);", null) }
+        }
+
         if (savedInstanceState == null) {
             web.loadUrl(START_URL)
         } else {
@@ -115,6 +120,7 @@ class MainActivity : Activity() {
     }
 
     override fun onDestroy() {
+        PlayerActivity.onZap = null
         pairing.stop()
         web.destroy()
         super.onDestroy()
@@ -227,9 +233,7 @@ class MainActivity : Activity() {
             val scheme = Uri.parse(url).scheme?.lowercase()
             if (scheme != "http" && scheme != "https") return
             runOnUiThread {
-                @Suppress("DEPRECATION")
-                startActivityForResult(
-                    Intent(this@MainActivity, PlayerActivity::class.java)
+                val player = Intent(this@MainActivity, PlayerActivity::class.java)
                         .putExtra(PlayerActivity.EXTRA_URL, url)
                         .putExtra(PlayerActivity.EXTRA_TITLE, json.optString("title"))
                         .putExtra(PlayerActivity.EXTRA_START_MS, json.optLong("startMs", 0L))
@@ -238,9 +242,15 @@ class MainActivity : Activity() {
                         .putExtra(PlayerActivity.EXTRA_NEXT_TITLE, json.optString("nextTitle"))
                         .putExtra(PlayerActivity.EXTRA_NEXT_LABEL, json.optString("nextLabel"))
                         .putExtra(PlayerActivity.EXTRA_PLAY_NOW_LABEL, json.optString("playNowLabel"))
-                        .putExtra(PlayerActivity.EXTRA_CANCEL_LABEL, json.optString("cancelLabel")),
-                    NATIVE_PLAYER_REQUEST
-                )
+                        .putExtra(PlayerActivity.EXTRA_CANCEL_LABEL, json.optString("cancelLabel"))
+                // Zapping: the open player switches to the next channel in place.
+                val open = PlayerActivity.current
+                if (open != null && !open.isFinishing) {
+                    open.switchTo(player)
+                } else {
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(player, NATIVE_PLAYER_REQUEST)
+                }
             }
         }
     }

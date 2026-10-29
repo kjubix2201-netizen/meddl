@@ -67,6 +67,22 @@ export function useSoundFallback(tv: TvModel) {
         if (!item) setState((previous) => (previous.id ? { id: '', phase: 'idle' } : previous));
     }, [item?.id]);
 
+    /**
+     * Channel up / down inside the app's own player: the neighbouring
+     * channel of the list plays there as well (sticky).
+     */
+    const zap = (direction: number) => {
+        const current = latest.current;
+        const channels = current.catalog.items.filter((m) => m.kind === 'live');
+        const at = channels.findIndex((m) => m.id === current.playing?.id);
+        const next = at >= 0 ? channels[at + (direction > 0 ? 1 : -1)] : undefined;
+        if (!next) return false;
+        sticky.current = true;
+        current.setSelected(next);
+        void current.play(next);
+        return true;
+    };
+
     /** The app's own player continues with the next episode. */
     const desktopContinue = (positionSeconds: number, durationSeconds: number) => {
         latest.current.player.current?.recordExternal(positionSeconds, durationSeconds);
@@ -74,9 +90,12 @@ export function useSoundFallback(tv: TvModel) {
     };
 
     useEffect(() => {
-        (window as unknown as { meddlNativeClosed?: NativeClosed }).meddlNativeClosed = closed;
+        const shell = window as unknown as { meddlNativeClosed?: NativeClosed; meddlZap?: (direction: number) => boolean };
+        shell.meddlNativeClosed = closed;
+        shell.meddlZap = zap;
         return () => {
-            delete (window as unknown as { meddlNativeClosed?: NativeClosed }).meddlNativeClosed;
+            delete shell.meddlNativeClosed;
+            delete shell.meddlZap;
         };
     }, []);
 
@@ -95,7 +114,7 @@ export function useSoundFallback(tv: TvModel) {
         // Live: straight away in full screen, and with "always" also from the
         // list (the page cannot preview most live streams in these apps).
         const direct =
-            (item?.kind === 'live' && (tv.fullscreen || alwaysAppPlayer())) ||
+            (item?.kind === 'live' && (tv.fullscreen || alwaysAppPlayer() || sticky.current)) ||
             (item?.kind !== 'live' && (sticky.current || (tv.fullscreen && alwaysAppPlayer())));
         if (!item || !direct || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
         const id = item.id;
@@ -159,5 +178,5 @@ export function useSoundFallback(tv: TvModel) {
         setState({ id: item.id, phase: 'native' });
     }
     silentRef.current = silent;
-    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode };
+    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap };
 }

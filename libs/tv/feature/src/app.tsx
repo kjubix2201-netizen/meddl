@@ -254,6 +254,7 @@ export function TvApp() {
                         nextEpisode.playNext();
                     }}
                     onCancelNext={nextEpisode.cancel}
+                    onZap={sound.zap}
                 />
             ) : null}
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />
