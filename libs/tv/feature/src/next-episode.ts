@@ -50,7 +50,9 @@ export function useNextEpisode(tv: TvModel, video: HTMLVideoElement | null) {
     function playNext() {
         setCountdown(null);
         if (!next) return;
-        latest.current.setSelected(next);
+        // A series page keeps showing the series and its episode list; only
+        // an episode opened on its own (Continue watching) moves on.
+        if (latest.current.selected?.kind !== 'series') latest.current.setSelected(next);
         void latest.current.play(next);
     }
 

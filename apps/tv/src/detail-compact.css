@@ -1,0 +1,132 @@
+/*
+ * Film and series page, compact (TV and Windows): smaller poster, title and
+ * buttons, so the episode list starts in the first screen, and four
+ * episode cards per row instead of three large ones.
+ */
+@media (min-width: 901px) {
+    .detail-page .page-header button,
+    .detail-page .page-header select {
+        min-height: 0;
+        height: 40px;
+        padding: 0 16px;
+        font-size: 15px;
+    }
+    .detail-page .detail-hero {
+        margin-top: 10px;
+        min-height: 0;
+        padding: 6px 0 4px;
+    }
+    .detail-page .detail-poster {
+        min-width: 150px;
+        width: 150px;
+        height: 225px;
+        margin-right: 32px;
+    }
+    .detail-page .detail-poster-fallback {
+        padding: 18px 14px;
+    }
+    .detail-page .detail-poster-fallback svg {
+        width: 36px;
+        height: 36px;
+    }
+    .detail-page .detail-poster-fallback strong {
+        font-size: 17px;
+    }
+    .detail-page .detail-hero > div:last-child {
+        max-width: 760px;
+    }
+    .detail-page .detail-hero .eyebrow {
+        font-size: 12px;
+    }
+    .detail-page .detail-hero h1 {
+        font-size: 30px;
+        margin: 6px 0 8px;
+    }
+    .detail-page .detail-hero .muted {
+        font-size: 14px;
+    }
+    .detail-page .detail-hero p {
+        font-size: 15px;
+        line-height: 1.5;
+        max-height: 92px;
+        margin: 8px 0 14px;
+    }
+    .detail-page .detail-hero .actions button {
+        min-height: 0;
+        height: 40px;
+        padding: 0 18px;
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    .detail-page .section-title {
+        margin: 22px 0 14px;
+    }
+    .detail-page .section-title h2 {
+        font-size: 22px;
+    }
+    .detail-page .section-title label {
+        font-size: 14px;
+    }
+    .detail-page .section-title select {
+        min-height: 0;
+        height: 38px;
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: 14px;
+        margin-left: 12px;
+    }
+
+    /* Episodes: four per row, smaller cards. */
+    .detail-page .episode-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-gap: 14px;
+    }
+    .detail-page .virtual-collection .episode {
+        height: 132px;
+        min-height: 0;
+        padding: 14px 16px;
+    }
+    .detail-page .episode-copy .episode-number,
+    .detail-page .episode-number {
+        font-size: 14px;
+    }
+    .detail-page .virtual-collection .episode strong {
+        font-size: 15px;
+        margin: 6px 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .detail-page .episode small {
+        font-size: 13px;
+    }
+    .detail-page .episode-description {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    .detail-page .episode-still {
+        width: 96px;
+        height: 60px;
+        margin: 0 12px 8px 0;
+    }
+    .detail-page.cinematic-page .rich-episodes .episode-grid,
+    .detail-page .rich-episodes .episode-grid {
+        grid-auto-rows: 286px;
+    }
+    .detail-page .rich-episodes .virtual-collection .episode.with-still {
+        height: 286px;
+        padding: 0;
+    }
+    .detail-page .with-still .episode-still {
+        width: 100%;
+        height: 150px;
+        margin: 0;
+    }
+    .detail-page .with-still .episode-copy {
+        padding: 12px 14px;
+    }
+    .detail-page .with-still .episode-description {
+        -webkit-line-clamp: 2;
+    }
+}

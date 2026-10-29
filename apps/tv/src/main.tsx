@@ -32,5 +32,6 @@ if (new URLSearchParams(location.search).get('overlay') === 'player') {
 
 import './settings.css';
 import './live-stage.css';
+import './detail-compact.css';
 import './phone.css';
 import './tv-lite.css';
