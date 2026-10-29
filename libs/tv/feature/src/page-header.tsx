@@ -29,7 +29,7 @@ export function PageHeader({ tv }: { tv: TvModel }) {
     const count =
         view === 'favorites'
             ? favoritesFor(tv, tv.route.kind).length
-            : ['movies', 'series', 'search', 'live'].includes(view)
+            : ['movies', 'series', 'live'].includes(view)
               ? tv.catalog.total
               : undefined;
     return (

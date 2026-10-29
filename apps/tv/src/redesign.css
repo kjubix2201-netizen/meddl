@@ -550,3 +550,22 @@ main {
     padding: 8px 14px;
     font-size: 16px;
 }
+
+/* ---------- Search across films, series and channels (search-screen.tsx) ---------- */
+.catalog-filters label.search-field {
+    width: 100%;
+    max-width: 760px;
+}
+.search-results {
+    margin-top: 18px;
+}
+.search-results h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+.search-busy {
+    margin-top: 14px;
+}

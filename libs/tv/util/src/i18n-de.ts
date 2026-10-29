@@ -531,4 +531,8 @@ export const DE: Readonly<Record<string, string>> = {
     'SERIES': 'SERIE',
     'EPISODE': 'FOLGE',
     'FILM': 'FILM',
+    'Search films, series and channels': 'Filme, Serien und Sender suchen',
+    'Type at least two letters to search films, series and channels.': 'Tippe mindestens zwei Buchstaben, um Filme, Serien und Sender zu finden.',
+    'Searching…': 'Suche läuft …',
+    'Nothing found for “{query}”.': 'Nichts gefunden für „{query}“.',
 };

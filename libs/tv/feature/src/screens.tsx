@@ -6,6 +6,7 @@ import { HomeLauncher } from './home-launcher';
 import { HomePortrait } from './home-portrait';
 import { TvModel } from './use-tv';
 import { recentChannels } from './recent-channels';
+import { SearchScreen } from './search-screen';
 export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
     const items = tv.home;
     const sourceId = tv.data.activeId;
@@ -72,6 +73,8 @@ export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
 }
 export function CatalogScreen({ tv }: { tv: TvModel }) {
     const r = tv.route;
+    // Search covers films, series and channels together (search-screen.tsx).
+    if (r.view === 'search') return <SearchScreen tv={tv} />;
     const list = tv.catalog.items;
     return (
         <>
@@ -91,28 +94,6 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                         }
                     />
                 </label>
-                {r.view === 'search' ? (
-                    <label>
-                        {t('Content')}
-                        <select
-                            aria-label={t('Content type')}
-                            value={r.kind}
-                            onChange={(e) =>
-                                tv.setRoute({
-                                    ...r,
-                                    kind: e.currentTarget
-                                        .value as typeof r.kind,
-                                    page: 0,
-                                    category: '',
-                                })
-                            }
-                        >
-                            <option value="movie">{t('Movies')}</option>
-                            <option value="series">{t('Series')}</option>
-                            <option value="live">{t('Live TV')}</option>
-                        </select>
-                    </label>
-                ) : null}
                 <label>
                     {t('Category')}
                     <select
