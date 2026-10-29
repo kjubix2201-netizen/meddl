@@ -512,3 +512,41 @@ main {
     height: 100%;
     background: #ffffff;
 }
+
+/* ---------- Films and series, compact: six titles per row ---------- */
+@media (min-width: 901px) {
+    .poster-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        grid-gap: 22px 18px;
+    }
+}
+.page-header {
+    min-height: 48px;
+    margin-bottom: 16px;
+}
+.page-heading h1 {
+    font-size: 38px;
+}
+.catalog-count {
+    font-size: 17px;
+}
+.page-header select {
+    min-height: 44px;
+    padding: 8px 14px;
+    font-size: 16px;
+}
+.catalog-filters {
+    margin-bottom: 12px;
+}
+.catalog-filters label {
+    width: 24%;
+    margin-right: 18px;
+    font-size: 15px;
+}
+.catalog-filters input,
+.catalog-filters select {
+    min-height: 44px;
+    margin-top: 6px;
+    padding: 8px 14px;
+    font-size: 16px;
+}
