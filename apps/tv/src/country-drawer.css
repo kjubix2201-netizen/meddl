@@ -42,6 +42,10 @@
     .live-layout.picks-country .channel-column {
         visibility: hidden;
     }
+    /* No stage either (a running preview then shrinks to nothing as well). */
+    .live-layout.picks-country .live-information {
+        display: none;
+    }
     .country-drawer.is-open {
         display: flex;
         flex-direction: column;
@@ -50,6 +54,11 @@
         padding-left: 12px;
         background: linear-gradient(90deg, rgba(13, 11, 20, 0.92) 60%, rgba(13, 11, 20, 0));
         animation: country-drawer-in 0.18s ease-out;
+    }
+    /* First choice: the list on the page itself, no panel behind it. */
+    .country-drawer.is-open.is-picking {
+        background: none;
+        animation: none;
     }
     .country-drawer.is-open .country-drawer-list {
         flex: 1 1 auto;
@@ -104,15 +113,17 @@
         background: transparent;
         box-shadow: none;
     }
+    /* A quiet arrow; it lights up when ◀ reaches it. */
     .country-drawer-arrow {
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-        opacity: 0.7;
+        background: transparent;
+        opacity: 0.45;
+        transition: opacity 0.15s ease, background 0.15s ease;
     }
     .country-drawer-tab:hover .country-drawer-arrow,
     .country-drawer-tab:focus .country-drawer-arrow {

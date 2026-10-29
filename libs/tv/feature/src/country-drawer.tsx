@@ -92,8 +92,17 @@ export function CountryDrawer({
             aria-label={t('Choose a country')}
             onFocusOut={() =>
                 requestAnimationFrame(() => {
-                    // Focus moved on to the categories: slide the drawer away.
-                    if (!picking && drawer.current && !drawer.current.contains(document.activeElement)) setOpen(false);
+                    // Focus moved on to the page (categories, titles): slide the drawer away.
+                    // Not while focus is nowhere – that is the arrow being replaced by the list.
+                    const active = document.activeElement;
+                    if (
+                        !picking &&
+                        drawer.current &&
+                        active &&
+                        active !== document.body &&
+                        !drawer.current.contains(active)
+                    )
+                        setOpen(false);
                 })
             }
             onKeyDown={(event) => {
