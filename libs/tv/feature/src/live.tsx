@@ -79,7 +79,8 @@ export function Live({
                 // The fullscreen channel overlay renders its own list.
                 <div class="live-columns-placeholder" />
             )}
-            <section class="live-information">
+            <section class="live-information live-stage">
+                {selected?.poster ? <img class="stage-art" src={selected.poster} alt="" /> : null}
                 <div class="preview-placeholder">
                     {tv.playing ? (
                         <button
@@ -95,6 +96,27 @@ export function Live({
                     ) : (
                         <span>{t('Select a channel to start preview')}</span>
                     )}
+                </div>
+                <div class="stage-copy">
+                    <span class="eyebrow">{running ? t('Now playing') : t('Live TV')}</span>
+                    <h3>{running ? running.title : selected ? displayChannelName(selected.title) : t('Select a channel')}</h3>
+                    {running ? (
+                        <>
+                            <span class="stage-channel">{selected ? displayChannelName(selected.title) : ''}</span>
+                            {running.description ? <p>{running.description}</p> : null}
+                            <div class="now-progress" aria-hidden="true">
+                                <span
+                                    style={{
+                                        width: `${Math.round(Math.min(1, Math.max(0, (now - running.start) / Math.max(1, running.end - running.start))) * 100)}%`,
+                                    }}
+                                />
+                            </div>
+                            <div class="now-times">
+                                <time>{clock(running.start)}</time>
+                                <time>{clock(running.end)}</time>
+                            </div>
+                        </>
+                    ) : null}
                 </div>
                 <div class="section-title">
                     <h2>{selected ? displayChannelName(selected.title) : t('Programme guide')}</h2>

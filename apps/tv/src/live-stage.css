@@ -1,0 +1,304 @@
+/*
+ * Live TV, stage design (TV and Windows app, wider than 900 px): a narrow
+ * rail, the categories as a quiet list with the chosen one standing out,
+ * large channel cards with the focused one lifted and marked, and on the
+ * right a full-height stage with the preview and what is on now.
+ */
+@media (min-width: 901px) {
+    .live-layout {
+        grid-template-columns: 56px 230px minmax(0, 420px) minmax(0, 1fr);
+        grid-gap: 22px;
+    }
+    .live-columns-placeholder {
+        grid-column: span 3;
+    }
+
+    /* ---------- Rail ---------- */
+    .live-rail {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+    }
+    .live-rail button.round {
+        width: 52px;
+        height: 52px;
+        min-height: 0;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+    }
+    .live-rail button.round[aria-pressed='true'] {
+        background: rgba(255, 255, 255, 0.24);
+    }
+    .live-rail button.round:focus {
+        background: #ffffff;
+        color: #0d0b14;
+        outline: none;
+    }
+    .live-rail button.round svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    /* ---------- Categories: a quiet list ---------- */
+    .category-column > h2 {
+        font-size: 24px;
+        font-weight: 600;
+    }
+    .category-list {
+        -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 3%, #000 86%, transparent 100%);
+        mask-image: linear-gradient(180deg, transparent 0, #000 3%, #000 86%, transparent 100%);
+    }
+    .category-list .live-category {
+        min-height: 48px;
+        padding: 6px 10px;
+        border: none;
+        border-radius: 12px;
+        background: transparent;
+        opacity: 0.6;
+    }
+    .category-list .live-category[aria-pressed='true'],
+    .category-list .live-category:focus {
+        opacity: 1;
+    }
+    .category-list .live-category[aria-pressed='true'] {
+        background: transparent;
+    }
+    .category-list .live-category:focus {
+        background: rgba(255, 255, 255, 0.1);
+        outline: none;
+        box-shadow: inset 3px 0 0 #ffffff;
+    }
+    .category-list .live-category strong {
+        font-size: 15px;
+        font-weight: 400;
+    }
+    .category-list .live-category[aria-pressed='true'] strong {
+        font-size: 17px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+    .category-initial,
+    .live-category .flag {
+        flex: none;
+        width: 32px;
+        height: 32px;
+        margin-right: 14px;
+        border-radius: 50%;
+    }
+    .category-initial {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+    .category-initial svg {
+        width: 18px;
+        height: 18px;
+    }
+    .live-category[aria-pressed='true'] .category-initial {
+        width: 40px;
+        height: 40px;
+        background: #ffffff;
+        color: #0d0b14;
+        font-size: 16px;
+    }
+
+    /* ---------- Channels: large cards ---------- */
+    .channel-pane-header > span {
+        display: none;
+    }
+    .channel-pane-header button {
+        border: none;
+        background: rgba(255, 255, 255, 0.06);
+    }
+    .channel-column .channels {
+        /* Room for the marker and the lifted card. */
+        padding-left: 28px;
+        padding-right: 14px;
+    }
+    .channel.channel-tile {
+        min-height: 104px;
+        margin-bottom: 12px;
+        padding: 10px 14px 10px 10px;
+        border: none;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        transform: scale(1);
+        transition: transform 0.15s ease-out;
+    }
+    .channel.channel-tile[aria-pressed='true'] {
+        background: rgba(255, 255, 255, 0.08);
+        border: none;
+    }
+    .channel.channel-tile:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.16);
+        transform: scale(1.04);
+        box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    }
+    /* The white marker left of the focused card. */
+    .channel.channel-tile:focus::before {
+        content: '';
+        position: absolute;
+        left: -15px;
+        top: 22%;
+        bottom: 22%;
+        width: 4px;
+        border-radius: 2px;
+        background: #ffffff;
+    }
+    .channel-tile .channel-number {
+        display: none;
+    }
+    .channel-tile .channel-logo {
+        width: 84px;
+        height: 84px;
+        margin-right: 16px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.35);
+    }
+    .channel-tile-copy {
+        padding-right: 0;
+        align-self: stretch;
+        justify-content: center;
+    }
+    .channel-tile-copy strong {
+        font-size: 17px;
+    }
+    .channel-tile .channel-badges {
+        position: static;
+        margin-top: 10px;
+    }
+    .channel-tile .channel-favorite {
+        position: absolute;
+        right: 14px;
+        bottom: 12px;
+        margin: 0;
+        color: #ff8a3d;
+    }
+    .channel-tile .channel-favorite svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
+
+    /* ---------- Stage: preview and what is on ---------- */
+    .live-information.live-stage {
+        position: relative;
+        margin: 0 -4.3vw -24px 0;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        overflow: hidden;
+        background:
+            radial-gradient(ellipse at 70% 30%, rgba(120, 110, 160, 0.35) 0%, rgba(13, 11, 20, 0) 60%),
+            #0d0b14;
+    }
+    .live-stage .stage-art {
+        position: absolute;
+        top: 18%;
+        left: 50%;
+        width: 34%;
+        max-height: 34%;
+        object-fit: contain;
+        transform: translateX(-50%);
+        opacity: 0.22;
+    }
+    .live-stage .preview-placeholder {
+        position: absolute;
+        inset: 0;
+        height: auto;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+        background: transparent;
+    }
+    .live-stage .preview-placeholder > span {
+        display: none;
+    }
+    .live-stage .preview-open {
+        position: absolute;
+        z-index: 4;
+        top: 64px;
+        right: 24px;
+    }
+    .live-stage .stage-copy {
+        position: absolute;
+        z-index: 4;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 140px 36px 34px;
+        background: linear-gradient(180deg, rgba(13, 11, 20, 0) 0%, rgba(13, 11, 20, 0.75) 45%, rgba(13, 11, 20, 0.95) 100%);
+    }
+    .stage-copy .eyebrow {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        text-transform: none;
+        color: rgba(255, 255, 255, 0.75);
+    }
+    .stage-copy h3 {
+        margin: 0 0 4px;
+        font-size: 28px;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+    .stage-copy .stage-channel {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.65);
+    }
+    .stage-copy p {
+        margin: 0 0 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(255, 255, 255, 0.7);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .stage-copy .now-times {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+    }
+    /* The buttons sit at the stage's top left; the long schedule opens with "Programme". */
+    .live-stage .section-title {
+        position: absolute;
+        z-index: 4;
+        top: 62px;
+        left: 24px;
+        right: 24px;
+    }
+    .live-stage .section-title h2,
+    .live-stage .programme-list {
+        display: none;
+    }
+    .live-stage .section-title .actions {
+        margin: 0;
+    }
+    .live-stage .section-title button {
+        border: none;
+        background: rgba(0, 0, 0, 0.45);
+    }
+    .live-page > .page-header {
+        z-index: 5;
+    }
+}

@@ -31,6 +31,29 @@ export function LiveColumns({
     const oneCountry = !!tv.route.country && tv.route.country !== ALL_COUNTRIES;
     return (
         <>
+            {/* Left rail: all channels of the country, or the favourite channels. */}
+            <nav class="live-rail" aria-label={t('Live TV')}>
+                <button
+                    class="round"
+                    data-focus="live-rail:all"
+                    aria-label={t('All channels')}
+                    aria-pressed={!tv.route.category}
+                    onClick={() => browse.choose('')}
+                >
+                    <TvIcon name="tv-live" />
+                </button>
+                <button
+                    class="round"
+                    data-focus="live-rail:favorites"
+                    aria-label={t('Favorite channels')}
+                    onClick={() => {
+                        tv.navigate('favorites');
+                        tv.setRoute({ ...tv.route, view: 'favorites', kind: 'live', category: '', page: 0, query: '' });
+                    }}
+                >
+                    <TvIcon name="star" />
+                </button>
+            </nav>
             <section class="category-column" aria-label={t('Channel categories')}>
                 <h2>
                     {tv.route.country && tv.route.country !== ALL_COUNTRIES ? (
@@ -56,7 +79,17 @@ export function LiveColumns({
                                 onClick={() => browse.choose(category.categoryId)}
                             >
                                 {/* Inside one country every row had the same flag. */}
-                                {oneCountry ? null : <Flag country={categoryCountry(category.name)} />}
+                                {oneCountry ? (
+                                    <span class="category-initial" aria-hidden="true">
+                                        {category.categoryId ? (
+                                            displayCategoryName(category.name).slice(0, 1).toUpperCase()
+                                        ) : (
+                                            <TvIcon name="tv-live" />
+                                        )}
+                                    </span>
+                                ) : (
+                                    <Flag country={categoryCountry(category.name)} />
+                                )}
                                 <span class="live-category-copy">
                                     <strong>{displayCategoryName(category.name)}</strong>
                                     {category.categoryId === tv.route.category &&

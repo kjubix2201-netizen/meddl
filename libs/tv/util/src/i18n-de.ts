@@ -543,4 +543,5 @@ export const DE: Readonly<Record<string, string>> = {
     'Download again': 'Neu laden',
     'Reload lists now': 'Listen jetzt neu laden',
     'This happens once every {hours} hours. Everything opens instantly afterwards.': 'Das passiert nur alle {hours} Stunden. Danach öffnet sich alles sofort.',
+    'Select a channel': 'Wähle einen Sender',
 };

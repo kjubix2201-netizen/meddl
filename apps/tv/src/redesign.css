@@ -590,7 +590,7 @@ main {
         padding: 6px 12px;
         font-size: 14px;
     }
-    .live-information {
+    .live-information:not(.live-stage) {
         margin-top: 52px;
     }
 }
