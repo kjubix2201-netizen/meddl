@@ -9,6 +9,13 @@
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
 }
+/* The focus highlight moves at once: a fading highlight (0.15 s on every
+   button) trails behind the remote on a TV and looks laggy. */
+.tv-lite button,
+.tv-lite summary,
+.tv-lite [data-tv-scroll] {
+    transition: none;
+}
 /* Home tiles: the focused tile grows by scaling (drawn by the graphics
    chip in one step) instead of changing its size, which made the whole row
    jump on every move. */
