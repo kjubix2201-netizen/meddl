@@ -14,7 +14,9 @@ import './player.css';
 // scrolling stutter there, so tv-lite.css switches it off.
 try {
     const shell = (window as unknown as { MeddlAndroid?: { isTelevision?: () => boolean } }).MeddlAndroid;
-    if (shell?.isTelevision?.()) document.documentElement.classList.add('tv-lite');
+    if (shell?.isTelevision?.()) document.documentElement.classList.add('tv-lite', 'tv-ui');
+    // The Windows app shows the same TV interface and feel (no blur cut needed).
+    if ((window as unknown as { meddlDesktop?: unknown }).meddlDesktop) document.documentElement.classList.add('tv-ui');
 } catch {
     // Older app versions: keep the full look.
 }

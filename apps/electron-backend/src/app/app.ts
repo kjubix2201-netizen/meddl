@@ -45,6 +45,7 @@ import {
     requestFullScreen,
     trackNativeFullScreen,
 } from './services/native-fullscreen-transitions';
+import { attachTvWindowScale } from './services/tv-window-scale';
 import { attachWindowBackGestures } from './services/window-back-gestures';
 
 const externalBrowserProtocols = new Set(['http:', 'https:']);
@@ -565,6 +566,8 @@ export default class App {
         // Seeds the F11 tracker's fullscreen state now, while no transition
         // can be in flight; from here on it follows the window's events.
         trackNativeFullScreen(App.mainWindow);
+        // The TV interface looks like the TV version at any window size.
+        if (useTvInterface()) attachTvWindowScale(App.mainWindow);
         App.notifyMainWindowCreated(App.mainWindow);
         if (!savedWindowBounds) {
             App.mainWindow.center();

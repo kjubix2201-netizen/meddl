@@ -1,7 +1,8 @@
 /*
- * Android TV / Fire TV (html.tv-lite, set in main.tsx): no background blur
- * and no animated size changes, which the TV's graphics chip renders too
- * slowly while lists scroll. Glass surfaces get a denser fill instead.
+ * html.tv-ui (the TV app and the Windows app, set in main.tsx): the TV feel,
+ * an instant focus highlight and Home tiles that grow by scaling.
+ * html.tv-lite (Android TV / Fire TV only): no background blur either,
+ * which the TV's graphics chip renders too slowly while lists scroll.
  */
 .tv-lite *,
 .tv-lite *::before,
@@ -11,25 +12,41 @@
 }
 /* The focus highlight moves at once: a fading highlight (0.15 s on every
    button) trails behind the remote on a TV and looks laggy. */
-.tv-lite button,
-.tv-lite summary,
-.tv-lite [data-tv-scroll] {
+.tv-ui button,
+.tv-ui summary,
+.tv-ui [data-tv-scroll] {
     transition: none;
 }
 /* Home tiles: the focused tile grows by scaling (drawn by the graphics
    chip in one step) instead of changing its size, which made the whole row
    jump on every move. */
-.tv-lite .launcher-tile {
+.tv-ui .launcher-tile {
     margin-right: 4.4vh;
     transform: scale(1);
     transition: transform 0.18s ease-out, background 0.18s ease-out;
     will-change: transform;
 }
-.tv-lite .launcher-tile:focus {
+.tv-ui .launcher-tile:focus {
     width: 33vh;
     height: 54vh;
     transform: scale(1.12);
 }
 .tv-lite main {
     scroll-behavior: auto;
+}
+/* Narrower windows (Windows app): keep the tile size, only scale it. */
+@media (max-aspect-ratio: 3/2) {
+    .tv-ui .launcher-tile {
+        margin-right: 2.6vw;
+    }
+    .tv-ui .launcher-tile:focus {
+        width: 20vw;
+        height: 32.5vw;
+    }
+}
+@media (max-width: 900px) {
+    .tv-ui .launcher-tile:focus {
+        width: 29vw;
+        height: 44vw;
+    }
 }
