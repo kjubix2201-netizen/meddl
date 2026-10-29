@@ -2,7 +2,7 @@ import { LiveColumns } from './live-columns';
 import { useLiveBrowse } from './use-live-browse';
 import { useEffect, useRef } from 'preact/hooks';
 import { TvIcon } from '@meddl/tv/ui';
-import { t, tvLocale, type Program } from '@meddl/tv/util';
+import { t, tvLocale, type Program, displayChannelName } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
 
 const clock = (value: number) =>
@@ -97,7 +97,7 @@ export function Live({
                     )}
                 </div>
                 <div class="section-title">
-                    <h2>{selected?.title ?? t('Programme guide')}</h2>
+                    <h2>{selected ? displayChannelName(selected.title) : t('Programme guide')}</h2>
                     <div class="actions">
                         <button data-focus="live-grid-guide" onClick={openGrid}>
                             <TvIcon name="guide" /> {t('TV Guide')}

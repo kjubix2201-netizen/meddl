@@ -1,6 +1,6 @@
 import { categoryCountry } from '@meddl/shared/m3u-utils';
 import { ChannelLogo, Empty, Flag, TvIcon, VirtualCollection } from '@meddl/tv/ui';
-import { channelBadges, t, tn } from '@meddl/tv/util';
+import { channelBadges, displayCategoryName, displayChannelName, t, tn } from '@meddl/tv/util';
 import { categoryKey, useLiveBrowse } from './use-live-browse';
 import type { TvModel } from './use-tv';
 import { ALL_COUNTRIES } from './country-catalog';
@@ -28,6 +28,7 @@ export function LiveColumns({
     const nearby = items.slice(Math.max(0, at - 4), at + 9).filter((m) => m.kind === 'live');
     const { schedules } = useGridGuide(tv.guideClient, nearby, !!tv.data.epg);
     const now = Date.now();
+    const oneCountry = !!tv.route.country && tv.route.country !== ALL_COUNTRIES;
     return (
         <>
             <section class="category-column" aria-label={t('Channel categories')}>
@@ -54,9 +55,10 @@ export function LiveColumns({
                                 aria-pressed={category.categoryId === tv.route.category}
                                 onClick={() => browse.choose(category.categoryId)}
                             >
-                                <Flag country={categoryCountry(category.name)} />
+                                {/* Inside one country every row had the same flag. */}
+                                {oneCountry ? null : <Flag country={categoryCountry(category.name)} />}
                                 <span class="live-category-copy">
-                                    <strong>{category.name}</strong>
+                                    <strong>{displayCategoryName(category.name)}</strong>
                                     {category.categoryId === tv.route.category &&
                                     !tv.catalogBusy ? (
                                         <small>
@@ -84,8 +86,8 @@ export function LiveColumns({
                         onClick={browse.back}
                         aria-label={t('Back to categories')}
                     >
-                        <Flag country={categoryCountry(browse.categoryName)} />
-                        {browse.categoryName}
+                        {oneCountry ? null : <Flag country={categoryCountry(browse.categoryName)} />}
+                        {displayCategoryName(browse.categoryName)}
                     </button>
                     <span class="muted">{t('OK: preview · OK again: fullscreen')}</span>
                 </div>
@@ -117,9 +119,10 @@ export function LiveColumns({
                                         void tv.play(item);
                                     }}
                                 >
+                                    <span class="channel-number">{n + 1}</span>
                                     <ChannelLogo src={item.poster} />
                                     <span class="channel-tile-copy">
-                                        <strong>{item.title}</strong>
+                                        <strong>{displayChannelName(item.title)}</strong>
                                         <small>
                                             {playing
                                                 ? confirmed
@@ -127,9 +130,7 @@ export function LiveColumns({
                                                     : t('Starting…')
                                                 : running
                                                   ? running.title
-                                                  : t('Channel {number}', {
-                                                        number: n + 1,
-                                                    })}
+                                                  : ''}
                                         </small>
                                         {running ? (
                                             <span class="channel-now" aria-hidden="true">

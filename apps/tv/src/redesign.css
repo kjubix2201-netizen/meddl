@@ -569,3 +569,132 @@ main {
 .search-busy {
     margin-top: 14px;
 }
+
+/* ---------- Live TV, calmer: one header row, text lists, numbers ---------- */
+@media (min-width: 901px) {
+    main.live-page {
+        position: relative;
+    }
+    /* The source picker sits in the header row of the three columns
+       instead of a row of its own. */
+    .live-page > .page-header {
+        position: absolute;
+        top: var(--top-bar-height);
+        right: 4.3vw;
+        min-height: 0;
+        margin: 0;
+        z-index: 3;
+    }
+    .live-page > .page-header select {
+        min-height: 38px;
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    .live-information {
+        margin-top: 52px;
+    }
+}
+.category-column > h2 {
+    min-height: 40px;
+    margin: 0 8px 8px;
+    font-size: 22px;
+}
+.category-column > h2 .flag {
+    width: 26px;
+    height: 26px;
+    margin-right: 10px;
+}
+.category-list .live-category {
+    min-height: 46px;
+    padding: 6px 14px;
+}
+.category-list .live-category strong {
+    font-size: 15px;
+    font-weight: 500;
+}
+.category-list .live-category[aria-pressed='true'] strong {
+    font-weight: 600;
+}
+.channel-pane-header {
+    padding: 0 8px 6px;
+}
+.channel-pane-header button {
+    min-height: 40px;
+    padding: 6px 14px;
+    font-size: 16px;
+}
+.channel-pane-header > span {
+    margin-top: 6px;
+    font-size: 12px;
+}
+.channel.channel-tile {
+    min-height: 62px;
+    padding: 6px 12px 6px 6px;
+}
+.channel-tile .channel-number {
+    display: block;
+    flex: none;
+    width: 30px;
+    margin: 0 6px 0 2px;
+    text-align: right;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    color: var(--tv-muted);
+}
+.channel-tile .channel-logo {
+    width: 48px;
+    height: 48px;
+    margin-right: 12px;
+}
+.channel-tile-copy strong {
+    font-size: 16px;
+    font-weight: 600;
+}
+.channel-tile-copy small:empty {
+    display: none;
+}
+.live-information .section-title h2 {
+    font-size: 22px;
+    line-height: 30px;
+}
+.live-information .section-title button {
+    font-size: 14px;
+    min-height: 40px;
+    padding: 6px 14px;
+}
+.live-information .section-title button.round {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.live-information .programme-list,
+.live-information .programme-list .muted {
+    font-size: 15px;
+}
+
+/* Quality badges at the right edge: the row stays one line lower. */
+.channel.channel-tile {
+    position: relative;
+}
+.channel-tile .channel-badges {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    margin: 0;
+}
+.channel-tile-copy {
+    padding-right: 70px;
+}
+.live-information .section-title button.round svg {
+    width: 18px;
+    height: 18px;
+}
+.live-information .now-playing h2 {
+    font-size: 24px;
+}
+.live-information .now-playing p {
+    font-size: 15px;
+}

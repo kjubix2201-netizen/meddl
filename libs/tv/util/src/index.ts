@@ -253,3 +253,4 @@ export * from './i18n';
 export { channelBadges } from './channel-badges';
 export * from './category-filter';
 export { countryName } from './country-names';
+export { displayCategoryName, displayChannelName } from './display-names';
