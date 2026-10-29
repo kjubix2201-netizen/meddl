@@ -1,10 +1,14 @@
 import { Media, t } from '@meddl/tv/util';
 import { TvIcon } from './icon';
 /** A local vector remains visible when a channel has no logo or its URL fails. */
-export function ChannelLogo({ src }: { src?: string }) {
+/**
+ * The channel's logo. Without one (or while it loads) the box shows the
+ * channel's name when given, otherwise a TV icon.
+ */
+export function ChannelLogo({ src, name }: { src?: string; name?: string }) {
     return (
-        <span class="channel-logo" aria-hidden="true">
-            <TvIcon name="live" />
+        <span class={`channel-logo ${name ? 'named' : ''}`} aria-hidden="true">
+            {name ? <span class="channel-logo-name">{name}</span> : <TvIcon name="live" />}
             {src ? (
                 <img
                     key={src}

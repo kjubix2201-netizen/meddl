@@ -163,7 +163,7 @@ export function LiveColumns({
                                     }}
                                 >
                                     <span class="channel-number">{n + 1}</span>
-                                    <ChannelLogo src={item.poster} />
+                                    <ChannelLogo src={item.poster} name={displayChannelName(item.title)} />
                                     <span class="channel-tile-copy">
                                         <strong>{displayChannelName(item.title)}</strong>
                                         <small>

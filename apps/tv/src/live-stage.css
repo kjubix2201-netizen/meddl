@@ -4,6 +4,16 @@
  * large channel cards with the focused one lifted and marked, and on the
  * right a full-height stage with the preview and what is on now.
  */
+/* Channel without a logo: its name in the box (all screen sizes). */
+.channel-logo-name {
+    padding: 0 3px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: #ffffff;
+}
 @media (min-width: 901px) {
     .live-layout {
         grid-template-columns: 56px 230px minmax(0, 420px) minmax(0, 1fr);
@@ -128,9 +138,9 @@
         padding-right: 14px;
     }
     .channel.channel-tile {
-        min-height: 104px;
-        margin-bottom: 12px;
-        padding: 10px 14px 10px 10px;
+        min-height: 132px;
+        margin-bottom: 9px; /* virtual-collection.tsx counts 9 px between rows */
+        padding: 10px 16px 10px 10px;
         border: none;
         border-radius: 12px;
         background: rgba(255, 255, 255, 0.05);
@@ -161,12 +171,32 @@
     .channel-tile .channel-number {
         display: none;
     }
+    /* Large logo box over the card's full height, as in the TV design. */
     .channel-tile .channel-logo {
-        width: 84px;
-        height: 84px;
-        margin-right: 16px;
+        width: 112px;
+        height: 112px;
+        margin: 0 18px 0 0;
         border-radius: 8px;
         background: rgba(0, 0, 0, 0.35);
+    }
+    .channel-tile .channel-logo img {
+        padding: 12px;
+    }
+    .channel-logo-name {
+        padding: 0 10px;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.15;
+        letter-spacing: 0.2px;
+        color: #ffffff;
+        overflow-wrap: anywhere;
     }
     .channel-tile-copy {
         padding-right: 0;
@@ -174,7 +204,7 @@
         justify-content: center;
     }
     .channel-tile-copy strong {
-        font-size: 17px;
+        font-size: 18px;
     }
     .channel-tile .channel-badges {
         position: static;
@@ -402,5 +432,12 @@
     }
     .live-page .live-stage .preview-open {
         top: 98px;
+    }
+}
+
+/* Phones keep their single list; the rail is for the wide layout. */
+@media (max-width: 900px) {
+    .live-rail {
+        display: none;
     }
 }
