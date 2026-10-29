@@ -2,5 +2,6 @@
 build/
 app/build/
 local.properties
-# Filled by CI / `pnpm run android-tv:assets` from dist/apps/tv
+# Filled by CI / `pnpm run android-tv:assets` from dist/apps/tv and dist/apps/tv-setup
 app/src/main/assets/www/
+app/src/main/assets/setup/

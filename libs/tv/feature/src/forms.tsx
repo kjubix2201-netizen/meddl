@@ -8,7 +8,7 @@ import {
     Source,
     Provider, t } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
-import { localServerAvailable } from '@meddl/tv/data-access';
+import { appPairingAvailable, localServerAvailable } from '@meddl/tv/data-access';
 export function Sources({ tv }: { tv: TvModel }) {
     const [type, setType] = useState<Provider>('xtream');
     const [editing, setEditing] = useState<Source>();
@@ -115,7 +115,7 @@ export function Sources({ tv }: { tv: TvModel }) {
                     </div>
                 ))}
             </div>
-            {local ? null : <PhoneSetup tv={tv} />}
+            {local && !appPairingAvailable() ? null : <PhoneSetup tv={tv} />}
             <div class="filters">
                 {(['xtream', 'stalker', 'm3u'] as Provider[]).map((p) => (
                     <button

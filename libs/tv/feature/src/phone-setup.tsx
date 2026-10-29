@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import QRCode from 'qrcode';
 import {
     createPairing,
+    appPairingAvailable,
+    appPairingServer,
     phoneBackendUrl,
     finishPairing,
     pairingState,
@@ -29,6 +31,7 @@ export function PhoneSetup({
     onSettingsApplied?: () => void;
 }) {
     const settings = purpose === 'settings';
+    const available = tv.backend.connected || appPairingAvailable();
     const [session, setSession] = useState<PairingSession>();
     const [state, setState] = useState<PairingState>();
     const [qr, setQr] = useState('');
@@ -67,17 +70,21 @@ export function PhoneSetup({
         saved.current = false;
         pendingSave.current = undefined;
         try {
+            // A meddl server when connected, otherwise the app's own setup server.
+            const viaServer = tv.backend.connected && !!tv.data.backend;
+            const backend = viaServer ? tv.data.backend : appPairingServer();
+            if (!backend) throw new Error('No setup server');
             const next = await createPairing(
-                tv.data.backend,
-                tv.data.backendToken,
+                backend,
+                viaServer ? tv.data.backendToken : '',
                 abort.signal,
                 purpose,
                 settings ? phoneSettingsDefaults(tv.data) : undefined
             );
             if (abort.signal.aborted) return;
-            owner.current = { session: next, backend: tv.data.backend };
+            owner.current = { session: next, backend };
             // The phone needs an address it can reach, not "localhost".
-            const reachable = await phoneBackendUrl(tv.data.backend, abort.signal);
+            const reachable = await phoneBackendUrl(backend, abort.signal);
             if (abort.signal.aborted) return;
             const url = `${reachable}/tv/setup#${next.id}.${next.phoneToken}`;
             setQr(
@@ -239,7 +246,7 @@ export function PhoneSetup({
                     type="button"
                     class="primary"
                     data-focus="phone-start"
-                    disabled={!tv.backend.connected || busy}
+                    disabled={!available || busy}
                     onClick={() => void start()}
                 >
                     {busy
@@ -281,7 +288,7 @@ export function PhoneSetup({
                     </button>
                 </PhoneSetupPanel>
             )}
-            {!tv.backend.connected && !session ? (
+            {!available && !session ? (
                 <p class="muted">{t('Connect a backend to enable phone setup.')}</p>
             ) : null}
             {error ? <p role="alert">{error}</p> : null}

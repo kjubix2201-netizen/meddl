@@ -192,14 +192,16 @@ jobs:
 
             - name: Build TV client
               shell: bash
-              run: bash tools/ci/run-and-annotate.sh pnpm nx build tv --skip-nx-cache
+              run: bash tools/ci/run-and-annotate.sh pnpm nx run-many -t build -p tv tv-setup --skip-nx-cache
 
             - name: Bundle TV client into the Android app
               run: |
-                  rm -rf apps/android-tv/app/src/main/assets/www
+                  rm -rf apps/android-tv/app/src/main/assets/www apps/android-tv/app/src/main/assets/setup
                   mkdir -p apps/android-tv/app/src/main/assets
                   cp -r dist/apps/tv apps/android-tv/app/src/main/assets/www
+                  cp -r dist/apps/tv-setup apps/android-tv/app/src/main/assets/setup
                   test -f apps/android-tv/app/src/main/assets/www/index.html
+                  test -f apps/android-tv/app/src/main/assets/setup/setup.js
 
             - name: Setup Java
               uses: actions/setup-java@v4

@@ -7,7 +7,7 @@ import { DirectAccessProbe } from './direct-probe';
 import { TmdbSettings } from './tmdb-settings';
 import { SettingsPreferences } from './settings-preferences';
 import { LanguageSetting } from './language-setting';
-import { localServerAvailable, servedByMeddlApp } from '@meddl/tv/data-access';
+import { appPairingAvailable, localServerAvailable, servedByMeddlApp } from '@meddl/tv/data-access';
 import { WeatherSetting } from './weather-setting';
 import { HomeNetworkSetting, homeNetworkSharingAvailable } from './home-network-setting';
 import {
@@ -35,7 +35,7 @@ export function Settings({
         >
             <div class="settings-toolbar">
                 <p class="muted">{t('Choose a category to adjust settings.')}</p>
-                {localServerAvailable() ? null : (
+                {localServerAvailable() && !appPairingAvailable() ? null : (
                     <PhoneSetup
                         tv={tv}
                         purpose="settings"

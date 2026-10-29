@@ -59,6 +59,28 @@ export function finishPairing(
     });
 }
 
+/**
+ * Phone setup without a meddl server: the Android TV / Fire TV app runs its
+ * own small setup server in the home network. Its address for this page, or
+ * "" when the app has none (other platforms, older app versions).
+ */
+export function appPairingServer(): string {
+    if (typeof window === 'undefined') return '';
+    const android = (window as unknown as { MeddlAndroid?: { startPairingServer?: () => string } }).MeddlAndroid;
+    try {
+        return typeof android?.startPairingServer === 'function' ? android.startPairingServer() || '' : '';
+    } catch {
+        return '';
+    }
+}
+
+/** True when the app itself can run the phone setup (see appPairingServer). */
+export function appPairingAvailable(): boolean {
+    if (typeof window === 'undefined') return false;
+    const android = (window as unknown as { MeddlAndroid?: { startPairingServer?: unknown } }).MeddlAndroid;
+    return typeof android?.startPairingServer === 'function';
+}
+
 const LOOPBACK = /^(localhost|127\.\d+\.\d+\.\d+|\[::1\]|::1)$/i;
 
 /**

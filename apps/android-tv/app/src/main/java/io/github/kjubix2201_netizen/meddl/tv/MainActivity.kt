@@ -31,6 +31,7 @@ import org.json.JSONObject
 class MainActivity : Activity() {
 
     private lateinit var web: WebView
+    private val pairing by lazy { PairingServer(assets) }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,6 +107,7 @@ class MainActivity : Activity() {
     }
 
     override fun onDestroy() {
+        pairing.stop()
         web.destroy()
         super.onDestroy()
     }
@@ -175,6 +177,17 @@ class MainActivity : Activity() {
 
         @JavascriptInterface
         fun version(): String = BuildConfig.VERSION_NAME
+
+        /**
+         * Phone setup by QR code without a meddl server ([PairingServer]).
+         * Returns the server's address for the TV page, or "" if no port
+         * could be opened.
+         */
+        @JavascriptInterface
+        fun startPairingServer(): String {
+            val port = pairing.start()
+            return if (port > 0) "http://127.0.0.1:$port" else ""
+        }
 
         /** The page may reach providers through [DirectFetch] (built-in server). */
         @JavascriptInterface
