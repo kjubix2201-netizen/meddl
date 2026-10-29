@@ -11,13 +11,17 @@ export class NativePlayer {
     }
     /** Where another player should continue: the saved position while it is still being restored. */
     get handoverPosition(): number {
-        return this.restore ? this.restore.target : this.position;
+        return this.restore ? this.restore.target : (this.deferredStart ?? this.position);
     }
     get restoringPosition() {
         return !!this.restore && !this.restore.failed;
     }
     private confirmed = false;
     private handedOver = false;
+    /** Saved position of a title handed straight to the app's player. */
+    private deferredStart?: number;
+    /** Set by the TV client: true when the app's own player will play this title. */
+    deferToApp?: (item: Media) => boolean;
     /** Position in the title in seconds. */
     get position() {
         return Number.isFinite(this.video.currentTime) ? this.video.currentTime : 0;
@@ -98,6 +102,16 @@ export class NativePlayer {
         this.item = item;
         this.lastPlayback = { sourceId: item.sourceId, url: playback.url };
         this.handedOver = false;
+        this.deferredStart = undefined;
+        // The app's own player takes this title right away: do not open the
+        // stream here as well (many providers allow one connection only,
+        // and loading it twice made starts and channel switches slow).
+        if (this.deferToApp?.(item)) {
+            this.deferredStart = item.kind !== 'live' && Number.isFinite(resume) && resume > 0 ? resume : 0;
+            this.confirmed = false;
+            this.changed();
+            return;
+        }
         if (item.kind !== 'live' && Number.isFinite(resume) && resume > 0)
             this.startRestore(resume);
         this.confirmed = false;

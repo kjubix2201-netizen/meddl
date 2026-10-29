@@ -57,6 +57,7 @@ class PlayerActivity : Activity() {
     private lateinit var channelBanner: TextView
     private val hideBanner = Runnable { channelBanner.visibility = View.GONE }
     private var lastZapAt = 0L
+    private var userAgentInUse = ""
     private lateinit var nextBanner: LinearLayout
     private lateinit var nextText: TextView
     private lateinit var nextNow: Button
@@ -144,17 +145,33 @@ class PlayerActivity : Activity() {
         nextTitle = next.getStringExtra(EXTRA_NEXT_TITLE).orEmpty()
         liveRetries = 0
         cancelNext()
+        showBanner(next.getStringExtra(EXTRA_TITLE).orEmpty())
+        val exo = player
+        val url = next.getStringExtra(EXTRA_URL)
+        // Same provider login: keep the player and its decoders, only the
+        // stream changes, which makes switching channels quick.
+        if (exo != null && url != null && next.getStringExtra(EXTRA_USER_AGENT).orEmpty() == userAgentInUse) {
+            exo.setMediaItem(
+                MediaItem.Builder()
+                    .setUri(Uri.parse(url))
+                    .setMediaMetadata(MediaMetadata.Builder().setTitle(next.getStringExtra(EXTRA_TITLE) ?: "").build())
+                    .build(),
+                if (live) C.TIME_UNSET else next.getLongExtra(EXTRA_START_MS, 0L),
+            )
+            exo.prepare()
+            exo.playWhenReady = true
+            return
+        }
         player?.release()
         player = null
         view.player = null
         startPlayer()
-        showBanner(next.getStringExtra(EXTRA_TITLE).orEmpty())
     }
 
     /** Channel up / down: asks the page for the neighbouring channel. */
     private fun zap(direction: Int) {
         val now = System.currentTimeMillis()
-        if (now - lastZapAt < 400) return
+        if (now - lastZapAt < 250) return
         lastZapAt = now
         showBanner("…")
         onZap?.invoke(direction)
@@ -251,6 +268,7 @@ class PlayerActivity : Activity() {
         val url = intent.getStringExtra(EXTRA_URL) ?: return finish()
         val userAgent = intent.getStringExtra(EXTRA_USER_AGENT)?.takeIf { it.isNotBlank() }
             ?: "meddlAndroidTV/${BuildConfig.VERSION_NAME}"
+        userAgentInUse = intent.getStringExtra(EXTRA_USER_AGENT).orEmpty()
         val http = DefaultHttpDataSource.Factory()
             .setUserAgent(userAgent)
             .setAllowCrossProtocolRedirects(true)

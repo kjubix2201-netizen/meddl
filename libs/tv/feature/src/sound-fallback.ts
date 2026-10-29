@@ -108,15 +108,24 @@ export function useSoundFallback(tv: TvModel) {
         return true;
     };
 
+    /**
+     * True when the app's own player plays this title from the start. Live:
+     * in full screen, and with "always" also from the list (the page cannot
+     * preview most live streams in these apps). Films and series: with
+     * "always", or once the app's player went on to the next episode.
+     */
+    const takesOver = (media: { kind: string }) => {
+        if (!(androidBridge()?.playNative || desktopMpvAvailable())) return false;
+        return media.kind === 'live'
+            ? latest.current.fullscreen || alwaysAppPlayer() || sticky.current
+            : sticky.current || alwaysAppPlayer();
+    };
+    if (tv.player.current) tv.player.current.deferToApp = takesOver;
+
     // Live channels start in the app's own engine right away, like other
     // IPTV players do: raw transport streams and Dolby/DTS are its strength.
     useEffect(() => {
-        // Live: straight away in full screen, and with "always" also from the
-        // list (the page cannot preview most live streams in these apps).
-        const direct =
-            (item?.kind === 'live' && (tv.fullscreen || alwaysAppPlayer() || sticky.current)) ||
-            (item?.kind !== 'live' && (sticky.current || (tv.fullscreen && alwaysAppPlayer())));
-        if (!item || !direct || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
+        if (!item || phase !== 'idle' || !takesOver(item)) return;
         const id = item.id;
         let tries = 0;
         const timer = setInterval(() => {
@@ -125,7 +134,7 @@ export function useSoundFallback(tv: TvModel) {
                 clearInterval(timer);
                 silentRef.current();
             } else if (++tries > 40) clearInterval(timer);
-        }, 150);
+        }, 50);
         return () => clearInterval(timer);
     }, [item?.id, phase, tv.fullscreen]);
 
