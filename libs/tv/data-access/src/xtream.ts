@@ -22,6 +22,7 @@ import {
     withSeriesContext,
 } from '@meddl/tv/util';
 import type { XtreamVodDetails } from '@meddl/shared/interfaces';
+import { cachedList } from './catalog-cache';
 import { ProviderTransport } from './transport';
 /** Xtream category rows from an array or an object map of rows. */
 function categoryRows(payload: unknown): Category[] {
@@ -94,13 +95,15 @@ export class XtreamProvider implements ProviderClient {
         const key = type;
         let data = this.catalogs.get(key);
         if (!data) {
-            data = await this.fullList(kind === 'series' ? 'get_series' : `get_${type}_streams`, type, signal);
+            const action = kind === 'series' ? 'get_series' : `get_${type}_streams`;
+            // Kept on this device and downloaded again every 24 hours (catalog-cache.ts).
+            data = await cachedList(this.cacheKey(action), () => this.fullList(action, type, signal), signal);
             // An empty answer is often a busy or throttled panel: ask again later.
             if (!signal.aborted && data.length) this.catalogs.set(key, data);
         }
         let categories = this.categoryLists.get(type);
         if (!categories) {
-            categories = await this.loadCategories(type, signal);
+            categories = await cachedList(this.cacheKey(`get_${type}_categories`), () => this.loadCategories(type, signal), signal);
             if (!signal.aborted && categories.length) this.categoryLists.set(type, categories);
         }
         // Converted once per list: TVs need half a second and more to turn
@@ -130,6 +133,10 @@ export class XtreamProvider implements ProviderClient {
             categories,
             categoryCounts: converted.counts,
         };
+    }
+    /** One provider login, one list: the account is part of the key. */
+    private cacheKey(action: string) {
+        return JSON.stringify([this.source.id, this.source.url, this.source.username ?? '', action]);
     }
     private converted = new Map<string, { data: Record<string, unknown>[]; all: Media[]; counts: ReturnType<typeof countByCategory> }>();
     /** The last filtered and sorted list, so "load more" pages do not sort again. */

@@ -535,4 +535,12 @@ export const DE: Readonly<Record<string, string>> = {
     'Type at least two letters to search films, series and channels.': 'Tippe mindestens zwei Buchstaben, um Filme, Serien und Sender zu finden.',
     'Searching…': 'Suche läuft …',
     'Nothing found for “{query}”.': 'Nichts gefunden für „{query}“.',
+    'On every start': 'Bei jedem Start',
+    'Every 24 hours': 'Alle 24 Stunden',
+    'Every {hours} hours': 'Alle {hours} Stunden',
+    'Channel and title lists': 'Sender- und Titellisten',
+    'meddl keeps the lists of your source on this device and downloads them again only after this time. If the provider does not answer, the last lists are used.': 'meddl speichert die Listen deiner Quelle auf diesem Gerät und lädt sie erst nach dieser Zeit neu. Antwortet der Anbieter nicht, werden die letzten Listen verwendet.',
+    'Download again': 'Neu laden',
+    'Reload lists now': 'Listen jetzt neu laden',
+    'This happens once every {hours} hours. Everything opens instantly afterwards.': 'Das passiert nur alle {hours} Stunden. Danach öffnet sich alles sofort.',
 };

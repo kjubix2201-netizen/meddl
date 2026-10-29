@@ -7,6 +7,7 @@ import { DirectAccessProbe } from './direct-probe';
 import { TmdbSettings } from './tmdb-settings';
 import { SettingsPreferences } from './settings-preferences';
 import { AppPlayerSetting, appPlayerAvailable } from './app-player-setting';
+import { CatalogRefreshSetting } from './catalog-refresh-setting';
 import { LanguageSetting } from './language-setting';
 import { appPairingAvailable, localServerAvailable, servedByMeddlApp } from '@meddl/tv/data-access';
 import { WeatherSetting } from './weather-setting';
@@ -105,7 +106,10 @@ export function Settings({
                                 </>
                             )
                         ) : id === 'library' ? (
-                            <LibrarySettings tv={tv} />
+                            <>
+                                <CatalogRefreshSetting />
+                                <LibrarySettings tv={tv} />
+                            </>
                         ) : id === 'appearance' ? (
                             <>
                                 <LanguageSetting />

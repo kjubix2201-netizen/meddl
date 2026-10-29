@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { TvIcon, focusKey, restoreFocus } from '@meddl/tv/ui';
 import { t, tn, tvLocale } from '@meddl/tv/util';
 import type { WarmStep } from './use-provider';
+import { catalogRefreshHours } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
 
 const SKIP_AFTER_MS = 20000;
@@ -81,7 +82,9 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
                 <p class="muted">
                     {phase === 'connecting' && seconds >= 15
                         ? t('Your provider is answering slowly ({seconds} s). Close meddl in other browsers and apps, so only one connection is open.', { seconds })
-                        : t('This happens once per start. Everything opens instantly afterwards.')}
+                        : catalogRefreshHours() > 0
+                          ? t('This happens once every {hours} hours. Everything opens instantly afterwards.', { hours: catalogRefreshHours() })
+                          : t('This happens once per start. Everything opens instantly afterwards.')}
                 </p>
                 {steps.length ? (
                     <>

@@ -40,3 +40,4 @@ export { CachedProvider } from './cached-provider';
 export { LocalTransport } from './local-transport';
 export { directFetch, localServerAvailable, servedByMeddlApp } from './direct-fetch';
 export * from './desktop-mpv';
+export * from './catalog-cache';
