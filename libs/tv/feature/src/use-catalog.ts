@@ -94,8 +94,9 @@ export function useCatalog(
             const cacheKey = `${current.source}|${current.ready}|${kind}`;
             let category = current.route.category;
             let scoped: Category[] | undefined;
+            let all: Category[] | undefined;
             if (country && country !== ALL_COUNTRIES) {
-                let all = categoryCache.current.get(cacheKey);
+                all = categoryCache.current.get(cacheKey);
                 if (!all) {
                     all = (
                         await client.catalog(kind, '', 0, '', job.signal, current.sort)
@@ -145,6 +146,7 @@ export function useCatalog(
                         DEFAULT_PREFERRED_REGION,
                         (category) => category.name
                     ) as typeof result.categories,
+                    allCategories: all ?? result.categories,
                 },
                 busy: false,
                 error: '',

@@ -135,7 +135,7 @@ export function TvApp() {
             <main
                 hidden={tv.fullscreen || !tv.storageReady}
                 class={
-                    needsCountry(r)
+                    needsCountry(r) && r.view !== 'live'
                         ? 'country-page'
                         : cinematic
                           ? `cinematic-page ${r.view}-page`
@@ -179,7 +179,8 @@ export function TvApp() {
                         </div>
                     ) : null}
                 </div>
-                {needsCountry(r) ? (
+                {/* Live TV chooses its country in a drawer on its own page. */}
+                {needsCountry(r) && r.view !== 'live' ? (
                     <CountryPicker tv={tv} />
                 ) : r.view === 'home' ? (
                     <Home tv={display} history={feature.history} />

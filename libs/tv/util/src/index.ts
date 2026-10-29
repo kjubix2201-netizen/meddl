@@ -78,6 +78,8 @@ export interface Catalog {
     categories: Category[];
     /** Titles per category id, when the provider holds the full list. */
     categoryCounts?: Record<string, number>;
+    /** Every category of the source and kind, also while one country is shown (for the country list). */
+    allCategories?: Category[];
 }
 export interface Program {
     title: string;

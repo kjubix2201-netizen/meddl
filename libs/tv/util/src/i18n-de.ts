@@ -468,6 +468,7 @@ export const DE: Readonly<Record<string, string>> = {
     'All countries': 'Alle Länder',
     'More categories': 'Weitere Kategorien',
     'Choose a country': 'Wähle ein Land',
+    Countries: 'Länder',
     'Loading countries…': 'Länder werden geladen …',
     'This source has no categories here yet.': 'Diese Quelle hat hier noch keine Kategorien.',
     '{count} category': '{count} Kategorie',

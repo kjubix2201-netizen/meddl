@@ -6,9 +6,11 @@ import type { TvModel } from './use-tv';
 import { ALL_COUNTRIES } from './country-catalog';
 import { useGridGuide } from './use-grid-guide';
 import { CountryFlag, countryLabel } from './country-picker';
+import { LiveCountries } from './live-countries';
 
 /**
- * Live TV, first two columns: countries / categories with flags on the left,
+ * Live TV, first columns: the country drawer at the left edge, then
+ * countries / categories with flags,
  * the selected category's channels as cards in the middle. Both stay
  * visible; OK on a category opens its channels, Back from a channel returns
  * to its category (same state machine as the single-pane overlay).
@@ -16,9 +18,13 @@ import { CountryFlag, countryLabel } from './country-picker';
 export function LiveColumns({
     tv,
     browse,
+    countriesOpen,
+    setCountriesOpen,
 }: {
     tv: TvModel;
     browse: ReturnType<typeof useLiveBrowse>;
+    countriesOpen: boolean;
+    setCountriesOpen: (open: boolean) => void;
 }) {
     const items = tv.catalog.items;
     const favorites = new Set(tv.data.favorites.map((m) => m.id));
@@ -41,29 +47,8 @@ export function LiveColumns({
                     {oneCountry ? <small>{countryLabel(tv.route.country!)}</small> : null}
                 </span>
             </header>
-            {/* Left rail: all channels of the country, or the favourite channels. */}
-            <nav class="live-rail" aria-label={t('Live TV')}>
-                <button
-                    class="round"
-                    data-focus="live-rail:all"
-                    aria-label={t('All channels')}
-                    aria-pressed={!tv.route.category}
-                    onClick={() => browse.choose('')}
-                >
-                    <TvIcon name="tv-live" />
-                </button>
-                <button
-                    class="round"
-                    data-focus="live-rail:favorites"
-                    aria-label={t('Favorite channels')}
-                    onClick={() => {
-                        tv.navigate('favorites');
-                        tv.setRoute({ ...tv.route, view: 'favorites', kind: 'live', category: '', page: 0, query: '' });
-                    }}
-                >
-                    <TvIcon name="star" />
-                </button>
-            </nav>
+            {/* Left edge: the countries as a drawer (an arrow once one is chosen). */}
+            <LiveCountries tv={tv} open={countriesOpen} setOpen={setCountriesOpen} />
             <section class="category-column" aria-label={t('Channel categories')}>
                 <h2>
                     {tv.route.country && tv.route.country !== ALL_COUNTRIES ? (

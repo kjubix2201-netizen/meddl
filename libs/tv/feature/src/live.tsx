@@ -1,6 +1,6 @@
 import { LiveColumns } from './live-columns';
 import { useLiveBrowse } from './use-live-browse';
-import { useEffect, useRef } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { TvIcon } from '@meddl/tv/ui';
 import { t, tvLocale, type Program, displayChannelName } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
@@ -49,6 +49,9 @@ export function Live({
     openGrid: () => void;
 }) {
     const guide = useRef<HTMLDivElement>(null);
+    // Country drawer at the left edge: always open until a country is chosen.
+    const [countriesOpen, setCountriesOpen] = useState(false);
+    const picking = !tv.route.country;
     useEffect(() => {
         if (guide.current) guide.current.scrollTop = 0;
     }, [tv.selected?.id]);
@@ -59,10 +62,13 @@ export function Live({
     const saved = !!selected && tv.data.favorites.some((m) => m.id === selected.id);
     return (
         <div
-            class={`live-layout ${browse.categoriesOpen ? 'shows-categories' : 'shows-channels'}`}
+            class={`live-layout ${browse.categoriesOpen ? 'shows-categories' : 'shows-channels'}${
+                picking ? ' picks-country' : countriesOpen ? ' countries-open' : ''
+            }`}
             onKeyDown={(event) => {
                 if (
                     !tv.fullscreen &&
+                    !picking &&
                     !browse.categoriesOpen &&
                     (event.keyCode === 461 ||
                         ['Escape', 'BrowserBack', 'Backspace'].includes(event.key))
@@ -74,7 +80,7 @@ export function Live({
             }}
         >
             {!overlayOpen ? (
-                <LiveColumns tv={tv} browse={browse} />
+                <LiveColumns tv={tv} browse={browse} countriesOpen={countriesOpen} setCountriesOpen={setCountriesOpen} />
             ) : (
                 // The fullscreen channel overlay renders its own list.
                 <div class="live-columns-placeholder" />
@@ -94,12 +100,20 @@ export function Live({
                             {t('Fullscreen')} ↗
                         </button>
                     ) : (
-                        <span>{t('Select a channel to start preview')}</span>
+                        <span>{picking ? t('Choose a country') : t('Select a channel to start preview')}</span>
                     )}
                 </div>
                 <div class="stage-copy">
                     <span class="eyebrow">{running ? t('Now playing') : t('Live TV')}</span>
-                    <h3>{running ? running.title : selected ? displayChannelName(selected.title) : t('Select a channel')}</h3>
+                    <h3>
+                        {running
+                            ? running.title
+                            : selected
+                              ? displayChannelName(selected.title)
+                              : picking
+                                ? t('Choose a country')
+                                : t('Select a channel')}
+                    </h3>
                     {running ? (
                         <>
                             <span class="stage-channel">{selected ? displayChannelName(selected.title) : ''}</span>
