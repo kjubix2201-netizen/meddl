@@ -21,11 +21,31 @@
 .country-drawer .country-row:focus .country-copy {
     transform: scale(1.08);
 }
+.country-drawer .country-row,
+.country-drawer .country-row[aria-pressed='true'] {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+.country-drawer .country-row:focus {
+    background: rgba(255, 255, 255, 0.1);
+}
+/* The chosen country: white text and a small dot, the focus keeps the only highlight. */
 .country-drawer .country-row[aria-pressed='true'] {
     color: #ffffff;
 }
 .country-drawer .country-row[aria-pressed='true'] .country-copy strong {
     font-weight: 600;
+}
+.country-drawer .country-row[aria-pressed='true'] .country-copy strong::after {
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    vertical-align: middle;
 }
 
 @media (min-width: 901px) {
@@ -50,14 +70,10 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        margin-left: -12px;
-        padding-left: 12px;
-        background: linear-gradient(90deg, rgba(13, 11, 20, 0.92) 60%, rgba(13, 11, 20, 0));
         animation: country-drawer-in 0.18s ease-out;
     }
-    /* First choice: the list on the page itself, no panel behind it. */
+    /* First choice: the list is simply there. */
     .country-drawer.is-open.is-picking {
-        background: none;
         animation: none;
     }
     .country-drawer.is-open .country-drawer-list {
@@ -223,7 +239,7 @@
 }
 @media (min-width: 901px) {
     main.catalog-stage-page {
-        padding-top: 22px;
+        padding-top: 0;
     }
     .catalog-stage {
         display: grid;
@@ -234,11 +250,21 @@
     .catalog-stage.picks-country {
         grid-template-columns: 300px minmax(0, 1fr);
     }
+    /* The title stays on top while the titles scroll; they slide under it,
+       not under the clock and the tools. */
     .catalog-title {
         grid-column: 1 / -1;
         grid-row: 1;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 3;
         height: 52px;
-        margin-bottom: 18px;
+        padding: 22px 0 18px;
+        margin: 0 -56px;
+        padding-left: 56px;
+        padding-right: 56px;
+        background: linear-gradient(180deg, rgba(19, 16, 28, 0.98) 72%, rgba(19, 16, 28, 0));
     }
     /* The drawer stays in view while the catalog scrolls. */
     .catalog-stage > .country-drawer {
@@ -247,12 +273,14 @@
         align-self: start;
         position: -webkit-sticky;
         position: sticky;
-        top: 0;
+        top: 92px;
         height: calc(100vh - 92px);
     }
     .catalog-stage > .country-drawer.is-open .country-drawer-list {
-        padding-top: 2vh;
+        padding-top: 0;
         padding-bottom: 10vh;
+        -webkit-mask-image: linear-gradient(180deg, #000 0, #000 85%, transparent 100%);
+        mask-image: linear-gradient(180deg, #000 0, #000 85%, transparent 100%);
     }
     .catalog-stage-content {
         grid-column: 2;
@@ -275,5 +303,13 @@
     .catalog-stage.picks-country > .country-drawer {
         display: flex;
         flex-direction: column;
+    }
+}
+@media (min-width: 901px) and (max-width: 1400px) {
+    /* main has 35 px side padding here */
+    .catalog-title {
+        margin: 0 -35px;
+        padding-left: 35px;
+        padding-right: 35px;
     }
 }
