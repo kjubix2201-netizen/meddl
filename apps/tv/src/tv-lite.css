@@ -1,0 +1,17 @@
+/*
+ * Android TV / Fire TV (html.tv-lite, set in main.tsx): no background blur
+ * and no animated size changes, which the TV's graphics chip renders too
+ * slowly while lists scroll. Glass surfaces get a denser fill instead.
+ */
+.tv-lite *,
+.tv-lite *::before,
+.tv-lite *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+.tv-lite .launcher-tile {
+    transition: background 0.15s ease;
+}
+.tv-lite main {
+    scroll-behavior: auto;
+}

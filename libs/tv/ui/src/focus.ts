@@ -85,11 +85,13 @@ export function installRemote(
         // Keep caret/slider movement native; vertical arrows leave single-line
         // fields. Selects own vertical choice changes and leave horizontally.
         if (
-            from?.matches('textarea') ||
+            // A read-only field (the TV's locked text field) is passed over.
+            (from?.matches('textarea') && !(from as HTMLTextAreaElement).readOnly) ||
             (horizontal &&
                 from?.matches(
                     'input:not([type="checkbox"]):not([type="radio"])'
-                )) ||
+                ) &&
+                !(from as HTMLInputElement).readOnly) ||
             (!horizontal && from?.matches('select'))
         )
             return;
@@ -118,12 +120,65 @@ export function installRemote(
         const target = nextFocus(from, direction, candidates);
         if (!target) return;
         memory = { from, to: target, direction };
-        target.focus();
-        target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        clearOfTopBar(target);
+        target.focus({ preventScroll: true });
+        revealFocus(target);
     };
     document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
+    const keyboard = remoteKeyboard();
+    return () => {
+        document.removeEventListener('keydown', handler);
+        keyboard();
+    };
+}
+
+type TvShell = { isTelevision?: () => boolean; showKeyboard?: () => void };
+
+const TEXT_FIELD = 'textarea,input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"])';
+
+/**
+ * On a TV, moving onto a text field must not pop up the on-screen keyboard
+ * (Android opens it on focus). The field stays read-only while the remote
+ * passes over it; OK unlocks it and opens the keyboard.
+ */
+function remoteKeyboard(): () => void {
+    const shell = (window as unknown as { MeddlAndroid?: TvShell }).MeddlAndroid;
+    let television = false;
+    try {
+        television = !!shell?.isTelevision?.();
+    } catch {
+        television = false;
+    }
+    if (!television) return () => undefined;
+    const locked = new WeakSet<HTMLElement>();
+    const focusIn = (event: FocusEvent) => {
+        const field = event.target as HTMLInputElement;
+        if (!field?.matches?.(TEXT_FIELD) || field.readOnly) return;
+        field.readOnly = true;
+        locked.add(field);
+    };
+    const focusOut = (event: FocusEvent) => {
+        const field = event.target as HTMLInputElement;
+        if (!locked.has(field)) return;
+        locked.delete(field);
+        field.readOnly = false;
+    };
+    const unlock = (event: KeyboardEvent) => {
+        const field = event.target as HTMLInputElement;
+        if (!locked.has(field) || (event.key !== 'Enter' && event.keyCode !== 13)) return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        locked.delete(field);
+        field.readOnly = false;
+        shell?.showKeyboard?.();
+    };
+    document.addEventListener('focusin', focusIn);
+    document.addEventListener('focusout', focusOut);
+    document.addEventListener('keydown', unlock, true);
+    return () => {
+        document.removeEventListener('focusin', focusIn);
+        document.removeEventListener('focusout', focusOut);
+        document.removeEventListener('keydown', unlock, true);
+    };
 }
 /**
  * The element the arrow moves to. Elements lined up with the focused one
@@ -220,16 +275,51 @@ function inHorizontalRow(element: HTMLElement): boolean {
     return false;
 }
 
+/** The nearest ancestor that scrolls along this axis. */
+function scroller(element: HTMLElement, axis: 'x' | 'y'): HTMLElement | null {
+    for (let node = element.parentElement; node && node !== document.body; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        const overflow = axis === 'y' ? style.overflowY : style.overflowX;
+        const room = axis === 'y' ? node.scrollHeight - node.clientHeight : node.scrollWidth - node.clientWidth;
+        if ((overflow === 'auto' || overflow === 'scroll') && room > 1) return node;
+    }
+    return null;
+}
+
 /**
- * The top bar floats over the page: a focused element scrolled up under it
- * moves down until it is fully visible again.
+ * Brings the focused element into view the TV way: lists and pages glide
+ * (smooth scrolling) so the focused element sits in the middle of the free
+ * area below the top bar, which keeps every step the same size instead of
+ * jumping at the edges. Rows scroll sideways only as far as needed.
  */
-export function clearOfTopBar(element: HTMLElement) {
-    const page = element.closest('main');
-    const bar = document.querySelector<HTMLElement>('.top-bar');
-    if (!page || !bar || page.contains(bar)) return;
-    const covered = bar.getBoundingClientRect().bottom + 12 - element.getBoundingClientRect().top;
-    if (covered > 0 && page.scrollTop > 0) page.scrollTop = Math.max(0, page.scrollTop - covered);
+export function revealFocus(element: HTMLElement) {
+    const vertical = scroller(element, 'y');
+    const horizontal = scroller(element, 'x');
+    if (!vertical && !horizontal) {
+        element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        return;
+    }
+    const box = element.getBoundingClientRect();
+    if (vertical) {
+        const view = vertical.getBoundingClientRect();
+        const bar = document.querySelector<HTMLElement>('.top-bar');
+        const top = bar && !vertical.contains(bar) ? Math.max(view.top, bar.getBoundingClientRect().bottom) : view.top;
+        const free = view.bottom - top;
+        const offset = box.height >= free ? box.top - top - 12 : box.top + box.height / 2 - (top + free / 2);
+        const goal = Math.max(0, Math.min(vertical.scrollHeight - vertical.clientHeight, vertical.scrollTop + offset));
+        if (Math.abs(goal - vertical.scrollTop) > 1) vertical.scrollTo({ top: goal, behavior: 'smooth' });
+    }
+    if (horizontal) {
+        const view = horizontal.getBoundingClientRect();
+        const margin = 24;
+        const shift =
+            box.left < view.left + margin
+                ? box.left - view.left - margin
+                : box.right > view.right - margin
+                  ? box.right - view.right + margin
+                  : 0;
+        if (shift) horizontal.scrollTo({ left: horizontal.scrollLeft + shift, behavior: 'smooth' });
+    }
 }
 
 export function platformBack() {

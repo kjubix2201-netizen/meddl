@@ -116,7 +116,7 @@ export function useSettingsNavigation(memory: SettingsMemory) {
             (back ||
                 (key === 'ArrowLeft' &&
                     !target.matches(
-                        'textarea,input:not([type="checkbox"]):not([type="radio"])'
+                        'textarea:not([readonly]),input:not([type="checkbox"]):not([type="radio"]):not([readonly])'
                     )))
         ) {
             event.preventDefault();
@@ -140,7 +140,7 @@ export function useSettingsNavigation(memory: SettingsMemory) {
                 (target.matches('select,textarea') && key !== 'ArrowRight') ||
                 (key === 'ArrowRight' &&
                     target.matches(
-                        'textarea,input:not([type="checkbox"]):not([type="radio"])'
+                        'textarea:not([readonly]),input:not([type="checkbox"]):not([type="radio"]):not([readonly])'
                     ))
             )
                 return;

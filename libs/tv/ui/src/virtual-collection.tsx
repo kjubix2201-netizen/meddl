@@ -1,6 +1,7 @@
 import { t } from '@meddl/tv/util';
 import { cloneElement, VNode } from 'preact';
 import { useLayoutEffect, useRef, useState } from 'preact/hooks';
+import { revealFocus } from './focus';
 
 const windowRow = (index: number, columns: number) =>
     Math.max(0, Math.floor(index / columns) - 2);
@@ -193,7 +194,7 @@ export function VirtualCollection<T extends { id: string }>({
                   );
         if (target) {
             target.focus({ preventScroll: true });
-            target.scrollIntoView({ block: 'nearest' });
+            revealFocus(target);
             focusAfterRender.current = undefined;
         }
         update.current?.();
@@ -224,8 +225,8 @@ export function VirtualCollection<T extends { id: string }>({
                     if (destination) {
                         event.preventDefault();
                         event.stopPropagation();
-                        destination.focus();
-                        destination.scrollIntoView({ block: 'nearest' });
+                        destination.focus({ preventScroll: true });
+                        revealFocus(destination);
                     }
                 }
                 if ((down || up) && target.dataset.virtualIndex) {
@@ -240,8 +241,8 @@ export function VirtualCollection<T extends { id: string }>({
                                 `[data-virtual-index="${next}"]`
                             );
                         if (destination) {
-                            destination.focus();
-                            destination.scrollIntoView({ block: 'nearest' });
+                            destination.focus({ preventScroll: true });
+                            revealFocus(destination);
                         } else {
                             focusAfterRender.current = next;
                             setWindow((w) => ({

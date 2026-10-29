@@ -10,9 +10,18 @@ import './glass.css';
 import './countries.css';
 import './loading.css';
 import './player.css';
+// Android TVs have small graphics chips: background blur ("glass") makes
+// scrolling stutter there, so tv-lite.css switches it off.
+try {
+    const shell = (window as unknown as { MeddlAndroid?: { isTelevision?: () => boolean } }).MeddlAndroid;
+    if (shell?.isTelevision?.()) document.documentElement.classList.add('tv-lite');
+} catch {
+    // Older app versions: keep the full look.
+}
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing TV application root');
 render(<TvApp />, root);
 
 import './settings.css';
 import './phone.css';
+import './tv-lite.css';

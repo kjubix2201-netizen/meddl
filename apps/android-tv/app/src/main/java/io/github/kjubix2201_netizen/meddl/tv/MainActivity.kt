@@ -2,6 +2,9 @@ package io.github.kjubix2201_netizen.meddl.tv
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.UiModeManager
+import android.content.res.Configuration
+import android.view.inputmethod.InputMethodManager
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -55,6 +58,9 @@ class MainActivity : Activity() {
                 // Backends on the home network and most IPTV streams are
                 // plain http; the page itself is https (asset loader).
                 mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+                // TVs lay the page out 1280 px wide (see tvIndex), scaled to the screen.
+                useWideViewPort = true
+                loadWithOverviewMode = true
                 allowFileAccess = false
                 allowContentAccess = false
                 userAgentString = "$userAgentString meddlAndroidTV/${BuildConfig.VERSION_NAME}"
@@ -67,6 +73,8 @@ class MainActivity : Activity() {
                 ): WebResourceResponse? =
                     if (request.url.host == ASSET_HOST && request.url.path == DirectFetch.PATH) {
                         DirectFetch.answer(request.url, request.method)
+                    } else if (request.url.host == ASSET_HOST && request.url.path == INDEX_PATH && isTelevision()) {
+                        tvIndex() ?: assets.shouldInterceptRequest(request.url)
                     } else {
                         assets.shouldInterceptRequest(request.url)
                     }
@@ -194,6 +202,19 @@ class MainActivity : Activity() {
         @JavascriptInterface
         fun hasDirectFetch(): Boolean = true
 
+        /** Remote-first: text fields open the keyboard only after OK (see focus.ts). */
+        @JavascriptInterface
+        fun isTelevision(): Boolean = this@MainActivity.isTelevision()
+
+        @JavascriptInterface
+        fun showKeyboard() {
+            runOnUiThread {
+                web.requestFocus()
+                (getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager)
+                    ?.showSoftInput(web, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+
         /**
          * Plays a stream in the native player (Dolby / DTS sound). The page
          * calls this when its own playback stays silent; `request` is JSON
@@ -224,12 +245,29 @@ class MainActivity : Activity() {
         }
     }
 
+    private fun isTelevision(): Boolean =
+        isFireTv() ||
+            (getSystemService(UI_MODE_SERVICE) as? UiModeManager)?.currentModeType == Configuration.UI_MODE_TYPE_TELEVISION ||
+            packageManager.hasSystemFeature("android.software.leanback")
+
+    /**
+     * The TV interface is designed for a 1280 px wide page. Android TVs report
+     * 960 px (1080p at density 2), which made everything a third too large:
+     * the page asks for 1280 px and the WebView scales it to the screen.
+     */
+    private fun tvIndex(): WebResourceResponse? = runCatching {
+        val html = assets.open("www/index.html").bufferedReader().use { it.readText() }
+            .replace(Regex("<meta name=\"viewport\"[^>]*>"), "<meta name=\"viewport\" content=\"width=1280\" />")
+        WebResourceResponse("text/html", "utf-8", html.byteInputStream())
+    }.getOrNull()
+
     private fun isFireTv(): Boolean =
         packageManager.hasSystemFeature("amazon.hardware.fire_tv")
 
     companion object {
         private const val ASSET_HOST = "appassets.androidplatform.net"
         private const val NATIVE_PLAYER_REQUEST = 41
+        private const val INDEX_PATH = "/assets/www/index.html"
         private val START_URL = Uri.Builder()
             .scheme("https")
             .authority(ASSET_HOST)
