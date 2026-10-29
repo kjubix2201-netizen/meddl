@@ -221,7 +221,13 @@ export function TvApp() {
                 class={`native-player ${tv.fullscreen ? 'fullscreen' : 'preview'}`}
                 hidden={!current}
             >
-                <video ref={video} playsInline preload="metadata" />
+                {/* Transparent poster: Android's WebView otherwise shows a grey play symbol while loading. */}
+                <video
+                    ref={video}
+                    playsInline
+                    preload="metadata"
+                    poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                />
                 {tv.fullscreen ? (
                     <PlayerOverlay
                         tv={tv}

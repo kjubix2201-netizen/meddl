@@ -17,6 +17,7 @@ export class NativePlayer {
         return !!this.restore && !this.restore.failed;
     }
     private confirmed = false;
+    private handedOver = false;
     /** Position in the title in seconds. */
     get position() {
         return Number.isFinite(this.video.currentTime) ? this.video.currentTime : 0;
@@ -70,7 +71,7 @@ export class NativePlayer {
                 this.changed();
             },
             error: () => {
-                if (this.item)
+                if (this.item && !this.handedOver)
                     this.failure(
                         'This stream could not be played. Check codec, network and provider media headers. The API backend does not relay video.'
                     );
@@ -96,6 +97,7 @@ export class NativePlayer {
         const generation = ++this.generation;
         this.item = item;
         this.lastPlayback = { sourceId: item.sourceId, url: playback.url };
+        this.handedOver = false;
         if (item.kind !== 'live' && Number.isFinite(resume) && resume > 0)
             this.startRestore(resume);
         this.confirmed = false;
@@ -106,7 +108,9 @@ export class NativePlayer {
         } catch (error) {
             const reason =
                 error instanceof DOMException ? error.name : 'MediaError';
-            if (this.generation === generation)
+            // AbortError: play() was interrupted (paused, handed over, new
+            // source). Nothing failed; the viewer can press Play again.
+            if (this.generation === generation && !this.handedOver && reason !== 'AbortError')
                 this.failure(
                     `Playback did not start (${reason}). Press Play to retry. This stream may need unsupported media headers or codecs.`
                 );
@@ -157,7 +161,22 @@ export class NativePlayer {
             () => undefined
         );
     }
+    /**
+     * The app's own player takes over this title: stop loading here without
+     * an error message. Item and position stay, so the position the other
+     * player reports back is saved for this title.
+     */
+    handOver() {
+        this.handedOver = true;
+        this.cancelRestore();
+        this.video.pause();
+        this.video.removeAttribute('src');
+        this.video.querySelectorAll('source').forEach((source) => source.remove());
+        this.video.load();
+        this.changed();
+    }
     stop() {
+        this.handedOver = false;
         this.persist();
         this.cancelRestore();
         this.item = undefined;

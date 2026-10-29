@@ -108,8 +108,10 @@ export function useSoundFallback(tv: TvModel) {
         const android = androidBridge();
         const source = tv.data.sources.find((s) => s.id === item.sourceId);
         const live = item.kind === 'live';
+        // Read before handOver(), which ends the page's position restore.
+        const start = live ? 0 : Math.max(0, player.handoverPosition);
         if (url && !android?.playNative && desktopMpvAvailable()) {
-            player.pause();
+            player.handOver();
             setState({
                 id: item.id,
                 phase: 'desktop',
@@ -117,7 +119,7 @@ export function useSoundFallback(tv: TvModel) {
                     streamUrl: url,
                     title: mediaTitle(item),
                     isLive: live,
-                    ...(live ? {} : { startTime: Math.max(0, Math.floor(player.handoverPosition)) }),
+                    ...(live ? {} : { startTime: Math.floor(start) }),
                     ...(source?.userAgent ? { userAgent: source.userAgent } : {}),
                 },
             });
@@ -127,12 +129,12 @@ export function useSoundFallback(tv: TvModel) {
             setState({ id: item.id, phase: 'unavailable' });
             return;
         }
-        player.pause();
+        player.handOver();
         android.playNative(
             JSON.stringify({
                 url,
                 title: mediaTitle(item),
-                startMs: live ? 0 : Math.round(player.handoverPosition * 1000),
+                startMs: Math.round(start * 1000),
                 live,
                 userAgent: source?.userAgent ?? '',
                 ...(!live && nextEpisode.current
