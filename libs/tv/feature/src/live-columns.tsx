@@ -31,6 +31,16 @@ export function LiveColumns({
     const oneCountry = !!tv.route.country && tv.route.country !== ALL_COUNTRIES;
     return (
         <>
+            {/* Wide screens: back and the title over the rail, in place of the menu. */}
+            <header class="live-title">
+                <button class="round" data-focus="live-back" aria-label={t('Back')} onClick={tv.back}>
+                    <TvIcon name="back" />
+                </button>
+                <span class="live-title-copy">
+                    <strong>{t('Live TV')}</strong>
+                    {oneCountry ? <small>{countryLabel(tv.route.country!)}</small> : null}
+                </span>
+            </header>
             {/* Left rail: all channels of the country, or the favourite channels. */}
             <nav class="live-rail" aria-label={t('Live TV')}>
                 <button

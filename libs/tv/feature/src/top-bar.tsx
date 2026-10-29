@@ -1,3 +1,4 @@
+import { needsCountry } from './country-catalog';
 import { Clock, TvIcon } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
 import { ProfileFace } from './home-portrait';
@@ -64,8 +65,10 @@ function HomeBar({ tv }: { tv: TvModel }) {
 export function TopBar({ tv }: { tv: TvModel }) {
     const current = tv.route.view;
     if (current === 'home') return <HomeBar tv={tv} />;
+    // Live TV channels (wide screens): only the tools, over the stage.
+    const stage = current === 'live' && !needsCountry(tv.route);
     return (
-        <header class="top-bar" hidden={tv.fullscreen || !tv.storageReady}>
+        <header class={`top-bar ${stage ? 'live-stage-bar' : ''}`} hidden={tv.fullscreen || !tv.storageReady}>
             <span class="home-wordmark">meddl</span>
             <span class="home-divider" aria-hidden="true" />
             <nav class="top-tabs" aria-label={t('Main navigation')}>
