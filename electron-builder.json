@@ -40,6 +40,11 @@
             "to": "tv",
             "filter": ["**/*"]
         },
+        {
+            "from": "dist/apps/tv-setup",
+            "to": "tv-setup",
+            "filter": ["**/*"]
+        },
         "electron-backend/**/*",
         "!electron-backend/native{,/**/*}",
         "web/**/*",

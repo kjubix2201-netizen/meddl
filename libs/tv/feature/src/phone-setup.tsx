@@ -72,7 +72,7 @@ export function PhoneSetup({
         try {
             // A meddl server when connected, otherwise the app's own setup server.
             const viaServer = tv.backend.connected && !!tv.data.backend;
-            const backend = viaServer ? tv.data.backend : appPairingServer();
+            const backend = viaServer ? tv.data.backend : await appPairingServer();
             if (!backend) throw new Error('No setup server');
             const next = await createPairing(
                 backend,

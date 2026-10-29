@@ -79,6 +79,7 @@ export function DesktopPlayer({
     const session = useRef<DesktopMpvSession | null>(null);
     const hideTimer = useRef<ReturnType<typeof setTimeout>>();
     const closed = useRef(false);
+    const lastSeek = useRef(0);
     const latestClose = useRef(onClose);
     latestClose.current = onClose;
     const latestNext = useRef({ next, onEnded, onNext, onZap });
@@ -143,8 +144,14 @@ export function DesktopPlayer({
                 return upcoming.onNext(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
             }
             if (PAUSE_KEYS.includes(event.key) || [415, 19, 179].includes(event.keyCode)) mpv.togglePause();
-            else if (event.key === 'ArrowLeft' && !playback.isLive) mpv.seekBy(-SEEK_SECONDS);
-            else if (event.key === 'ArrowRight' && !playback.isLive) mpv.seekBy(SEEK_SECONDS);
+            else if ((event.key === 'ArrowLeft' || event.key === 'ArrowRight') && !playback.isLive) {
+                // Held down: an even pace (one 10 s step every 120 ms), not
+                // the keyboard's repeat rate.
+                const now = Date.now();
+                if (event.repeat && now - lastSeek.current < 120) return;
+                lastSeek.current = now;
+                mpv.seekBy(event.key === 'ArrowRight' ? SEEK_SECONDS : -SEEK_SECONDS);
+            }
             // Live: Up / Down (and Page / Channel keys) switch channels, like a TV.
             else if (playback.isLive && upcoming.onZap && ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'ChannelUp', 'ChannelDown'].includes(event.key))
                 upcoming.onZap(['ArrowDown', 'PageDown', 'ChannelDown'].includes(event.key) ? 1 : -1);

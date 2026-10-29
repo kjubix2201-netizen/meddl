@@ -1254,4 +1254,5 @@ contextBridge.exposeInMainWorld('meddlDesktop', {
         ipcRenderer.invoke('meddl:tv-direct-fetch', { url, headers, timeoutMs }),
     homeNetworkStatus: () => ipcRenderer.invoke('meddl:home-network-status'),
     setHomeNetwork: (enabled: boolean) => ipcRenderer.invoke('meddl:home-network-set', enabled === true),
+    startPairingServer: (): Promise<string> => ipcRenderer.invoke('meddl:pairing-start'),
 });

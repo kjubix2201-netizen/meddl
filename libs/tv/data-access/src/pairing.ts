@@ -60,25 +60,32 @@ export function finishPairing(
 }
 
 /**
- * Phone setup without a meddl server: the Android TV / Fire TV app runs its
- * own small setup server in the home network. Its address for this page, or
+ * Phone setup without a meddl server: the Android TV / Fire TV app and the
+ * Windows app run their own small setup server in the home network. Its address for this page, or
  * "" when the app has none (other platforms, older app versions).
  */
-export function appPairingServer(): string {
+type PairingShells = {
+    MeddlAndroid?: { startPairingServer?: () => string };
+    meddlDesktop?: { startPairingServer?: () => Promise<string> };
+};
+
+export async function appPairingServer(): Promise<string> {
     if (typeof window === 'undefined') return '';
-    const android = (window as unknown as { MeddlAndroid?: { startPairingServer?: () => string } }).MeddlAndroid;
+    const { MeddlAndroid: android, meddlDesktop: desktop } = window as unknown as PairingShells;
     try {
-        return typeof android?.startPairingServer === 'function' ? android.startPairingServer() || '' : '';
+        if (typeof android?.startPairingServer === 'function') return android.startPairingServer() || '';
+        if (typeof desktop?.startPairingServer === 'function') return (await desktop.startPairingServer()) || '';
     } catch {
-        return '';
+        // No setup server then.
     }
+    return '';
 }
 
-/** True when the app itself can run the phone setup (see appPairingServer). */
+/** True when the app itself can run the phone setup (Android TV, Windows app). */
 export function appPairingAvailable(): boolean {
     if (typeof window === 'undefined') return false;
-    const android = (window as unknown as { MeddlAndroid?: { startPairingServer?: unknown } }).MeddlAndroid;
-    return typeof android?.startPairingServer === 'function';
+    const { MeddlAndroid: android, meddlDesktop: desktop } = window as unknown as PairingShells;
+    return typeof android?.startPairingServer === 'function' || typeof desktop?.startPairingServer === 'function';
 }
 
 const LOOPBACK = /^(localhost|127\.\d+\.\d+\.\d+|\[::1\]|::1)$/i;
