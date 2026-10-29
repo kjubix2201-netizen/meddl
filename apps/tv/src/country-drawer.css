@@ -238,53 +238,51 @@
     display: none;
 }
 @media (min-width: 901px) {
+    /* The page scrolls below the title row: the titles end at its lower
+       edge instead of sliding under the title, the clock or the tools.
+       (No mask here: it would also cut away the fixed title above.) */
     main.catalog-stage-page {
+        margin-top: 92px;
+        height: calc(100vh - 92px);
         padding-top: 0;
     }
     .catalog-stage {
         display: grid;
         grid-template-columns: 56px minmax(0, 1fr);
         grid-column-gap: 22px;
+        padding-top: 18px;
     }
     .catalog-stage.countries-open,
     .catalog-stage.picks-country {
         grid-template-columns: 300px minmax(0, 1fr);
     }
-    /* The title stays on top while the titles scroll; they slide under it,
-       not under the clock and the tools. */
+    /* Title row fixed at the top, beside the clock and the tools; no band behind it. */
     .catalog-title {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0;
-        z-index: 3;
+        position: fixed;
+        z-index: 5;
+        top: 22px;
+        left: 56px;
         height: 52px;
-        padding: 22px 0 18px;
-        margin: 0 -56px;
-        padding-left: 56px;
-        padding-right: 56px;
-        background: linear-gradient(180deg, rgba(19, 16, 28, 0.98) 72%, rgba(19, 16, 28, 0));
     }
     /* The drawer stays in view while the catalog scrolls. */
     .catalog-stage > .country-drawer {
         grid-column: 1;
-        grid-row: 2;
+        grid-row: 1;
         align-self: start;
         position: -webkit-sticky;
         position: sticky;
-        top: 92px;
+        top: 0;
         height: calc(100vh - 92px);
     }
     .catalog-stage > .country-drawer.is-open .country-drawer-list {
-        padding-top: 0;
+        padding-top: 18px;
         padding-bottom: 10vh;
         -webkit-mask-image: linear-gradient(180deg, #000 0, #000 85%, transparent 100%);
         mask-image: linear-gradient(180deg, #000 0, #000 85%, transparent 100%);
     }
     .catalog-stage-content {
         grid-column: 2;
-        grid-row: 2;
+        grid-row: 1;
         min-width: 0;
     }
 }
@@ -308,8 +306,6 @@
 @media (min-width: 901px) and (max-width: 1400px) {
     /* main has 35 px side padding here */
     .catalog-title {
-        margin: 0 -35px;
-        padding-left: 35px;
-        padding-right: 35px;
+        left: 35px;
     }
 }
