@@ -441,3 +441,23 @@
         display: none;
     }
 }
+
+/* The stage's left edge fades into the channel list instead of a hard edge. */
+@media (min-width: 901px) {
+    .live-page .live-information.live-stage {
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px);
+        mask-image: linear-gradient(90deg, transparent 0, #000 80px);
+    }
+    /* The preview picture lies over the stage: it fades the same way
+       (not on Android TV, where a masked video costs too much). */
+    html:not(.tv-lite) main.live-page ~ .native-player.preview {
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px);
+        mask-image: linear-gradient(90deg, transparent 0, #000 80px);
+    }
+    .live-page .live-stage .stage-copy {
+        padding-left: 72px;
+    }
+    .live-page .live-stage .section-title {
+        left: 72px;
+    }
+}
