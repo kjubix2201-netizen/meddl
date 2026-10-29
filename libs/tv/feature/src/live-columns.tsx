@@ -6,7 +6,7 @@ import type { TvModel } from './use-tv';
 import { ALL_COUNTRIES } from './country-catalog';
 import { useGridGuide } from './use-grid-guide';
 import { CountryFlag, countryLabel } from './country-picker';
-import { LiveCountries } from './live-countries';
+import { CountryDrawer } from './country-drawer';
 
 /**
  * Live TV, first columns: the country drawer at the left edge, then
@@ -48,7 +48,13 @@ export function LiveColumns({
                 </span>
             </header>
             {/* Left edge: the countries as a drawer (an arrow once one is chosen). */}
-            <LiveCountries tv={tv} open={countriesOpen} setOpen={setCountriesOpen} />
+            <CountryDrawer
+                tv={tv}
+                open={countriesOpen}
+                setOpen={setCountriesOpen}
+                focusAfter={categoryKey(tv.route.category)}
+                focusFallback={categoryKey('')}
+            />
             <section class="category-column" aria-label={t('Channel categories')}>
                 <h2>
                     {tv.route.country && tv.route.country !== ALL_COUNTRIES ? (

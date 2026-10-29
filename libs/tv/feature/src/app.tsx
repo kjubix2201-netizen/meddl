@@ -16,6 +16,7 @@ import { Settings } from './settings';
 import type { SettingsMemory } from './settings-navigation';
 import { Home, CatalogScreen } from './screens';
 import { CountryPicker } from './country-picker';
+import { CatalogStage } from './catalog-stage';
 import { LoadingOverlay } from './loading-overlay';
 import { needsCountry } from './country-catalog';
 import { Detail } from './detail';
@@ -135,7 +136,9 @@ export function TvApp() {
             <main
                 hidden={tv.fullscreen || !tv.storageReady}
                 class={
-                    needsCountry(r) && r.view !== 'live'
+                    r.view === 'movies' || r.view === 'series'
+                        ? 'catalog-stage-page'
+                        : needsCountry(r) && r.view !== 'live'
                         ? 'country-page'
                         : cinematic
                           ? `cinematic-page ${r.view}-page`
@@ -179,8 +182,10 @@ export function TvApp() {
                         </div>
                     ) : null}
                 </div>
-                {/* Live TV chooses its country in a drawer on its own page. */}
-                {needsCountry(r) && r.view !== 'live' ? (
+                {/* Live TV, Movies and Series choose the country in a drawer on their own page. */}
+                {r.view === 'movies' || r.view === 'series' ? (
+                    <CatalogStage tv={tv} />
+                ) : needsCountry(r) && r.view !== 'live' ? (
                     <CountryPicker tv={tv} />
                 ) : r.view === 'home' ? (
                     <Home tv={display} history={feature.history} />

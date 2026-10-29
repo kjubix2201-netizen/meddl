@@ -53,8 +53,8 @@ function HomeBar({ tv }: { tv: TvModel }) {
 export function TopBar({ tv }: { tv: TvModel }) {
     const current = tv.route.view;
     if (current === 'home') return <HomeBar tv={tv} />;
-    // Live TV channels (wide screens): only the tools, over the stage.
-    const stage = current === 'live';
+    // Live TV, Movies and Series (wide screens): only the tools, at the top right.
+    const stage = current === 'live' || current === 'movies' || current === 'series';
     return (
         <header class={`top-bar ${stage ? 'live-stage-bar' : ''}`} hidden={tv.fullscreen || !tv.storageReady}>
             <span class="home-wordmark">meddl</span>

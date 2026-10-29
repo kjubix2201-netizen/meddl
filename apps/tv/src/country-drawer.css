@@ -3,28 +3,28 @@
  * former rail). Open without a chosen country and when the viewer moves
  * left onto the arrow; otherwise only the arrow is left.
  */
-.live-countries {
+.country-drawer {
     position: relative;
     z-index: 4;
     min-width: 0;
     min-height: 0;
 }
-.live-countries-list {
+.country-drawer-list {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
 }
-.live-countries .country-row .country-copy {
+.country-drawer .country-row .country-copy {
     /* Only the name here: centred beside the flag, no count line. */
     transform: none;
 }
-.live-countries .country-row:focus .country-copy {
+.country-drawer .country-row:focus .country-copy {
     transform: scale(1.08);
 }
-.live-countries .country-row[aria-pressed='true'] {
+.country-drawer .country-row[aria-pressed='true'] {
     color: #ffffff;
 }
-.live-countries .country-row[aria-pressed='true'] .country-copy strong {
+.country-drawer .country-row[aria-pressed='true'] .country-copy strong {
     font-weight: 600;
 }
 
@@ -42,48 +42,48 @@
     .live-layout.picks-country .channel-column {
         visibility: hidden;
     }
-    .live-countries.is-open {
+    .country-drawer.is-open {
         display: flex;
         flex-direction: column;
         height: 100%;
         margin-left: -12px;
         padding-left: 12px;
         background: linear-gradient(90deg, rgba(13, 11, 20, 0.92) 60%, rgba(13, 11, 20, 0));
-        animation: live-countries-in 0.18s ease-out;
+        animation: country-drawer-in 0.18s ease-out;
     }
-    .live-countries.is-open .live-countries-list {
+    .country-drawer.is-open .country-drawer-list {
         flex: 1 1 auto;
         padding: 16vh 12px 16vh 2px;
         -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 85%, transparent 100%);
         mask-image: linear-gradient(180deg, transparent 0, #000 15%, #000 85%, transparent 100%);
     }
-    .live-countries .country-row {
+    .country-drawer .country-row {
         height: 64px;
         flex: 0 0 auto;
         padding: 0 10px;
         margin: 0 0 4px;
         border-radius: 12px;
     }
-    .live-countries .country-row .flag {
+    .country-drawer .country-row .flag {
         width: 48px;
         height: 48px;
         margin-right: 16px;
         box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.16);
         transform: scale(0.8);
     }
-    .live-countries .country-row:focus .flag {
+    .country-drawer .country-row:focus .flag {
         transform: scale(1);
         box-shadow: 0 0 0 3px #ffffff, 0 8px 20px rgba(0, 0, 0, 0.4);
     }
-    .live-countries .country-copy strong {
+    .country-drawer .country-copy strong {
         font-size: 19px;
     }
 
     /* Closed: one arrow over the full height, so ◀ from any category lands on it. */
-    .live-countries.is-closed {
+    .country-drawer.is-closed {
         height: 100%;
     }
-    .live-countries-tab {
+    .country-drawer-tab {
         width: 100%;
         height: 100%;
         min-height: 0;
@@ -99,12 +99,12 @@
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
     }
-    .live-countries-tab:focus {
+    .country-drawer-tab:focus {
         outline: none;
         background: transparent;
         box-shadow: none;
     }
-    .live-countries-arrow {
+    .country-drawer-arrow {
         width: 44px;
         height: 44px;
         display: inline-flex;
@@ -114,18 +114,18 @@
         background: rgba(255, 255, 255, 0.1);
         opacity: 0.7;
     }
-    .live-countries-tab:hover .live-countries-arrow,
-    .live-countries-tab:focus .live-countries-arrow {
+    .country-drawer-tab:hover .country-drawer-arrow,
+    .country-drawer-tab:focus .country-drawer-arrow {
         background: #ffffff;
         color: #0d0b14;
         opacity: 1;
     }
-    .live-countries-arrow svg {
+    .country-drawer-arrow svg {
         width: 20px;
         height: 20px;
     }
 }
-@keyframes live-countries-in {
+@keyframes country-drawer-in {
     from {
         opacity: 0;
         transform: translateX(-24px);
@@ -138,7 +138,7 @@
 
 /* Phones: the country list as its own step, Back returns to it. */
 @media (max-width: 900px) {
-    .live-countries.is-closed {
+    .country-drawer.is-closed {
         display: none;
     }
     .live-layout.picks-country .category-column,
@@ -146,18 +146,123 @@
     .live-layout.picks-country .live-information {
         display: none;
     }
-    .live-layout.picks-country .live-countries {
+    .live-layout.picks-country .country-drawer {
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
     }
-    .live-countries-list {
+    .country-drawer-list {
         flex: 1 1 auto;
         min-height: 0;
         padding: 4px 2px 24px;
     }
-    .live-countries .country-row {
+    .country-drawer .country-row {
         height: 58px;
         flex: 0 0 auto;
+    }
+}
+
+/*
+ * Movies and Series in the same style: no menu bar (only the tools at the
+ * top right), back and the title at the top left, the country drawer at
+ * the left edge and the catalog beside it.
+ */
+.catalog-title {
+    display: flex;
+    align-items: center;
+}
+.catalog-title button.round {
+    width: 52px;
+    height: 52px;
+    min-height: 0;
+    margin-right: 16px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+.catalog-title button.round:focus {
+    background: #ffffff;
+    color: #0d0b14;
+    outline: none;
+}
+.catalog-title button.round svg {
+    width: 22px;
+    height: 22px;
+}
+.catalog-title-copy {
+    display: flex;
+    flex-direction: column;
+}
+.catalog-title-copy strong {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.15;
+}
+.catalog-title-copy small {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+}
+.catalog-stage-page > .page-header {
+    display: none;
+}
+@media (min-width: 901px) {
+    main.catalog-stage-page {
+        padding-top: 22px;
+    }
+    .catalog-stage {
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        grid-column-gap: 22px;
+    }
+    .catalog-stage.countries-open,
+    .catalog-stage.picks-country {
+        grid-template-columns: 300px minmax(0, 1fr);
+    }
+    .catalog-title {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        height: 52px;
+        margin-bottom: 18px;
+    }
+    /* The drawer stays in view while the catalog scrolls. */
+    .catalog-stage > .country-drawer {
+        grid-column: 1;
+        grid-row: 2;
+        align-self: start;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        height: calc(100vh - 92px);
+    }
+    .catalog-stage > .country-drawer.is-open .country-drawer-list {
+        padding-top: 2vh;
+        padding-bottom: 10vh;
+    }
+    .catalog-stage-content {
+        grid-column: 2;
+        grid-row: 2;
+        min-width: 0;
+    }
+}
+@media (max-width: 900px) {
+    .catalog-title {
+        margin-bottom: 10px;
+    }
+    .catalog-title button.round {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+    }
+    .catalog-title-copy strong {
+        font-size: 19px;
+    }
+    .catalog-stage.picks-country > .country-drawer {
+        display: flex;
+        flex-direction: column;
     }
 }
