@@ -9,6 +9,10 @@ export class NativePlayer {
     get hasConfirmedPlayback() {
         return this.confirmed && !this.video.paused && !this.video.ended;
     }
+    /** Where another player should continue: the saved position while it is still being restored. */
+    get handoverPosition(): number {
+        return this.restore ? this.restore.target : this.position;
+    }
     get restoringPosition() {
         return !!this.restore && !this.restore.failed;
     }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { desktopMpvAvailable, type DesktopMpvPlayback } from '@meddl/tv/data-access';
 import { mediaTitle } from '@meddl/tv/util';
 import type { TvModel } from './use-tv';
+import { alwaysAppPlayer } from './app-player-setting';
 
 /** `done`: the desktop MPV player was closed; the page does not reopen it. */
 export type SoundPhase = 'idle' | 'native' | 'desktop' | 'done' | 'unavailable';
@@ -74,7 +75,9 @@ export function useSoundFallback(tv: TvModel) {
     // Live channels start in the app's own engine right away, like other
     // IPTV players do: raw transport streams and Dolby/DTS are its strength.
     useEffect(() => {
-        const direct = (item?.kind === 'live' && tv.fullscreen) || (sticky.current && item?.kind === 'episode');
+        const direct =
+            (item?.kind === 'live' && tv.fullscreen) ||
+            (item?.kind !== 'live' && (sticky.current || (tv.fullscreen && alwaysAppPlayer())));
         if (!item || !direct || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
         const id = item.id;
         let tries = 0;
@@ -104,7 +107,7 @@ export function useSoundFallback(tv: TvModel) {
                     streamUrl: url,
                     title: mediaTitle(item),
                     isLive: live,
-                    ...(live ? {} : { startTime: Math.max(0, Math.floor(player.position)) }),
+                    ...(live ? {} : { startTime: Math.max(0, Math.floor(player.handoverPosition)) }),
                     ...(source?.userAgent ? { userAgent: source.userAgent } : {}),
                 },
             });
@@ -119,7 +122,7 @@ export function useSoundFallback(tv: TvModel) {
             JSON.stringify({
                 url,
                 title: mediaTitle(item),
-                startMs: live ? 0 : Math.round(player.position * 1000),
+                startMs: live ? 0 : Math.round(player.handoverPosition * 1000),
                 live,
                 userAgent: source?.userAgent ?? '',
             })

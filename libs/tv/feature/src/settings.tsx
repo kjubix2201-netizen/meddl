@@ -6,6 +6,7 @@ import { BackendConnection } from './backend-connection';
 import { DirectAccessProbe } from './direct-probe';
 import { TmdbSettings } from './tmdb-settings';
 import { SettingsPreferences } from './settings-preferences';
+import { AppPlayerSetting, appPlayerAvailable } from './app-player-setting';
 import { LanguageSetting } from './language-setting';
 import { appPairingAvailable, localServerAvailable, servedByMeddlApp } from '@meddl/tv/data-access';
 import { WeatherSetting } from './weather-setting';
@@ -108,6 +109,7 @@ export function Settings({
                         ) : id === 'appearance' ? (
                             <>
                                 <LanguageSetting />
+                                {appPlayerAvailable() ? <AppPlayerSetting /> : null}
                                 <WeatherSetting />
                                 <SettingsPreferences
                                     key={`layout:${phoneRevision}`}
