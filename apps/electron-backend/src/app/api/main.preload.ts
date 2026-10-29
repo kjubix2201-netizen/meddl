@@ -1255,4 +1255,24 @@ contextBridge.exposeInMainWorld('meddlDesktop', {
     homeNetworkStatus: () => ipcRenderer.invoke('meddl:home-network-status'),
     setHomeNetwork: (enabled: boolean) => ipcRenderer.invoke('meddl:home-network-set', enabled === true),
     startPairingServer: (): Promise<string> => ipcRenderer.invoke('meddl:pairing-start'),
+    // See-through player controls (services/player-overlay-window.ts).
+    overlay: {
+        open: (): Promise<boolean> => ipcRenderer.invoke('meddl:overlay-open'),
+        close: (): Promise<void> => ipcRenderer.invoke('meddl:overlay-close'),
+        update: (state: unknown) => ipcRenderer.send('meddl:overlay-state', state),
+        onCommand: (callback: (command: unknown) => void) => {
+            const listener = (_event: unknown, command: unknown) => callback(command);
+            ipcRenderer.on('meddl:overlay-command', listener);
+            return () => ipcRenderer.removeListener('meddl:overlay-command', listener);
+        },
+    },
+    // The overlay window's side.
+    overlayView: {
+        onState: (callback: (state: unknown) => void) => {
+            const listener = (_event: unknown, state: unknown) => callback(state);
+            ipcRenderer.on('meddl:overlay-state', listener);
+            return () => ipcRenderer.removeListener('meddl:overlay-state', listener);
+        },
+        command: (command: unknown) => ipcRenderer.send('meddl:overlay-command', command),
+    },
 });

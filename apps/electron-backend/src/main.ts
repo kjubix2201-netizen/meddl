@@ -19,6 +19,7 @@ import { registerStaticHeaderShims } from './app/services/request-header-overrid
 import WindowEvents from './app/events/window.events';
 import { registerTvDirectFetchHandler } from './app/events/tv-direct-fetch.events';
 import { registerHomeNetworkHandlers } from './app/events/home-network.events';
+import { registerPlayerOverlayHandlers } from './app/services/player-overlay-window';
 import { bootstrapWindowCloseGuard } from './app/services/window-close-guard.service';
 import { environment } from './environments/environment';
 import {
@@ -133,6 +134,7 @@ export default class Main {
         PlaylistOpenEvents.bootstrapPlaylistOpenEvents();
         registerTvDirectFetchHandler();
         registerHomeNetworkHandlers();
+        registerPlayerOverlayHandlers();
 
         const deferred = createDeferredBootstrap<
             DeferredEventsModule,

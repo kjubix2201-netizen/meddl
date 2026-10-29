@@ -6,26 +6,24 @@ import {
     type DesktopMpvState,
     type DesktopMpvTrack,
 } from '@meddl/tv/data-access';
-import { TvIcon } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
+import { PlayerBar, SEEK_SECONDS, type PlayerBarCommand, type PlayerBarState } from './desktop-player-bar';
 
 const HIDE_AFTER_MS = 4000;
-const SEEK_SECONDS = 10;
 const BACK_KEYS = ['Escape', 'BrowserBack', 'Backspace', 'GoBack'];
 const PAUSE_KEYS = ['Enter', ' ', 'MediaPlayPause', 'MediaPlay', 'MediaPause', 'k'];
 
-function clock(seconds: number | null | undefined) {
-    if (seconds === null || seconds === undefined || !Number.isFinite(seconds)) return '--:--';
-    const s = Math.max(0, Math.floor(seconds));
-    const h = Math.floor(s / 3600);
-    const m = String(Math.floor((s % 3600) / 60)).padStart(h ? 2 : 1, '0');
-    const sec = String(s % 60).padStart(2, '0');
-    return h ? `${h}:${m}:${sec}` : `${m}:${sec}`;
-}
+type OverlayBridge = {
+    open: () => Promise<boolean>;
+    close: () => Promise<void>;
+    update: (state: PlayerBarState) => void;
+    onCommand: (callback: (command: unknown) => void) => () => void;
+};
 
-function trackName(track: DesktopMpvTrack) {
-    const name = [track.title, track.language?.toUpperCase()].filter(Boolean).join(' · ');
-    return name || t('Track {number}', { number: track.id });
+/** The desktop app's see-through controls window over the video, if it has one. */
+function overlayBridge(): OverlayBridge | undefined {
+    const overlay = (window as unknown as { meddlDesktop?: { overlay?: OverlayBridge } }).meddlDesktop?.overlay;
+    return overlay && typeof overlay.open === 'function' ? overlay : undefined;
 }
 
 /** The track after the selected one; subtitles end with "off" (-1). */
@@ -36,7 +34,7 @@ function nextTrack(tracks: DesktopMpvTrack[], selected: number | null | undefine
     return ids[(at + 1) % ids.length];
 }
 
-/** The page area MPV may paint into: all of it, minus the bar while shown. */
+/** The page area MPV may paint into: all of it, minus the bar while shown below it. */
 function surface(bar: HTMLElement | null, controls: boolean): DesktopMpvBounds {
     const width = Math.max(1, window.innerWidth);
     const height = Math.max(1, window.innerHeight);
@@ -45,10 +43,11 @@ function surface(bar: HTMLElement | null, controls: boolean): DesktopMpvBounds {
 }
 
 /**
- * Full-window player of the desktop app for sound the page cannot decode
- * (Dolby Digital, DTS …): the app's MPV player draws the picture, the page
- * keeps the keyboard and shows a control bar below the picture. Back closes
- * it and returns the position reached, like the Android TV native player.
+ * Full-window player of the desktop app (MPV): it plays every format, Dolby
+ * Digital and DTS sound included. The page keeps the keyboard; the controls
+ * lie see-through over the picture in the app's overlay window, or, without
+ * one, below the picture. Back closes it and returns the position reached,
+ * like the Android TV native player.
  */
 export function DesktopPlayer({
     playback,
@@ -72,9 +71,8 @@ export function DesktopPlayer({
     const [state, setState] = useState<DesktopMpvState | null>(null);
     const [failure, setFailure] = useState('');
     const [controls, setControls] = useState(true);
-    // Where the viewer drags the seek bar to (applied on release).
-    const [scrub, setScrub] = useState<number | null>(null);
     const muted = useRef(1);
+    const overlay = useRef(overlayBridge());
     const bar = useRef<HTMLDivElement>(null);
     const session = useRef<DesktopMpvSession | null>(null);
     const hideTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -123,7 +121,9 @@ export function DesktopPlayer({
     }, []);
 
     useEffect(() => {
-        const sync = () => session.current?.setBounds(surface(bar.current, controls || !!failure || countdown));
+        // With the overlay window the picture always fills the window.
+        const sync = () =>
+            session.current?.setBounds(surface(bar.current, !overlay.current && (controls || !!failure || countdown)));
         sync();
         window.addEventListener('resize', sync);
         // The bar grows when tracks or the countdown appear: the picture
@@ -195,147 +195,58 @@ export function DesktopPlayer({
     }
 
     const status = state?.status ?? 'loading';
-    const duration = state?.durationSeconds ?? null;
-    const position = state?.positionSeconds ?? 0;
-    const shownAt = scrub ?? position;
-    const volume = state?.volume ?? 1;
-    const audioTracks = state?.audioTracks ?? [];
-    const subtitleTracks = state?.subtitleTracks ?? [];
-    const audio = audioTracks.find((track) => track.id === state?.selectedAudioTrackId);
-    const subtitle = subtitleTracks.find((track) => track.id === state?.selectedSubtitleTrackId);
-    const seekable = !playback.isLive && !!duration && duration > 0;
     const shown = controls || !!failure || next?.countdown != null;
+    const barState: PlayerBarState = {
+        title: playback.title,
+        isLive: !!playback.isLive,
+        status,
+        failure,
+        position: state?.positionSeconds ?? 0,
+        duration: state?.durationSeconds ?? null,
+        volume: state?.volume ?? 1,
+        audioTracks: state?.audioTracks ?? [],
+        audioId: state?.selectedAudioTrackId ?? null,
+        subtitleTracks: state?.subtitleTracks ?? [],
+        subtitleId: state?.selectedSubtitleTrackId ?? null,
+        ...(next && onNext ? { next } : {}),
+        shown,
+    };
+    const handle = (command: PlayerBarCommand) => {
+        const mpv = session.current;
+        const at = mpv?.state;
+        if (command.type !== 'back') reveal();
+        if (command.type === 'back') close();
+        else if (command.type === 'toggle') mpv?.togglePause();
+        else if (command.type === 'seekBy') mpv?.seekBy(command.seconds);
+        else if (command.type === 'seekTo') mpv?.seekTo(command.seconds);
+        else if (command.type === 'volume') mpv?.setVolume(command.value);
+        else if (command.type === 'mute') toggleMute();
+        else if (command.type === 'audio') cycleAudio();
+        else if (command.type === 'subtitles') cycleSubtitles();
+        else if (command.type === 'next') onNext?.(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
+        else if (command.type === 'cancelNext') onCancelNext?.();
+    };
+    const latestHandle = useRef(handle);
+    latestHandle.current = handle;
+    useEffect(() => {
+        const bridge = overlay.current;
+        if (!bridge) return;
+        void bridge.open().catch(() => undefined);
+        const stop = bridge.onCommand((command) => {
+            if (command && typeof command === 'object' && 'type' in command) latestHandle.current(command as PlayerBarCommand);
+        });
+        return () => {
+            stop();
+            void bridge.close().catch(() => undefined);
+        };
+    }, []);
+    overlay.current?.update(barState);
     return (
         <div class={`desktop-player ${shown ? '' : 'dormant'}`} data-tv-modal onMouseMove={reveal}>
             {status === 'loading' && !failure ? (
                 <span class="spinner large desktop-player-spinner" aria-hidden="true" />
             ) : null}
-            <div class="desktop-player-bar" ref={bar}>
-                <div class="dp-head">
-                    <div class="dp-title">
-                        <strong>{playback.title}</strong>
-                        {failure || status === 'loading' || status === 'paused' ? (
-                            <small class={failure ? 'dp-failure' : ''}>
-                                {failure ? failure : status === 'loading' ? t('Loading…') : t('Paused')}
-                            </small>
-                        ) : null}
-                    </div>
-                    {playback.isLive ? <span class="live-badge">{t('Live')}</span> : null}
-                </div>
-                {seekable ? (
-                    <div class="dp-timeline">
-                        <span class="dp-time">{clock(shownAt)}</span>
-                        <input
-                            class="desktop-player-seek"
-                            type="range"
-                            min={0}
-                            max={Math.floor(duration!)}
-                            step={1}
-                            value={Math.floor(shownAt)}
-                            aria-label={t('Position')}
-                            style={{ '--share': `${Math.min(100, (shownAt / duration!) * 100)}%` }}
-                            onInput={(event) => {
-                                reveal();
-                                setScrub(Number(event.currentTarget.value));
-                            }}
-                            onChange={(event) => {
-                                session.current?.seekTo(Number(event.currentTarget.value));
-                                setScrub(null);
-                            }}
-                        />
-                        <span class="dp-time">−{clock(Math.max(0, duration! - shownAt))}</span>
-                    </div>
-                ) : null}
-                <div class="dp-controls">
-                    <div class="dp-side">
-                        <button class="dp-icon" aria-label={t('Back')} title={t('Back') + ' (Esc)'} onClick={close}>
-                            <TvIcon name="back" />
-                        </button>
-                    </div>
-                    <div class="dp-center">
-                        {playback.isLive ? null : (
-                            <button
-                                class="dp-icon"
-                                aria-label={t('Back 10 seconds')}
-                                title={t('Back 10 seconds') + ' (←)'}
-                                onClick={() => session.current?.seekBy(-SEEK_SECONDS)}
-                            >
-                                <TvIcon name="rewind" />
-                            </button>
-                        )}
-                        <button
-                            class="dp-play"
-                            aria-label={status === 'paused' ? t('Play') : t('Pause')}
-                            title={(status === 'paused' ? t('Play') : t('Pause')) + ' (Space)'}
-                            onClick={() => session.current?.togglePause()}
-                        >
-                            <TvIcon name={status === 'paused' ? 'play' : 'pause'} />
-                        </button>
-                        {playback.isLive ? null : (
-                            <button
-                                class="dp-icon"
-                                aria-label={t('Forward 10 seconds')}
-                                title={t('Forward 10 seconds') + ' (→)'}
-                                onClick={() => session.current?.seekBy(SEEK_SECONDS)}
-                            >
-                                <TvIcon name="forward" />
-                            </button>
-                        )}
-                    </div>
-                    <div class="dp-side dp-right">
-                        {next && onNext ? (
-                            <button class="dp-pill" onClick={() => onNext(position, duration ?? position)} title={next.title}>
-                                {t('Next episode')} <TvIcon name="next" />
-                            </button>
-                        ) : null}
-                        {audioTracks.length > 1 ? (
-                            <button class="dp-pill" onClick={cycleAudio} title={t('Change audio track (A)')}>
-                                {t('Audio')}: {audio ? trackName(audio) : '–'}
-                            </button>
-                        ) : null}
-                        {subtitleTracks.length ? (
-                            <button class="dp-pill" onClick={cycleSubtitles} title={t('Change subtitles (S)')}>
-                                {t('Subtitles')}: {subtitle ? trackName(subtitle) : t('Off')}
-                            </button>
-                        ) : null}
-                        <button
-                            class="dp-icon"
-                            aria-label={volume > 0 ? t('Mute') : t('Unmute')}
-                            title={(volume > 0 ? t('Mute') : t('Unmute')) + ' (M)'}
-                            onClick={toggleMute}
-                        >
-                            <TvIcon name={volume > 0 ? 'volume' : 'muted'} />
-                        </button>
-                        <input
-                            class="desktop-player-volume"
-                            type="range"
-                            min={0}
-                            max={100}
-                            step={5}
-                            value={Math.round(volume * 100)}
-                            aria-label={t('Volume')}
-                            style={{ '--share': `${Math.round(volume * 100)}%` }}
-                            onInput={(event) => session.current?.setVolume(Number(event.currentTarget.value) / 100)}
-                        />
-                    </div>
-                </div>
-                {next && next.countdown !== null ? (
-                    <div class="next-banner desktop-next" role="status">
-                        <span>{t('Next episode in {seconds} s: {title}', { seconds: next.countdown, title: next.title })}</span>
-                        <button class="primary" onClick={() => onNext?.(position, duration ?? position)}>
-                            {t('Play now')}
-                        </button>
-                        <button onClick={onCancelNext}>{t('Cancel')}</button>
-                    </div>
-                ) : null}
-                {status === 'paused' ? (
-                    <p class="desktop-player-keys muted">
-                        {playback.isLive
-                            ? t('Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back')
-                            : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back')}
-                    </p>
-                ) : null}
-            </div>
+            {overlay.current ? null : <PlayerBar state={barState} send={handle} barRef={bar} />}
         </div>
     );
 }

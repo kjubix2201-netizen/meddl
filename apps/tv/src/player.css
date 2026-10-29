@@ -187,7 +187,7 @@
 }
 .dp-controls {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
     margin-top: 8px;
 }
@@ -333,3 +333,38 @@
     text-align: center;
 }
 
+
+/* ---------- Windows app: see-through controls window (player-overlay-view.tsx) ---------- */
+html.player-overlay-page,
+html.player-overlay-page body,
+html.player-overlay-page #app {
+    background: transparent !important;
+    overflow: hidden;
+}
+.player-overlay {
+    position: fixed;
+    inset: 0;
+    cursor: default;
+}
+.player-overlay.dormant {
+    cursor: none;
+}
+/* The bar over the picture: a dark fade from the bottom, the video shows
+   through above it. */
+.player-overlay .desktop-player-bar {
+    padding-top: 64px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.82) 100%);
+    transition: opacity 0.25s ease;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.player-overlay.dormant .desktop-player-bar {
+    opacity: 0;
+    pointer-events: none;
+}
+.player-overlay .desktop-player-bar button.dp-pill {
+    background: rgba(255, 255, 255, 0.16);
+}
+.player-overlay .desktop-player-bar button.dp-icon:hover,
+.player-overlay .desktop-player-bar button.dp-icon:focus {
+    background: rgba(255, 255, 255, 0.2);
+}

@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { TvApp } from '@meddl/tv/feature';
+import { PlayerOverlayView, TvApp } from '@meddl/tv/feature';
 import './theme.css';
 import './live-overlay.css';
 import './programme-guide.css';
@@ -22,7 +22,13 @@ try {
 }
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing TV application root');
-render(<TvApp />, root);
+// The Windows app's see-through player controls (player-overlay-window.ts).
+if (new URLSearchParams(location.search).get('overlay') === 'player') {
+    document.documentElement.classList.add('player-overlay-page');
+    render(<PlayerOverlayView />, root);
+} else {
+    render(<TvApp />, root);
+}
 
 import './settings.css';
 import './phone.css';
