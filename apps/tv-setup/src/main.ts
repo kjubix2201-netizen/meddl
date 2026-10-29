@@ -1,8 +1,10 @@
 import { settingsForm } from './settings-form';
 import type { PhoneSettingsDefaults } from '@meddl/tv/util';
 import './theme.css';
+import { tr, translatePage } from './i18n';
 /** Phone-only setup UI; the capability stays in this page’s memory. */
 export function phoneClient() {
+    translatePage();
     window.addEventListener('hashchange', () => {
         if (location.hash) location.reload();
     });
@@ -72,7 +74,7 @@ export function phoneClient() {
                     });
             });
         document.querySelector('#url-label')!.textContent =
-            type === 'm3u' ? 'Playlist URL' : 'Provider URL';
+            type === 'm3u' ? tr('Playlist URL') : tr('Provider URL');
     }
     provider.onchange = fields;
     fields();
@@ -96,23 +98,23 @@ export function phoneClient() {
             form.hidden = false;
             submit.disabled = false;
             status.textContent = settings
-                ? 'Adjust settings. Confirm on the TV to finish.'
-                : 'Enter your source details. Confirm on the TV to finish.';
+                ? tr('Adjust settings. Confirm on the TV to finish.')
+                : tr('Enter your source details. Confirm on the TV to finish.');
             return;
         }
         form.hidden = true;
         status.textContent =
             state === 'saved'
                 ? settings
-                    ? 'Settings saved on your TV. You can close this page.'
-                    : 'Added to your TV. You can close this page.'
+                    ? tr('Settings saved on your TV. You can close this page.')
+                    : tr('Added to your TV. You can close this page.')
                 : state === 'rejected'
-                  ? 'Changes were declined on the TV. Open a new QR code to try again.'
+                  ? tr('Changes were declined on the TV. Open a new QR code to try again.')
                   : state === 'cancelled'
-                    ? 'Setup was cancelled on the TV. Open a new QR code to try again.'
+                    ? tr('Setup was cancelled on the TV. Open a new QR code to try again.')
                     : settings
-                      ? 'Sent. Confirm “Apply settings” on your TV.'
-                      : 'Sent. Confirm “Add source” on your TV.';
+                      ? tr('Sent. Confirm “Apply settings” on your TV.')
+                      : tr('Sent. Confirm “Add source” on your TV.');
         finished = ['saved', 'rejected', 'cancelled'].includes(state);
     }
     async function poll() {
@@ -122,8 +124,8 @@ export function phoneClient() {
         } catch (error) {
             status.textContent =
                 error instanceof Error
-                    ? error.message
-                    : 'Connection interrupted.';
+                    ? tr(error.message)
+                    : tr('Connection interrupted.');
             if (finished) form.hidden = true;
         }
         if (!finished) setTimeout(poll, 1500);
@@ -160,8 +162,8 @@ export function phoneClient() {
             sent = false;
             status.textContent =
                 error instanceof Error
-                    ? error.message
-                    : 'Could not send. Retry.';
+                    ? tr(error.message)
+                    : tr('Could not send. Retry.');
             submit.disabled = finished;
         }
     };
@@ -169,7 +171,7 @@ export function phoneClient() {
         finished = true;
         form.hidden = true;
         status.textContent =
-            'Open a new QR code on the TV. This page needs a one-time setup link.';
+            tr('Open a new QR code on the TV. This page needs a one-time setup link.');
     } else void poll();
 }
 
