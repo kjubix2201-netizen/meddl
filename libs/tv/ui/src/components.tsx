@@ -35,10 +35,10 @@ export function Poster({
                 <span class="poster-fallback">{item.title}</span>
                 <small>
                     {item.kind === 'series'
-                        ? 'SERIES'
+                        ? t('SERIES')
                         : item.kind === 'episode'
-                          ? 'EPISODE'
-                          : 'FILM'}
+                          ? t('EPISODE')
+                          : t('FILM')}
                 </small>
             </span>
             <strong>{item.title}</strong>

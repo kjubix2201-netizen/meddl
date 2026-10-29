@@ -5,10 +5,12 @@ import { Media, Progress, t } from '@meddl/tv/util';
 import { HomeLauncher } from './home-launcher';
 import { HomePortrait } from './home-portrait';
 import { TvModel } from './use-tv';
+import { recentChannels } from './recent-channels';
 export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
     const items = tv.home;
     const sourceId = tv.data.activeId;
     const rails: [string, Media[]][] = [
+        [t('Recently watched channels'), recentChannels(sourceId)],
         [
             t('Favorite channels'),
             tv.data.favorites

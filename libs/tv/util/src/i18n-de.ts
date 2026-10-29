@@ -527,4 +527,8 @@ export const DE: Readonly<Record<string, string>> = {
         'Filme, Serien und Live-TV im Vollbild starten direkt im eigenen Player der App. Er spielt Dolby-/DTS-Ton und alle Stream-Formate. Aus: Er springt nur ein, wenn nötig.',
     'Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back':
         'Leertaste: Pause · ↑↓: Sender · +/−: Lautstärke · A: Ton · S: Untertitel · Esc: zurück',
+    'Recently watched channels': 'Zuletzt gesehene Sender',
+    'SERIES': 'SERIE',
+    'EPISODE': 'FOLGE',
+    'FILM': 'FILM',
 };

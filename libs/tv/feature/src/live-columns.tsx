@@ -4,6 +4,7 @@ import { channelBadges, t, tn } from '@meddl/tv/util';
 import { categoryKey, useLiveBrowse } from './use-live-browse';
 import type { TvModel } from './use-tv';
 import { ALL_COUNTRIES } from './country-catalog';
+import { useGridGuide } from './use-grid-guide';
 import { CountryFlag, countryLabel } from './country-picker';
 
 /**
@@ -21,6 +22,12 @@ export function LiveColumns({
 }) {
     const items = tv.catalog.items;
     const favorites = new Set(tv.data.favorites.map((m) => m.id));
+    // "Now on" for the channels around the focused one (what is on screen),
+    // loaded one by one like the TV guide and cached for five minutes.
+    const at = Math.max(0, items.findIndex((m) => m.id === tv.selected?.id));
+    const nearby = items.slice(Math.max(0, at - 4), at + 9).filter((m) => m.kind === 'live');
+    const { schedules } = useGridGuide(tv.guideClient, nearby, !!tv.data.epg);
+    const now = Date.now();
     return (
         <>
             <section class="category-column" aria-label={t('Channel categories')}>
@@ -96,6 +103,9 @@ export function LiveColumns({
                             const playing = tv.playing?.id === item.id;
                             const confirmed =
                                 playing && tv.player.current?.hasConfirmedPlayback;
+                            const running = schedules
+                                .get(item.id)
+                                ?.programs.find((p) => p.start <= now && p.end > now);
                             return (
                                 <button
                                     class={`channel channel-tile ${confirmed ? 'is-playing' : ''}`}
@@ -115,10 +125,21 @@ export function LiveColumns({
                                                 ? confirmed
                                                     ? t('● Playing')
                                                     : t('Starting…')
-                                                : t('Channel {number}', {
-                                                      number: n + 1,
-                                                  })}
+                                                : running
+                                                  ? running.title
+                                                  : t('Channel {number}', {
+                                                        number: n + 1,
+                                                    })}
                                         </small>
+                                        {running ? (
+                                            <span class="channel-now" aria-hidden="true">
+                                                <span
+                                                    style={{
+                                                        width: `${Math.min(100, ((now - running.start) / Math.max(1, running.end - running.start)) * 100)}%`,
+                                                    }}
+                                                />
+                                            </span>
+                                        ) : null}
                                         <span class="channel-badges">
                                             {channelBadges(item).map((badge) => (
                                                 <span class="badge">{badge}</span>

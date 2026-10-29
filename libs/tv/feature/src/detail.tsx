@@ -1,4 +1,4 @@
-import { Empty, VirtualCollection } from '@meddl/tv/ui';
+import { Empty, TvIcon, VirtualCollection } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
 import { TvMetadata } from '@meddl/tv/data-access';
 import { mediaTitle, t } from '@meddl/tv/util';
@@ -39,11 +39,20 @@ export function Detail({
         <>
             <section class="detail-hero">
                 <div class="detail-poster">
+                    {/* Shown when there is no picture or it does not load. */}
+                    <span class="detail-poster-fallback">
+                        <TvIcon name={item.kind === 'series' || item.kind === 'episode' ? 'series' : 'movies'} />
+                        <strong>{mediaTitle(item)}</strong>
+                    </span>
                     {item.poster ? (
-                        <img src={item.poster} alt="" />
-                    ) : (
-                        <span>{item.title}</span>
-                    )}
+                        <img
+                            src={item.poster}
+                            alt=""
+                            onError={(event) => {
+                                event.currentTarget.style.display = 'none';
+                            }}
+                        />
+                    ) : null}
                 </div>
                 <div>
                     <span class="eyebrow">

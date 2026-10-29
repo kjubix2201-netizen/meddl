@@ -8,6 +8,7 @@ import { usePlaybackOrigin } from './use-playback-origin';
 import { useUserData } from './user-data';
 import { useContent } from './use-content';
 import { useEffect, useRef, useState } from 'preact/hooks';
+import { rememberChannel } from './recent-channels';
 import { useProvider } from './use-provider';
 import { useSourceNavigation } from './use-source-navigation';
 import { useTvRemote } from './use-tv-remote';
@@ -207,6 +208,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
             if (!lane.owns(job)) return false;
             playerOrigin.remember(originAtStart);
             setPlaying(item);
+            rememberChannel(item);
             if (item.kind === 'live') playingCategory.current = category;
             if (item.kind !== 'live') {
                 setFullscreen(true);
