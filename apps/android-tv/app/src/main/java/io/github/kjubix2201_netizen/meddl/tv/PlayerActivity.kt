@@ -87,6 +87,9 @@ class PlayerActivity : Activity() {
             keepScreenOn = true
         }
         if (live) {
+            // The controls (pause) appear only on OK, not on every start or
+            // buffering of a channel, so switching channels stays clear.
+            view.controllerAutoShow = false
             // Live has nothing to seek in: no timeline, times or skip buttons.
             view.setShowRewindButton(false)
             view.setShowFastForwardButton(false)
@@ -384,8 +387,10 @@ class PlayerActivity : Activity() {
                     zap(-1)
                     return true
                 }
-                // Up / Down with the controls hidden switch channels, like a TV.
-                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live && !view.isControllerFullyVisible) {
+                // Up / Down always switch channels on live TV, like a TV; the
+                // controls (pause) close so nothing waits for them.
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live) {
+                    if (view.isControllerFullyVisible) view.hideController()
                     zap(if (event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) 1 else -1)
                     return true
                 }
