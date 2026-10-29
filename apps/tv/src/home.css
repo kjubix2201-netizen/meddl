@@ -17,6 +17,12 @@
 .home-bar button {
     pointer-events: auto;
 }
+/* Scrolled down to the rows: a slim, solid bar so tiles and posters do not
+   show through the menu (html.page-scrolled, set in focus.ts). */
+.page-scrolled .top-bar.home-bar {
+    height: var(--top-bar-height);
+    background: linear-gradient(180deg, #0d0b14 0%, #0d0b14 84%, rgba(13, 11, 20, 0) 100%);
+}
 .home-wordmark {
     font-size: 5vh;
     font-weight: 500;

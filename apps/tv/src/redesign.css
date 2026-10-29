@@ -23,8 +23,7 @@
     display: flex;
     align-items: center;
     padding: 0 56px;
-    /* Nearly solid: lists scrolled up underneath must not show through the menu. */
-    background: linear-gradient(180deg, rgba(13, 11, 20, 0.98) 0%, rgba(13, 11, 20, 0.94) 78%, rgba(13, 11, 20, 0) 100%);
+    background: linear-gradient(180deg, rgba(13, 11, 20, 0.95) 0%, rgba(13, 11, 20, 0.6) 70%, rgba(13, 11, 20, 0) 100%);
 }
 .top-bar .wordmark {
     margin: 0 44px 0 0;

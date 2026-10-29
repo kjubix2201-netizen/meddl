@@ -92,7 +92,9 @@ export function installRemote(
                     'input:not([type="checkbox"]):not([type="radio"])'
                 ) &&
                 !(from as HTMLInputElement).readOnly) ||
-            (!horizontal && from?.matches('select'))
+            // On a TV, OK opens a list's choices; arrows move on instead of
+            // changing the choice by accident.
+            (!horizontal && from?.matches('select') && !isTelevision())
         )
             return;
         event.preventDefault();
@@ -125,13 +127,36 @@ export function installRemote(
     };
     document.addEventListener('keydown', handler);
     const keyboard = remoteKeyboard();
+    // The Home bar gets a solid backing once the page is scrolled.
+    const mark = () => {
+        const page = document.querySelector('main');
+        document.documentElement.classList.toggle('page-scrolled', !!page && page.scrollTop > 24);
+    };
+    const scrolled = (event: Event) => {
+        if ((event.target as HTMLElement)?.tagName === 'MAIN') mark();
+    };
+    // A new page starts at the top without a scroll event: check after keys too.
+    const afterKey = () => requestAnimationFrame(mark);
+    document.addEventListener('scroll', scrolled, true);
+    document.addEventListener('keyup', afterKey);
     return () => {
         document.removeEventListener('keydown', handler);
+        document.removeEventListener('scroll', scrolled, true);
+        document.removeEventListener('keyup', afterKey);
         keyboard();
     };
 }
 
 type TvShell = { isTelevision?: () => boolean; showKeyboard?: () => void };
+
+/** True in the Android TV / Fire TV app on a television. */
+export function isTelevision(): boolean {
+    try {
+        return !!(window as unknown as { MeddlAndroid?: TvShell }).MeddlAndroid?.isTelevision?.();
+    } catch {
+        return false;
+    }
+}
 
 const TEXT_FIELD = 'textarea,input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="button"]):not([type="submit"])';
 

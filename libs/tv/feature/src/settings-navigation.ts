@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
+import { isTelevision } from '@meddl/tv/ui';
 
 export const settingsCategories = [
     ['connection', 'Connection', 'Home server & diagnostics'],
@@ -137,7 +138,7 @@ export function useSettingsNavigation(memory: SettingsMemory) {
             // Selects own choice keys and text inputs own the caret. All other
             // moves stay in this form rather than crossing into the categories.
             if (
-                (target.matches('select,textarea') && key !== 'ArrowRight') ||
+                (target.matches(isTelevision() ? 'textarea:not([readonly])' : 'select,textarea') && key !== 'ArrowRight') ||
                 (key === 'ArrowRight' &&
                     target.matches(
                         'textarea:not([readonly]),input:not([type="checkbox"]):not([type="radio"]):not([readonly])'
