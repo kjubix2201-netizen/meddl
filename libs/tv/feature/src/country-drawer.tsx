@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef } from 'preact/hooks';
 import { TvIcon, focusKey, restoreFocus } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
-import { countryGroups, type CountryGroup } from './country-catalog';
+import { ALL_COUNTRIES, OTHER_COUNTRY, countryGroups, type CountryGroup } from './country-catalog';
 import { CountryFlag, countryKey, countryLabel } from './country-picker';
 import type { TvModel } from './use-tv';
 
@@ -51,6 +51,13 @@ export function CountryDrawer({
         if (picking && tv.restoreKey && current !== 'country-drawer') return;
         restoreFocus(countryKey(route.country || groups[0].code), countryKey(groups[0].code));
     }, [expanded, groups.length]);
+
+    // The source has no categories for this country (e.g. the default, Germany): offer the list.
+    useEffect(() => {
+        if (picking || open || !computed.length) return;
+        if (route.country === ALL_COUNTRIES || route.country === OTHER_COUNTRY) return;
+        if (!computed.some((group) => group.code === route.country)) setOpen(true);
+    }, [computed, route.country]);
 
     function close() {
         setOpen(false);

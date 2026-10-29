@@ -2,6 +2,8 @@ import { categoryCountry, DEFAULT_PREFERRED_REGION } from '@meddl/shared/m3u-uti
 import type { Category } from '@meddl/tv/util';
 import type { Route } from './navigation';
 
+/** Live TV, Movies and Series open in this country (ISO code as categoryCountry returns it). */
+export const DEFAULT_COUNTRY = DEFAULT_PREFERRED_REGION.toUpperCase();
 /** Every category, regardless of country. */
 export const ALL_COUNTRIES = 'all';
 /** Categories without a recognisable country tag ("SPORT", "4K", …). */

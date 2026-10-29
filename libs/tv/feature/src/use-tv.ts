@@ -3,6 +3,8 @@ import { useReconnect } from './use-reconnect';
 import { useLibrary } from './use-library';
 import { useBackend } from './use-backend';
 import { firstRoute, type View } from './navigation';
+import { DEFAULT_COUNTRY } from './country-catalog';
+import { categoryKey } from './use-live-browse';
 import { useRouteHistory, type NavigationOrigin } from './use-route-history';
 import { usePlaybackOrigin } from './use-playback-origin';
 import { useUserData } from './user-data';
@@ -134,6 +136,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         if (view !== 'live' || playing?.kind !== 'live') stop();
         stack.current = [];
         pendingFocus.current = '';
+        const catalog = view === 'live' || view === 'movies' || view === 'series';
         setRoute({
             ...firstRoute(),
             view,
@@ -143,8 +146,15 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
                     : view === 'series'
                       ? 'series'
                       : 'movie',
+            // Live TV, Movies and Series open straight in Germany; other
+            // countries are one ◀ away in the drawer at the left edge.
+            country: catalog ? DEFAULT_COUNTRY : '',
         });
-        restoreFocus(`nav:${view}`, view === 'home' ? 'launcher:live' : '', 0);
+        restoreFocus(
+            `nav:${view}`,
+            view === 'home' ? 'launcher:live' : view === 'live' ? categoryKey('') : catalog ? 'catalog:category' : '',
+            0
+        );
     }
     function open(item: Media, origin?: NavigationOrigin) {
         if (item.sourceId !== data.activeId) return;
