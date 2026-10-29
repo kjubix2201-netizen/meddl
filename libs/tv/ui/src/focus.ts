@@ -81,11 +81,27 @@ export function installRemote(
             playerKey(code);
             return;
         }
+        // OK on a list (category, sort order …) opens its choices. TVs do that
+        // themselves; elsewhere (Windows app with a controller) ask for the picker.
+        if ((event.key === 'Enter' || code === 13) && !isTelevision()) {
+            const list = document.activeElement as HTMLSelectElement | null;
+            const picker = list?.matches?.('select') ? (list as unknown as { showPicker?: () => void }).showPicker : undefined;
+            if (list && typeof picker === 'function') {
+                event.preventDefault();
+                try {
+                    picker.call(list);
+                } catch {
+                    /* not allowed here (e.g. without a user gesture): leave it */
+                }
+            }
+            return;
+        }
         if (!direction.startsWith('Arrow')) return;
         const from = document.activeElement as HTMLElement;
         const horizontal = /Left|Right/.test(direction);
         // Keep caret/slider movement native; vertical arrows leave single-line
-        // fields. Selects own vertical choice changes and leave horizontally.
+        // fields. Lists (selects) never change with the arrows: OK opens them,
+        // the arrows move on – on TVs and in the Windows app alike.
         if (
             // A read-only field (the TV's locked text field) is passed over.
             (from?.matches('textarea') && !(from as HTMLTextAreaElement).readOnly) ||
@@ -93,10 +109,7 @@ export function installRemote(
                 from?.matches(
                     'input:not([type="checkbox"]):not([type="radio"])'
                 ) &&
-                !(from as HTMLInputElement).readOnly) ||
-            // On a TV, OK opens a list's choices; arrows move on instead of
-            // changing the choice by accident.
-            (!horizontal && from?.matches('select') && !isTelevision())
+                !(from as HTMLInputElement).readOnly)
         )
             return;
         event.preventDefault();
