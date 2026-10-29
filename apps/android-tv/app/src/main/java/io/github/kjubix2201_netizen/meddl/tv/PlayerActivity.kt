@@ -28,6 +28,7 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.ui.DefaultTimeBar
 import androidx.media3.ui.PlayerView
 
 /**
@@ -80,6 +81,21 @@ class PlayerActivity : Activity() {
             setShowNextButton(false)
             setShowPreviousButton(false)
             keepScreenOn = true
+        }
+        if (live) {
+            // Live has nothing to seek in: no timeline, times or skip buttons.
+            view.setShowRewindButton(false)
+            view.setShowFastForwardButton(false)
+            for (id in listOf(
+                androidx.media3.ui.R.id.exo_progress,
+                androidx.media3.ui.R.id.exo_position,
+                androidx.media3.ui.R.id.exo_duration,
+                androidx.media3.ui.R.id.exo_time,
+            )) view.findViewById<View>(id)?.visibility = View.GONE
+        } else {
+            // Left / Right on the timeline: 10 s steps, also while held.
+            (view.findViewById<View>(androidx.media3.ui.R.id.exo_progress) as? DefaultTimeBar)
+                ?.setKeyTimeIncrement(SEEK_STEP_MS)
         }
         nextTitle = intent.getStringExtra(EXTRA_NEXT_TITLE).orEmpty()
         val root = FrameLayout(this)
@@ -285,6 +301,18 @@ class PlayerActivity : Activity() {
                     finish()
                     return true
                 }
+                KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> if (!live && seeksHere()) {
+                    steadySeek(exo, if (event.keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) 1 else -1, event.repeatCount > 0)
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_REWIND -> if (!live) {
+                    steadySeek(exo, -1, event.repeatCount > 0)
+                    return true
+                }
+                KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> if (!live) {
+                    steadySeek(exo, 1, event.repeatCount > 0)
+                    return true
+                }
                 KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_HEADSETHOOK -> {
                     exo.playWhenReady = !exo.playWhenReady
                     return true
@@ -307,6 +335,34 @@ class PlayerActivity : Activity() {
         if (event.keyCode == KeyEvent.KEYCODE_BACK || event.keyCode == KeyEvent.KEYCODE_ESCAPE) return true
         // Arrows and OK open the controls, then move within them.
         return view.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
+    }
+
+    private var seekTarget = -1L
+    private var lastSeekAt = 0L
+    private val seekDone = Runnable { seekTarget = -1L }
+
+    /** Left / Right seek while the controls are hidden or the timeline has the focus. */
+    private fun seeksHere(): Boolean {
+        if (!view.isControllerFullyVisible) return true
+        return currentFocus?.id == androidx.media3.ui.R.id.exo_progress
+    }
+
+    /**
+     * 10 s per press. Held down, the steps keep coming at an even pace
+     * (one every 120 ms, 80 s of film per second) instead of following the
+     * remote's key repeat, and the picture follows the target position.
+     */
+    private fun steadySeek(exo: ExoPlayer, direction: Int, repeat: Boolean) {
+        val now = System.currentTimeMillis()
+        if (repeat && now - lastSeekAt < SEEK_REPEAT_MS) return
+        lastSeekAt = now
+        val duration = exo.duration.takeIf { it != C.TIME_UNSET && it > 0 } ?: Long.MAX_VALUE
+        val from = if (seekTarget >= 0) seekTarget else exo.currentPosition
+        seekTarget = (from + direction * SEEK_STEP_MS).coerceIn(0L, duration)
+        exo.seekTo(seekTarget)
+        view.showController()
+        countdown.removeCallbacks(seekDone)
+        countdown.postDelayed(seekDone, 800)
     }
 
     @Suppress("DEPRECATION")
@@ -335,5 +391,7 @@ class PlayerActivity : Activity() {
         const val EXTRA_PLAY_NOW_LABEL = "playNowLabel"
         const val EXTRA_CANCEL_LABEL = "cancelLabel"
         private const val AUTOPLAY_SECONDS = 8
+        private const val SEEK_STEP_MS = 10_000L
+        private const val SEEK_REPEAT_MS = 120L
     }
 }

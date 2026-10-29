@@ -9,8 +9,19 @@
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
 }
+/* Home tiles: the focused tile grows by scaling (drawn by the graphics
+   chip in one step) instead of changing its size, which made the whole row
+   jump on every move. */
 .tv-lite .launcher-tile {
-    transition: background 0.15s ease;
+    margin-right: 4.4vh;
+    transform: scale(1);
+    transition: transform 0.18s ease-out, background 0.18s ease-out;
+    will-change: transform;
+}
+.tv-lite .launcher-tile:focus {
+    width: 33vh;
+    height: 54vh;
+    transform: scale(1.12);
 }
 .tv-lite main {
     scroll-behavior: auto;

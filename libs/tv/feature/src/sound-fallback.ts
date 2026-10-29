@@ -50,7 +50,10 @@ export function useSoundFallback(tv: TvModel) {
             return;
         }
         sticky.current = false;
-        if (current.fullscreen) current.back();
+        // Live: nothing keeps playing in the page (it could not anyway), so
+        // the list is back and the same channel can be chosen again.
+        if (current.playing?.kind === 'live') current.stop();
+        else if (current.fullscreen) current.back();
     };
     /** The desktop MPV player closed at this position (seconds). */
     const desktopClosed = (positionSeconds: number, durationSeconds: number) => {
@@ -58,6 +61,11 @@ export function useSoundFallback(tv: TvModel) {
         setState((previous) => ({ id: previous.id, phase: 'done' }));
         closed(positionSeconds * 1000, durationSeconds * 1000);
     };
+
+    // Nothing plays any more: the next start of the same title is a new one.
+    useEffect(() => {
+        if (!item) setState((previous) => (previous.id ? { id: '', phase: 'idle' } : previous));
+    }, [item?.id]);
 
     /** The app's own player continues with the next episode. */
     const desktopContinue = (positionSeconds: number, durationSeconds: number) => {
@@ -73,20 +81,21 @@ export function useSoundFallback(tv: TvModel) {
     }, []);
 
     // The page cannot play the stream at all (live .ts, unsupported codecs):
-    // the app's own player takes over instead of showing the error.
-    useEffect(() => {
-        const failed = /^(This stream could not be played|Playback did not start)/.test(tv.error);
-        if (failed && item && phase === 'idle' && (androidBridge()?.playNative || desktopMpvAvailable())) {
-            silent();
-            tv.setError('');
-        }
-    }, [tv.error, phase, item?.id]);
+    // the app's own player takes over, without showing the error first.
+    tv.playbackFailure.current = (message) => {
+        const failed = /^(This stream could not be played|Playback did not start)/.test(message);
+        if (!failed || !item || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return false;
+        silent();
+        return true;
+    };
 
     // Live channels start in the app's own engine right away, like other
     // IPTV players do: raw transport streams and Dolby/DTS are its strength.
     useEffect(() => {
+        // Live: straight away in full screen, and with "always" also from the
+        // list (the page cannot preview most live streams in these apps).
         const direct =
-            (item?.kind === 'live' && tv.fullscreen) ||
+            (item?.kind === 'live' && (tv.fullscreen || alwaysAppPlayer())) ||
             (item?.kind !== 'live' && (sticky.current || (tv.fullscreen && alwaysAppPlayer())));
         if (!item || !direct || phase !== 'idle' || !(androidBridge()?.playNative || desktopMpvAvailable())) return;
         const id = item.id;

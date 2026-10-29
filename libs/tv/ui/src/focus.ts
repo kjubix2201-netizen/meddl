@@ -287,10 +287,10 @@ function scroller(element: HTMLElement, axis: 'x' | 'y'): HTMLElement | null {
 }
 
 /**
- * Brings the focused element into view the TV way: lists and pages glide
- * (smooth scrolling) so the focused element sits in the middle of the free
- * area below the top bar, which keeps every step the same size instead of
- * jumping at the edges. Rows scroll sideways only as far as needed.
+ * Brings the focused element into view the TV way: the focused element sits
+ * in the middle of the free area below the top bar, which keeps every step
+ * the same size instead of jumping at the edges; the page glides there.
+ * Rows scroll sideways only as far as needed.
  */
 export function revealFocus(element: HTMLElement) {
     const vertical = scroller(element, 'y');
@@ -307,7 +307,11 @@ export function revealFocus(element: HTMLElement) {
         const free = view.bottom - top;
         const offset = box.height >= free ? box.top - top - 12 : box.top + box.height / 2 - (top + free / 2);
         const goal = Math.max(0, Math.min(vertical.scrollHeight - vertical.clientHeight, vertical.scrollTop + offset));
-        if (Math.abs(goal - vertical.scrollTop) > 1) vertical.scrollTo({ top: goal, behavior: 'smooth' });
+        // Only the page glides. Lists inside it (channels, categories) jump
+        // straight to the spot: a gliding list that re-renders its window
+        // while moving wobbles up and down.
+        const glide = vertical.tagName === 'MAIN';
+        if (Math.abs(goal - vertical.scrollTop) > 1) vertical.scrollTo({ top: goal, behavior: glide ? 'smooth' : 'auto' });
     }
     if (horizontal) {
         const view = horizontal.getBoundingClientRect();

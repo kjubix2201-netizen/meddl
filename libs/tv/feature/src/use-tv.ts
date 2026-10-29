@@ -36,6 +36,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
     const playingCategory = useRef('');
     const pendingFocus = useRef('');
     const pendingScroll = useRef<number>();
+    const playbackFailure = useRef<(message: string) => boolean>();
     const {
         data,
         storageReady,
@@ -46,7 +47,8 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         update,
     } = useUserData(
         video,
-        (message) => setError(message, retryPlayback, t('Retry playback')),
+        // The app's own player may take the stream instead (sound-fallback.ts).
+        (message) => playbackFailure.current?.(message) || setError(message, retryPlayback, t('Retry playback')),
         () => tick((t) => t + 1),
         (message, retrySave) =>
             setError(
@@ -368,6 +370,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         selected,
         setSelected,
         playing,
+        playbackFailure,
         playingCategory: playingCategory.current,
         fullscreen,
         setFullscreen,
