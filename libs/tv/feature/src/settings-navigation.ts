@@ -169,13 +169,15 @@ export function useSettingsNavigation(memory: SettingsMemory) {
             target.closest('.settings-categories') &&
             (key === 'ArrowUp' || key === 'ArrowDown')
         ) {
-            event.preventDefault();
-            event.stopPropagation();
             const index = settingsCategories.findIndex(
                 ([id]) => id === memory.category
             );
             const next =
                 settingsCategories[index + (key === 'ArrowUp' ? -1 : 1)];
+            // Up from the first area goes on to the top bar.
+            if (!next && key === 'ArrowUp') return;
+            event.preventDefault();
+            event.stopPropagation();
             if (next)
                 root.current
                     ?.querySelector<HTMLElement>(
