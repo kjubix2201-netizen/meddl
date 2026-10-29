@@ -103,23 +103,37 @@ export class XtreamProvider implements ProviderClient {
             categories = await this.loadCategories(type, signal);
             if (!signal.aborted && categories.length) this.categoryLists.set(type, categories);
         }
-        const matchesTitle = catalogTitleMatcher(query);
-        const inCategory = categoryFilter(category);
-        const all = data.map((r) => this.media(r, kind));
-        const items = all.filter(
-            (m) => inCategory(m.category) && matchesTitle(m.title)
-        );
+        // Converted once per list: TVs need half a second and more to turn
+        // 40,000 provider rows into titles, which froze opening a section.
+        let converted = this.converted.get(key);
+        if (!converted || converted.data !== data) {
+            const all = data.map((r) => this.media(r, kind));
+            converted = { data, all, counts: countByCategory(all) };
+            this.converted.set(key, converted);
+        }
+        const order = kind === 'live' ? 'provider' : sort;
+        const view = `${key}\u0000${category}\u0000${query}\u0000${order}`;
+        let items = this.lastView?.view === view && this.lastView.all === converted.all ? this.lastView.items : undefined;
+        if (!items) {
+            const matchesTitle = catalogTitleMatcher(query);
+            const inCategory = categoryFilter(category);
+            items = sortCatalog(
+                converted.all.filter((m) => inCategory(m.category) && matchesTitle(m.title)),
+                order
+            );
+            this.lastView = { view, all: converted.all, items };
+        }
         return {
-            items: sortCatalog(
-                items,
-                kind === 'live' ? 'provider' : sort
-            ).slice(page * 60, (page + 1) * 60),
+            items: items.slice(page * 60, (page + 1) * 60),
             total: items.length,
             page,
             categories,
-            categoryCounts: countByCategory(all),
+            categoryCounts: converted.counts,
         };
     }
+    private converted = new Map<string, { data: Record<string, unknown>[]; all: Media[]; counts: ReturnType<typeof countByCategory> }>();
+    /** The last filtered and sorted list, so "load more" pages do not sort again. */
+    private lastView?: { view: string; all: Media[]; items: Media[] };
     /**
      * The whole section in one request. Some panels never finish that answer
      * (or cut it off); the list is then built category by category, like
