@@ -46,6 +46,9 @@ export function TvApp() {
     // opens in the app's own player instead of an error.
     const sound = useSoundFallback(tv);
     const nextEpisode = useNextEpisode(tv, video.current);
+    sound.nextEpisode.current = nextEpisode.next
+        ? { title: nextEpisode.next.title, play: nextEpisode.playNext }
+        : undefined;
     useEffect(() => {
         const position = () => {
             const rect = document

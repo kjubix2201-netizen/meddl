@@ -118,8 +118,9 @@ class MainActivity : Activity() {
         if (requestCode != NATIVE_PLAYER_REQUEST) return
         val position = data?.getLongExtra(PlayerActivity.EXTRA_POSITION_MS, 0L) ?: 0L
         val duration = data?.getLongExtra(PlayerActivity.EXTRA_DURATION_MS, 0L) ?: 0L
+        val next = data?.getBooleanExtra(PlayerActivity.EXTRA_NEXT, false) ?: false
         web.evaluateJavascript(
-            "window.meddlNativeClosed&&window.meddlNativeClosed($position,$duration);",
+            "window.meddlNativeClosed&&window.meddlNativeClosed($position,$duration,$next);",
             null
         )
     }
@@ -212,7 +213,11 @@ class MainActivity : Activity() {
                         .putExtra(PlayerActivity.EXTRA_TITLE, json.optString("title"))
                         .putExtra(PlayerActivity.EXTRA_START_MS, json.optLong("startMs", 0L))
                         .putExtra(PlayerActivity.EXTRA_LIVE, json.optBoolean("live", false))
-                        .putExtra(PlayerActivity.EXTRA_USER_AGENT, json.optString("userAgent")),
+                        .putExtra(PlayerActivity.EXTRA_USER_AGENT, json.optString("userAgent"))
+                        .putExtra(PlayerActivity.EXTRA_NEXT_TITLE, json.optString("nextTitle"))
+                        .putExtra(PlayerActivity.EXTRA_NEXT_LABEL, json.optString("nextLabel"))
+                        .putExtra(PlayerActivity.EXTRA_PLAY_NOW_LABEL, json.optString("playNowLabel"))
+                        .putExtra(PlayerActivity.EXTRA_CANCEL_LABEL, json.optString("cancelLabel")),
                     NATIVE_PLAYER_REQUEST
                 )
             }

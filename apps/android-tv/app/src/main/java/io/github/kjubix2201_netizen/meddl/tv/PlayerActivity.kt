@@ -4,11 +4,21 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import androidx.annotation.OptIn
 import androidx.media3.common.C
+import androidx.media3.common.ForwardingPlayer
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
@@ -31,6 +41,9 @@ import androidx.media3.ui.PlayerView
  *
  * Started by the page through `MeddlAndroid.playNative`; on Back it returns
  * the position, which MainActivity hands to `window.meddlNativeClosed`.
+ * With a next episode (EXTRA_NEXT_TITLE) the controls show a Next button and
+ * the end of the episode counts down, then returns with EXTRA_NEXT so the
+ * page starts the next episode, which comes back here.
  */
 @OptIn(UnstableApi::class)
 class PlayerActivity : Activity() {
@@ -39,6 +52,22 @@ class PlayerActivity : Activity() {
     private lateinit var view: PlayerView
     private var live = false
     private var liveRetries = 0
+    private var nextTitle = ""
+    private lateinit var nextBanner: LinearLayout
+    private lateinit var nextText: TextView
+    private lateinit var nextNow: Button
+    private val countdown = Handler(Looper.getMainLooper())
+    private var secondsLeft = 0
+    private val tick = object : Runnable {
+        override fun run() {
+            if (secondsLeft <= 0) return goNext()
+            nextText.text = label(EXTRA_NEXT_LABEL, "Next episode in {seconds} s: {title}")
+                .replace("{seconds}", secondsLeft.toString())
+                .replace("{title}", nextTitle)
+            secondsLeft -= 1
+            countdown.postDelayed(this, 1000)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +81,86 @@ class PlayerActivity : Activity() {
             setShowPreviousButton(false)
             keepScreenOn = true
         }
-        setContentView(view)
+        nextTitle = intent.getStringExtra(EXTRA_NEXT_TITLE).orEmpty()
+        val root = FrameLayout(this)
+        root.addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
+        root.addView(buildNextBanner(), FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            Gravity.BOTTOM or Gravity.END,
+        ).apply { setMargins(0, 0, dp(48), dp(48)) })
+        setContentView(root)
         hideSystemBars()
+    }
+
+    private fun label(extra: String, fallback: String) =
+        intent.getStringExtra(extra)?.takeIf { it.isNotBlank() } ?: fallback
+
+    private fun dp(value: Int) = (value * resources.displayMetrics.density).toInt()
+
+    /** "Next episode in 8 s: …" with Play now / Cancel, shown at the end. */
+    private fun buildNextBanner(): LinearLayout {
+        nextText = TextView(this).apply {
+            setTextColor(Color.WHITE)
+            textSize = 18f
+            setPadding(0, 0, dp(20), 0)
+        }
+        fun button(text: String, primary: Boolean, action: () -> Unit) = Button(this).apply {
+            this.text = text
+            isAllCaps = false
+            textSize = 16f
+            setTextColor(if (primary) Color.BLACK else Color.WHITE)
+            background = GradientDrawable().apply {
+                cornerRadius = dp(10).toFloat()
+                setColor(if (primary) Color.WHITE else 0x33FFFFFF)
+            }
+            setPadding(dp(20), dp(8), dp(20), dp(8))
+            isFocusable = true
+            setOnFocusChangeListener { v, focused -> v.alpha = if (focused) 1f else 0.75f }
+            setOnClickListener { action() }
+        }
+        nextNow = button(label(EXTRA_PLAY_NOW_LABEL, "Play now"), true) { goNext() }
+        val cancel = button(label(EXTRA_CANCEL_LABEL, "Cancel"), false) { cancelNext() }
+        nextBanner = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(dp(24), dp(16), dp(16), dp(16))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(14).toFloat()
+                setColor(0xE61F1D2B.toInt())
+            }
+            visibility = View.GONE
+            addView(nextText)
+            addView(nextNow)
+            addView(cancel, LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,
+            ).apply { marginStart = dp(12) })
+        }
+        return nextBanner
+    }
+
+    private fun startCountdown() {
+        if (nextTitle.isEmpty() || nextBanner.visibility == View.VISIBLE) return
+        view.hideController()
+        nextBanner.visibility = View.VISIBLE
+        nextNow.requestFocus()
+        secondsLeft = AUTOPLAY_SECONDS
+        countdown.removeCallbacks(tick)
+        tick.run()
+    }
+
+    private fun cancelNext() {
+        countdown.removeCallbacks(tick)
+        nextBanner.visibility = View.GONE
+    }
+
+    /** Back to the page, which starts the next episode. */
+    private fun goNext() {
+        countdown.removeCallbacks(tick)
+        val exo = player
+        if (exo != null) reportPosition(exo, next = true)
+        else setResult(RESULT_OK, Intent().putExtra(EXTRA_NEXT, true))
+        finish()
     }
 
     override fun onStart() {
@@ -62,6 +169,7 @@ class PlayerActivity : Activity() {
     }
 
     override fun onStop() {
+        countdown.removeCallbacks(tick)
         releasePlayer()
         super.onStop()
     }
@@ -84,6 +192,16 @@ class PlayerActivity : Activity() {
             .setMediaSourceFactory(DefaultMediaSourceFactory(http))
             .build()
         exo.addListener(object : Player.Listener {
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_ENDED && !live) {
+                    if (nextTitle.isNotEmpty()) startCountdown()
+                    else {
+                        reportPosition(exo)
+                        finish()
+                    }
+                }
+            }
+
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 if (isPlaying) liveRetries = 0
             }
@@ -108,7 +226,21 @@ class PlayerActivity : Activity() {
         exo.setMediaItem(item, if (live) C.TIME_UNSET else intent.getLongExtra(EXTRA_START_MS, 0L))
         exo.playWhenReady = true
         exo.prepare()
-        view.player = exo
+        // The Next button of the controls starts the next episode.
+        view.setShowNextButton(nextTitle.isNotEmpty() && !live)
+        view.player = if (nextTitle.isEmpty() || live) exo else object : ForwardingPlayer(exo) {
+            override fun isCommandAvailable(command: Int) =
+                command == Player.COMMAND_SEEK_TO_NEXT || command == Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM ||
+                    super.isCommandAvailable(command)
+
+            override fun getAvailableCommands(): Player.Commands = super.getAvailableCommands().buildUpon()
+                .add(Player.COMMAND_SEEK_TO_NEXT)
+                .add(Player.COMMAND_SEEK_TO_NEXT_MEDIA_ITEM)
+                .build()
+
+            override fun seekToNext() = goNext()
+            override fun seekToNextMediaItem() = goNext()
+        }
         player = exo
     }
 
@@ -121,18 +253,27 @@ class PlayerActivity : Activity() {
         view.player = null
     }
 
-    private fun reportPosition(exo: ExoPlayer) {
+    private fun reportPosition(exo: ExoPlayer, next: Boolean = false) {
         val duration = exo.duration.takeIf { it != C.TIME_UNSET } ?: 0L
         setResult(
             RESULT_OK,
             Intent()
                 .putExtra(EXTRA_POSITION_MS, if (live) 0L else exo.currentPosition)
                 .putExtra(EXTRA_DURATION_MS, duration)
+                .putExtra(EXTRA_NEXT, next)
         )
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val exo = player
+        // The countdown banner has the focus: OK and arrows work on its buttons.
+        if (nextBanner.visibility == View.VISIBLE) {
+            if (event.keyCode == KeyEvent.KEYCODE_BACK || event.keyCode == KeyEvent.KEYCODE_ESCAPE) {
+                if (event.action == KeyEvent.ACTION_DOWN) cancelNext()
+                return true
+            }
+            return super.dispatchKeyEvent(event)
+        }
         if (exo != null && event.action == KeyEvent.ACTION_DOWN) {
             when (event.keyCode) {
                 KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE -> {
@@ -188,5 +329,11 @@ class PlayerActivity : Activity() {
         const val EXTRA_USER_AGENT = "userAgent"
         const val EXTRA_POSITION_MS = "positionMs"
         const val EXTRA_DURATION_MS = "durationMs"
+        const val EXTRA_NEXT = "next"
+        const val EXTRA_NEXT_TITLE = "nextTitle"
+        const val EXTRA_NEXT_LABEL = "nextLabel"
+        const val EXTRA_PLAY_NOW_LABEL = "playNowLabel"
+        const val EXTRA_CANCEL_LABEL = "cancelLabel"
+        private const val AUTOPLAY_SECONDS = 8
     }
 }

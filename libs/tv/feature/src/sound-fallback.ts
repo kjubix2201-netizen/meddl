@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { desktopMpvAvailable, type DesktopMpvPlayback } from '@meddl/tv/data-access';
-import { mediaTitle } from '@meddl/tv/util';
+import { mediaTitle, t } from '@meddl/tv/util';
 import type { TvModel } from './use-tv';
 import { alwaysAppPlayer } from './app-player-setting';
 
@@ -9,7 +9,7 @@ export type SoundPhase = 'idle' | 'native' | 'desktop' | 'done' | 'unavailable';
 
 /** Android TV / Fire TV shell (apps/android-tv) with its own decoders. */
 type AndroidBridge = { playNative?: (request: string) => void };
-type NativeClosed = (positionMs: number, durationMs: number) => void;
+type NativeClosed = (positionMs: number, durationMs: number, next?: boolean) => void;
 
 function androidBridge(): AndroidBridge | undefined {
     return (window as unknown as { MeddlAndroid?: AndroidBridge }).MeddlAndroid;
@@ -37,9 +37,19 @@ export function useSoundFallback(tv: TvModel) {
     // The app's own player went on to the next episode: it plays there too.
     const sticky = useRef(false);
 
-    const closed: NativeClosed = (positionMs, durationMs) => {
+    // The series' next episode, set by app.tsx from useNextEpisode.
+    const nextEpisode = useRef<{ title: string; play: () => void } | undefined>();
+    const closed: NativeClosed = (positionMs, durationMs, next) => {
         const current = latest.current;
         current.player.current?.recordExternal(positionMs / 1000, durationMs / 1000);
+        const upcoming = nextEpisode.current;
+        if (next && upcoming) {
+            // The native player went on: the next episode plays there too.
+            sticky.current = true;
+            upcoming.play();
+            return;
+        }
+        sticky.current = false;
         if (current.fullscreen) current.back();
     };
     /** The desktop MPV player closed at this position (seconds). */
@@ -125,10 +135,18 @@ export function useSoundFallback(tv: TvModel) {
                 startMs: live ? 0 : Math.round(player.handoverPosition * 1000),
                 live,
                 userAgent: source?.userAgent ?? '',
+                ...(!live && nextEpisode.current
+                    ? {
+                          nextTitle: nextEpisode.current.title,
+                          nextLabel: t('Next episode in {seconds} s: {title}'),
+                          playNowLabel: t('Play now'),
+                          cancelLabel: t('Cancel'),
+                      }
+                    : {}),
             })
         );
         setState({ id: item.id, phase: 'native' });
     }
     silentRef.current = silent;
-    return { phase, silent, desktop, desktopClosed, desktopContinue };
+    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode };
 }
