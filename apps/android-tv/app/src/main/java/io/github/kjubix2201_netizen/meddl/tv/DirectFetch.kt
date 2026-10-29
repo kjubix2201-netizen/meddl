@@ -31,8 +31,10 @@ object DirectFetch {
         val headers = runCatching { JSONObject(request.getQueryParameter("h") ?: "{}") }
             .getOrNull() ?: JSONObject()
         val timeout = (request.getQueryParameter("t")?.toIntOrNull() ?: 30_000).coerceIn(1_000, 300_000)
+        // c=1: an image (channel logo) the WebView may keep for a day.
+        val cache = if (request.getQueryParameter("c") == "1") "max-age=86400" else "no-store"
         return try {
-            fetch(URL(target), headers, timeout)
+            fetch(URL(target), headers, timeout, cache)
         } catch (error: IOException) {
             failure(502, error.javaClass.simpleName)
         } catch (error: RuntimeException) {
@@ -40,7 +42,7 @@ object DirectFetch {
         }
     }
 
-    private fun fetch(start: URL, headers: JSONObject, timeout: Int): WebResourceResponse {
+    private fun fetch(start: URL, headers: JSONObject, timeout: Int, cache: String): WebResourceResponse {
         var url = start
         repeat(MAX_REDIRECTS + 1) {
             val connection = (url.openConnection() as HttpURLConnection).apply {
@@ -70,7 +72,7 @@ object DirectFetch {
                 "utf-8",
                 code,
                 connection.responseMessage?.ifBlank { null } ?: "OK",
-                mapOf("Cache-Control" to "no-store"),
+                mapOf("Cache-Control" to if (status in 200..299) cache else "no-store"),
                 body
             )
         }
