@@ -31,11 +31,21 @@ main {
     padding-left: 5.6vw;
     padding-right: 4.3vw;
 }
-/* TV screens scroll with the remote; scrollbars only add clutter. */
+/* TV screens scroll with the remote; scrollbars only add clutter.
+   (Also over theme.css, which gives .channels and .programme-list a visible bar.) */
 main::-webkit-scrollbar,
-main *::-webkit-scrollbar {
+main *::-webkit-scrollbar,
+main .channels::-webkit-scrollbar,
+main .programme-list::-webkit-scrollbar,
+[data-tv-modal] .channels::-webkit-scrollbar,
+[data-tv-modal] .programme-list::-webkit-scrollbar {
     width: 0;
     height: 0;
+    display: none;
+}
+[data-tv-modal] .channels,
+[data-tv-modal] .programme-list {
+    scrollbar-width: none;
 }
 main,
 main * {
