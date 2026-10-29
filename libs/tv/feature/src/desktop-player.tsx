@@ -126,7 +126,14 @@ export function DesktopPlayer({
         const sync = () => session.current?.setBounds(surface(bar.current, controls || !!failure || countdown));
         sync();
         window.addEventListener('resize', sync);
-        return () => window.removeEventListener('resize', sync);
+        // The bar grows when tracks or the countdown appear: the picture
+        // must move up with it, or it covers the title.
+        const observer = typeof ResizeObserver === 'function' && bar.current ? new ResizeObserver(sync) : undefined;
+        if (observer && bar.current) observer.observe(bar.current);
+        return () => {
+            window.removeEventListener('resize', sync);
+            observer?.disconnect();
+        };
     }, [controls, failure, countdown]);
 
     useEffect(() => {
@@ -204,99 +211,114 @@ export function DesktopPlayer({
                 <span class="spinner large desktop-player-spinner" aria-hidden="true" />
             ) : null}
             <div class="desktop-player-bar" ref={bar}>
-                <div class="desktop-player-row">
-                    <button class="round" aria-label={t('Back')} onClick={close}>
-                        <TvIcon name="back" />
-                    </button>
-                    {playback.isLive ? null : (
-                        <button class="round" aria-label={t('Back 10 seconds')} onClick={() => session.current?.seekBy(-SEEK_SECONDS)}>
-                            <TvIcon name="rewind" />
-                        </button>
-                    )}
-                    <button
-                        class="round"
-                        aria-label={status === 'paused' ? t('Play') : t('Pause')}
-                        onClick={() => session.current?.togglePause()}
-                    >
-                        <TvIcon name={status === 'paused' ? 'play' : 'pause'} />
-                    </button>
-                    {playback.isLive ? null : (
-                        <button class="round" aria-label={t('Forward 10 seconds')} onClick={() => session.current?.seekBy(SEEK_SECONDS)}>
-                            <TvIcon name="forward" />
-                        </button>
-                    )}
-                    <div class="desktop-player-title">
+                <div class="dp-head">
+                    <div class="dp-title">
                         <strong>{playback.title}</strong>
-                        <small>
-                            {failure
-                                ? failure
-                                : status === 'loading'
-                                  ? t('Loading…')
-                                  : status === 'paused'
-                                    ? t('Paused')
-                                    : t('Dolby / DTS sound through the meddl player')}
-                        </small>
+                        {failure || status === 'loading' || status === 'paused' ? (
+                            <small class={failure ? 'dp-failure' : ''}>
+                                {failure ? failure : status === 'loading' ? t('Loading…') : t('Paused')}
+                            </small>
+                        ) : null}
                     </div>
-                    {next && onNext ? (
-                        <button
-                            class="desktop-player-pill"
-                            onClick={() => onNext(position, duration ?? position)}
-                            title={next.title}
-                        >
-                            {t('Next episode')}
-                        </button>
-                    ) : null}
-                    {audioTracks.length > 1 ? (
-                        <button class="desktop-player-pill" onClick={cycleAudio} title={t('Change audio track (A)')}>
-                            {t('Audio')}: {audio ? trackName(audio) : '–'}
-                        </button>
-                    ) : null}
-                    {subtitleTracks.length ? (
-                        <button class="desktop-player-pill" onClick={cycleSubtitles} title={t('Change subtitles (S)')}>
-                            {t('Subtitles')}: {subtitle ? trackName(subtitle) : t('Off')}
-                        </button>
-                    ) : null}
-                    <button class="round" aria-label={volume > 0 ? t('Mute') : t('Unmute')} onClick={toggleMute}>
-                        <TvIcon name={volume > 0 ? 'volume' : 'muted'} />
-                    </button>
-                    <input
-                        class="desktop-player-volume"
-                        type="range"
-                        min={0}
-                        max={100}
-                        step={5}
-                        value={Math.round(volume * 100)}
-                        aria-label={t('Volume')}
-                        onInput={(event) => session.current?.setVolume(Number(event.currentTarget.value) / 100)}
-                    />
-                    {playback.isLive ? (
-                        <span class="live-badge">{t('Live')}</span>
-                    ) : (
-                        <span class="desktop-player-time">
-                            {clock(shownAt)} / {clock(duration)}
-                        </span>
-                    )}
+                    {playback.isLive ? <span class="live-badge">{t('Live')}</span> : null}
                 </div>
                 {seekable ? (
-                    <input
-                        class="desktop-player-seek"
-                        type="range"
-                        min={0}
-                        max={Math.floor(duration!)}
-                        step={1}
-                        value={Math.floor(shownAt)}
-                        aria-label={t('Position')}
-                        style={{ '--share': `${Math.min(100, (shownAt / duration!) * 100)}%` }}
-                        onInput={(event) => {
-                            reveal();
-                            setScrub(Number(event.currentTarget.value));
-                        }}
-                        onChange={(event) => {
-                            session.current?.seekTo(Number(event.currentTarget.value));
-                            setScrub(null);
-                        }}
-                    />
+                    <div class="dp-timeline">
+                        <span class="dp-time">{clock(shownAt)}</span>
+                        <input
+                            class="desktop-player-seek"
+                            type="range"
+                            min={0}
+                            max={Math.floor(duration!)}
+                            step={1}
+                            value={Math.floor(shownAt)}
+                            aria-label={t('Position')}
+                            style={{ '--share': `${Math.min(100, (shownAt / duration!) * 100)}%` }}
+                            onInput={(event) => {
+                                reveal();
+                                setScrub(Number(event.currentTarget.value));
+                            }}
+                            onChange={(event) => {
+                                session.current?.seekTo(Number(event.currentTarget.value));
+                                setScrub(null);
+                            }}
+                        />
+                        <span class="dp-time">−{clock(Math.max(0, duration! - shownAt))}</span>
+                    </div>
                 ) : null}
+                <div class="dp-controls">
+                    <div class="dp-side">
+                        <button class="dp-icon" aria-label={t('Back')} title={t('Back') + ' (Esc)'} onClick={close}>
+                            <TvIcon name="back" />
+                        </button>
+                    </div>
+                    <div class="dp-center">
+                        {playback.isLive ? null : (
+                            <button
+                                class="dp-icon"
+                                aria-label={t('Back 10 seconds')}
+                                title={t('Back 10 seconds') + ' (←)'}
+                                onClick={() => session.current?.seekBy(-SEEK_SECONDS)}
+                            >
+                                <TvIcon name="rewind" />
+                            </button>
+                        )}
+                        <button
+                            class="dp-play"
+                            aria-label={status === 'paused' ? t('Play') : t('Pause')}
+                            title={(status === 'paused' ? t('Play') : t('Pause')) + ' (Space)'}
+                            onClick={() => session.current?.togglePause()}
+                        >
+                            <TvIcon name={status === 'paused' ? 'play' : 'pause'} />
+                        </button>
+                        {playback.isLive ? null : (
+                            <button
+                                class="dp-icon"
+                                aria-label={t('Forward 10 seconds')}
+                                title={t('Forward 10 seconds') + ' (→)'}
+                                onClick={() => session.current?.seekBy(SEEK_SECONDS)}
+                            >
+                                <TvIcon name="forward" />
+                            </button>
+                        )}
+                    </div>
+                    <div class="dp-side dp-right">
+                        {next && onNext ? (
+                            <button class="dp-pill" onClick={() => onNext(position, duration ?? position)} title={next.title}>
+                                {t('Next episode')} <TvIcon name="next" />
+                            </button>
+                        ) : null}
+                        {audioTracks.length > 1 ? (
+                            <button class="dp-pill" onClick={cycleAudio} title={t('Change audio track (A)')}>
+                                {t('Audio')}: {audio ? trackName(audio) : '–'}
+                            </button>
+                        ) : null}
+                        {subtitleTracks.length ? (
+                            <button class="dp-pill" onClick={cycleSubtitles} title={t('Change subtitles (S)')}>
+                                {t('Subtitles')}: {subtitle ? trackName(subtitle) : t('Off')}
+                            </button>
+                        ) : null}
+                        <button
+                            class="dp-icon"
+                            aria-label={volume > 0 ? t('Mute') : t('Unmute')}
+                            title={(volume > 0 ? t('Mute') : t('Unmute')) + ' (M)'}
+                            onClick={toggleMute}
+                        >
+                            <TvIcon name={volume > 0 ? 'volume' : 'muted'} />
+                        </button>
+                        <input
+                            class="desktop-player-volume"
+                            type="range"
+                            min={0}
+                            max={100}
+                            step={5}
+                            value={Math.round(volume * 100)}
+                            aria-label={t('Volume')}
+                            style={{ '--share': `${Math.round(volume * 100)}%` }}
+                            onInput={(event) => session.current?.setVolume(Number(event.currentTarget.value) / 100)}
+                        />
+                    </div>
+                </div>
                 {next && next.countdown !== null ? (
                     <div class="next-banner desktop-next" role="status">
                         <span>{t('Next episode in {seconds} s: {title}', { seconds: next.countdown, title: next.title })}</span>
@@ -306,11 +328,13 @@ export function DesktopPlayer({
                         <button onClick={onCancelNext}>{t('Cancel')}</button>
                     </div>
                 ) : null}
-                <p class="desktop-player-keys muted">
-                    {playback.isLive
-                        ? t('Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back')
-                        : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back')}
-                </p>
+                {status === 'paused' ? (
+                    <p class="desktop-player-keys muted">
+                        {playback.isLive
+                            ? t('Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back')
+                            : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back')}
+                    </p>
+                ) : null}
             </div>
         </div>
     );

@@ -105,8 +105,10 @@
     color: rgba(255, 255, 255, 0.85);
 }
 
-/* ---------- Desktop app: MPV player for Dolby / DTS (desktop-player.tsx) ---------- */
-/* MPV paints a native surface above the page; the bar sits below it. */
+/* ---------- Desktop app: the meddl player (MPV, desktop-player.tsx) ---------- */
+/* MPV paints a native surface above the page; the bar sits below it, black
+   like the picture's borders, laid out like a TV player: title, timeline,
+   then the buttons with Play in the middle. */
 .desktop-player {
     position: fixed;
     inset: 0;
@@ -124,9 +126,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-    padding: 1.6vh 4.3vw 1.4vh 5.6vw;
-    background: #1f1d2b;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 14px 48px 16px;
+    background: #000000;
+    color: #ffffff;
 }
 .desktop-player.dormant .desktop-player-bar {
     visibility: hidden;
@@ -134,74 +136,148 @@
 .desktop-player.dormant {
     cursor: none;
 }
-.desktop-player-row {
+.dp-head {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
+    min-width: 0;
 }
-/* Title and state on their own line above the controls. */
-.desktop-player-row > .desktop-player-title {
-    order: -1;
-    flex: 1 0 100%;
-    margin: 0 0 1.2vh;
-}
-.desktop-player-row > .desktop-player-time,
-.desktop-player-row > .live-badge {
-    margin-left: auto;
-}
-.desktop-player-row button.round {
-    width: 6.4vh;
-    height: 6.4vh;
-    min-height: 0;
-    margin-right: 1.4vh;
-    flex: 0 0 auto;
-}
-.desktop-player-title {
+.dp-title {
     flex: 1 1 auto;
     min-width: 0;
-    margin: 0 2vh 0 0.6vh;
+    display: flex;
+    align-items: baseline;
 }
-.desktop-player-title strong {
-    display: block;
+.dp-title strong {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 2.6vh;
-    font-weight: 500;
+    font-size: 20px;
+    font-weight: 600;
 }
-.desktop-player-title small {
-    display: block;
-    margin-top: 0.3vh;
-    font-size: 1.9vh;
-    color: rgba(255, 255, 255, 0.64);
+.dp-title small {
+    flex: none;
+    margin-left: 14px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
 }
-.desktop-player-time {
-    flex: 0 0 auto;
-    font-size: 2.2vh;
-    font-weight: 300;
+.dp-title small.dp-failure {
+    color: #ff8a8a;
+    flex: 0 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.dp-head .live-badge {
+    margin-left: 14px;
+}
+.dp-timeline {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+.dp-time {
+    flex: none;
+    min-width: 64px;
+    font-size: 14px;
     font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, 0.8);
 }
-.desktop-player-bar .now-progress {
-    margin-top: 1.2vh;
+.dp-time:last-child {
+    text-align: right;
 }
-.desktop-player-pill {
-    flex: 0 0 auto;
-    height: 5.2vh;
+.dp-controls {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-top: 8px;
+}
+.dp-side {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+.dp-right {
+    justify-content: flex-end;
+}
+.dp-center {
+    display: flex;
+    align-items: center;
+}
+.desktop-player-bar button.dp-icon {
+    flex: none;
+    width: 46px;
+    height: 46px;
     min-height: 0;
-    max-width: 22vw;
-    margin-right: 1.2vh;
-    padding: 0 1.8vh;
-    border-radius: 2.6vh;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 1.9vh;
-    background: rgba(255, 255, 255, 0.1);
+    padding: 0;
+    margin: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     border: none;
+    border-radius: 50%;
+    background: transparent;
     color: #ffffff;
 }
-.desktop-player-pill:hover {
-    background: rgba(255, 255, 255, 0.2);
+.desktop-player-bar button.dp-icon:hover,
+.desktop-player-bar button.dp-icon:focus {
+    background: rgba(255, 255, 255, 0.14);
+}
+.desktop-player-bar button.dp-icon svg {
+    width: 24px;
+    height: 24px;
+}
+.desktop-player-bar button.dp-play {
+    flex: none;
+    width: 58px;
+    height: 58px;
+    min-height: 0;
+    padding: 0;
+    margin: 0 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #0d0b14;
+}
+.desktop-player-bar button.dp-play:hover,
+.desktop-player-bar button.dp-play:focus {
+    transform: scale(1.06);
+}
+.desktop-player-bar button.dp-play svg {
+    width: 26px;
+    height: 26px;
+}
+.desktop-player-bar button.dp-pill {
+    flex: 0 1 auto;
+    width: auto;
+    min-width: 60px;
+    max-width: 260px;
+    height: 36px;
+    min-height: 0;
+    margin-left: 8px;
+    padding: 0 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    border: none;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+.desktop-player-bar button.dp-pill:hover,
+.desktop-player-bar button.dp-pill:focus {
+    background: rgba(255, 255, 255, 0.22);
+}
+.desktop-player-bar button.dp-pill svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
 }
 .desktop-player-bar input[type='range'] {
     min-height: 0;
@@ -210,38 +286,50 @@
     border-radius: 0;
     box-shadow: none;
     background: transparent;
-}
-.desktop-player-volume {
-    flex: 0 0 auto;
-    width: 14vh;
-    max-width: 14vh;
-    margin: 0 2.4vh 0 0;
-    accent-color: #ffffff;
-}
-.desktop-player-seek {
-    display: block;
-    width: 100%;
-    height: 2.4vh;
-    margin: 1.2vh 0 0;
     -webkit-appearance: none;
     appearance: none;
-    background: transparent;
     cursor: pointer;
 }
-.desktop-player-seek::-webkit-slider-runnable-track {
-    height: 0.6vh;
-    border-radius: 0.3vh;
-    background: linear-gradient(90deg, #ffffff 0 var(--share, 0%), rgba(255, 255, 255, 0.22) var(--share, 0%) 100%);
+.desktop-player-bar .desktop-player-seek {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    height: 18px;
+    margin: 0 14px;
 }
-.desktop-player-seek::-webkit-slider-thumb {
+.desktop-player-bar .desktop-player-volume {
+    flex: 0 0 96px;
+    width: 96px;
+    max-width: 96px;
+    height: 18px;
+    margin: 0 0 0 4px;
+}
+.desktop-player-bar input[type='range']::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #ffffff 0 var(--share, 0%), rgba(255, 255, 255, 0.25) var(--share, 0%) 100%);
+}
+.desktop-player-bar input[type='range']:hover::-webkit-slider-runnable-track {
+    height: 6px;
+}
+.desktop-player-bar input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 1.8vh;
-    height: 1.8vh;
-    margin-top: -0.6vh;
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
     border-radius: 50%;
     background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15);
+}
+.desktop-player-bar input[type='range']:hover::-webkit-slider-thumb {
+    margin-top: -4px;
+}
+.desktop-player-bar .next-banner {
+    margin-top: 12px;
 }
 .desktop-player-keys {
-    margin: 1vh 0 0;
-    font-size: 1.7vh;
+    margin: 8px 0 0;
+    font-size: 13px;
+    text-align: center;
 }
+
