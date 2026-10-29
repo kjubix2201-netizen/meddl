@@ -8,6 +8,7 @@ import {
     Source,
     Provider, t } from '@meddl/tv/util';
 import { TvModel } from './use-tv';
+import { TvIcon } from '@meddl/tv/ui';
 import { appPairingAvailable, localServerAvailable } from '@meddl/tv/data-access';
 export function Sources({ tv }: { tv: TvModel }) {
     const [type, setType] = useState<Provider>('xtream');
@@ -71,6 +72,17 @@ export function Sources({ tv }: { tv: TvModel }) {
     }
     return (
         <>
+            {/* Settings and favourites live here, behind the profile button. */}
+            <nav class="profile-links" aria-label={t('Sources & profile')}>
+                <button data-focus="profile:settings" onClick={() => tv.visit({ ...tv.route, view: 'settings', category: '', page: 0, query: '' }, '')}>
+                    <TvIcon name="gear" />
+                    {t('Settings')}
+                </button>
+                <button data-focus="profile:favorites" onClick={() => tv.visit({ ...tv.route, view: 'favorites', kind: 'movie', category: '', page: 0, query: '' }, 'favorites:movie')}>
+                    <TvIcon name="star" />
+                    {t('Favorites')}
+                </button>
+            </nav>
             <p class="muted">
                 {t('Your subscriptions. Server sources are managed in the PWA.')}
             </p>

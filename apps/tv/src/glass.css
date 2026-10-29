@@ -164,7 +164,7 @@ button.round:not(.avatar):focus {
     color: #ffffff;
 }
 .top-tools .clock {
-    margin: 0 0.4vh 0 2.6vh;
+    margin: 0 2.2vh 0 0;
     font-size: 2.4vh;
     font-weight: 300;
 }
@@ -427,4 +427,33 @@ header select,
     font-size: 24px;
     font-weight: 600;
     line-height: 1.2;
+}
+
+/* Profile page: settings and favourites (they left the top bar). */
+.profile-links {
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    padding: 0;
+    background: none;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 4px 0 22px;
+}
+.profile-links button {
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 0;
+    height: 56px;
+    padding: 0 24px;
+    border-radius: 14px;
+    font-size: 17px;
+}
+.profile-links button svg {
+    width: 22px;
+    height: 22px;
 }

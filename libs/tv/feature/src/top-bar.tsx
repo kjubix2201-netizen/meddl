@@ -12,14 +12,12 @@ const SECTIONS: [View, string][] = [
     ['movies', 'Movies'],
     ['series', 'Series'],
 ];
-const TOOLS: [View, string, string][] = [
-    ['search', 'Search', 'search'],
-    ['favorites', 'Favorites', 'star'],
-];
+// Settings and favourites open from the profile page (the avatar).
+const TOOLS: [View, string, string][] = [['search', 'Search', 'search']];
 
 /**
- * Home keeps the bar calm: wordmark, a search entry, settings and the
- * profile button (sources). The tiles below are the navigation.
+ * Home keeps the bar calm: wordmark, a search entry and the profile
+ * button (sources, settings, favourites). The tiles below are the navigation.
  */
 function HomeBar({ tv }: { tv: TvModel }) {
     return (
@@ -34,15 +32,6 @@ function HomeBar({ tv }: { tv: TvModel }) {
                 <span>{t('Search')}</span>
             </button>
             <div class="top-tools">
-                <button
-                    class="round"
-                    data-focus="nav:settings"
-                    aria-label={t('Settings')}
-                    title={t('Settings')}
-                    onClick={() => tv.navigate('settings')}
-                >
-                    <TvIcon name="gear" />
-                </button>
                 <button
                     class="round avatar"
                     data-focus="nav:sources"
@@ -83,6 +72,7 @@ export function TopBar({ tv }: { tv: TvModel }) {
                 ))}
             </nav>
             <div class="top-tools">
+                <Clock />
                 {TOOLS.map(([view, label, icon]) => (
                     <button
                         class="round"
@@ -95,23 +85,12 @@ export function TopBar({ tv }: { tv: TvModel }) {
                         <TvIcon name={icon} />
                     </button>
                 ))}
-                <Clock />
-                <button
-                    class="round"
-                    data-focus="nav:settings"
-                    aria-label={t('Settings')}
-                    title={t('Settings')}
-                    aria-current={current === 'settings' ? 'page' : undefined}
-                    onClick={() => tv.navigate('settings')}
-                >
-                    <TvIcon name="gear" />
-                </button>
                 <button
                     class="round avatar"
                     data-focus="nav:sources"
                     aria-label={t('Sources & profile')}
                     title={t('Sources & profile')}
-                    aria-current={current === 'sources' ? 'page' : undefined}
+                    aria-current={current === 'sources' || current === 'settings' ? 'page' : undefined}
                     onClick={() => tv.navigate('sources')}
                 >
                     <TvIcon name="user" />

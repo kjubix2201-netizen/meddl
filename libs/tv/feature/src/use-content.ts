@@ -82,7 +82,7 @@ export function useContent(
             (route.view === 'detail' && route.item?.sourceId !== sourceId)
         ) {
             setBusy(false);
-            if (route.view === 'favorites') finishFocus();
+            if (['favorites', 'sources', 'settings'].includes(route.view)) finishFocus();
             return;
         }
         setBusy(true);

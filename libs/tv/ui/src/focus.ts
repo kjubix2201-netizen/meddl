@@ -19,6 +19,8 @@ export function restoreFocus(
         const target =
             elements.find((e) => e.dataset.focus === key) ??
             elements.find((e) => e.dataset.focus === fallback) ??
+            // Otherwise the page's first control rather than the top bar.
+            elements.find((e) => !!e.closest('main')) ??
             elements[0];
         target?.focus();
         if (scroll !== undefined) {
