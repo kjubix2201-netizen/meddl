@@ -1,7 +1,78 @@
+import { useEffect } from 'preact/hooks';
 import { Empty, TvIcon, VirtualCollection } from '@meddl/tv/ui';
 import { TvModel } from './use-tv';
 import { TvMetadata } from '@meddl/tv/data-access';
-import { mediaTitle, t } from '@meddl/tv/util';
+import { mediaTitle, t, tvLocale, type Progress } from '@meddl/tv/util';
+import { clock } from './desktop-player-bar';
+
+/** The episode of this series watched last (history first, then all saved positions). */
+function lastEpisode(data: TvModel['data'], seriesId: string): Progress | undefined {
+    const ofSeries = (p: Progress) => p.item.kind === 'episode' && p.item.parentId === seriesId;
+    return (
+        data.history.find(ofSeries) ??
+        Object.values(data.positions)
+            .filter(ofSeries)
+            .sort((a, b) => b.updated - a.updated)[0]
+    );
+}
+
+/** Watched to (nearly) the end. */
+function finished(progress: Progress): boolean {
+    return progress.duration > 0 && progress.seconds >= progress.duration * 0.95;
+}
+
+/** "today", "yesterday" or "30 Oct". */
+function whenWatched(at: number): string {
+    const day = new Date(at);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    if (day.toDateString() === today.toDateString()) return t('today');
+    if (day.toDateString() === yesterday.toDateString()) return t('yesterday');
+    return day.toLocaleDateString(tvLocale(), { day: 'numeric', month: 'short' });
+}
+
+/** Where the viewer was: "at 23:42 of 1:52:10" with a bar, or "watched". */
+function LastWatched({
+    progress,
+    label,
+    onPlay,
+}: {
+    progress: Progress;
+    label: string;
+    onPlay?: () => void;
+}) {
+    const done = finished(progress);
+    const share = progress.duration > 0 ? Math.min(100, (progress.seconds / progress.duration) * 100) : 0;
+    const where = done
+        ? t('watched to the end')
+        : progress.duration > 0
+          ? t('at {time} of {duration}', { time: clock(progress.seconds), duration: clock(progress.duration) })
+          : t('at {time}', { time: clock(progress.seconds) });
+    const content = (
+        <>
+            <span class="last-watched-copy">
+                <small>
+                    {t('Last watched')} · {whenWatched(progress.updated)}
+                </small>
+                <strong>{label}</strong>
+                <span class="last-watched-where">{where}</span>
+            </span>
+            {share > 0 ? (
+                <span class="last-watched-bar" aria-hidden="true">
+                    <span style={{ width: `${done ? 100 : share}%` }} />
+                </span>
+            ) : null}
+        </>
+    );
+    return onPlay ? (
+        <button class="last-watched" data-focus="detail-last-watched" onClick={onPlay}>
+            {content}
+        </button>
+    ) : (
+        <div class="last-watched">{content}</div>
+    );
+}
 import { MetadataCredits } from './metadata-credits';
 import { useEpisodeMetadata } from './use-episode-metadata';
 
@@ -30,11 +101,24 @@ export function Detail({
         currentSeason,
         metadataClient
     );
+    // A series opens at the season of the episode watched last.
+    const lastSeason =
+        item?.kind === 'series'
+            ? lastEpisode(tv.data, item.id)?.item.season
+            : undefined;
+    useEffect(() => {
+        if (!season && lastSeason && seasons.includes(lastSeason) && lastSeason !== currentSeason) selectSeason(lastSeason);
+    }, [item?.id, lastSeason, seasons.length]);
     if (!item || item.sourceId !== tv.data.activeId) return null;
     const episodes = metadata.items.filter(
         (e) => (e.season ?? 1) === currentSeason
     );
     const saved = tv.data.favorites.some((m) => m.id === item.id);
+    // Films: where the viewer stopped. Series: the episode watched last.
+    const last =
+        item.kind === 'series'
+            ? lastEpisode(tv.data, item.id)
+            : tv.data.positions[item.id];
     return (
         <>
             <section class="detail-hero">
@@ -77,8 +161,8 @@ export function Detail({
                                 data-focus="detail-play"
                                 onClick={() => tv.play(item)}
                             >
-                                {tv.data.positions[item.id]?.seconds
-                                    ? t('Resume')
+                                {tv.data.positions[item.id]?.seconds && !finished(tv.data.positions[item.id])
+                                    ? t('Resume at {time}', { time: clock(tv.data.positions[item.id].seconds) })
                                     : t('Watch now')}{' '}
                                 ▶
                             </button>
@@ -95,6 +179,17 @@ export function Detail({
                             {saved ? t('♥ Saved') : t('♡ Add to favorites')}
                         </button>
                     </div>
+                    {last && last.seconds > 0 ? (
+                        item.kind === 'series' ? (
+                            <LastWatched
+                                progress={last}
+                                label={`S${last.item.season ?? 1} · E${last.item.episode ?? 1} · ${last.item.title}`}
+                                onPlay={() => tv.play(last.item)}
+                            />
+                        ) : (
+                            <LastWatched progress={last} label={mediaTitle(item)} />
+                        )
+                    ) : null}
                 </div>
             </section>
             <MetadataCredits item={item} open={tv.openPerson} />
@@ -170,10 +265,21 @@ export function Detail({
                                     ) : null}
                                     <small>
                                         {tv.data.positions[e.id]?.seconds
-                                            ? t('Resume episode')
+                                            ? finished(tv.data.positions[e.id])
+                                                ? t('✓ Watched')
+                                                : t('Resume at {time}', { time: clock(tv.data.positions[e.id].seconds) })
                                             : t('Watch episode')}{' '}
-                                        →
+                                        {tv.data.positions[e.id]?.seconds && finished(tv.data.positions[e.id]) ? '' : '→'}
                                     </small>
+                                    {tv.data.positions[e.id]?.seconds && tv.data.positions[e.id].duration > 0 ? (
+                                        <span class="episode-progress" aria-hidden="true">
+                                            <span
+                                                style={{
+                                                    width: `${Math.min(100, (tv.data.positions[e.id].seconds / tv.data.positions[e.id].duration) * 100)}%`,
+                                                }}
+                                            />
+                                        </span>
+                                    ) : null}
                                 </span>
                             </button>
                         )}
