@@ -499,8 +499,9 @@ html.player-overlay-page #app {
     z-index: 3;
     min-width: 260px;
     max-width: 420px;
-    max-height: 50vh;
+    max-height: 60vh;
     overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 10px;
     border-radius: 14px;
     background: rgba(20, 18, 28, 0.96);
@@ -509,6 +510,7 @@ html.player-overlay-page #app {
     flex-direction: column;
 }
 .dp-menu-title {
+    flex: none;
     padding: 6px 12px 10px;
     font-size: 13px;
     font-weight: 600;
@@ -517,6 +519,8 @@ html.player-overlay-page #app {
     color: rgba(255, 255, 255, 0.55);
 }
 .desktop-player-bar .dp-menu button {
+    /* Many tracks: the list scrolls instead of squeezing the rows together. */
+    flex: none;
     width: 100%;
     min-height: 0;
     height: 44px;
@@ -550,4 +554,11 @@ html.player-overlay-page #app {
 .dp-menu-check svg {
     width: 18px;
     height: 18px;
+}
+.dp-menu::-webkit-scrollbar {
+    width: 6px;
+}
+.dp-menu::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.25);
 }
