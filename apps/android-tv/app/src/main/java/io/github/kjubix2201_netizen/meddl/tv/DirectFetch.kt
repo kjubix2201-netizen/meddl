@@ -1,6 +1,9 @@
 package io.github.kjubix2201_netizen.meddl.tv
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.LruCache
 import android.webkit.WebResourceResponse
 import org.json.JSONObject
 import java.io.ByteArrayInputStream
@@ -33,14 +36,64 @@ object DirectFetch {
         val timeout = (request.getQueryParameter("t")?.toIntOrNull() ?: 30_000).coerceIn(1_000, 300_000)
         // c=1: an image (channel logo) the WebView may keep for a day.
         val cache = if (request.getQueryParameter("c") == "1") "max-age=86400" else "no-store"
+        // w=<px>: a poster for the catalog grid, made small here (native
+        // decoders, background thread) so the TV's WebView has far less to
+        // decode and draw while the grid scrolls.
+        val width = request.getQueryParameter("w")?.toIntOrNull()?.coerceIn(64, 1280)
         return try {
-            fetch(URL(target), headers, timeout, cache)
+            if (width != null) thumbnail(target, width, headers, timeout)
+            else fetch(URL(target), headers, timeout, cache)
         } catch (error: IOException) {
             failure(502, error.javaClass.simpleName)
         } catch (error: RuntimeException) {
             failure(502, error.javaClass.simpleName)
         }
     }
+
+    /** Small posters already made, newest kept (about 24 MB). */
+    private val thumbs = object : LruCache<String, ByteArray>(24 * 1024 * 1024) {
+        override fun sizeOf(key: String, value: ByteArray) = value.size
+    }
+
+    private fun thumbnail(target: String, width: Int, headers: JSONObject, timeout: Int): WebResourceResponse {
+        val key = "$width|$target"
+        thumbs.get(key)?.let { return image(it) }
+        val original = fetch(URL(target), headers, timeout, "no-store")
+        if (original.statusCode !in 200..299) return original
+        val bytes = original.data.use { it.readBytes() }
+        val small = shrink(bytes, width) ?: return WebResourceResponse(
+            original.mimeType, null, 200, "OK", mapOf("Cache-Control" to "max-age=86400"), ByteArrayInputStream(bytes)
+        )
+        thumbs.put(key, small)
+        return image(small)
+    }
+
+    private fun shrink(bytes: ByteArray, width: Int): ByteArray? = runCatching {
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeByteArray(bytes, 0, bytes.size, bounds)
+        if (bounds.outWidth <= 0 || bounds.outHeight <= 0) return null
+        var sample = 1
+        while (bounds.outWidth / (sample * 2) >= width) sample *= 2
+        val decoded = BitmapFactory.decodeByteArray(
+            bytes, 0, bytes.size,
+            BitmapFactory.Options().apply {
+                inSampleSize = sample
+                inPreferredConfig = Bitmap.Config.RGB_565
+            }
+        ) ?: return null
+        val scaled = if (decoded.width > width) {
+            Bitmap.createScaledBitmap(decoded, width, decoded.height * width / decoded.width, true)
+                .also { if (it !== decoded) decoded.recycle() }
+        } else decoded
+        val out = java.io.ByteArrayOutputStream()
+        scaled.compress(Bitmap.CompressFormat.JPEG, 82, out)
+        scaled.recycle()
+        out.toByteArray()
+    }.getOrNull()
+
+    private fun image(bytes: ByteArray) = WebResourceResponse(
+        "image/jpeg", null, 200, "OK", mapOf("Cache-Control" to "max-age=86400"), ByteArrayInputStream(bytes)
+    )
 
     private fun fetch(start: URL, headers: JSONObject, timeout: Int, cache: String): WebResourceResponse {
         var url = start

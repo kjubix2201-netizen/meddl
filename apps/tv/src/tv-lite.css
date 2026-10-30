@@ -50,3 +50,11 @@
         height: 44vw;
     }
 }
+
+/* The focused poster: only the white ring on a TV, no large soft shadow
+   (redrawn on every step, it slowed a held arrow down). */
+.tv-lite .poster-card:focus .poster-art,
+.tv-lite .resume-card:focus .resume-art,
+.tv-lite .episode:focus .episode-still {
+    box-shadow: 0 0 0 3px #ffffff;
+}

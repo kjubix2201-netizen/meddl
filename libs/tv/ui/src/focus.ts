@@ -116,7 +116,7 @@ export function installRemote(
         if (event.repeat && Date.now() - lastMove < 75) return;
         // Held or pressed in quick succession: the page follows at once
         // instead of starting a new glide on every step (that stutters).
-        if (event.repeat || Date.now() - lastMove < 260) rapidUntil = Date.now() + 260;
+        if (event.repeat || Date.now() - lastMove < 260) markRapid();
         lastMove = Date.now();
         const root =
             document.querySelector('[data-tv-modal]') ??
@@ -370,6 +370,29 @@ function scroller(element: HTMLElement, axis: 'x' | 'y'): HTMLElement | null {
  */
 /** Until then focus moves come fast (held key): scroll without gliding. */
 let rapidUntil = 0;
+let settleTimer: ReturnType<typeof setTimeout> | undefined;
+function markRapid() {
+    rapidUntil = Date.now() + 260;
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(() => window.dispatchEvent(new Event('meddl:settled')), 300);
+}
+/** True while the viewer holds an arrow (or presses it in quick succession). */
+export function movingFast(): boolean {
+    return Date.now() < rapidUntil;
+}
+/** Calls back once the fast movement is over (at once if there is none). */
+export function whenSettled(callback: () => void): () => void {
+    if (!movingFast()) {
+        callback();
+        return () => undefined;
+    }
+    const done = () => {
+        window.removeEventListener('meddl:settled', done);
+        callback();
+    };
+    window.addEventListener('meddl:settled', done);
+    return () => window.removeEventListener('meddl:settled', done);
+}
 
 export function revealFocus(element: HTMLElement) {
     const vertical = scroller(element, 'y');
