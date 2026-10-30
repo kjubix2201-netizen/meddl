@@ -223,6 +223,8 @@ export function DesktopPlayer({
         else if (command.type === 'mute') toggleMute();
         else if (command.type === 'audio') cycleAudio();
         else if (command.type === 'subtitles') cycleSubtitles();
+        else if (command.type === 'audioTrack') mpv?.setAudioTrack(command.id);
+        else if (command.type === 'subtitleTrack') mpv?.setSubtitleTrack(command.id);
         else if (command.type === 'next') onNext?.(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
         else if (command.type === 'cancelNext') onCancelNext?.();
     };

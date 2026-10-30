@@ -40,7 +40,8 @@ export interface PlayerBarState {
 export type PlayerBarCommand =
     | { type: 'back' | 'toggle' | 'mute' | 'audio' | 'subtitles' | 'next' | 'cancelNext' | 'activity' }
     | { type: 'seekBy' | 'seekTo'; seconds: number }
-    | { type: 'volume'; value: number };
+    | { type: 'volume'; value: number }
+    | { type: 'audioTrack' | 'subtitleTrack'; id: number };
 
 /**
  * The meddl player's controls, laid out like a TV player: title, timeline,
@@ -58,6 +59,9 @@ export function PlayerBar({
 }) {
     // Where the viewer drags the timeline to (applied on release).
     const [scrub, setScrub] = useState<number | null>(null);
+    // The open track menu (Audio or Subtitles), a list to pick from.
+    const [menu, setMenu] = useState<'audio' | 'subtitles' | null>(null);
+    const openMenu = state.shown ? menu : null;
     const duration = state.duration;
     const shownAt = scrub ?? state.position;
     const volume = state.volume;
@@ -146,14 +150,62 @@ export function PlayerBar({
                         </button>
                     ) : null}
                     {audioTracks.length > 1 ? (
-                        <button class="dp-pill" onClick={() => send({ type: 'audio' })} title={t('Change audio track (A)')}>
+                        <button
+                            class="dp-pill"
+                            aria-expanded={openMenu === 'audio'}
+                            onClick={() => {
+                                send({ type: 'activity' });
+                                setMenu(openMenu === 'audio' ? null : 'audio');
+                            }}
+                            title={t('Change audio track (A)')}
+                        >
                             {t('Audio')}: {audio ? trackName(audio) : '–'}
                         </button>
                     ) : null}
                     {subtitleTracks.length ? (
-                        <button class="dp-pill" onClick={() => send({ type: 'subtitles' })} title={t('Change subtitles (S)')}>
+                        <button
+                            class="dp-pill"
+                            aria-expanded={openMenu === 'subtitles'}
+                            onClick={() => {
+                                send({ type: 'activity' });
+                                setMenu(openMenu === 'subtitles' ? null : 'subtitles');
+                            }}
+                            title={t('Change subtitles (S)')}
+                        >
                             {t('Subtitles')}: {subtitle ? trackName(subtitle) : t('Off')}
                         </button>
+                    ) : null}
+                    {openMenu ? (
+                        <div class="dp-menu" role="menu" aria-label={openMenu === 'audio' ? t('Audio') : t('Subtitles')}>
+                            <strong class="dp-menu-title">{openMenu === 'audio' ? t('Audio') : t('Subtitles')}</strong>
+                            {(openMenu === 'subtitles'
+                                ? [{ id: -1, label: t('Off') }, ...subtitleTracks.map((track) => ({ id: track.id, label: trackName(track) }))]
+                                : audioTracks.map((track) => ({ id: track.id, label: trackName(track) }))
+                            ).map((option) => {
+                                const chosen =
+                                    openMenu === 'audio'
+                                        ? option.id === state.audioId
+                                        : option.id === -1
+                                          ? state.subtitleId === null || state.subtitleId < 0
+                                          : option.id === state.subtitleId;
+                                return (
+                                    <button
+                                        role="menuitemradio"
+                                        aria-checked={chosen}
+                                        class={chosen ? 'is-chosen' : ''}
+                                        onClick={() => {
+                                            send({ type: openMenu === 'audio' ? 'audioTrack' : 'subtitleTrack', id: option.id });
+                                            setMenu(null);
+                                        }}
+                                    >
+                                        <span class="dp-menu-check" aria-hidden="true">
+                                            {chosen ? <TvIcon name="check" /> : null}
+                                        </span>
+                                        {option.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     ) : null}
                     <button
                         class="dp-icon"

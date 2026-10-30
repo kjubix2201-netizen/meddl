@@ -37,7 +37,7 @@ export function PlayerOverlayView() {
                 // The controls cover the whole picture: a click anywhere
                 // but on a button or slider pauses or plays.
                 const target = event.target as HTMLElement;
-                if (!target.closest('button, input, .next-banner')) send({ type: 'toggle' });
+                if (!target.closest('button, input, .next-banner, .dp-menu')) send({ type: 'toggle' });
             }}
         >
             {state ? <PlayerBar state={state} send={send} /> : null}

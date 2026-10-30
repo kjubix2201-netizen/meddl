@@ -188,12 +188,13 @@ export function useSoundFallback(tv: TvModel) {
     }
     silentRef.current = silent;
     /**
-     * The Android app's own player takes (or took) this title: the page
+     * The app's own player (Android TV, or MPV in the Windows app) takes
+     * (or took) this title: the page
      * shows no player of its own meanwhile, only a quiet handover screen.
      */
     const handingOver =
         !!item &&
-        !!androidBridge()?.playNative &&
+        (!!androidBridge()?.playNative || desktopMpvAvailable()) &&
         (phase === 'native' || (phase === 'idle' && takesOver(item)));
     return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap, handingOver };
 }
