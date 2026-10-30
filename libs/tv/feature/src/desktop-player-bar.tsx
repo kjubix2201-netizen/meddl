@@ -121,7 +121,7 @@ export function PlayerBar({
                         </button>
                     )}
                     <button
-                        class="dp-play"
+                        class={`dp-play${state.status === 'loading' && !state.failure ? ' is-loading' : ''}`}
                         aria-label={state.status === 'paused' ? t('Play') : t('Pause')}
                         title={(state.status === 'paused' ? t('Play') : t('Pause')) + ' (Space)'}
                         onClick={() => send({ type: 'toggle' })}

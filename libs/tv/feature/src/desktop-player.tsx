@@ -243,7 +243,8 @@ export function DesktopPlayer({
     overlay.current?.update(barState);
     return (
         <div class={`desktop-player ${shown ? '' : 'dormant'}`} data-tv-modal onMouseMove={reveal}>
-            {status === 'loading' && !failure ? (
+            {/* With the overlay window the spinner rings Play there instead. */}
+            {status === 'loading' && !failure && !overlay.current ? (
                 <span class="spinner large desktop-player-spinner" aria-hidden="true" />
             ) : null}
             {overlay.current ? null : <PlayerBar state={barState} send={handle} barRef={bar} />}

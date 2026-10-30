@@ -464,3 +464,26 @@ html.player-overlay-page #app {
     right: 0;
     top: calc(50% + 70px);
 }
+/* Loading: a ring turns around Play (no second spinner on top of it). */
+.desktop-player-bar button.dp-play.is-loading {
+    position: relative;
+    overflow: visible;
+}
+.desktop-player-bar button.dp-play.is-loading::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.18);
+    border-top-color: #ffffff;
+    animation: meddl-spin 0.9s linear infinite;
+    pointer-events: none;
+}
+/* Back and Play are lifted out of the row: the tracks and the volume keep
+   their place at the bottom right. */
+.player-overlay .dp-controls > .dp-right {
+    grid-column: 3;
+}
