@@ -23,6 +23,15 @@ export function PlayerOverlayView() {
     const view = overlayView();
     useEffect(() => view?.onState((next) => setState(next as PlayerBarState)), []);
     const send = (command: PlayerBarCommand) => view?.command(command);
+    // The pointer rests on a button or the timeline: the controls stay
+    // (they used to fade away under the pointer, and the next click missed).
+    const [hovering, setHovering] = useState(false);
+    useEffect(() => {
+        if (!hovering) return;
+        send({ type: 'activity' });
+        const timer = setInterval(() => send({ type: 'activity' }), 1500);
+        return () => clearInterval(timer);
+    }, [hovering]);
     const moved = () => {
         const now = Date.now();
         if (now - lastMove.current < 250) return;
@@ -33,6 +42,10 @@ export function PlayerOverlayView() {
         <div
             class={`player-overlay ${state?.shown ? '' : 'dormant'}`}
             onMouseMove={moved}
+            onMouseOver={(event) =>
+                setHovering(!!(event.target as HTMLElement).closest('button, input, .dp-menu, .dp-timeline'))
+            }
+            onMouseLeave={() => setHovering(false)}
             onClick={(event) => {
                 // Pause and play only with the button in the middle. A click
                 // anywhere else on the picture closes the controls (or
