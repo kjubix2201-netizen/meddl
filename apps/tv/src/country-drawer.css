@@ -149,10 +149,14 @@
         -webkit-backdrop-filter: none;
         backdrop-filter: none;
     }
-    .country-drawer-tab:focus {
+    .country-drawer-tab:focus,
+    .country-drawer-tab:hover,
+    .country-drawer-tab:active {
         outline: none;
+        border: none;
         background: transparent;
         box-shadow: none;
+        transform: none;
     }
     /* A quiet arrow; it lights up when ◀ reaches it. */
     .country-drawer-arrow {
