@@ -81,7 +81,10 @@ export function CountryDrawer({
                     aria-label={t('Countries')}
                     onFocus={(event) => {
                         returnTo.current = (event.relatedTarget as HTMLElement | null)?.dataset?.focus ?? '';
-                        setOpen(true);
+                        // Remote or keyboard (◀) opens at once; with the mouse
+                        // (focus follows the pointer in the Windows app) only
+                        // a click does.
+                        if (!(event.currentTarget as HTMLElement).matches(':hover')) setOpen(true);
                     }}
                     onClick={() => setOpen(true)}
                 >
