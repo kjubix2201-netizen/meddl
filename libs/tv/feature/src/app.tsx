@@ -146,7 +146,9 @@ export function TvApp() {
                           ? 'settings-page'
                           : r.view === 'live'
                             ? 'live-page'
-                            : ''
+                            : r.view === 'sources'
+                              ? 'sources-page'
+                              : ''
                 }
             >
                 {cinematic ? <Backdrop item={metadata.item} /> : null}

@@ -148,3 +148,12 @@
 .home-network-share ol {
     padding-left: 2.4vh;
 }
+
+/* Profile (sources) and Settings: drawn smaller, so more fits on screen
+   and the pages look less oversized next to the rest of the app. */
+@media (min-width: 901px) {
+    main.settings-page > :not(.app-toasts),
+    main.sources-page > :not(.app-toasts) {
+        zoom: 0.8;
+    }
+}
