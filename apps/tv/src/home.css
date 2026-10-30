@@ -399,3 +399,51 @@ main.home-page::-webkit-scrollbar {
     transform: scale(1.35);
     transform-origin: center 30%;
 }
+
+/* Arrow below the tiles: there is more on the home page further down. */
+.home-launcher {
+    position: relative;
+}
+.home-more {
+    position: absolute;
+    left: 50%;
+    bottom: 4vh;
+    width: 6vh;
+    height: 6vh;
+    margin-left: -3vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    opacity: 0.6;
+    cursor: pointer;
+    animation: home-more-bob 2.4s ease-in-out infinite;
+    transition: opacity 0.25s ease;
+}
+.home-more svg {
+    width: 4.4vh;
+    height: 4.4vh;
+}
+.home-more:hover {
+    opacity: 1;
+}
+/* Nothing below the tiles, or already scrolled down: no arrow. */
+.home-launcher:last-child .home-more,
+.page-scrolled .home-more {
+    opacity: 0;
+    pointer-events: none;
+}
+@keyframes home-more-bob {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(1vh);
+    }
+}
+@media (max-width: 900px) {
+    .home-more {
+        display: none;
+    }
+}

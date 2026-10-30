@@ -73,6 +73,19 @@ export function HomeLauncher({ tv }: { tv: TvModel }) {
                     <Clock large />
                 </div>
             </div>
+            {/* More below (rows of the home page): a quiet arrow, gone once scrolled. */}
+            <span
+                class="home-more"
+                aria-hidden="true"
+                onClick={(event) => {
+                    const next = (event.currentTarget.closest('.home-launcher') as HTMLElement | null)
+                        ?.nextElementSibling as HTMLElement | null;
+                    next?.querySelector<HTMLElement>('button')?.focus({ preventScroll: true });
+                    next?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+            >
+                <TvIcon name="down" />
+            </span>
         </section>
     );
 }

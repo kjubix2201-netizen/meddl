@@ -17,6 +17,7 @@ const paths: Record<string, string> = {
     previous: 'M6 5v14 M19 5L9 12l10 7z',
     next: 'M18 5v14 M5 5l10 7-10 7z',
     back: 'M15 5l-7 7 7 7',
+    down: 'M5 9l7 7 7-7',
     rewind: 'M11 6l-7 6 7 6z M20 6l-7 6 7 6z',
     forward: 'M13 6l7 6-7 6z M4 6l7 6-7 6z',
     guide: 'M3 4h18v16H3z M3 9h18 M9 9v11',
