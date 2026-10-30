@@ -58,3 +58,12 @@
 .tv-lite .episode:focus .episode-still {
     box-shadow: 0 0 0 3px #ffffff;
 }
+
+/* Nothing may make the page wider than the TV's 1280 px layout: the app
+   then zooms out to show it all, and a strip of bare background appears
+   at the right edge. */
+html.tv-lite,
+html.tv-lite body {
+    overflow-x: hidden;
+    max-width: 100%;
+}

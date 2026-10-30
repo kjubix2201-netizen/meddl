@@ -474,6 +474,8 @@ export const DE: Readonly<Record<string, string>> = {
     '{count} category': '{count} Kategorie',
     '{count} categories': '{count} Kategorien',
     'Loading your channels…': 'Sender werden geladen …',
+    'Opening your saved lists…': 'Gespeicherte Listen werden geöffnet …',
+    'Saved on this device – nothing is downloaded.': 'Auf diesem Gerät gespeichert – es wird nichts heruntergeladen.',
     'This happens once per start. Everything opens instantly afterwards.': 'Das passiert nur einmal pro Start. Danach öffnet sich alles sofort.',
     'Loads when opened': 'Wird beim Öffnen geladen',
     'Waiting': 'Wartet',

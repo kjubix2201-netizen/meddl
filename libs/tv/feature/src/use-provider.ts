@@ -5,6 +5,7 @@ import {
     createProvider,
     LocalTransport,
     localServerAvailable,
+    onListOrigin,
     ProviderTransport,
 } from '@meddl/tv/data-access';
 import type { Kind, ProviderClient, UserData } from '@meddl/tv/util';
@@ -18,6 +19,8 @@ export type WarmStep = {
 export type WarmState = {
     phase: 'idle' | 'connecting' | 'loading';
     steps: WarmStep[];
+    /** A list is being downloaded (not just opened from this device). */
+    downloading?: boolean;
 };
 const IDLE: WarmState = { phase: 'idle', steps: [] };
 
@@ -107,6 +110,12 @@ export function useProvider(
                         phase: 'loading',
                         steps: client.warmKinds().map((kind) => ({ kind, state: 'waiting' })),
                     });
+                    // Lists kept on this device open without the blocking
+                    // window unless that takes long; a download shows it.
+                    const stopOrigin = onListOrigin((origin) => {
+                        if (origin === 'provider' && !abort.signal.aborted)
+                            setWarm((current) => (current.phase === 'idle' || current.downloading ? current : { ...current, downloading: true }));
+                    });
                     void client
                         .warm(data.catalogSort, (kind, state, total) => {
                             if (abort.signal.aborted) return;
@@ -118,6 +127,7 @@ export function useProvider(
                             }));
                         })
                         .finally(() => {
+                            stopOrigin();
                             if (!abort.signal.aborted) setWarm(IDLE);
                         });
                 }

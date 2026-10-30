@@ -23,6 +23,14 @@ let opening: Promise<IDBDatabase | null> | null = null;
 
 function database(): Promise<IDBDatabase | null> {
     if (typeof indexedDB === 'undefined') return Promise.resolve(null);
+    // Ask to keep the lists when the device runs low on space (TVs often
+    // do); without it the browser may clear them and every start downloads.
+    if (!opening)
+        try {
+            void navigator.storage?.persist?.().catch(() => undefined);
+        } catch {
+            // Not offered here.
+        }
     opening ??= new Promise((resolve) => {
         try {
             const request = indexedDB.open(DATABASE, 1);
@@ -104,6 +112,24 @@ export async function clearCatalogCache(): Promise<void> {
     });
 }
 
+/** Where a list came from: kept on this device, or downloaded now. */
+export type ListOrigin = 'device' | 'provider';
+const originListeners = new Set<(origin: ListOrigin) => void>();
+/** Hears whether lists come from this device or the provider (start-up window). */
+export function onListOrigin(listener: (origin: ListOrigin) => void): () => void {
+    originListeners.add(listener);
+    return () => originListeners.delete(listener);
+}
+function reportOrigin(origin: ListOrigin) {
+    originListeners.forEach((listener) => {
+        try {
+            listener(origin);
+        } catch {
+            // A listener's failure never breaks loading.
+        }
+    });
+}
+
 /**
  * The list under `key`: from this device while it is fresh enough,
  * otherwise from `load`, falling back to the last good list when the
@@ -112,7 +138,11 @@ export async function clearCatalogCache(): Promise<void> {
 export async function cachedList<T>(key: string, load: () => Promise<T[]>, signal: AbortSignal): Promise<T[]> {
     const cached = await readCachedList(key);
     const hours = catalogRefreshHours();
-    if (cached && hours > 0 && Date.now() - cached.at < hours * 3_600_000) return cached.rows as T[];
+    if (cached && hours > 0 && Date.now() - cached.at < hours * 3_600_000) {
+        reportOrigin('device');
+        return cached.rows as T[];
+    }
+    reportOrigin('provider');
     try {
         const fresh = await load();
         if (fresh.length) {

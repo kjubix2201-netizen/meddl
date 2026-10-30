@@ -48,8 +48,18 @@ function StepRow({ step }: { step: WarmStep }) {
  * half-loaded; after 20 s a button lets the viewer continue anyway.
  */
 export function LoadingOverlay({ tv }: { tv: TvModel }) {
-    const { phase, steps } = tv.warm;
-    const open = tv.storageReady && phase !== 'idle';
+    const { phase, steps, downloading } = tv.warm;
+    const active = tv.storageReady && phase !== 'idle';
+    // Lists kept on this device open within a moment: the window shows up
+    // only for a download or when opening them takes longer.
+    const [late, setLate] = useState(false);
+    useEffect(() => {
+        setLate(false);
+        if (!active) return;
+        const timer = setTimeout(() => setLate(true), 1500);
+        return () => clearTimeout(timer);
+    }, [active]);
+    const open = active && (late || !!downloading);
     const panel = useRef<HTMLDivElement>(null);
     const previous = useRef('');
     const [seconds, setSeconds] = useState(0);
@@ -77,12 +87,18 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
             <div class="loading-panel" ref={panel} tabIndex={-1}>
                 <span class="spinner large" aria-hidden="true" />
                 <h2 id="loading-title">
-                    {phase === 'connecting' ? t('Connecting to your source…') : t('Loading your channels…')}
+                    {phase === 'connecting'
+                        ? t('Connecting to your source…')
+                        : downloading
+                          ? t('Loading your channels…')
+                          : t('Opening your saved lists…')}
                 </h2>
                 <p class="muted">
                     {phase === 'connecting' && seconds >= 15
                         ? t('Your provider is answering slowly ({seconds} s). Close meddl in other browsers and apps, so only one connection is open.', { seconds })
-                        : catalogRefreshHours() > 0
+                        : phase === 'loading' && !downloading
+                          ? t('Saved on this device – nothing is downloaded.')
+                          : catalogRefreshHours() > 0
                           ? t('This happens once every {hours} hours. Everything opens instantly afterwards.', { hours: catalogRefreshHours() })
                           : t('This happens once per start. Everything opens instantly afterwards.')}
                 </p>
