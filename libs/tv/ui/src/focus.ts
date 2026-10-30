@@ -226,7 +226,18 @@ function remoteKeyboard(): () => void {
         shell?.showKeyboard?.();
     };
     let editing: HTMLInputElement | undefined;
+    // While typing, the results follow after a short pause: searching tens
+    // of thousands of titles on every letter made the TV keyboard lag.
+    let pending: ReturnType<typeof setTimeout> | undefined;
     const entered = (text: string, done: boolean) => {
+        clearTimeout(pending);
+        if (!done) {
+            pending = setTimeout(() => apply(text, false), 350);
+            return;
+        }
+        apply(text, true);
+    };
+    const apply = (text: string, done: boolean) => {
         let field = editing;
         if (field && !field.isConnected) {
             // Re-rendered meanwhile: the same field by its label.
