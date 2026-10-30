@@ -114,6 +114,9 @@ export function installRemote(
             return;
         event.preventDefault();
         if (event.repeat && Date.now() - lastMove < 75) return;
+        // Held or pressed in quick succession: the page follows at once
+        // instead of starting a new glide on every step (that stutters).
+        if (event.repeat || Date.now() - lastMove < 260) rapidUntil = Date.now() + 260;
         lastMove = Date.now();
         const root =
             document.querySelector('[data-tv-modal]') ??
@@ -162,7 +165,11 @@ export function installRemote(
     };
 }
 
-type TvShell = { isTelevision?: () => boolean; showKeyboard?: () => void };
+type TvShell = {
+    isTelevision?: () => boolean;
+    showKeyboard?: () => void;
+    editText?: (value: string, hint: string) => void;
+};
 
 /** True in the Android TV / Fire TV app on a television. */
 export function isTelevision(): boolean {
@@ -207,10 +214,38 @@ function remoteKeyboard(): () => void {
         if (!locked.has(field) || (event.key !== 'Enter' && event.keyCode !== 13)) return;
         event.preventDefault();
         event.stopImmediatePropagation();
+        if (shell?.editText) {
+            // The app's own text field (MainActivity): the WebView's field
+            // loses the keyboard on many TVs. Text comes back as typed.
+            editing = field;
+            shell.editText(field.value, field.getAttribute('aria-label') || field.placeholder || '');
+            return;
+        }
         locked.delete(field);
         field.readOnly = false;
         shell?.showKeyboard?.();
     };
+    let editing: HTMLInputElement | undefined;
+    const entered = (text: string, done: boolean) => {
+        let field = editing;
+        if (field && !field.isConnected) {
+            // Re-rendered meanwhile: the same field by its label.
+            const label = field.getAttribute('aria-label');
+            const selector = `input[aria-label="${(label ?? '').replace(/"/g, '\\"')}"]`;
+            field = (label && document.querySelector<HTMLInputElement>(selector)) || undefined;
+            editing = field;
+        }
+        if (!field) return;
+        if (field.value !== text) {
+            field.value = text;
+            field.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (done) {
+            editing = undefined;
+            field.focus({ preventScroll: true });
+        }
+    };
+    (window as unknown as { meddlTextEntered?: typeof entered }).meddlTextEntered = entered;
     document.addEventListener('focusin', focusIn);
     document.addEventListener('focusout', focusOut);
     document.addEventListener('keydown', unlock, true);
@@ -218,6 +253,7 @@ function remoteKeyboard(): () => void {
         document.removeEventListener('focusin', focusIn);
         document.removeEventListener('focusout', focusOut);
         document.removeEventListener('keydown', unlock, true);
+        delete (window as unknown as { meddlTextEntered?: typeof entered }).meddlTextEntered;
     };
 }
 /**
@@ -332,6 +368,9 @@ function scroller(element: HTMLElement, axis: 'x' | 'y'): HTMLElement | null {
  * the same size instead of jumping at the edges; the page glides there.
  * Rows scroll sideways only as far as needed.
  */
+/** Until then focus moves come fast (held key): scroll without gliding. */
+let rapidUntil = 0;
+
 export function revealFocus(element: HTMLElement) {
     const vertical = scroller(element, 'y');
     const horizontal = scroller(element, 'x');
@@ -350,7 +389,7 @@ export function revealFocus(element: HTMLElement) {
         // Only the page glides. Lists inside it (channels, categories) jump
         // straight to the spot: a gliding list that re-renders its window
         // while moving wobbles up and down.
-        const glide = vertical.tagName === 'MAIN';
+        const glide = vertical.tagName === 'MAIN' && Date.now() > rapidUntil;
         if (Math.abs(goal - vertical.scrollTop) > 1) vertical.scrollTo({ top: goal, behavior: glide ? 'smooth' : 'auto' });
     }
     if (horizontal) {
@@ -362,7 +401,11 @@ export function revealFocus(element: HTMLElement) {
                 : box.right > view.right - margin
                   ? box.right - view.right + margin
                   : 0;
-        if (shift) horizontal.scrollTo({ left: horizontal.scrollLeft + shift, behavior: 'smooth' });
+        if (shift)
+            horizontal.scrollTo({
+                left: horizontal.scrollLeft + shift,
+                behavior: Date.now() > rapidUntil ? 'smooth' : 'auto',
+            });
     }
 }
 

@@ -26,6 +26,7 @@ export function Poster({
                     <img
                         src={item.poster}
                         loading="lazy"
+                        decoding="async"
                         alt=""
                         onError={(e) => {
                             e.currentTarget.style.display = 'none';

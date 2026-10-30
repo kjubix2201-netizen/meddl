@@ -2,6 +2,14 @@ package io.github.kjubix2201_netizen.meddl.tv
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
+import android.view.Gravity
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.app.UiModeManager
 import android.content.res.Configuration
 import android.view.inputmethod.InputMethodManager
@@ -212,6 +220,17 @@ class MainActivity : Activity() {
         @JavascriptInterface
         fun isTelevision(): Boolean = this@MainActivity.isTelevision()
 
+        /**
+         * Text entry on a TV: a native field with the system keyboard (the
+         * WebView's own field loses the keyboard on many TVs right after
+         * it opens). Every change goes to window.meddlTextEntered(text,
+         * done), so results update behind the field while typing.
+         */
+        @JavascriptInterface
+        fun editText(value: String, hint: String) {
+            runOnUiThread { showTextField(value, hint) }
+        }
+
         @JavascriptInterface
         fun showKeyboard() {
             runOnUiThread {
@@ -253,6 +272,75 @@ class MainActivity : Activity() {
                 }
             }
         }
+    }
+
+    private var textField: AlertDialog? = null
+
+    private fun showTextField(value: String, hint: String) {
+        textField?.dismiss()
+        val field = EditText(this).apply {
+            setText(value)
+            setSelection(text.length)
+            this.hint = hint
+            setSingleLine(true)
+            inputType = InputType.TYPE_CLASS_TEXT
+            imeOptions = EditorInfo.IME_ACTION_SEARCH or EditorInfo.IME_FLAG_NO_EXTRACT_UI
+        }
+        val pad = (24 * resources.displayMetrics.density).toInt()
+        val box = FrameLayout(this).apply {
+            setPadding(pad, pad / 2, pad, 0)
+            addView(field)
+        }
+        var sent = value
+        fun send(done: Boolean) {
+            val text = field.text.toString()
+            if (!done && text == sent) return
+            sent = text
+            web.evaluateJavascript(
+                "window.meddlTextEntered&&window.meddlTextEntered(${JSONObject.quote(text)},$done);",
+                null
+            )
+        }
+        val dialog = AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
+            .setTitle(hint)
+            .setView(box)
+            .setPositiveButton(android.R.string.ok) { _, _ -> send(true) }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> send(true) }
+            .create()
+        field.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+            override fun afterTextChanged(s: Editable?) = send(false)
+        })
+        field.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE ||
+                event?.keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
+                send(true)
+                dialog.dismiss()
+                true
+            } else {
+                false
+            }
+        }
+        dialog.window?.apply {
+            // At the top, so the results stay visible below while typing.
+            setGravity(Gravity.TOP)
+            setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        }
+        dialog.setOnShowListener {
+            field.requestFocus()
+            (getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager)
+                ?.showSoftInput(field, InputMethodManager.SHOW_IMPLICIT)
+        }
+        dialog.setOnDismissListener {
+            if (textField === dialog) textField = null
+            send(true)
+            hideSystemBars()
+            web.requestFocus()
+        }
+        textField = dialog
+        dialog.show()
     }
 
     private fun isTelevision(): Boolean =

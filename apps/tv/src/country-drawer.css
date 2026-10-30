@@ -345,3 +345,11 @@
         left: 35px;
     }
 }
+
+/* Live TV, Movies, Series: the page scrolls below the tools at the top
+   right, so they need no dark backing when it is scrolled. */
+@media (min-width: 901px) {
+    .page-scrolled .top-bar.live-stage-bar {
+        background: none;
+    }
+}
