@@ -69,6 +69,18 @@ const DE: Record<string, string> = {
         'Auf dem Fernseher ist schon ein Schlüssel gespeichert. Lass das Feld leer, um ihn zu behalten, oder füge einen neuen ein. Der gespeicherte Schlüssel wird nie an dieses Handy gesendet.',
     'Paste your own TMDB v3 API key or v4 read access token.':
         'Füge deinen eigenen TMDB-v3-API-Schlüssel oder v4-Lese-Token ein.',
+    'VPN profile · meddl': 'VPN-Profil · meddl',
+    'A VPN for your TV.': 'Ein VPN für deinen Fernseher.',
+    'Choose the WireGuard file from your VPN provider (for example Proton VPN), then confirm on your television.':
+        'Wähle die WireGuard-Datei deines VPN-Anbieters (z. B. Proton VPN) und bestätige dann am Fernseher.',
+    'WireGuard file (.conf)': 'WireGuard-Datei (.conf)',
+    'or paste its content': 'oder ihren Inhalt einfügen',
+    'Send profile to TV': 'Profil an den Fernseher senden',
+    'Only meddl on the TV uses this VPN; other apps stay as they are. The profile is saved on the TV after your confirmation. This link expires in five minutes.':
+        'Nur meddl auf dem Fernseher nutzt dieses VPN, andere Apps bleiben unverändert. Das Profil wird erst nach deiner Bestätigung auf dem Fernseher gespeichert. Der Link gilt fünf Minuten.',
+    'Choose your WireGuard file. Confirm on the TV to finish.': 'Wähle deine WireGuard-Datei und bestätige am Fernseher.',
+    'VPN profile saved on your TV. You can close this page.': 'Das VPN-Profil ist auf dem Fernseher gespeichert. Du kannst diese Seite schließen.',
+    'Sent. Confirm “Use profile” on your TV.': 'Gesendet. Bestätige am Fernseher mit „Profil übernehmen“.',
 };
 
 const german = typeof navigator !== 'undefined' && /^de\b/i.test(navigator.language || '');

@@ -157,3 +157,62 @@
         zoom: 0.8;
     }
 }
+
+/* Settings → Connection: the built-in VPN (Android TV, vpn-setting.tsx). */
+.vpn-setting {
+    margin-top: 28px;
+}
+.vpn-status {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 14px 0;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+}
+.vpn-status strong {
+    margin-right: 14px;
+    font-size: 18px;
+}
+.vpn-status small {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 15px;
+}
+.vpn-dot {
+    width: 12px;
+    height: 12px;
+    margin-right: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+}
+.vpn-status.is-up .vpn-dot {
+    background: #3ddc84;
+    box-shadow: 0 0 10px rgba(61, 220, 132, 0.7);
+}
+.vpn-status.is-connecting .vpn-dot {
+    background: #f5c542;
+}
+.vpn-error {
+    color: #ff8a8a;
+}
+.vpn-setting .actions button {
+    margin: 0 12px 12px 0;
+}
+.vpn-pairing {
+    display: flex;
+    align-items: center;
+    margin: 12px 0;
+}
+.vpn-pairing .pairing-qr {
+    width: 22vh;
+    height: 22vh;
+    margin-right: 3vh;
+    flex: none;
+}
+.vpn-incoming {
+    margin: 12px 0;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+}

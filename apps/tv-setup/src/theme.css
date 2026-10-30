@@ -65,6 +65,7 @@ label {
 }
 input,
 select,
+textarea,
 button {
     display: block;
     width: 100%;
@@ -79,6 +80,7 @@ button {
 }
 input:focus,
 select:focus,
+textarea:focus,
 button:focus-visible,
 summary:focus-visible {
     outline: 3px solid #88e0bb;
@@ -118,4 +120,13 @@ footer {
     width: 22px;
     height: 22px;
     margin: 0;
+}
+
+/* VPN profile: the pasted WireGuard text. */
+textarea {
+    box-sizing: border-box;
+    resize: vertical;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.4;
 }

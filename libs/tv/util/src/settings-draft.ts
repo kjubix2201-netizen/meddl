@@ -1,5 +1,6 @@
 import type { UserData } from './index';
-export type SetupPurpose = 'source' | 'settings';
+/** 'vpn': a WireGuard profile for the Android TV app's built-in VPN. */
+export type SetupPurpose = 'source' | 'settings' | 'vpn';
 export interface SettingsDraft {
     layout: 'cinema' | 'shelf';
     epg: boolean;

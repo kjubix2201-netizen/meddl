@@ -11,6 +11,7 @@ import { CatalogRefreshSetting } from './catalog-refresh-setting';
 import { LanguageSetting } from './language-setting';
 import { appPairingAvailable, localServerAvailable, servedByMeddlApp } from '@meddl/tv/data-access';
 import { WeatherSetting } from './weather-setting';
+import { VpnSetting, vpnAvailable } from './vpn-setting';
 import { HomeNetworkSetting, homeNetworkSharingAvailable } from './home-network-setting';
 import {
     settingsCategories,
@@ -95,6 +96,7 @@ export function Settings({
                                             : t('This app talks to your provider directly. No meddl server is needed.')}
                                     </p>
                                     {homeNetworkSharingAvailable() ? <HomeNetworkSetting /> : null}
+                                    {vpnAvailable() ? <VpnSetting /> : null}
                                 </>
                             ) : (
                                 <>

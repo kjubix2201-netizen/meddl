@@ -171,7 +171,7 @@ class PairingServer(private val assets: AssetManager) {
     private fun create(request: JSONObject): JSONObject {
         sweep()
         val purpose = request.optString("purpose", "source").ifEmpty { "source" }
-        if (purpose != "source" && purpose != "settings") throw Failure(400, "Invalid setup purpose.")
+        if (purpose != "source" && purpose != "settings" && purpose != "vpn") throw Failure(400, "Invalid setup purpose.")
         if (sessions.size >= 32) throw Failure(429, "Too many setup attempts. Try again shortly.")
         val defaults = if (purpose == "settings") request.opt("defaults") else null
         val session = Session(token(), token(), token(), System.currentTimeMillis() + TTL_MS, purpose, defaults)
@@ -190,7 +190,16 @@ class PairingServer(private val assets: AssetManager) {
             .put("purpose", s.purpose)
             .put("expiresAt", s.expiresAt)
         s.defaults?.let { result.put("defaults", it) }
-        if (tv) s.entry?.let { result.put(if (s.purpose == "settings") "settings" else "source", it) }
+        if (tv) s.entry?.let {
+            result.put(
+                when (s.purpose) {
+                    "settings" -> "settings"
+                    "vpn" -> "vpn"
+                    else -> "source"
+                },
+                it
+            )
+        }
         return result
     }
 

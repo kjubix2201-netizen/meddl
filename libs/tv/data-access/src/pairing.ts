@@ -16,6 +16,8 @@ export interface PairingState {
     source?: SourceDraft;
     purpose?: SetupPurpose;
     settings?: SettingsDraft;
+    /** purpose 'vpn': the WireGuard profile text and its file name. */
+    vpn?: { config?: string; name?: string };
     expiresAt: number;
 }
 export function createPairing(

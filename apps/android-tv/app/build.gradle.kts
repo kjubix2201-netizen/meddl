@@ -58,6 +58,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // The WireGuard tunnel library uses Java 8 APIs (Optional …) that
+        // Fire OS 5 / Android 5.1 lack.
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -78,4 +81,8 @@ dependencies {
     // FFmpeg audio decoder built by Jellyfin for this Media3 release:
     // AC-3, E-AC-3, DTS, TrueHD and more, decoded in software.
     implementation("org.jellyfin.media3:media3-ffmpeg-decoder:$media3+1")
+    // Built-in VPN: the viewer's own WireGuard profile (Proton, Mullvad …),
+    // only for meddl's own traffic. Last release that still supports API 21.
+    implementation("com.wireguard.android:tunnel:1.0.20250531")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }

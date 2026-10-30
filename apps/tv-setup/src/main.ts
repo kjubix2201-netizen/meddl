@@ -1,4 +1,5 @@
 import { settingsForm } from './settings-form';
+import { vpnForm } from './vpn-form';
 import type { PhoneSettingsDefaults } from '@meddl/tv/util';
 import './theme.css';
 import { tr, translatePage } from './i18n';
@@ -18,6 +19,7 @@ export function phoneClient() {
     const provider = form.elements.namedItem('provider') as HTMLSelectElement;
     let configured = false;
     let settings = false;
+    let vpn = false;
     let finished = false;
     let sent = false;
     const endpoint = `./pairing/${encodeURIComponent(id ?? '')}/phone`;
@@ -87,6 +89,11 @@ export function phoneClient() {
         if (!configured && response.purpose) {
             configured = true;
             settings = response.purpose === 'settings';
+            vpn = response.purpose === 'vpn';
+            if (vpn) {
+                vpnForm(form);
+                submit = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+            }
             if (settings && response.defaults) {
                 settingsForm(form, response.defaults);
                 submit = form.querySelector<HTMLButtonElement>(
@@ -97,22 +104,28 @@ export function phoneClient() {
         if (state === 'waiting' && !sent) {
             form.hidden = false;
             submit.disabled = false;
-            status.textContent = settings
-                ? tr('Adjust settings. Confirm on the TV to finish.')
-                : tr('Enter your source details. Confirm on the TV to finish.');
+            status.textContent = vpn
+                ? tr('Choose your WireGuard file. Confirm on the TV to finish.')
+                : settings
+                  ? tr('Adjust settings. Confirm on the TV to finish.')
+                  : tr('Enter your source details. Confirm on the TV to finish.');
             return;
         }
         form.hidden = true;
         status.textContent =
             state === 'saved'
-                ? settings
+                ? vpn
+                    ? tr('VPN profile saved on your TV. You can close this page.')
+                    : settings
                     ? tr('Settings saved on your TV. You can close this page.')
                     : tr('Added to your TV. You can close this page.')
                 : state === 'rejected'
                   ? tr('Changes were declined on the TV. Open a new QR code to try again.')
                   : state === 'cancelled'
                     ? tr('Setup was cancelled on the TV. Open a new QR code to try again.')
-                    : settings
+                    : vpn
+                      ? tr('Sent. Confirm “Use profile” on your TV.')
+                      : settings
                       ? tr('Sent. Confirm “Apply settings” on your TV.')
                       : tr('Sent. Confirm “Add source” on your TV.');
         finished = ['saved', 'rejected', 'cancelled'].includes(state);
@@ -143,7 +156,9 @@ export function phoneClient() {
             render(
                 await request(
                     'POST',
-                    settings
+                    vpn
+                        ? { config: data.config, name: data.name }
+                        : settings
                         ? {
                               layout: data.layout,
                               epg: values.has('epg'),

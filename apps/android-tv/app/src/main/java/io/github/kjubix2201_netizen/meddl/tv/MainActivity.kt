@@ -103,6 +103,15 @@ class MainActivity : Activity() {
             runOnUiThread { web.evaluateJavascript("window.meddlZap&&window.meddlZap($direction);", null) }
         }
 
+        // The built-in VPN tells the page about every change.
+        MeddlVpn.listener = { state ->
+            runOnUiThread {
+                if (!isDestroyed)
+                    web.evaluateJavascript("window.meddlVpnChanged&&window.meddlVpnChanged($state);", null)
+            }
+        }
+        MeddlVpn.autostart(this)
+
         if (savedInstanceState == null) {
             web.loadUrl(START_URL)
         } else {
@@ -129,6 +138,7 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         PlayerActivity.onZap = null
+        MeddlVpn.listener = null
         pairing.stop()
         web.destroy()
         super.onDestroy()
@@ -137,6 +147,10 @@ class MainActivity : Activity() {
     @Deprecated("Activity result API needs androidx.activity; plain Activity keeps the shell small.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == VPN_REQUEST) {
+            if (resultCode == RESULT_OK) MeddlVpn.connect(this) else MeddlVpn.denied(this)
+            return
+        }
         if (requestCode != NATIVE_PLAYER_REQUEST) return
         val position = data?.getLongExtra(PlayerActivity.EXTRA_POSITION_MS, 0L) ?: 0L
         val duration = data?.getLongExtra(PlayerActivity.EXTRA_DURATION_MS, 0L) ?: 0L
@@ -230,6 +244,36 @@ class MainActivity : Activity() {
         fun editText(value: String, hint: String) {
             runOnUiThread { showTextField(value, hint) }
         }
+
+        /** Built-in VPN (MeddlVpn): state as JSON for the settings page. */
+        @JavascriptInterface
+        fun vpnState(): String = MeddlVpn.summary(this@MainActivity).toString()
+
+        /** Keeps a WireGuard profile; "" when fine, otherwise the reason. */
+        @JavascriptInterface
+        fun vpnImport(text: String, name: String): String = MeddlVpn.import(this@MainActivity, text, name)
+
+        @JavascriptInterface
+        fun vpnConnect() {
+            runOnUiThread {
+                val consent = android.net.VpnService.prepare(this@MainActivity)
+                if (consent != null) {
+                    runCatching { startActivityForResult(consent, VPN_REQUEST) }
+                        .onFailure { MeddlVpn.denied(this@MainActivity) }
+                } else {
+                    MeddlVpn.connect(this@MainActivity)
+                }
+            }
+        }
+
+        @JavascriptInterface
+        fun vpnDisconnect() = MeddlVpn.disconnect(this@MainActivity)
+
+        @JavascriptInterface
+        fun vpnRemove() = MeddlVpn.remove(this@MainActivity)
+
+        @JavascriptInterface
+        fun vpnSetAutostart(on: Boolean) = MeddlVpn.setAutostart(this@MainActivity, on)
 
         @JavascriptInterface
         fun showKeyboard() {
@@ -365,6 +409,7 @@ class MainActivity : Activity() {
     companion object {
         private const val ASSET_HOST = "appassets.androidplatform.net"
         private const val NATIVE_PLAYER_REQUEST = 41
+        private const val VPN_REQUEST = 42
         private const val INDEX_PATH = "/assets/www/index.html"
         private val START_URL = Uri.Builder()
             .scheme("https")
