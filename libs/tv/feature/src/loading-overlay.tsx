@@ -4,6 +4,7 @@ import { t, tn, tvLocale } from '@meddl/tv/util';
 import type { WarmStep } from './use-provider';
 import { catalogRefreshHours } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
+import { vpnErrorText } from './vpn-setting';
 
 const SKIP_AFTER_MS = 20000;
 
@@ -48,7 +49,7 @@ function StepRow({ step }: { step: WarmStep }) {
  * half-loaded; after 20 s a button lets the viewer continue anyway.
  */
 export function LoadingOverlay({ tv }: { tv: TvModel }) {
-    const { phase, steps, downloading } = tv.warm;
+    const { phase, steps, downloading, vpnError } = tv.warm;
     const active = tv.storageReady && phase !== 'idle';
     // Lists kept on this device open within a moment: the window shows up
     // only for a download or when opening them takes longer.
@@ -59,7 +60,7 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
         const timer = setTimeout(() => setLate(true), 1500);
         return () => clearTimeout(timer);
     }, [active]);
-    const open = active && (late || !!downloading);
+    const open = active && (late || !!downloading || phase === 'vpn');
     const panel = useRef<HTMLDivElement>(null);
     const previous = useRef('');
     const [seconds, setSeconds] = useState(0);
@@ -87,14 +88,20 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
             <div class="loading-panel" ref={panel} tabIndex={-1}>
                 <span class="spinner large" aria-hidden="true" />
                 <h2 id="loading-title">
-                    {phase === 'connecting'
+                    {phase === 'vpn'
+                        ? t('Waiting for the VPN…')
+                        : phase === 'connecting'
                         ? t('Connecting to your source…')
                         : downloading
                           ? t('Loading your channels…')
                           : t('Opening your saved lists…')}
                 </h2>
                 <p class="muted">
-                    {phase === 'connecting' && seconds >= 15
+                    {phase === 'vpn'
+                        ? vpnError
+                            ? vpnErrorText(vpnError)
+                            : t('meddl loads only through your VPN (Settings → Connection → VPN).')
+                        : phase === 'connecting' && seconds >= 15
                         ? t('Your provider is answering slowly ({seconds} s). Close meddl in other browsers and apps, so only one connection is open.', { seconds })
                         : phase === 'loading' && !downloading
                           ? t('Saved on this device – nothing is downloaded.')

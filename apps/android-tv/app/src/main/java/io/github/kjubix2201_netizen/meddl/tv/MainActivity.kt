@@ -276,6 +276,9 @@ class MainActivity : Activity() {
         fun vpnSetAutostart(on: Boolean) = MeddlVpn.setAutostart(this@MainActivity, on)
 
         @JavascriptInterface
+        fun vpnSetLock(on: Boolean) = MeddlVpn.setLock(this@MainActivity, on)
+
+        @JavascriptInterface
         fun showKeyboard() {
             runOnUiThread {
                 web.requestFocus()

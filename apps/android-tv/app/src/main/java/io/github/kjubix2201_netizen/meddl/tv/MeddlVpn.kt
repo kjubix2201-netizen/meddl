@@ -23,8 +23,11 @@ object MeddlVpn {
     private const val KEY_CONFIG = "config"
     private const val KEY_NAME = "name"
     private const val KEY_AUTOSTART = "autostart"
+    private const val KEY_LOCK = "lock"
 
     @Volatile private var state = "down"
+    /** The viewer pressed "Disconnect": no automatic reconnect. */
+    @Volatile private var stoppedByViewer = false
     @Volatile private var error = ""
     private var backend: GoBackend? = null
     private val worker = Executors.newSingleThreadExecutor()
@@ -37,6 +40,13 @@ object MeddlVpn {
         override fun onStateChange(newState: Tunnel.State) {
             state = if (newState == Tunnel.State.UP) "up" else "down"
             notifyChange(null)
+            // Lock on and the tunnel dropped by itself: bring it back.
+            val ctx = lastContext
+            if (newState != Tunnel.State.UP && !stoppedByViewer && ctx != null && prefs(ctx).getBoolean(KEY_LOCK, false))
+                worker.execute {
+                    Thread.sleep(2000)
+                    if (state == "down" && !stoppedByViewer && !needsPermission(ctx)) connect(ctx)
+                }
         }
     }
 
@@ -64,7 +74,8 @@ object MeddlVpn {
             .put("configured", text != null)
             .put("state", state)
             .put("error", error)
-            .put("autostart", stored.getBoolean(KEY_AUTOSTART, false))
+            .put("autostart", stored.getBoolean(KEY_AUTOSTART, false) || stored.getBoolean(KEY_LOCK, false))
+            .put("lock", stored.getBoolean(KEY_LOCK, false))
             .put("name", stored.getString(KEY_NAME, "") ?: "")
         if (text != null) runCatching {
             val endpoint = parse(context, text).peers.firstOrNull()?.endpoint
@@ -94,6 +105,8 @@ object MeddlVpn {
 
     fun connect(context: Context) {
         val text = prefs(context).getString(KEY_CONFIG, null) ?: return
+        stoppedByViewer = false
+        lastContext = context.applicationContext
         state = "connecting"
         error = ""
         notifyChange(context)
@@ -113,6 +126,7 @@ object MeddlVpn {
     }
 
     fun disconnect(context: Context) {
+        stoppedByViewer = true
         worker.execute {
             runCatching { backend(context).setState(tunnel, Tunnel.State.DOWN, null) }
             state = "down"
@@ -122,7 +136,7 @@ object MeddlVpn {
 
     fun remove(context: Context) {
         disconnect(context)
-        prefs(context).edit().remove(KEY_CONFIG).remove(KEY_NAME).apply()
+        prefs(context).edit().remove(KEY_CONFIG).remove(KEY_NAME).remove(KEY_LOCK).apply()
         worker.execute { notifyChange(context) }
     }
 
@@ -131,10 +145,22 @@ object MeddlVpn {
         notifyChange(context)
     }
 
+    /**
+     * "Only through the VPN": meddl contacts the provider only while the
+     * tunnel is up (the page waits, see vpn-setting.tsx) and the tunnel comes
+     * back by itself when it drops. Implies connecting at start.
+     */
+    fun setLock(context: Context, on: Boolean) {
+        prefs(context).edit().putBoolean(KEY_LOCK, on).apply()
+        notifyChange(context)
+    }
+
     /** At app start: connect when the viewer chose so and Android already allowed it. */
     fun autostart(context: Context) {
         val stored = prefs(context)
-        if (stored.getBoolean(KEY_AUTOSTART, false) && stored.contains(KEY_CONFIG) && !needsPermission(context))
+        val wanted = stored.getBoolean(KEY_AUTOSTART, false) || stored.getBoolean(KEY_LOCK, false)
+        lastContext = context.applicationContext
+        if (wanted && stored.contains(KEY_CONFIG) && !needsPermission(context))
             connect(context)
     }
 

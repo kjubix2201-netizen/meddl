@@ -18,6 +18,8 @@ interface VpnState {
     state: 'down' | 'connecting' | 'up';
     error: string;
     autostart: boolean;
+    /** Only through the VPN: meddl waits for the tunnel before loading. */
+    lock: boolean;
     name: string;
     server?: string;
 }
@@ -28,6 +30,7 @@ type VpnShell = {
     vpnDisconnect?: () => void;
     vpnRemove?: () => void;
     vpnSetAutostart?: (on: boolean) => void;
+    vpnSetLock?: (on: boolean) => void;
 };
 
 function shell(): VpnShell | undefined {
@@ -45,6 +48,35 @@ function readState(): VpnState | undefined {
     } catch {
         return undefined;
     }
+}
+
+/**
+ * With "only through the VPN" on: resolves once the tunnel is up (and
+ * starts it when needed, asking the TV for permission the first time).
+ * Resolves at once without the lock, or when the viewer turns it off.
+ */
+export async function vpnReady(signal: AbortSignal, waiting: (error: string) => void): Promise<void> {
+    let state = readState();
+    if (!state?.lock || !state.configured || state.state === 'up') return;
+    if (state.state === 'down') shell()?.vpnConnect?.();
+    waiting('');
+    let asked = Date.now();
+    while (!signal.aborted) {
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        state = readState();
+        if (!state?.lock || !state.configured || state.state === 'up') return;
+        waiting(state.error);
+        // Dropped or refused: try again every 15 s (the viewer may fix it meanwhile).
+        if (state.state === 'down' && Date.now() - asked > 15000) {
+            asked = Date.now();
+            shell()?.vpnConnect?.();
+        }
+    }
+    throw new DOMException('Aborted', 'AbortError');
+}
+
+export function vpnErrorText(code: string): string {
+    return errorText(code);
 }
 
 function errorText(code: string): string {
@@ -226,15 +258,30 @@ export function VpnSetting() {
                 </div>
             )}
             {vpn.configured ? (
-                <label class="check">
-                    <input
-                        type="checkbox"
-                        data-focus="vpn:autostart"
-                        checked={vpn.autostart}
-                        onChange={(event) => shell()?.vpnSetAutostart?.(event.currentTarget.checked)}
-                    />
-                    <span>{t('Connect automatically when meddl starts')}</span>
-                </label>
+                <>
+                    <label class="check">
+                        <input
+                            type="checkbox"
+                            data-focus="vpn:lock"
+                            checked={vpn.lock}
+                            onChange={(event) => shell()?.vpnSetLock?.(event.currentTarget.checked)}
+                        />
+                        <span>{t('Only through the VPN (lock)')}</span>
+                    </label>
+                    <p class="muted vpn-note">
+                        {t('meddl then loads channels, films and pictures only once the VPN is connected, and connects again by itself when the VPN drops.')}
+                    </p>
+                    <label class="check">
+                        <input
+                            type="checkbox"
+                            data-focus="vpn:autostart"
+                            checked={vpn.autostart}
+                            disabled={vpn.lock}
+                            onChange={(event) => shell()?.vpnSetAutostart?.(event.currentTarget.checked)}
+                        />
+                        <span>{t('Connect automatically when meddl starts')}</span>
+                    </label>
+                </>
             ) : null}
         </section>
     );

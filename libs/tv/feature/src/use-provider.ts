@@ -9,6 +9,7 @@ import {
     ProviderTransport,
 } from '@meddl/tv/data-access';
 import type { Kind, ProviderClient, UserData } from '@meddl/tv/util';
+import { vpnReady } from './vpn-setting';
 
 export type WarmStep = {
     kind: Kind;
@@ -17,7 +18,10 @@ export type WarmStep = {
 };
 /** Start-up progress for the blocking loading window. */
 export type WarmState = {
-    phase: 'idle' | 'connecting' | 'loading';
+    /** 'vpn': waiting for the built-in VPN ("only through the VPN"). */
+    phase: 'idle' | 'vpn' | 'connecting' | 'loading';
+    /** While waiting for the VPN: why it is not up yet. */
+    vpnError?: string;
     steps: WarmStep[];
     /** A list is being downloaded (not just opened from this device). */
     downloading?: boolean;
@@ -98,8 +102,14 @@ export function useProvider(
         setBusy(true);
         setWarm({ phase: 'connecting', steps: [] });
         callbacks.current.report('');
-        client
-            .connect(abort.signal)
+        // "Only through the VPN": nothing reaches the provider before the tunnel is up.
+        vpnReady(abort.signal, (vpnError) => {
+            if (!abort.signal.aborted) setWarm({ phase: 'vpn', steps: [], vpnError });
+        })
+            .then(() => {
+                if (!abort.signal.aborted) setWarm({ phase: 'connecting', steps: [] });
+                return client.connect(abort.signal);
+            })
             .then(() => {
                 if (!abort.signal.aborted) {
                     callbacks.current.report('');
