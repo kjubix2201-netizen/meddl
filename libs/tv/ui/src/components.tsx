@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import { ChannelCard } from './channel-card';
+import { TvIcon } from './icon';
 import { whenSettled } from './focus';
 import { Media, t } from '@meddl/tv/util';
 export * from './focus';
@@ -32,14 +33,17 @@ function smallPoster(src: string): string | undefined {
  * them all made scrolling stutter on TVs). On a TV the app delivers it
  * small; the original stays the fallback.
  */
-function PosterImage({ src }: { src: string }) {
+function PosterImage({ src, onLoaded, onFailed }: { src: string; onLoaded: () => void; onFailed: () => void }) {
     const [ready, setReady] = useState(() => !onTelevision());
     const [step, setStep] = useState({ src: '', step: 0 });
     useEffect(() => (ready ? undefined : whenSettled(() => setReady(true))), []);
-    if (!ready) return null;
     const candidates = [smallPoster(src), src].filter((url): url is string => !!url);
-    const current = candidates[step.src === src ? step.step : 0];
-    if (!current) return null;
+    const at = step.src === src ? step.step : 0;
+    const current = candidates[at];
+    useEffect(() => {
+        if (ready && !current) onFailed();
+    }, [ready, current]);
+    if (!ready || !current) return null;
     return (
         <img
             key={current}
@@ -47,8 +51,33 @@ function PosterImage({ src }: { src: string }) {
             loading="lazy"
             decoding="async"
             alt=""
-            onError={() => setStep({ src, step: (step.src === src ? step.step : 0) + 1 })}
+            onLoad={onLoaded}
+            onError={() => setStep({ src, step: at + 1 })}
         />
+    );
+}
+
+/**
+ * The poster's frame: a quiet placeholder while the picture loads (it
+ * fades in), the title only when there is no picture or it cannot load.
+ */
+function PosterArt({ item, children }: { item: Media; children: preact.ComponentChildren }) {
+    const [art, setArt] = useState({ src: '', state: 'loading' as 'loading' | 'loaded' | 'failed' });
+    const src = item.poster ?? '';
+    const state = !src ? 'failed' : art.src === src ? art.state : 'loading';
+    return (
+        <span class={`poster-art art-${state}`}>
+            {src ? (
+                <PosterImage
+                    key={src}
+                    src={src}
+                    onLoaded={() => setArt({ src, state: 'loaded' })}
+                    onFailed={() => setArt({ src, state: 'failed' })}
+                />
+            ) : null}
+            {state === 'failed' ? <span class="poster-fallback">{item.title}</span> : null}
+            {children}
+        </span>
     );
 }
 export function Poster({
@@ -71,9 +100,7 @@ export function Poster({
             data-focus={item.id}
             onClick={() => open(item)}
         >
-            <span class="poster-art">
-                {item.poster ? <PosterImage src={item.poster} /> : null}
-                <span class="poster-fallback">{item.title}</span>
+            <PosterArt item={item}>
                 <small>
                     {item.kind === 'series'
                         ? t('SERIES')
@@ -81,7 +108,7 @@ export function Poster({
                           ? t('EPISODE')
                           : t('FILM')}
                 </small>
-            </span>
+            </PosterArt>
             <strong>{item.title}</strong>
             <span class="muted">
                 {saved ? t('♥ Saved') : item.year || t('From your source')}
@@ -89,6 +116,30 @@ export function Poster({
         </button>
     );
 }
-export function Empty({ children }: { children: preact.ComponentChildren }) {
-    return <div class="empty">{children}</div>;
+/**
+ * An empty list or search: a quiet symbol, the sentence and, when there is
+ * one, the way out (another category, clear the search).
+ */
+export function Empty({
+    children,
+    icon = 'list',
+    action,
+}: {
+    children: preact.ComponentChildren;
+    icon?: string;
+    action?: { label: string; run: () => void; focus?: string };
+}) {
+    return (
+        <div class="empty">
+            <span class="empty-icon" aria-hidden="true">
+                <TvIcon name={icon} />
+            </span>
+            <p>{children}</p>
+            {action ? (
+                <button class="primary empty-action" data-focus={action.focus} onClick={action.run}>
+                    {action.label}
+                </button>
+            ) : null}
+        </div>
+    );
 }

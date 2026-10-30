@@ -131,7 +131,16 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                 render={(item) => <Poster item={item} open={tv.open} />}
             />
             {!tv.busy && !list.length ? (
-                <Empty>
+                <Empty
+                    icon={r.query ? 'search' : 'film'}
+                    action={
+                        r.query
+                            ? { label: t('Clear search'), run: () => tv.setRoute({ ...r, query: '', page: 0 }) }
+                            : r.category
+                              ? { label: t('All categories'), run: () => tv.setRoute({ ...r, category: '', page: 0 }) }
+                              : undefined
+                    }
+                >
                     {t('No titles in this category. Try another category or search.')}
                 </Empty>
             ) : null}

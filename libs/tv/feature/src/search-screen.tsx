@@ -74,7 +74,7 @@ export function SearchScreen({ tv }: { tv: TvModel }) {
                 </label>
             </div>
             {query.length < 2 ? (
-                <Empty>{t('Type at least two letters to search films, series and channels.')}</Empty>
+                <Empty icon="search">{t('Type at least two letters to search films, series and channels.')}</Empty>
             ) : null}
             {results.rows.map(({ kind, items, total }) => (
                 <section class="search-results">
@@ -95,7 +95,7 @@ export function SearchScreen({ tv }: { tv: TvModel }) {
             ))}
             {query.length >= 2 && results.busy ? <p class="muted search-busy">{t('Searching…')}</p> : null}
             {query.length >= 2 && !results.busy && results.query === query && !results.rows.length ? (
-                <Empty>{t('Nothing found for “{query}”.', { query })}</Empty>
+                <Empty icon="search">{t('Nothing found for “{query}”.', { query })}</Empty>
             ) : null}
         </>
     );

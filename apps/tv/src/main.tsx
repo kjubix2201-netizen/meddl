@@ -36,3 +36,4 @@ import './detail-compact.css';
 import './phone.css';
 import './tv-lite.css';
 import './country-drawer.css';
+import './polish.css';

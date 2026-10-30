@@ -121,7 +121,7 @@ export function LiveChannels({
                 !tv.busy &&
                 !tv.catalogError &&
                 !items.length ? (
-                    <Empty>{t('No channels in this category.')}</Empty>
+                    <Empty icon="tv-live">{t('No channels in this category.')}</Empty>
                 ) : null}
                 {browse.categoriesOpen && tv.catalogError ? (
                     <div role="alert" class="load-more-status">

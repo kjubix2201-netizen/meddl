@@ -3,6 +3,34 @@ import { Media, t } from '@meddl/tv/util';
 import { TvIcon } from './icon';
 type AndroidShell = { MeddlAndroid?: { hasDirectFetch?: () => boolean } };
 
+/** Quality and country marks that say nothing about which channel it is. */
+const NOISE = /^(?:[A-Z]{2,3}[:|]|HD|FHD|UHD|SD|4K|8K|HEVC|H265|RAW|\+1|DE|AT|CH|\||\d{3,4}p?|Deutschland|Germany|Österreich|Austria|Schweiz)$/i;
+
+/** "Promi Big Brother HD" → "PBB", "Sportdigital" → "SPO", "ZDF" → "ZDF". */
+export function initials(name: string): string {
+    const words = name
+        .replace(/[()[\]{}]/g, ' ')
+        .split(/[\s\-_./]+/)
+        .filter((word) => word && !NOISE.test(word));
+    if (!words.length) return name.slice(0, 3).toUpperCase();
+    if (words.length === 1) return words[0].slice(0, 3).toUpperCase();
+    return words
+        .slice(0, 3)
+        .map((word) => (/^\d+$/.test(word) ? word : word[0]))
+        .join('')
+        .slice(0, 4)
+        .toUpperCase();
+}
+
+const COLOURS = ['#3b4a7a', '#5a3b7a', '#7a3b5c', '#7a4f3b', '#3b6a7a', '#3b7a5a', '#5f6b3b', '#4b3b7a'];
+
+/** The same quiet colour for a channel every time. */
+export function initialsColour(name: string): string {
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) | 0;
+    return COLOURS[Math.abs(hash) % COLOURS.length];
+}
+
 /**
  * The same logo fetched natively by the Android TV app (DirectFetch): many
  * provider logo hosts refuse the WebView's request (hotlink checks on the
@@ -41,7 +69,9 @@ export function ChannelLogo({ src, name }: { src?: string; name?: string }) {
                     onError={() => setAttempt({ src: src ?? '', step: step + 1 })}
                 />
             ) : name ? (
-                <span class="channel-logo-name">{name}</span>
+                <span class="channel-logo-initials" style={{ background: initialsColour(name) }} title={name}>
+                    {initials(name)}
+                </span>
             ) : (
                 <TvIcon name="live" />
             )}

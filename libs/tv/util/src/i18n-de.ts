@@ -161,6 +161,7 @@ export const DE: Readonly<Record<string, string>> = {
     'Content type': 'Inhaltstyp',
     'Category': 'Kategorie',
     'All categories': 'Alle Kategorien',
+    'Clear search': 'Suche löschen',
     'No titles in this category. Try another category or search.':
         'Keine Titel in dieser Kategorie. Versuch eine andere Kategorie oder die Suche.',
     'Sort by': 'Sortieren nach',

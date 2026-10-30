@@ -191,7 +191,7 @@ export function LiveColumns({
                         }}
                     />
                     {!tv.busy && !tv.catalogError && !items.length ? (
-                        <Empty>{t('No channels in this category.')}</Empty>
+                        <Empty icon="tv-live">{t('No channels in this category.')}</Empty>
                     ) : null}
                 </div>
             </section>
