@@ -187,5 +187,13 @@ export function useSoundFallback(tv: TvModel) {
         setState({ id: item.id, phase: 'native' });
     }
     silentRef.current = silent;
-    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap };
+    /**
+     * The Android app's own player takes (or took) this title: the page
+     * shows no player of its own meanwhile, only a quiet handover screen.
+     */
+    const handingOver =
+        !!item &&
+        !!androidBridge()?.playNative &&
+        (phase === 'native' || (phase === 'idle' && takesOver(item)));
+    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap, handingOver };
 }

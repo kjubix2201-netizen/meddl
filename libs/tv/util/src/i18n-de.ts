@@ -479,6 +479,7 @@ export const DE: Readonly<Record<string, string>> = {
     'Waiting': 'Wartet',
     'Continue, keep loading in the background': 'Weiter, im Hintergrund fertig laden',
     'Opening the meddl player with Dolby / DTS sound…': 'Der meddl-Player mit Dolby-/DTS-Ton wird geöffnet …',
+    'Opening the meddl player…': 'Der meddl-Player wird geöffnet …',
     'Next episode': 'Nächste Folge',
     'Next episode in {seconds} s: {title}': 'Nächste Folge in {seconds} s: {title}',
     'Play now': 'Jetzt abspielen',

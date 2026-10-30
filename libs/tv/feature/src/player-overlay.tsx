@@ -4,7 +4,7 @@ import type { useLiveOverlay } from './live-overlay';
 import { AudioNotice } from './player-audio-notice';
 import type { useSoundFallback } from './sound-fallback';
 import type { useNextEpisode } from './next-episode';
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import { VolumeControl } from './player-volume';
 import type { TvModel } from './use-tv';
 
@@ -69,8 +69,24 @@ export function PlayerOverlay({
             ? tv.epg.find((p) => p.start <= now && p.end > now)
             : undefined;
     const favorite = !!current && tv.data.favorites.some((m) => m.id === current.id);
+    // The Android app's player opens: no controls of the page's player in
+    // between, unless the handover does not happen within a few seconds.
+    const [stuck, setStuck] = useState('');
+    const handover = sound.handingOver && stuck !== current?.id;
+    useEffect(() => {
+        if (!sound.handingOver || sound.phase === 'native' || !current) return;
+        const id = current.id;
+        const timer = setTimeout(() => setStuck(id), 8000);
+        return () => clearTimeout(timer);
+    }, [sound.handingOver, sound.phase, current?.id]);
     // The app's own player (app.tsx) covers the window meanwhile.
     if (sound.desktop) return null;
+    if (handover)
+        return (
+            <div class="player-handover" role="status" aria-label={t('Opening the meddl player…')}>
+                <span class="spinner large" aria-hidden="true" />
+            </div>
+        );
     return (
         <div
             class={`player-controls ${visible || tv.error || nextEpisode.countdown !== null ? '' : 'dormant'}`}

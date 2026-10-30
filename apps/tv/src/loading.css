@@ -123,3 +123,18 @@
 .loading-panel button.primary {
     margin-top: 2.6vh;
 }
+
+/* The Android app's own player opens (player-overlay.tsx): only black and
+   a spinner meanwhile, no controls of the page's player. */
+.player-handover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000000;
+}
