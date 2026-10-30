@@ -76,6 +76,7 @@ export function DesktopPlayer({
     const bar = useRef<HTMLDivElement>(null);
     const session = useRef<DesktopMpvSession | null>(null);
     const hideTimer = useRef<ReturnType<typeof setTimeout>>();
+    const hiddenAt = useRef(0);
     const closed = useRef(false);
     const lastSeek = useRef(0);
     const latestClose = useRef(onClose);
@@ -214,8 +215,16 @@ export function DesktopPlayer({
     const handle = (command: PlayerBarCommand) => {
         const mpv = session.current;
         const at = mpv?.state;
-        if (command.type !== 'back') reveal();
+        // Just closed by a click: the hand still moving the mouse must not
+        // bring the controls straight back.
+        if (command.type === 'activity' && Date.now() - hiddenAt.current < 900) return;
+        if (command.type !== 'back' && command.type !== 'hide') reveal();
         if (command.type === 'back') close();
+        else if (command.type === 'hide') {
+            clearTimeout(hideTimer.current);
+            hiddenAt.current = Date.now();
+            setControls(false);
+        }
         else if (command.type === 'toggle') mpv?.togglePause();
         else if (command.type === 'seekBy') mpv?.seekBy(command.seconds);
         else if (command.type === 'seekTo') mpv?.seekTo(command.seconds);

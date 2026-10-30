@@ -15,7 +15,7 @@ function overlayView(): OverlayView | undefined {
  * ?overlay=player, services/player-overlay-window.ts): the player bar over
  * the video with the picture showing through, like YouTube. It shows what
  * the main window's player sends and sends clicks back; a click on the
- * picture pauses or plays, moving the mouse brings the controls back.
+ * picture beside the controls closes them, moving the mouse brings them back.
  */
 export function PlayerOverlayView() {
     const [state, setState] = useState<PlayerBarState | null>(null);
@@ -34,10 +34,12 @@ export function PlayerOverlayView() {
             class={`player-overlay ${state?.shown ? '' : 'dormant'}`}
             onMouseMove={moved}
             onClick={(event) => {
-                // The controls cover the whole picture: a click anywhere
-                // but on a button or slider pauses or plays.
+                // Pause and play only with the button in the middle. A click
+                // anywhere else on the picture closes the controls (or
+                // brings them back while they are hidden).
                 const target = event.target as HTMLElement;
-                if (!target.closest('button, input, .next-banner, .dp-menu')) send({ type: 'toggle' });
+                if (target.closest('button, input, .next-banner, .dp-menu')) return;
+                send({ type: state?.shown ? 'hide' : 'activity' });
             }}
         >
             {state ? <PlayerBar state={state} send={send} /> : null}

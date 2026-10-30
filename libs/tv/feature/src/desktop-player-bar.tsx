@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks';
+import { useEffect, useState } from 'preact/hooks';
 import type { DesktopMpvTrack } from '@meddl/tv/data-access';
 import { TvIcon } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
@@ -38,7 +38,7 @@ export interface PlayerBarState {
 }
 
 export type PlayerBarCommand =
-    | { type: 'back' | 'toggle' | 'mute' | 'audio' | 'subtitles' | 'next' | 'cancelNext' | 'activity' }
+    | { type: 'back' | 'toggle' | 'mute' | 'audio' | 'subtitles' | 'next' | 'cancelNext' | 'activity' | 'hide' }
     | { type: 'seekBy' | 'seekTo'; seconds: number }
     | { type: 'volume'; value: number }
     | { type: 'audioTrack' | 'subtitleTrack'; id: number };
@@ -62,6 +62,10 @@ export function PlayerBar({
     // The open track menu (Audio or Subtitles), a list to pick from.
     const [menu, setMenu] = useState<'audio' | 'subtitles' | null>(null);
     const openMenu = state.shown ? menu : null;
+    // Hidden controls close the menu too.
+    useEffect(() => {
+        if (!state.shown) setMenu(null);
+    }, [state.shown]);
     const duration = state.duration;
     const shownAt = scrub ?? state.position;
     const volume = state.volume;
