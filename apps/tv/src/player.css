@@ -566,3 +566,7 @@ html.player-overlay-page #app {
 .player-overlay.dormant .desktop-player-bar button.dp-play {
     pointer-events: auto;
 }
+/* The buttons at the bottom right keep their full label. */
+.player-overlay .desktop-player-bar button.dp-pill {
+    flex: none;
+}

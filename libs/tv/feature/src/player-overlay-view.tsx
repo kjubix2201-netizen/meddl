@@ -6,6 +6,11 @@ type OverlayView = {
     command: (command: PlayerBarCommand) => void;
 };
 
+function controlsScale(): number {
+    const fit = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+    return Math.max(0.55, Math.min(1, Math.round(fit * 100) / 100));
+}
+
 function overlayView(): OverlayView | undefined {
     return (window as unknown as { meddlDesktop?: { overlayView?: OverlayView } }).meddlDesktop?.overlayView;
 }
@@ -26,6 +31,15 @@ export function PlayerOverlayView() {
     // The pointer rests on a button or the timeline: the controls stay
     // (they used to fade away under the pointer, and the next click missed).
     const [hovering, setHovering] = useState(false);
+    // Laid out for a 1920 × 1080 window: smaller windows (or Windows display
+    // scaling, e.g. 150 % on a 24-inch screen) scale the controls down with
+    // them instead of making them crowd and cut off.
+    const [scale, setScale] = useState(controlsScale());
+    useEffect(() => {
+        const resize = () => setScale(controlsScale());
+        window.addEventListener('resize', resize);
+        return () => window.removeEventListener('resize', resize);
+    }, []);
     useEffect(() => {
         if (!hovering) return;
         send({ type: 'activity' });
@@ -41,6 +55,7 @@ export function PlayerOverlayView() {
     return (
         <div
             class={`player-overlay ${state?.shown ? '' : 'dormant'}`}
+            style={{ zoom: scale }}
             onMouseMove={moved}
             onMouseOver={(event) =>
                 setHovering(!!(event.target as HTMLElement).closest('button, input, .dp-menu, .dp-timeline'))
