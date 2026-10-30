@@ -34,7 +34,10 @@ export function PlayerOverlayView() {
             class={`player-overlay ${state?.shown ? '' : 'dormant'}`}
             onMouseMove={moved}
             onClick={(event) => {
-                if (event.target === event.currentTarget) send({ type: 'toggle' });
+                // The controls cover the whole picture: a click anywhere
+                // but on a button or slider pauses or plays.
+                const target = event.target as HTMLElement;
+                if (!target.closest('button, input, .next-banner')) send({ type: 'toggle' });
             }}
         >
             {state ? <PlayerBar state={state} send={send} /> : null}

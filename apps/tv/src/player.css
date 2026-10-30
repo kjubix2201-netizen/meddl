@@ -368,3 +368,99 @@ html.player-overlay-page #app {
 .player-overlay .desktop-player-bar button.dp-icon:focus {
     background: rgba(255, 255, 255, 0.2);
 }
+
+/*
+ * Windows app, see-through controls: laid out like the Android TV app's
+ * player. The picture dims evenly, Play and the 10-second buttons sit in
+ * the middle of the screen, the timeline runs over the full width near the
+ * bottom with the times below it, the tracks and the volume at the bottom
+ * right, the title with Back at the top left.
+ */
+.player-overlay .desktop-player-bar {
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 36px 56px 30px;
+    background: rgba(0, 0, 0, 0.5);
+    text-shadow: none;
+}
+.player-overlay .dp-head {
+    position: absolute;
+    top: 36px;
+    left: 120px;
+    right: 56px;
+}
+.player-overlay .dp-title strong {
+    font-size: 24px;
+}
+.player-overlay .dp-timeline {
+    flex-wrap: wrap;
+    margin-top: 0;
+}
+.player-overlay .dp-timeline .desktop-player-seek {
+    order: -1;
+    flex: 1 0 100%;
+    margin: 0 0 6px;
+}
+.player-overlay .dp-timeline .dp-time {
+    flex: 1 1 50%;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.85);
+}
+.player-overlay .dp-controls {
+    margin-top: 4px;
+}
+/* Back moves to the top left, beside the title. */
+.player-overlay .dp-controls > .dp-side:first-child {
+    position: absolute;
+    top: 28px;
+    left: 50px;
+}
+/* Play and ±10 s in the middle of the picture. */
+.player-overlay .dp-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.player-overlay .desktop-player-bar .dp-center button.dp-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 22px;
+}
+.player-overlay .desktop-player-bar .dp-center button.dp-icon svg {
+    width: 34px;
+    height: 34px;
+}
+.player-overlay .desktop-player-bar button.dp-play {
+    width: 96px;
+    height: 96px;
+    margin: 0 22px;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.18);
+}
+.player-overlay .desktop-player-bar button.dp-play:hover,
+.player-overlay .desktop-player-bar button.dp-play:focus {
+    background: #ffffff;
+    color: #0d0b14;
+    transform: none;
+    box-shadow: 0 0 48px rgba(255, 255, 255, 0.45);
+}
+.player-overlay .desktop-player-bar button.dp-play svg {
+    width: 40px;
+    height: 40px;
+}
+.player-overlay .desktop-player-bar .next-banner {
+    position: absolute;
+    right: 56px;
+    bottom: 140px;
+    max-width: 640px;
+}
+.player-overlay .desktop-player-keys {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(50% + 70px);
+}
