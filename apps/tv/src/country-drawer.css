@@ -52,10 +52,33 @@
     .live-layout {
         transition: none;
     }
-    /* Open drawer: the first column widens, everything else moves right. */
-    .live-layout.countries-open,
+    /* Without a country the list simply takes the first column. */
     .live-layout.picks-country {
         grid-template-columns: 300px 230px minmax(0, 420px) minmax(0, 1fr);
+    }
+    /*
+     * Opening and closing the drawer must not jump: the columns keep their
+     * size (no new layout, the lists stay as they are) and only slide right
+     * by the drawer's extra width – a transform the TV draws smoothly.
+     */
+    .live-page .live-layout {
+        overflow: hidden;
+    }
+    .live-layout .category-column,
+    .live-layout .channel-column,
+    .live-layout .live-information {
+        transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.24s ease;
+    }
+    .live-layout.countries-open .category-column,
+    .live-layout.countries-open .channel-column,
+    .live-layout.countries-open .live-information {
+        transform: translateX(244px);
+    }
+    .live-layout.countries-open .live-information {
+        opacity: 0.35;
+    }
+    .live-layout.countries-open > .country-drawer.is-open {
+        width: 300px;
     }
     /* Without a country there is nothing to show beside the list yet. */
     .live-layout.picks-country .category-column,
@@ -70,7 +93,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
-        animation: country-drawer-in 0.18s ease-out;
+        animation: country-drawer-in 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     /* First choice: the list is simply there. */
     .country-drawer.is-open.is-picking {
@@ -155,7 +178,7 @@
 @keyframes country-drawer-in {
     from {
         opacity: 0;
-        transform: translateX(-24px);
+        transform: translateX(-48px);
     }
     to {
         opacity: 1;
@@ -252,9 +275,22 @@
         grid-column-gap: 22px;
         padding-top: 18px;
     }
-    .catalog-stage.countries-open,
     .catalog-stage.picks-country {
         grid-template-columns: 300px minmax(0, 1fr);
+    }
+    /* As on Live TV: the catalog keeps its size and slides aside. */
+    main.catalog-stage-page {
+        overflow-x: hidden;
+    }
+    .catalog-stage-content {
+        transition: transform 0.24s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.24s ease;
+    }
+    .catalog-stage.countries-open .catalog-stage-content {
+        transform: translateX(244px);
+        opacity: 0.5;
+    }
+    .catalog-stage.countries-open > .country-drawer.is-open {
+        width: 300px;
     }
     /* Title row fixed at the top, beside the clock and the tools; no band behind it. */
     .catalog-title {
