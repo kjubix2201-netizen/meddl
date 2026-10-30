@@ -61,8 +61,10 @@
      * size (no new layout, the lists stay as they are) and only slide right
      * by the drawer's extra width – a transform the TV draws smoothly.
      */
-    .live-page .live-layout {
-        overflow: hidden;
+    /* Clipped at the screen edge (not at the columns: the stage reaches
+       into the page margin on the right and must stay whole there). */
+    main.live-page {
+        overflow-x: hidden;
     }
     .live-layout .category-column,
     .live-layout .channel-column,
