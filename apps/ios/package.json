@@ -1,0 +1,10 @@
+{
+    "name": "meddl-ios",
+    "private": true,
+    "description": "iPhone / iPad shell for the meddl TV client (Capacitor). Built on macOS in CI (build.yml, job ios); see README.md.",
+    "dependencies": {
+        "@capacitor/cli": "7.6.10",
+        "@capacitor/core": "7.6.10",
+        "@capacitor/ios": "7.6.10"
+    }
+}

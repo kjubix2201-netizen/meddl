@@ -1,0 +1,17 @@
+{
+    "appId": "io.github.kjubix2201netizen.meddl",
+    "appName": "meddl",
+    "webDir": "www",
+    "backgroundColor": "#0d0b14",
+    "ios": {
+        "contentInset": "always",
+        "backgroundColor": "#0d0b14",
+        "scrollEnabled": false,
+        "allowsLinkPreview": false
+    },
+    "plugins": {
+        "CapacitorHttp": {
+            "enabled": true
+        }
+    }
+}

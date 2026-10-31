@@ -17,10 +17,31 @@ type DesktopShell = {
 };
 
 type ServedPage = { directFetch?: boolean };
+type CapacitorShell = { getPlatform?: () => string; isNativePlatform?: () => boolean };
 
 function shells() {
-    const w = window as unknown as { MeddlAndroid?: AndroidShell; meddlDesktop?: DesktopShell; meddlServed?: ServedPage };
-    return { android: w.MeddlAndroid, desktop: w.meddlDesktop, served: w.meddlServed };
+    const w = window as unknown as {
+        MeddlAndroid?: AndroidShell;
+        meddlDesktop?: DesktopShell;
+        meddlServed?: ServedPage;
+        Capacitor?: CapacitorShell;
+    };
+    return { android: w.MeddlAndroid, desktop: w.meddlDesktop, served: w.meddlServed, capacitor: w.Capacitor };
+}
+
+/**
+ * True in the iPhone / iPad app (apps/ios, Capacitor). Its native HTTP layer
+ * (CapacitorHttp) answers the page's fetch() outside the browser rules, so
+ * providers are reached directly, like in the Android TV app.
+ */
+export function iosApp(): boolean {
+    if (typeof window === 'undefined') return false;
+    try {
+        const capacitor = shells().capacitor;
+        return !!capacitor?.isNativePlatform?.() && capacitor.getPlatform?.() === 'ios';
+    } catch {
+        return false;
+    }
 }
 
 /** True on a page the desktop app shares in the home network. */
@@ -33,6 +54,7 @@ export function localServerAvailable(): boolean {
     if (typeof window === 'undefined') return false;
     const { android, desktop, served } = shells();
     if (served?.directFetch === true) return true;
+    if (iosApp()) return true;
     try {
         if (android?.hasDirectFetch?.()) return true;
     } catch {
@@ -60,6 +82,7 @@ export async function directFetch(
         if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
         return { status: result.status, text: result.body };
     }
+    if (iosApp()) return iosFetch(url, headers, signal, timeoutMs);
     const query = new URLSearchParams({ u: url, h: JSON.stringify(headers), t: String(timeoutMs) });
     const abort = new AbortController();
     const cancel = () => abort.abort();
@@ -73,5 +96,28 @@ export async function directFetch(
     } finally {
         clearTimeout(timer);
         signal.removeEventListener('abort', cancel);
+    }
+}
+
+/** iPhone app: fetch() goes through the native HTTP layer (see iosApp). */
+async function iosFetch(
+    url: string,
+    headers: Record<string, string>,
+    signal: AbortSignal,
+    timeoutMs: number
+): Promise<DirectResponse> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error('Provider not reachable: timeout')), timeoutMs + 5000);
+    });
+    const aborted = new Promise<never>((_, reject) => {
+        signal.addEventListener('abort', () => reject(new DOMException('Aborted', 'AbortError')), { once: true });
+    });
+    try {
+        const response = await Promise.race([fetch(url, { headers, cache: 'no-store' }), timeout, aborted]);
+        const text = await Promise.race([response.text(), timeout, aborted]);
+        return { status: response.status, text };
+    } finally {
+        clearTimeout(timer);
     }
 }

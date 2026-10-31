@@ -1,6 +1,7 @@
 name: Build
 
-# Builds the Windows installer, the web app (PWA) and the Android TV /
+# Builds the Windows installer, the web app (PWA), the iPhone app (unsigned
+# IPA) and the Android TV /
 # Fire TV app (APK).
 #   - push to master / manual run: build and upload as workflow artifacts
 #   - tag vX.Y.Z: additionally create a DRAFT GitHub release with the
@@ -253,6 +254,66 @@ jobs:
               with:
                   name: meddl-android-tv
                   path: dist/android/*.apk
+                  if-no-files-found: error
+                  retention-days: 14
+
+    ios:
+        name: iPhone / iPad app (unsigned IPA)
+        runs-on: macos-15
+        timeout-minutes: 45
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v6.1.0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Build TV client
+              shell: bash
+              run: bash tools/ci/run-and-annotate.sh pnpm nx run-many -t build -p tv --skip-nx-cache
+
+            # apps/ios/README.md: Capacitor creates the Xcode project here,
+            # configure-ios.sh adjusts it (plain-http streams, icon, orientation).
+            - name: Create the Xcode project
+              working-directory: apps/ios
+              run: |
+                  rm -rf www ios
+                  cp -r ../../dist/apps/tv www
+                  test -f www/index.html
+                  npm install --no-audit --no-fund
+                  npx cap add ios
+                  npx cap sync ios
+                  ./configure-ios.sh
+
+            # Unsigned: the viewer signs it with their own Apple ID (Sideloadly, AltStore).
+            - name: Build unsigned IPA
+              working-directory: apps/ios/ios/App
+              run: |
+                  version=$(node -p "require('${GITHUB_WORKSPACE}/package.json').version")
+                  if [ -d App.xcworkspace ]; then target=(-workspace App.xcworkspace); else target=(-project App.xcodeproj); fi
+                  xcodebuild "${target[@]}" -scheme App -configuration Release -sdk iphoneos \
+                      -destination 'generic/platform=iOS' -derivedDataPath build \
+                      MARKETING_VERSION="$version" CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+                      CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build
+                  mkdir -p Payload "$GITHUB_WORKSPACE/dist/ios"
+                  cp -R build/Build/Products/Release-iphoneos/App.app Payload/
+                  zip -qry "$GITHUB_WORKSPACE/dist/ios/meddl-ios-${version}.ipa" Payload
+                  ls -l "$GITHUB_WORKSPACE/dist/ios"
+
+            - name: Upload IPA
+              uses: actions/upload-artifact@v7
+              with:
+                  name: meddl-ios
+                  path: dist/ios/*.ipa
                   if-no-files-found: error
                   retention-days: 14
 
