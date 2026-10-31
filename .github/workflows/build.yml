@@ -64,7 +64,7 @@ jobs:
               with:
                   name: meddl-web
                   path: dist/apps/web
-                  retention-days: 14
+                  retention-days: 3
 
     windows:
         name: Windows installer (x64)
@@ -169,7 +169,7 @@ jobs:
                       dist/executables/*.blockmap
                       dist/executables/*.yml
                   if-no-files-found: error
-                  retention-days: 14
+                  retention-days: 3
 
     android-tv:
         name: Android TV / Fire TV app (APK)
@@ -255,7 +255,7 @@ jobs:
                   name: meddl-android-tv
                   path: dist/android/*.apk
                   if-no-files-found: error
-                  retention-days: 14
+                  retention-days: 3
 
     ios:
         name: iPhone / iPad app (unsigned IPA)
@@ -315,7 +315,7 @@ jobs:
                   name: meddl-ios
                   path: dist/ios/*.ipa
                   if-no-files-found: error
-                  retention-days: 14
+                  retention-days: 3
 
     android-install-test:
         name: APK installs on Android 12 (emulator)
