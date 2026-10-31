@@ -60,6 +60,8 @@ jobs:
               run: bash tools/ci/run-and-annotate.sh pnpm run build:frontend:pwa
 
             - name: Upload web app
+              # The artifact storage quota may be full; the release copy below stays.
+              continue-on-error: true
               uses: actions/upload-artifact@v7
               with:
                   name: meddl-web
@@ -68,6 +70,8 @@ jobs:
 
     windows:
         name: Windows installer (x64)
+        permissions:
+            contents: write
         runs-on: windows-2022
         timeout-minutes: 60
         steps:
@@ -161,6 +165,8 @@ jobs:
               run: pnpm run verify:package-layout -- windows x64
 
             - name: Upload installer
+              # The artifact storage quota may be full; the release copy below stays.
+              continue-on-error: true
               uses: actions/upload-artifact@v7
               with:
                   name: meddl-windows-x64
@@ -171,8 +177,17 @@ jobs:
                   if-no-files-found: error
                   retention-days: 3
 
+            - name: Publish to the latest-build pre-release
+              if: github.ref == 'refs/heads/master'
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: bash tools/ci/publish-latest.sh dist/executables/*.exe
+
     android-tv:
         name: Android TV / Fire TV app (APK)
+        permissions:
+            contents: write
         runs-on: ubuntu-latest
         timeout-minutes: 40
         steps:
@@ -250,6 +265,8 @@ jobs:
                   "$tools/aapt2" dump badging "$apk" | grep -E "^(package|sdkVersion|targetSdkVersion|native-code|launchable)" || true
 
             - name: Upload APK
+              # The artifact storage quota may be full; the release copy below stays.
+              continue-on-error: true
               uses: actions/upload-artifact@v7
               with:
                   name: meddl-android-tv
@@ -257,8 +274,17 @@ jobs:
                   if-no-files-found: error
                   retention-days: 3
 
+            - name: Publish to the latest-build pre-release
+              if: github.ref == 'refs/heads/master'
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: bash tools/ci/publish-latest.sh dist/android/*.apk
+
     ios:
         name: iPhone / iPad app (unsigned IPA)
+        permissions:
+            contents: write
         runs-on: macos-15
         timeout-minutes: 45
         steps:
@@ -310,12 +336,21 @@ jobs:
                   ls -l "$GITHUB_WORKSPACE/dist/ios"
 
             - name: Upload IPA
+              # The artifact storage quota may be full; the release copy below stays.
+              continue-on-error: true
               uses: actions/upload-artifact@v7
               with:
                   name: meddl-ios
                   path: dist/ios/*.ipa
                   if-no-files-found: error
                   retention-days: 3
+
+            - name: Publish to the latest-build pre-release
+              if: github.ref == 'refs/heads/master'
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: bash tools/ci/publish-latest.sh dist/ios/*.ipa
 
     android-install-test:
         name: APK installs on Android 12 (emulator)
@@ -324,9 +359,17 @@ jobs:
         timeout-minutes: 30
         steps:
             - uses: actions/download-artifact@v5
+              continue-on-error: true
               with:
                   name: meddl-android-tv
                   path: apk
+            - name: APK from the latest-build pre-release (artifact storage full)
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  if ls apk/*.apk >/dev/null 2>&1; then exit 0; fi
+                  gh release download latest-build -R "$GITHUB_REPOSITORY" -p '*.apk' -D apk --clobber
             - name: Enable KVM
               run: |
                   echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
