@@ -220,7 +220,8 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
             setPlaying(item);
             rememberChannel(item);
             if (item.kind === 'live') playingCategory.current = category;
-            if (item.kind !== 'live') {
+            // Phones have no preview: a channel opens in full screen at once.
+            if (item.kind !== 'live' || phoneLayout()) {
                 setFullscreen(true);
                 restoreFocus('player-toggle');
             }
@@ -290,7 +291,8 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
     function back() {
         if (fullscreen) {
             setFullscreen(false);
-            if (playing?.kind !== 'live') stop();
+            // Nothing keeps playing behind the list on a phone.
+            if (playing?.kind !== 'live' || phoneLayout()) stop();
             playerOrigin.restore();
             return;
         }
@@ -402,3 +404,12 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
     };
 }
 export type TvModel = ReturnType<typeof useTv>;
+
+/** Phone-sized window (the layout of phone.css): no live preview. */
+function phoneLayout(): boolean {
+    try {
+        return typeof window !== 'undefined' && window.matchMedia('(max-width: 900px)').matches;
+    } catch {
+        return false;
+    }
+}

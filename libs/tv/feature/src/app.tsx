@@ -5,6 +5,7 @@ import { PageHeader } from './page-header';
 import { Favorites } from './favorites';
 import { usePlayerControls } from './player-controls';
 import { PlayerOverlay } from './player-overlay';
+import { IosPlayerScreen, useIosPlayer } from './ios-player';
 import { useSoundFallback } from './sound-fallback';
 import { DesktopPlayer } from './desktop-player';
 import { useNextEpisode } from './next-episode';
@@ -46,6 +47,7 @@ export function TvApp() {
     // Mounted for the live preview too: a channel the page cannot play
     // opens in the app's own player instead of an error.
     const sound = useSoundFallback(tv);
+    const ios = useIosPlayer(tv, video);
     const nextEpisode = useNextEpisode(tv, video.current);
     sound.nextEpisode.current = nextEpisode.next
         ? { title: nextEpisode.next.title, play: nextEpisode.playNext }
@@ -232,11 +234,13 @@ export function TvApp() {
                 {/* Transparent poster: Android's WebView otherwise shows a grey play symbol while loading. */}
                 <video
                     ref={video}
-                    playsInline
+                    playsInline={!ios}
                     preload="metadata"
                     poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
                 />
-                {tv.fullscreen ? (
+                {tv.fullscreen && ios ? (
+                    <IosPlayerScreen tv={tv} />
+                ) : tv.fullscreen ? (
                     <PlayerOverlay
                         tv={tv}
                         overlay={overlay}

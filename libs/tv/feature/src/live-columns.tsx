@@ -57,14 +57,20 @@ export function LiveColumns({
             />
             <section class="category-column" aria-label={t('Channel categories')}>
                 <h2>
-                    {tv.route.country && tv.route.country !== ALL_COUNTRIES ? (
-                        <>
-                            <CountryFlag code={tv.route.country} />
-                            {countryLabel(tv.route.country)}
-                        </>
-                    ) : (
-                        t('Live TV')
-                    )}
+                    {/* Phones: tap to choose another country (on TVs the drawer's arrow does that). */}
+                    <button class="country-switch" aria-label={t('Countries')} onClick={() => setCountriesOpen(true)}>
+                        {tv.route.country && tv.route.country !== ALL_COUNTRIES ? (
+                            <>
+                                <CountryFlag code={tv.route.country} />
+                                {countryLabel(tv.route.country)}
+                            </>
+                        ) : (
+                            t('Live TV')
+                        )}
+                        <span class="country-switch-arrow" aria-hidden="true">
+                            <TvIcon name="down" />
+                        </span>
+                    </button>
                 </h2>
                 <div class="channels category-list">
                     <VirtualCollection
