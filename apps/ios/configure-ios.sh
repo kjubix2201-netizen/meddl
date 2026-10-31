@@ -11,9 +11,9 @@ set_key CFBundleDisplayName string meddl
 # IPTV providers serve lists, logos and streams over plain http.
 "$pb" -c "Delete :NSAppTransportSecurity" "$plist" >/dev/null 2>&1 || true
 "$pb" -c "Add :NSAppTransportSecurity dict" "$plist"
+# Only this key: with ...InWebContent / ...ForMedia present, iOS ignores it,
+# and the native HTTP layer (provider lists over http) would be blocked.
 "$pb" -c "Add :NSAppTransportSecurity:NSAllowsArbitraryLoads bool true" "$plist"
-"$pb" -c "Add :NSAppTransportSecurity:NSAllowsArbitraryLoadsInWebContent bool true" "$plist"
-"$pb" -c "Add :NSAppTransportSecurity:NSAllowsArbitraryLoadsForMedia bool true" "$plist"
 # Sound keeps playing when the screen locks.
 "$pb" -c "Delete :UIBackgroundModes" "$plist" >/dev/null 2>&1 || true
 "$pb" -c "Add :UIBackgroundModes array" "$plist"
