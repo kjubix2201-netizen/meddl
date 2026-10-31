@@ -180,6 +180,7 @@ export const DE: Readonly<Record<string, string>> = {
         'Dein Anbieter hat für diesen Titel keine Beschreibung geliefert.',
     'Watch now': 'Jetzt ansehen',
     'Resume': 'Fortsetzen',
+    'AirPlay': 'AirPlay',
     'Waiting for the VPN…': 'Warte auf das VPN …',
     'meddl loads only through your VPN (Settings → Connection → VPN).': 'meddl lädt nur über dein VPN (Einstellungen → Verbindung → VPN).',
     'Only through the VPN (lock)': 'Nur über das VPN laden (Sperre)',

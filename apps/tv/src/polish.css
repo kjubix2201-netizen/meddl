@@ -203,3 +203,8 @@ button.last-watched:hover {
     height: 3px;
     margin-top: 8px;
 }
+
+/* iPhone / iPad: AirPlay in the player, blue while it plays on the TV. */
+.airplay-button.is-active {
+    color: #4ea1ff;
+}

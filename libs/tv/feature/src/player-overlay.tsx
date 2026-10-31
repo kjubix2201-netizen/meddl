@@ -6,6 +6,7 @@ import type { useSoundFallback } from './sound-fallback';
 import type { useNextEpisode } from './next-episode';
 import { useEffect, useState } from 'preact/hooks';
 import { VolumeControl } from './player-volume';
+import { AirPlayButton } from './airplay-button';
 import type { TvModel } from './use-tv';
 
 const clockTime = (value: number) =>
@@ -219,6 +220,7 @@ export function PlayerOverlay({
                         >
                             <TvIcon name="star" />
                         </button>
+                        <AirPlayButton video={element} />
                         <VolumeControl video={element} />
                     </div>
                 </div>
