@@ -25,6 +25,15 @@ import java.net.URL
 object DirectFetch {
     const val PATH = "/__meddl/fetch"
     private const val MAX_REDIRECTS = 5
+    private const val DISK_LIMIT = 200L * 1024 * 1024
+
+    /**
+     * Posters and logos kept on the device (MainActivity sets the app's cache
+     * folder): after a restart they come from here at once instead of the
+     * provider. Android may empty the folder when space runs low.
+     */
+    @Volatile var diskDir: java.io.File? = null
+    private var writesSincePrune = 0
 
     fun answer(request: Uri, method: String): WebResourceResponse {
         if (!method.equals("GET", ignoreCase = true)) return failure(405, "method")
@@ -42,6 +51,7 @@ object DirectFetch {
         val width = request.getQueryParameter("w")?.toIntOrNull()?.coerceIn(64, 1280)
         return try {
             if (width != null) thumbnail(target, width, headers, timeout)
+            else if (cache != "no-store") picture(target, headers, timeout, cache)
             else fetch(URL(target), headers, timeout, cache)
         } catch (error: IOException) {
             failure(502, error.javaClass.simpleName)
@@ -55,9 +65,78 @@ object DirectFetch {
         override fun sizeOf(key: String, value: ByteArray) = value.size
     }
 
+    /** A logo (c=1): from the device when kept, otherwise fetched and kept. */
+    private fun picture(target: String, headers: JSONObject, timeout: Int, cache: String): WebResourceResponse {
+        val key = "logo|$target"
+        (thumbs.get(key) ?: diskRead(key))?.let {
+            thumbs.put(key, it)
+            return WebResourceResponse(guessType(it), null, 200, "OK", mapOf("Cache-Control" to cache), ByteArrayInputStream(it))
+        }
+        val original = fetch(URL(target), headers, timeout, cache)
+        if (original.statusCode !in 200..299 || original.mimeType?.startsWith("image/") != true) return original
+        val bytes = original.data.use { it.readBytes() }
+        if (bytes.size <= 2 * 1024 * 1024) {
+            thumbs.put(key, bytes)
+            diskWrite(key, bytes)
+        }
+        return WebResourceResponse(original.mimeType, null, 200, "OK", mapOf("Cache-Control" to cache), ByteArrayInputStream(bytes))
+    }
+
+    private fun guessType(bytes: ByteArray): String = when {
+        bytes.size > 3 && bytes[0] == 0x89.toByte() && bytes[1] == 'P'.code.toByte() -> "image/png"
+        bytes.size > 2 && bytes[0] == 0xFF.toByte() && bytes[1] == 0xD8.toByte() -> "image/jpeg"
+        bytes.size > 3 && bytes[0] == 'G'.code.toByte() && bytes[1] == 'I'.code.toByte() -> "image/gif"
+        bytes.size > 12 && bytes[8] == 'W'.code.toByte() && bytes[9] == 'E'.code.toByte() -> "image/webp"
+        else -> "image/png"
+    }
+
+    private fun diskFile(key: String): java.io.File? {
+        val dir = diskDir ?: return null
+        val name = java.security.MessageDigest.getInstance("SHA-1")
+            .digest(key.toByteArray()).joinToString("") { "%02x".format(it) }
+        return java.io.File(dir, name)
+    }
+
+    private fun diskRead(key: String): ByteArray? = runCatching {
+        diskFile(key)?.takeIf { it.isFile }?.let { file ->
+            file.setLastModified(System.currentTimeMillis())
+            file.readBytes()
+        }
+    }.getOrNull()
+
+    private fun diskWrite(key: String, bytes: ByteArray) {
+        runCatching {
+            val file = diskFile(key) ?: return
+            file.parentFile?.mkdirs()
+            val temp = java.io.File(file.path + ".tmp")
+            temp.writeBytes(bytes)
+            temp.renameTo(file)
+            if (++writesSincePrune >= 200) {
+                writesSincePrune = 0
+                prune()
+            }
+        }
+    }
+
+    /** Keeps the folder under DISK_LIMIT, dropping the least recently used. */
+    private fun prune() {
+        val files = diskDir?.listFiles()?.filter { it.isFile } ?: return
+        var total = files.sumOf { it.length() }
+        if (total <= DISK_LIMIT) return
+        for (file in files.sortedBy { it.lastModified() }) {
+            total -= file.length()
+            file.delete()
+            if (total <= DISK_LIMIT * 8 / 10) break
+        }
+    }
+
     private fun thumbnail(target: String, width: Int, headers: JSONObject, timeout: Int): WebResourceResponse {
         val key = "$width|$target"
         thumbs.get(key)?.let { return image(it) }
+        diskRead(key)?.let {
+            thumbs.put(key, it)
+            return image(it)
+        }
         val original = fetch(URL(target), headers, timeout, "no-store")
         if (original.statusCode !in 200..299) return original
         val bytes = original.data.use { it.readBytes() }
@@ -65,6 +144,7 @@ object DirectFetch {
             original.mimeType, null, 200, "OK", mapOf("Cache-Control" to "max-age=86400"), ByteArrayInputStream(bytes)
         )
         thumbs.put(key, small)
+        diskWrite(key, small)
         return image(small)
     }
 

@@ -18,6 +18,17 @@ interface Entry {
     at: number;
     rows: unknown[];
 }
+/**
+ * Stored form: the list as one JSON text. Reading a single string and
+ * JSON.parse is several times faster than IndexedDB rebuilding tens of
+ * thousands of objects (and writing it too), which TVs notice most.
+ * Older entries keep their rows array and are read as before.
+ */
+interface StoredEntry {
+    at: number;
+    rows?: unknown[];
+    json?: string;
+}
 
 let opening: Promise<IDBDatabase | null> | null = null;
 
@@ -70,12 +81,36 @@ export async function readCachedList(key: string): Promise<Entry | undefined> {
         try {
             const request = db.transaction(STORE, 'readonly').objectStore(STORE).get(key);
             request.onsuccess = () => {
-                const value = request.result as Entry | undefined;
-                resolve(value && Array.isArray(value.rows) && Number.isFinite(value.at) ? value : undefined);
+                const value = request.result as StoredEntry | undefined;
+                if (!value || !Number.isFinite(value.at)) return resolve(undefined);
+                if (typeof value.json === 'string') {
+                    try {
+                        const rows = JSON.parse(value.json) as unknown;
+                        return resolve(Array.isArray(rows) ? { at: value.at, rows } : undefined);
+                    } catch {
+                        return resolve(undefined);
+                    }
+                }
+                resolve(Array.isArray(value.rows) ? { at: value.at, rows: value.rows } : undefined);
             };
             request.onerror = () => resolve(undefined);
         } catch {
             resolve(undefined);
+        }
+    });
+}
+
+/** True when a list is kept under `key` (without reading it). */
+export async function hasCachedList(key: string): Promise<boolean> {
+    const db = await database();
+    if (!db) return false;
+    return new Promise((resolve) => {
+        try {
+            const request = db.transaction(STORE, 'readonly').objectStore(STORE).count(key);
+            request.onsuccess = () => resolve(request.result > 0);
+            request.onerror = () => resolve(false);
+        } catch {
+            resolve(false);
         }
     });
 }
@@ -86,7 +121,7 @@ export async function writeCachedList(key: string, rows: unknown[]): Promise<voi
     await new Promise<void>((resolve) => {
         try {
             const transaction = db.transaction(STORE, 'readwrite');
-            transaction.objectStore(STORE).put({ at: Date.now(), rows } satisfies Entry, key);
+            transaction.objectStore(STORE).put({ at: Date.now(), json: JSON.stringify(rows) } satisfies StoredEntry, key);
             transaction.oncomplete = () => resolve();
             transaction.onerror = () => resolve();
             transaction.onabort = () => resolve();

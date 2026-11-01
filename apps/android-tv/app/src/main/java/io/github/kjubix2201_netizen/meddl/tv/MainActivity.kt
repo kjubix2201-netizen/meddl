@@ -48,6 +48,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        DirectFetch.diskDir = java.io.File(cacheDir, "pictures")
 
         val assets = WebViewAssetLoader.Builder()
             .setDomain(ASSET_HOST)

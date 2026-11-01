@@ -22,7 +22,7 @@ import {
     withSeriesContext,
 } from '@meddl/tv/util';
 import type { XtreamVodDetails } from '@meddl/shared/interfaces';
-import { cachedList, readCachedList } from './catalog-cache';
+import { cachedList, hasCachedList } from './catalog-cache';
 import { ProviderTransport } from './transport';
 /** The stream formats the account allows, kept for a start without waiting. */
 function savedFormats(key: string): string[] | undefined {
@@ -77,7 +77,7 @@ export class XtreamProvider implements ProviderClient {
         // Lists saved on this device: start with them at once (as other IPTV
         // players do) and check the account in the background.
         const formats = savedFormats(this.cacheKey('formats'));
-        if (formats && (await readCachedList(this.cacheKey('get_live_streams')))) {
+        if (formats && (await hasCachedList(this.cacheKey('get_live_streams')))) {
             this.client.formats = formats;
             void this.client
                 .account(signal)

@@ -153,16 +153,24 @@ export class CachedProvider implements ProviderClient {
         sorts: { movie: CatalogSort; series: CatalogSort },
         onStep: (kind: Kind, state: 'loading' | 'done' | 'failed', total?: number) => void = () => undefined
     ) {
+        let quick = false;
         for (const kind of this.warmKinds()) {
+            if (this.owner.signal.aborted) return;
+            // Live came from this device at once: films and series follow a
+            // little later, so opening their big lists does not make the first
+            // steps in Live TV stutter (TVs).
+            if (quick && kind !== 'live') await new Promise((resolve) => setTimeout(resolve, 5000));
             if (this.owner.signal.aborted) return;
             const sort = kind === 'live' ? 'provider' : sorts[kind === 'movie' ? 'movie' : 'series'];
             onStep(kind, 'loading');
+            const started = Date.now();
             try {
                 const result = await this.catalog(kind, '', 0, '', this.owner.signal, sort);
                 onStep(kind, 'done', result.total);
             } catch {
                 onStep(kind, 'failed');
             }
+            if (kind === 'live') quick = Date.now() - started < 1500;
         }
     }
     dispose() {
