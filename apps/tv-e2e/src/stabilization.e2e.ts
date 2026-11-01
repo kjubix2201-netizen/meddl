@@ -110,7 +110,7 @@ test('failed startup read blocks editing and safely retries the original saved s
     await expect(page.locator('.source-row')).toContainText('TV xtream');
 });
 
-test('temporary startup outage reconnects automatically without losing the saved source', async ({
+test('temporary startup outage reconnects on request without losing the saved source', async ({
     page,
 }) => {
     await start(page);
@@ -118,10 +118,12 @@ test('temporary startup outage reconnects automatically without losing the saved
     await page.route(`${backend}/provider-targets`, (route) => route.abort());
     await page.reload();
     await expect(page.getByRole('alert')).toContainText('request failed');
+    // No automatic attempts: the viewer reconnects.
     await expect(
         page.getByRole('status').filter({ hasText: 'Reconnecting in' })
-    ).toBeVisible();
+    ).toHaveCount(0);
     await page.unroute(`${backend}/provider-targets`);
+    await page.getByRole('button', { name: 'Retry connection' }).click();
     await expect(page.locator('.hero')).toBeVisible({ timeout: 15000 });
     await expect(page.getByRole('alert')).toHaveCount(0);
 });
