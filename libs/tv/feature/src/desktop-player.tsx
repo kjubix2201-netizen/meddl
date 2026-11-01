@@ -212,12 +212,15 @@ export function DesktopPlayer({
     const status = state?.status ?? 'loading';
     const [infoOpen, setInfoOpen] = useState(false);
     const latestInfo = useRef(setInfoOpen);
+    // MPV answers "-1" or "no" for "as the film"; a ratio means stretched.
+    const [fill, setFill] = useState(false);
     const toggleFormat = () => {
         const mpv = session.current;
         if (!mpv) return;
-        const filled = !!mpv.state?.aspectOverride && mpv.state.aspectOverride !== 'no';
+        const next = !fill;
+        setFill(next);
         // Fill: the picture stretched to the window's shape (no black bars).
-        mpv.setAspect(filled ? 'no' : (window.innerWidth / Math.max(1, window.innerHeight)).toFixed(3));
+        mpv.setAspect(next ? (window.innerWidth / Math.max(1, window.innerHeight)).toFixed(3) : 'no');
     };
     const latestFormat = useRef(toggleFormat);
     latestFormat.current = toggleFormat;
@@ -236,7 +239,7 @@ export function DesktopPlayer({
         subtitleId: state?.selectedSubtitleTrackId ?? null,
         ...(next && onNext ? { next } : {}),
         ...(channels.view ? { channels: channels.view } : {}),
-        format: state?.aspectOverride && state.aspectOverride !== 'no' ? 'fill' : 'fit',
+        format: fill ? 'fill' : 'fit',
         ...(infoOpen ? { info: streamInfoLines(state) } : {}),
         shown,
     };
