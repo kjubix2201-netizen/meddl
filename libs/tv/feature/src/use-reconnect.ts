@@ -1,9 +1,12 @@
 import { t } from '@meddl/tv/util';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { RECONNECT_DELAYS, shouldRetryOnResume } from './reconnect-policy';
+import { RECONNECT_DELAYS } from './reconnect-policy';
 export { RECONNECT_DELAYS, shouldRetryOnResume } from './reconnect-policy';
 
-/** Bounded retries only in the foreground and outside a playback session. */
+/**
+ * Reconnects only when the viewer presses "Reconnect" (no automatic
+ * attempts, RECONNECT_DELAYS is empty); the status line stays empty.
+ */
 export function useReconnect(options: {
     key: string;
     enabled: boolean;
@@ -34,10 +37,9 @@ export function useReconnect(options: {
                 setWake((n) => n + 1);
                 return;
             }
-            const current = latest.current;
+            // No automatic reconnect here either: the viewer presses "Reconnect".
             attempts.current = 0;
             setWake((n) => n + 1);
-            if (shouldRetryOnResume(current)) current.retry();
         };
         window.addEventListener('online', resume);
         window.addEventListener('offline', resume);
@@ -63,10 +65,9 @@ export function useReconnect(options: {
             return;
         }
         const delay = RECONNECT_DELAYS[attempts.current];
+        // No automatic retries (RECONNECT_DELAYS is empty): only "Reconnect".
         if (delay === undefined) {
-            setStatus(
-                t('Automatic retries stopped. Check your server or source, then retry.')
-            );
+            setStatus('');
             return;
         }
         setStatus(

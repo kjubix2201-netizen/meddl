@@ -1,4 +1,5 @@
-export const RECONNECT_DELAYS = [2000, 5000, 10000, 30000];
+/** Automatic reconnect attempts: none, the viewer reconnects by hand. */
+export const RECONNECT_DELAYS: number[] = [];
 
 /**
  * Coming back to the app (tab visible again, network back) reconnects only
