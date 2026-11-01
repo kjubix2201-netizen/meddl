@@ -207,6 +207,11 @@ export function useSoundFallback(tv: TvModel) {
                 live,
                 userAgent: source?.userAgent ?? '',
                 channelsLabel: t('Channels'),
+                formatLabel: t('Picture'),
+                fitLabel: t('Fit'),
+                fillLabel: t('Fill'),
+                zoomLabel: t('Zoom'),
+                infoLabel: t('Stream info'),
                 ...(!live && nextEpisode.current
                     ? {
                           nextTitle: nextEpisode.current.title,

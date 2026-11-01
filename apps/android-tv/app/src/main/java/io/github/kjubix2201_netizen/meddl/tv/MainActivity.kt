@@ -326,6 +326,11 @@ class MainActivity : Activity() {
                         .putExtra(PlayerActivity.EXTRA_PLAY_NOW_LABEL, json.optString("playNowLabel"))
                         .putExtra(PlayerActivity.EXTRA_CANCEL_LABEL, json.optString("cancelLabel"))
                         .putExtra(PlayerActivity.EXTRA_CHANNELS_LABEL, json.optString("channelsLabel"))
+                        .putExtra(PlayerActivity.EXTRA_FORMAT_LABEL, json.optString("formatLabel"))
+                        .putExtra(PlayerActivity.EXTRA_FIT_LABEL, json.optString("fitLabel"))
+                        .putExtra(PlayerActivity.EXTRA_FILL_LABEL, json.optString("fillLabel"))
+                        .putExtra(PlayerActivity.EXTRA_ZOOM_LABEL, json.optString("zoomLabel"))
+                        .putExtra(PlayerActivity.EXTRA_INFO_LABEL, json.optString("infoLabel"))
                 // Zapping: the open player switches to the next channel in place.
                 val open = PlayerActivity.current
                 if (open != null && !open.isFinishing) {

@@ -22,6 +22,22 @@ export interface DesktopMpvState {
     selectedAudioTrackId?: number | null;
     subtitleTracks?: DesktopMpvTrack[];
     selectedSubtitleTrackId?: number | null;
+    /** mpv video-aspect-override: "no" (as the film) or a ratio. */
+    aspectOverride?: string;
+    videoWidth?: number;
+    videoHeight?: number;
+    /** Live stream diagnostics (resolution, codecs, bitrates, buffer). */
+    stats?: {
+        fps?: number;
+        videoBitrateBps?: number;
+        audioBitrateBps?: number;
+        videoCodec?: string;
+        audioCodec?: string;
+        audioChannels?: string;
+        container?: string;
+        bufferedAheadSeconds?: number;
+        droppedFrames?: number;
+    };
     error?: string;
 }
 
@@ -52,6 +68,7 @@ type Bridge = {
     setEmbeddedMpvSubtitleTrack?: (id: string, trackId: number) => Promise<DesktopMpvState | null>;
     seekEmbeddedMpvBy?: (id: string, seconds: number) => Promise<DesktopMpvState | null>;
     setEmbeddedMpvVolume?: (id: string, volume: number) => Promise<DesktopMpvState | null>;
+    setEmbeddedMpvAspect?: (id: string, aspect: string) => Promise<DesktopMpvState | null>;
     disposeEmbeddedMpvSession?: (id: string) => Promise<unknown>;
     onEmbeddedMpvSessionUpdate?: (callback: (state: DesktopMpvState) => void) => (() => void) | void;
 };
@@ -140,6 +157,11 @@ export class DesktopMpvSession {
 
     setAudioTrack(trackId: number) {
         if (this.id) this.apply(bridge()?.setEmbeddedMpvAudioTrack?.(this.id, trackId));
+    }
+
+    /** "no" shows the picture as it is; a ratio ("1.778") stretches it to that. */
+    setAspect(aspect: string) {
+        if (this.id) this.apply(bridge()?.setEmbeddedMpvAspect?.(this.id, aspect));
     }
 
     /** -1 turns subtitles off. */

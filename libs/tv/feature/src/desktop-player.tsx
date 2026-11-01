@@ -9,6 +9,7 @@ import {
 import { t } from '@meddl/tv/util';
 import { PlayerBar, SEEK_SECONDS, type PlayerBarCommand, type PlayerBarState } from './desktop-player-bar';
 import { useDesktopChannelList } from './desktop-channel-list';
+import { streamInfoLines } from './stream-info';
 
 const HIDE_AFTER_MS = 4000;
 const BACK_KEYS = ['Escape', 'BrowserBack', 'Backspace', 'GoBack'];
@@ -179,6 +180,8 @@ export function DesktopPlayer({
             else if (event.key === 'm' || event.key === 'AudioVolumeMute') toggleMute();
             else if (event.key === 'a') cycleAudio();
             else if (event.key === 's' || event.key === 'c') cycleSubtitles();
+            else if (event.key === 'i') latestInfo.current((open) => !open);
+            else if (event.key === 'z') latestFormat.current();
             else if (event.key === 'j' && !playback.isLive) mpv.seekBy(-60);
             else if (event.key === 'l' && !playback.isLive) mpv.seekBy(60);
         };
@@ -207,7 +210,18 @@ export function DesktopPlayer({
     }
 
     const status = state?.status ?? 'loading';
-    const shown = controls || !!failure || next?.countdown != null || !!channels.view;
+    const [infoOpen, setInfoOpen] = useState(false);
+    const latestInfo = useRef(setInfoOpen);
+    const toggleFormat = () => {
+        const mpv = session.current;
+        if (!mpv) return;
+        const filled = !!mpv.state?.aspectOverride && mpv.state.aspectOverride !== 'no';
+        // Fill: the picture stretched to the window's shape (no black bars).
+        mpv.setAspect(filled ? 'no' : (window.innerWidth / Math.max(1, window.innerHeight)).toFixed(3));
+    };
+    const latestFormat = useRef(toggleFormat);
+    latestFormat.current = toggleFormat;
+    const shown = controls || !!failure || next?.countdown != null || !!channels.view || infoOpen;
     const barState: PlayerBarState = {
         title: playback.title,
         isLive: !!playback.isLive,
@@ -222,6 +236,8 @@ export function DesktopPlayer({
         subtitleId: state?.selectedSubtitleTrackId ?? null,
         ...(next && onNext ? { next } : {}),
         ...(channels.view ? { channels: channels.view } : {}),
+        format: state?.aspectOverride && state.aspectOverride !== 'no' ? 'fill' : 'fit',
+        ...(infoOpen ? { info: streamInfoLines(state) } : {}),
         shown,
     };
     const handle = (command: PlayerBarCommand) => {
@@ -247,6 +263,8 @@ export function DesktopPlayer({
         else if (command.type === 'audioTrack') mpv?.setAudioTrack(command.id);
         else if (command.type === 'subtitleTrack') mpv?.setSubtitleTrack(command.id);
         else if (command.type === 'pickChannel') channels.pick(command.index);
+        else if (command.type === 'format') toggleFormat();
+        else if (command.type === 'info') setInfoOpen((open) => !open);
         else if (command.type === 'next') onNext?.(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
         else if (command.type === 'cancelNext') onCancelNext?.();
     };

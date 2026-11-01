@@ -36,6 +36,10 @@ export interface PlayerBarState {
     next?: { title: string; countdown: number | null };
     /** Live: the open channel list (Up / Down in the player). */
     channels?: ChannelListView;
+    /** Picture format: as the film ("fit") or stretched to the window ("fill"). */
+    format?: 'fit' | 'fill';
+    /** Stream info lines while shown (I key or the Info button). */
+    info?: string[];
     /** False while the controls are hidden (no mouse or key for a while). */
     shown: boolean;
 }
@@ -45,7 +49,8 @@ export type PlayerBarCommand =
     | { type: 'seekBy' | 'seekTo'; seconds: number }
     | { type: 'volume'; value: number }
     | { type: 'audioTrack' | 'subtitleTrack'; id: number }
-    | { type: 'pickChannel'; index: number };
+    | { type: 'pickChannel'; index: number }
+    | { type: 'format' | 'info' };
 
 /**
  * The meddl player's controls, laid out like a TV player: title, timeline,
@@ -97,6 +102,13 @@ export function PlayerBar({
                             </button>
                         );
                     })}
+                </div>
+            ) : null}
+            {state.info ? (
+                <div class="dp-info" role="status">
+                    {state.info.map((line) => (
+                        <span>{line}</span>
+                    ))}
                 </div>
             ) : null}
             <div class="dp-head">
@@ -234,6 +246,18 @@ export function PlayerBar({
                             })}
                         </div>
                     ) : null}
+                    {state.format ? (
+                        <button class="dp-pill" onClick={() => send({ type: 'format' })} title={t('Picture') + ' (Z)'}>
+                            {t('Picture')}: {state.format === 'fill' ? t('Fill') : t('Fit')}
+                        </button>
+                    ) : null}
+                    <button
+                        class={`dp-pill ${state.info ? 'is-on' : ''}`}
+                        onClick={() => send({ type: 'info' })}
+                        title={t('Stream info') + ' (I)'}
+                    >
+                        {t('Info')}
+                    </button>
                     <button
                         class="dp-icon"
                         aria-label={volume > 0 ? t('Mute') : t('Unmute')}

@@ -32,6 +32,7 @@ import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.DefaultTimeBar
 import androidx.media3.ui.PlayerView
 
@@ -66,6 +67,17 @@ class PlayerActivity : Activity() {
     private var channelNames: List<String> = emptyList()
     private var playingIndex = 0
     private val hidePanel = Runnable { hideChannels() }
+    private lateinit var optionsBar: LinearLayout
+    private lateinit var formatButton: Button
+    private lateinit var infoText: TextView
+    private var format = 0
+    private val refreshInfo = object : Runnable {
+        override fun run() {
+            if (infoText.visibility != View.VISIBLE) return
+            infoText.text = streamInfo()
+            countdown.postDelayed(this, 1000)
+        }
+    }
     private var userAgentInUse = ""
     private lateinit var nextBanner: LinearLayout
     private lateinit var nextText: TextView
@@ -136,6 +148,27 @@ class PlayerActivity : Activity() {
             FrameLayout.LayoutParams.WRAP_CONTENT,
             Gravity.TOP or Gravity.START,
         ).apply { setMargins(dp(48), dp(40), 0, 0) })
+        root.addView(buildOptions(), FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            Gravity.TOP or Gravity.END,
+        ).apply { setMargins(0, dp(32), dp(40), 0) })
+        infoText = TextView(this).apply {
+            setTextColor(Color.WHITE)
+            textSize = 15f
+            setLineSpacing(0f, 1.25f)
+            setPadding(dp(18), dp(12), dp(18), dp(12))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(12).toFloat()
+                setColor(0xCC000000.toInt())
+            }
+            visibility = View.GONE
+        }
+        root.addView(infoText, FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT,
+            Gravity.BOTTOM or Gravity.START,
+        ).apply { setMargins(dp(48), 0, 0, dp(120)) })
         root.addView(buildChannelPanel(), FrameLayout.LayoutParams(
             (resources.displayMetrics.widthPixels * 0.34f).toInt(),
             FrameLayout.LayoutParams.MATCH_PARENT,
@@ -236,6 +269,134 @@ class PlayerActivity : Activity() {
             addView(channelList, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
         }
         return channelPanel
+    }
+
+    /**
+     * Shown with the controls at the top right: the picture format (fit with
+     * black bars, fill by stretching, zoom by cropping; kept for next time)
+     * and the stream info. Menu cycles the format, Info shows the info.
+     */
+    private fun buildOptions(): LinearLayout {
+        format = getSharedPreferences(PREFS, MODE_PRIVATE).getInt(KEY_FORMAT, 0).coerceIn(0, 2)
+        applyFormat()
+        fun pill(action: () -> Unit) = Button(this).apply {
+            isAllCaps = false
+            textSize = 15f
+            setTextColor(Color.WHITE)
+            minHeight = 0
+            minimumHeight = 0
+            setPadding(dp(18), dp(8), dp(18), dp(8))
+            background = GradientDrawable().apply {
+                cornerRadius = dp(20).toFloat()
+                setColor(0x66000000)
+            }
+            isFocusable = true
+            setOnFocusChangeListener { v, focused ->
+                (v.background as GradientDrawable).setColor(if (focused) Color.WHITE else 0x66000000)
+                (v as Button).setTextColor(if (focused) Color.BLACK else Color.WHITE)
+            }
+            setOnClickListener { action() }
+        }
+        formatButton = pill { cycleFormat() }
+        val info = pill { toggleInfo() }.apply { text = label(EXTRA_INFO_LABEL, "Stream info") }
+        formatButton.text = formatLabel()
+        optionsBar = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            visibility = View.GONE
+            addView(formatButton)
+            addView(info, LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT,
+            ).apply { marginStart = dp(10) })
+        }
+        view.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
+            optionsBar.visibility = visibility
+        })
+        return optionsBar
+    }
+
+    private fun formatLabel(): String {
+        val names = listOf(
+            label(EXTRA_FIT_LABEL, "Fit"),
+            label(EXTRA_FILL_LABEL, "Fill"),
+            label(EXTRA_ZOOM_LABEL, "Zoom"),
+        )
+        return "${label(EXTRA_FORMAT_LABEL, "Picture")}: ${names[format]}"
+    }
+
+    private fun applyFormat() {
+        view.resizeMode = when (format) {
+            1 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+            2 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+        }
+    }
+
+    private fun cycleFormat() {
+        format = (format + 1) % 3
+        applyFormat()
+        getSharedPreferences(PREFS, MODE_PRIVATE).edit().putInt(KEY_FORMAT, format).apply()
+        if (::formatButton.isInitialized) formatButton.text = formatLabel()
+        showBanner(formatLabel())
+    }
+
+    private fun toggleInfo() {
+        if (infoText.visibility == View.VISIBLE) {
+            infoText.visibility = View.GONE
+            countdown.removeCallbacks(refreshInfo)
+        } else {
+            infoText.visibility = View.VISIBLE
+            countdown.removeCallbacks(refreshInfo)
+            refreshInfo.run()
+        }
+    }
+
+    /** "1920×1080 · 50 fps · H.264 · 6.2 Mbit/s" and "Dolby Digital · 5.1". */
+    private fun streamInfo(): String {
+        val exo = player ?: return "…"
+        val video = exo.videoFormat
+        val audio = exo.audioFormat
+        val lines = mutableListOf<String>()
+        if (video != null) {
+            val parts = mutableListOf<String>()
+            if (video.width > 0 && video.height > 0) parts += "${video.width}×${video.height}"
+            if (video.frameRate > 0) parts += "${Math.round(video.frameRate)} fps"
+            codecName(video.sampleMimeType)?.let { parts += it }
+            if (video.bitrate > 0) parts += String.format(java.util.Locale.ROOT, "%.1f Mbit/s", video.bitrate / 1_000_000.0)
+            if (parts.isNotEmpty()) lines += parts.joinToString(" · ")
+        }
+        if (audio != null) {
+            val parts = mutableListOf<String>()
+            codecName(audio.sampleMimeType)?.let { parts += it }
+            when (audio.channelCount) {
+                1 -> parts += "Mono"
+                2 -> parts += "Stereo"
+                6 -> parts += "5.1"
+                8 -> parts += "7.1"
+                else -> if (audio.channelCount > 0) parts += "${audio.channelCount} ch"
+            }
+            if (audio.sampleRate > 0) parts += "${audio.sampleRate / 1000} kHz"
+            if (parts.isNotEmpty()) lines += parts.joinToString(" · ")
+        }
+        val buffered = (exo.totalBufferedDuration / 1000).coerceAtLeast(0)
+        lines += "Buffer: $buffered s"
+        return lines.joinToString("\n")
+    }
+
+    private fun codecName(mime: String?): String? = when (mime) {
+        null -> null
+        "video/avc" -> "H.264"
+        "video/hevc" -> "HEVC"
+        "video/av01" -> "AV1"
+        "video/x-vnd.on2.vp9" -> "VP9"
+        "video/mpeg2" -> "MPEG-2"
+        "audio/ac3" -> "Dolby Digital"
+        "audio/eac3", "audio/eac3-joc" -> "Dolby Digital+"
+        "audio/true-hd" -> "Dolby TrueHD"
+        "audio/vnd.dts", "audio/vnd.dts.hd" -> "DTS"
+        "audio/mp4a-latm" -> "AAC"
+        "audio/mpeg", "audio/mpeg-L2" -> "MP2/MP3"
+        "audio/opus" -> "Opus"
+        else -> mime.substringAfter('/').uppercase()
     }
 
     private inner class ChannelAdapter : BaseAdapter() {
@@ -525,8 +686,16 @@ class PlayerActivity : Activity() {
                 }
                 // Up / Down open the channel list (OK there switches); the
                 // Channel / Page keys still switch at once.
-                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live && onChannels != null) {
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live && onChannels != null && !view.isControllerFullyVisible) {
                     showChannels()
+                    return true
+                }
+                KeyEvent.KEYCODE_MENU, KeyEvent.KEYCODE_TV_ZOOM_MODE, KeyEvent.KEYCODE_WINDOW -> {
+                    cycleFormat()
+                    return true
+                }
+                KeyEvent.KEYCODE_INFO, KeyEvent.KEYCODE_GUIDE -> {
+                    toggleInfo()
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> if (!live && seeksHere()) {
@@ -627,6 +796,13 @@ class PlayerActivity : Activity() {
         /** Set by MainActivity: hands the category's channels (JSON) to the callback. */
         @Volatile var onChannels: ((callback: (String) -> Unit) -> Unit)? = null
         const val EXTRA_CHANNELS_LABEL = "channelsLabel"
+        const val EXTRA_FORMAT_LABEL = "formatLabel"
+        const val EXTRA_FIT_LABEL = "fitLabel"
+        const val EXTRA_FILL_LABEL = "fillLabel"
+        const val EXTRA_ZOOM_LABEL = "zoomLabel"
+        const val EXTRA_INFO_LABEL = "infoLabel"
+        private const val PREFS = "meddl-player"
+        private const val KEY_FORMAT = "format"
         private const val CHANNELS_IDLE_MS = 8000L
         const val EXTRA_NEXT_TITLE = "nextTitle"
         const val EXTRA_NEXT_LABEL = "nextLabel"
