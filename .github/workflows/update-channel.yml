@@ -1,0 +1,36 @@
+name: Update channel
+
+# Puts the files of the "latest-build" pre-release on the public update
+# channel (kjubix2201-netizen/meddl-updates) without building again, e.g.
+# after the MEDDL_UPDATES_TOKEN secret was added or renewed.
+on:
+    workflow_dispatch:
+        inputs:
+            build:
+                description: Build number of those files (run number of the Build workflow)
+                required: true
+
+permissions:
+    contents: read
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Download the latest build
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: gh release download latest-build -D files -p '*.apk' -p '*.exe' -p '*.ipa'
+
+            - name: Publish
+              env:
+                  GH_TOKEN: ${{ secrets.MEDDL_UPDATES_TOKEN }}
+                  MEDDL_BUILD: ${{ inputs.build }}
+              run: |
+                  bash tools/ci/publish-updates.sh android "$(ls files/*.apk | head -1)"
+                  bash tools/ci/publish-updates.sh windows "$(ls files/*.exe | head -1)"
+                  bash tools/ci/publish-updates.sh ios "$(ls files/*.ipa | head -1)"

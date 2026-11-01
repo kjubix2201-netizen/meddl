@@ -27,14 +27,15 @@ esac
 # A release needs a first commit in the (new, empty) repository.
 if ! gh api "repos/$repo/commits?per_page=1" >/dev/null 2>&1; then
     readme=$(printf '# meddl – Updates\n\nNeueste Versionen der meddl-Apps (Android TV / Fire TV, Windows, iPhone). Die Apps prüfen hier, ob es eine neue Version gibt.\n' | base64 -w0)
-    gh api -X PUT "repos/$repo/contents/README.md" -f message="Update-Kanal" -f content="$readme" >/dev/null 2>&1 || true
+    echo "Empty update repository: adding a README as its first commit."
+    gh api -X PUT "repos/$repo/contents/README.md" -f message="Update-Kanal" -f content="$readme" >/dev/null || true
     sleep 3
 fi
 if ! gh release view "$tag" -R "$repo" >/dev/null 2>&1; then
     # Several jobs may get here at once; a lost race is fine.
     gh release create "$tag" -R "$repo" --title "meddl – neueste Version" \
         --notes "Wird bei jedem Update automatisch ersetzt. Android TV / Fire TV: meddl-tv.apk · Windows: meddl-windows-setup.exe · iPhone: meddl-ios.ipa (unsigniert, mit Sideloadly installieren)." \
-        >/dev/null 2>&1 || true
+        >/dev/null || true
     sleep 3
 fi
 
