@@ -50,6 +50,11 @@ export default defineConfig({
                 replacement: resolve(workspace, paths[find][0]),
             })),
     },
+    // CI build number (MEDDL_BUILD): the app compares it with the update
+    // channel (libs/tv/feature/src/update-notice.tsx). Empty in local builds.
+    define: {
+        __MEDDL_BUILD__: JSON.stringify(process.env.MEDDL_BUILD ?? ''),
+    },
     server: { port: 4310, strictPort: true },
     build: {
         outDir: '../../dist/apps/tv',

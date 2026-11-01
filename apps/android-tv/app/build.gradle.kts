@@ -74,6 +74,8 @@ val media3 = "1.5.0"
 
 dependencies {
     implementation("androidx.webkit:webkit:1.12.1")
+    // FileProvider for the in-app update (UpdateInstaller).
+    implementation("androidx.core:core:1.13.1")
     // Native player for streams the WebView plays silently (Dolby / DTS).
     implementation("androidx.media3:media3-exoplayer:$media3")
     implementation("androidx.media3:media3-exoplayer-hls:$media3")

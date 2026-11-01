@@ -246,6 +246,23 @@ class MainActivity : Activity() {
         @JavascriptInterface
         fun hasDirectFetch(): Boolean = true
 
+        /** "New version available": download and install (UpdateInstaller). */
+        @JavascriptInterface
+        fun installUpdate(url: String) {
+            UpdateInstaller.start(
+                this@MainActivity,
+                url,
+                { percent ->
+                    if (!isDestroyed)
+                        web.evaluateJavascript("window.meddlUpdateProgress&&window.meddlUpdateProgress($percent);", null)
+                },
+                { state ->
+                    if (!isDestroyed)
+                        web.evaluateJavascript("window.meddlUpdateResult&&window.meddlUpdateResult('$state');", null)
+                }
+            )
+        }
+
         /** Remote-first: text fields open the keyboard only after OK (see focus.ts). */
         @JavascriptInterface
         fun isTelevision(): Boolean = this@MainActivity.isTelevision()

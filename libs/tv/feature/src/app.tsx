@@ -19,6 +19,7 @@ import { Home, CatalogScreen } from './screens';
 import { CountryPicker } from './country-picker';
 import { CatalogStage } from './catalog-stage';
 import { LoadingOverlay } from './loading-overlay';
+import { UpdateNotice } from './update-notice';
 import { needsCountry } from './country-catalog';
 import { Detail } from './detail';
 import { useDetailSeason } from './use-detail-season';
@@ -273,6 +274,7 @@ export function TvApp() {
             ) : null}
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />
             <LoadingOverlay tv={tv} />
+            <UpdateNotice tv={tv} />
         </div>
     );
 }

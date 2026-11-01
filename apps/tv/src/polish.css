@@ -340,3 +340,17 @@ button.last-watched:hover {
 .ios-player-screen .error {
     max-width: 80%;
 }
+
+/* "New version available" (update-notice.tsx), on the loading window's panel. */
+.update-notice .loading-panel h2 {
+    margin-bottom: 4px;
+}
+.update-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+}
+.update-actions button {
+    min-width: 160px;
+}

@@ -23,6 +23,11 @@ concurrency:
 permissions:
     contents: read
 
+env:
+    # The build number the apps compare with the update channel
+    # (tools/ci/publish-updates.sh, libs/tv/feature/src/update-notice.tsx).
+    MEDDL_BUILD: ${{ github.run_number }}
+
 jobs:
     web:
         name: Web app (PWA)
@@ -184,6 +189,14 @@ jobs:
                   GH_TOKEN: ${{ github.token }}
               run: bash tools/ci/publish-latest.sh dist/executables/*.exe
 
+            - name: Publish to the in-app update channel
+              if: github.ref == 'refs/heads/master'
+              continue-on-error: true
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.MEDDL_UPDATES_TOKEN }}
+              run: bash tools/ci/publish-updates.sh windows "$(ls dist/executables/*.exe | head -1)"
+
     android-tv:
         name: Android TV / Fire TV app (APK)
         permissions:
@@ -281,6 +294,14 @@ jobs:
                   GH_TOKEN: ${{ github.token }}
               run: bash tools/ci/publish-latest.sh dist/android/*.apk
 
+            - name: Publish to the in-app update channel
+              if: github.ref == 'refs/heads/master'
+              continue-on-error: true
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.MEDDL_UPDATES_TOKEN }}
+              run: bash tools/ci/publish-updates.sh android "$(ls dist/android/*.apk | head -1)"
+
     ios:
         name: iPhone / iPad app (unsigned IPA)
         permissions:
@@ -351,6 +372,14 @@ jobs:
               env:
                   GH_TOKEN: ${{ github.token }}
               run: bash tools/ci/publish-latest.sh dist/ios/*.ipa
+
+            - name: Publish to the in-app update channel
+              if: github.ref == 'refs/heads/master'
+              continue-on-error: true
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ secrets.MEDDL_UPDATES_TOKEN }}
+              run: bash tools/ci/publish-updates.sh ios "$(ls dist/ios/*.ipa | head -1)"
 
     android-install-test:
         name: APK installs on Android 12 (emulator)
