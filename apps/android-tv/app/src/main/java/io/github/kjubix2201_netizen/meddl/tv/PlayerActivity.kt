@@ -9,8 +9,12 @@ import android.os.Looper
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.view.KeyEvent
@@ -57,6 +61,11 @@ class PlayerActivity : Activity() {
     private lateinit var channelBanner: TextView
     private val hideBanner = Runnable { channelBanner.visibility = View.GONE }
     private var lastZapAt = 0L
+    private lateinit var channelPanel: LinearLayout
+    private lateinit var channelList: ListView
+    private var channelNames: List<String> = emptyList()
+    private var playingIndex = 0
+    private val hidePanel = Runnable { hideChannels() }
     private var userAgentInUse = ""
     private lateinit var nextBanner: LinearLayout
     private lateinit var nextText: TextView
@@ -127,6 +136,11 @@ class PlayerActivity : Activity() {
             FrameLayout.LayoutParams.WRAP_CONTENT,
             Gravity.TOP or Gravity.START,
         ).apply { setMargins(dp(48), dp(40), 0, 0) })
+        root.addView(buildChannelPanel(), FrameLayout.LayoutParams(
+            (resources.displayMetrics.widthPixels * 0.34f).toInt(),
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            Gravity.START,
+        ))
         setContentView(root)
         hideSystemBars()
         current = this
@@ -178,6 +192,110 @@ class PlayerActivity : Activity() {
         lastZapAt = now
         showBanner("…")
         onZap?.invoke(direction)
+    }
+
+    /**
+     * Live: Up / Down open the channels of the category see-through on the
+     * left; the arrows move in it and OK plays the chosen channel. Back or
+     * Left closes it, and it closes by itself after a few quiet seconds.
+     */
+    private fun buildChannelPanel(): LinearLayout {
+        val title = TextView(this).apply {
+            text = label(EXTRA_CHANNELS_LABEL, "Channels")
+            setTextColor(0xB3FFFFFF.toInt())
+            textSize = 14f
+            isAllCaps = true
+            letterSpacing = 0.08f
+            setPadding(dp(28), dp(28), dp(16), dp(12))
+        }
+        channelList = ListView(this).apply {
+            divider = null
+            dividerHeight = 0
+            isVerticalScrollBarEnabled = false
+            selector = GradientDrawable().apply {
+                cornerRadius = dp(12).toFloat()
+                setColor(0x40FFFFFF)
+                setStroke(dp(2), Color.WHITE)
+            }
+            setDrawSelectorOnTop(false)
+            itemsCanFocus = false
+            isFocusable = true
+            adapter = ChannelAdapter()
+            onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ -> pickChannel(position) }
+            setPadding(dp(14), 0, dp(14), dp(24))
+            clipToPadding = false
+        }
+        channelPanel = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = GradientDrawable(
+                GradientDrawable.Orientation.LEFT_RIGHT,
+                intArrayOf(0xE6000000.toInt(), 0xB3000000.toInt(), 0x00000000),
+            )
+            visibility = View.GONE
+            addView(title)
+            addView(channelList, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+        }
+        return channelPanel
+    }
+
+    private inner class ChannelAdapter : BaseAdapter() {
+        override fun getCount() = channelNames.size
+        override fun getItem(position: Int) = channelNames[position]
+        override fun getItemId(position: Int) = position.toLong()
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val row = (convertView as? TextView) ?: TextView(this@PlayerActivity).apply {
+                setTextColor(Color.WHITE)
+                textSize = 18f
+                maxLines = 1
+                ellipsize = android.text.TextUtils.TruncateAt.END
+                setPadding(dp(16), dp(12), dp(16), dp(12))
+            }
+            row.text = "${position + 1}   ${channelNames[position]}"
+            row.alpha = if (position == playingIndex) 1f else 0.85f
+            row.setTypeface(null, if (position == playingIndex) android.graphics.Typeface.BOLD else android.graphics.Typeface.NORMAL)
+            return row
+        }
+    }
+
+    private fun channelsOpen() = ::channelPanel.isInitialized && channelPanel.visibility == View.VISIBLE
+
+    /** Asks the page for the channels of the category, then shows them. */
+    private fun showChannels() {
+        val request = onChannels ?: return
+        if (view.isControllerFullyVisible) view.hideController()
+        request { json ->
+            runOnUiThread {
+                if (isFinishing) return@runOnUiThread
+                val data = runCatching { org.json.JSONObject(json) }.getOrNull() ?: return@runOnUiThread
+                val names = data.optJSONArray("names") ?: return@runOnUiThread
+                channelNames = List(names.length()) { names.optString(it) }
+                if (channelNames.isEmpty()) return@runOnUiThread
+                playingIndex = data.optInt("index", 0).coerceIn(0, channelNames.size - 1)
+                (channelList.adapter as BaseAdapter).notifyDataSetChanged()
+                channelPanel.visibility = View.VISIBLE
+                channelList.requestFocus()
+                channelList.setSelection(playingIndex)
+                keepChannelsOpen()
+            }
+        }
+    }
+
+    private fun keepChannelsOpen() {
+        countdown.removeCallbacks(hidePanel)
+        countdown.postDelayed(hidePanel, CHANNELS_IDLE_MS)
+    }
+
+    private fun hideChannels() {
+        countdown.removeCallbacks(hidePanel)
+        if (::channelPanel.isInitialized) channelPanel.visibility = View.GONE
+    }
+
+    private fun pickChannel(position: Int) {
+        hideChannels()
+        if (position == playingIndex) return
+        playingIndex = position
+        showBanner(channelNames.getOrNull(position) ?: "…")
+        onZapTo?.invoke(position)
     }
 
     override fun onDestroy() {
@@ -359,6 +477,24 @@ class PlayerActivity : Activity() {
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // The channel list is open: it has the arrows and OK; Back / Left close it.
+        if (channelsOpen()) {
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_BACK, KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_DPAD_LEFT -> {
+                    if (event.action == KeyEvent.ACTION_DOWN) hideChannels()
+                    return true
+                }
+                KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_NUMPAD_ENTER -> {
+                    if (event.action == KeyEvent.ACTION_UP) {
+                        val position = channelList.selectedItemPosition
+                        if (position != AdapterView.INVALID_POSITION) pickChannel(position)
+                    }
+                    return true
+                }
+            }
+            keepChannelsOpen()
+            return channelList.dispatchKeyEvent(event) || true
+        }
         val exo = player
         // The countdown banner has the focus: OK and arrows work on its buttons.
         if (nextBanner.visibility == View.VISIBLE) {
@@ -387,11 +523,10 @@ class PlayerActivity : Activity() {
                     zap(-1)
                     return true
                 }
-                // Up / Down always switch channels on live TV, like a TV; the
-                // controls (pause) close so nothing waits for them.
-                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live) {
-                    if (view.isControllerFullyVisible) view.hideController()
-                    zap(if (event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) 1 else -1)
+                // Up / Down open the channel list (OK there switches); the
+                // Channel / Page keys still switch at once.
+                KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_DPAD_DOWN -> if (live && onChannels != null) {
+                    showChannels()
                     return true
                 }
                 KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT -> if (!live && seeksHere()) {
@@ -485,6 +620,14 @@ class PlayerActivity : Activity() {
 
         /** Set by MainActivity: asks the page for the channel before (-1) or after (1). */
         @Volatile var onZap: ((Int) -> Unit)? = null
+
+        /** Set by MainActivity: plays the channel at this place of the category's list. */
+        @Volatile var onZapTo: ((Int) -> Unit)? = null
+
+        /** Set by MainActivity: hands the category's channels (JSON) to the callback. */
+        @Volatile var onChannels: ((callback: (String) -> Unit) -> Unit)? = null
+        const val EXTRA_CHANNELS_LABEL = "channelsLabel"
+        private const val CHANNELS_IDLE_MS = 8000L
         const val EXTRA_NEXT_TITLE = "nextTitle"
         const val EXTRA_NEXT_LABEL = "nextLabel"
         const val EXTRA_PLAY_NOW_LABEL = "playNowLabel"

@@ -102,6 +102,19 @@ class MainActivity : Activity() {
         PlayerActivity.onZap = { direction ->
             runOnUiThread { web.evaluateJavascript("window.meddlZap&&window.meddlZap($direction);", null) }
         }
+        // The native player's channel list: the page's channels, and OK plays one.
+        PlayerActivity.onZapTo = { index ->
+            runOnUiThread { web.evaluateJavascript("window.meddlZapTo&&window.meddlZapTo($index);", null) }
+        }
+        PlayerActivity.onChannels = { callback ->
+            runOnUiThread {
+                web.evaluateJavascript("window.meddlChannels?window.meddlChannels():''") { result ->
+                    // evaluateJavascript answers with a JSON string literal.
+                    val json = runCatching { org.json.JSONTokener(result).nextValue() as? String }.getOrNull()
+                    if (!json.isNullOrEmpty()) callback(json)
+                }
+            }
+        }
 
         // The built-in VPN tells the page about every change.
         MeddlVpn.listener = { state ->
@@ -138,6 +151,8 @@ class MainActivity : Activity() {
 
     override fun onDestroy() {
         PlayerActivity.onZap = null
+        PlayerActivity.onZapTo = null
+        PlayerActivity.onChannels = null
         MeddlVpn.listener = null
         pairing.stop()
         web.destroy()
@@ -309,6 +324,7 @@ class MainActivity : Activity() {
                         .putExtra(PlayerActivity.EXTRA_NEXT_LABEL, json.optString("nextLabel"))
                         .putExtra(PlayerActivity.EXTRA_PLAY_NOW_LABEL, json.optString("playNowLabel"))
                         .putExtra(PlayerActivity.EXTRA_CANCEL_LABEL, json.optString("cancelLabel"))
+                        .putExtra(PlayerActivity.EXTRA_CHANNELS_LABEL, json.optString("channelsLabel"))
                 // Zapping: the open player switches to the next channel in place.
                 val open = PlayerActivity.current
                 if (open != null && !open.isFinishing) {

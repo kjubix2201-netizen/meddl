@@ -8,6 +8,7 @@ import {
 } from '@meddl/tv/data-access';
 import { t } from '@meddl/tv/util';
 import { PlayerBar, SEEK_SECONDS, type PlayerBarCommand, type PlayerBarState } from './desktop-player-bar';
+import { useDesktopChannelList } from './desktop-channel-list';
 
 const HIDE_AFTER_MS = 4000;
 const BACK_KEYS = ['Escape', 'BrowserBack', 'Backspace', 'GoBack'];
@@ -57,6 +58,8 @@ export function DesktopPlayer({
     onNext,
     onCancelNext,
     onZap,
+    onChannels,
+    onZapTo,
 }: {
     playback: DesktopMpvPlayback;
     onClose: (positionSeconds: number, durationSeconds: number) => void;
@@ -67,6 +70,9 @@ export function DesktopPlayer({
     onCancelNext?: () => void;
     /** Live: switches to the channel before (-1) or after (1) in the list. */
     onZap?: (direction: number) => boolean;
+    /** Live: the category's channels, and playing one of them (channel list). */
+    onChannels?: () => { names: string[]; index: number };
+    onZapTo?: (index: number) => boolean;
 }) {
     const [state, setState] = useState<DesktopMpvState | null>(null);
     const [failure, setFailure] = useState('');
@@ -81,8 +87,11 @@ export function DesktopPlayer({
     const lastSeek = useRef(0);
     const latestClose = useRef(onClose);
     latestClose.current = onClose;
-    const latestNext = useRef({ next, onEnded, onNext, onZap });
-    latestNext.current = { next, onEnded, onNext, onZap };
+    const latestNext = useRef({ next, onEnded, onNext, onZap, onChannels, onZapTo });
+    latestNext.current = { next, onEnded, onNext, onZap, onChannels, onZapTo };
+    const channels = useDesktopChannelList(latestNext);
+    const latestChannels = useRef(channels);
+    latestChannels.current = channels;
     const countdown = next?.countdown != null;
 
     const close = () => {
@@ -143,6 +152,8 @@ export function DesktopPlayer({
             event.preventDefault();
             event.stopImmediatePropagation();
             const mpv = session.current;
+            // Live: the channel list takes Up / Down / Enter / Back while open.
+            if (playback.isLive && latestChannels.current.key(event.keyCode === 461 ? 'Escape' : event.key)) return;
             if (event.keyCode === 461 || BACK_KEYS.includes(event.key)) return close();
             reveal();
             if (!mpv) return;
@@ -160,7 +171,7 @@ export function DesktopPlayer({
                 lastSeek.current = now;
                 mpv.seekBy(event.key === 'ArrowRight' ? SEEK_SECONDS : -SEEK_SECONDS);
             }
-            // Live: Up / Down (and Page / Channel keys) switch channels, like a TV.
+            // Live: Page / Channel keys switch at once (Up / Down open the list above).
             else if (playback.isLive && upcoming.onZap && ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'ChannelUp', 'ChannelDown'].includes(event.key))
                 upcoming.onZap(['ArrowDown', 'PageDown', 'ChannelDown'].includes(event.key) ? 1 : -1);
             else if (['ArrowUp', 'AudioVolumeUp', '+'].includes(event.key)) mpv.changeVolume(0.1);
@@ -196,7 +207,7 @@ export function DesktopPlayer({
     }
 
     const status = state?.status ?? 'loading';
-    const shown = controls || !!failure || next?.countdown != null;
+    const shown = controls || !!failure || next?.countdown != null || !!channels.view;
     const barState: PlayerBarState = {
         title: playback.title,
         isLive: !!playback.isLive,
@@ -210,6 +221,7 @@ export function DesktopPlayer({
         subtitleTracks: state?.subtitleTracks ?? [],
         subtitleId: state?.selectedSubtitleTrackId ?? null,
         ...(next && onNext ? { next } : {}),
+        ...(channels.view ? { channels: channels.view } : {}),
         shown,
     };
     const handle = (command: PlayerBarCommand) => {
@@ -234,6 +246,7 @@ export function DesktopPlayer({
         else if (command.type === 'subtitles') cycleSubtitles();
         else if (command.type === 'audioTrack') mpv?.setAudioTrack(command.id);
         else if (command.type === 'subtitleTrack') mpv?.setSubtitleTrack(command.id);
+        else if (command.type === 'pickChannel') channels.pick(command.index);
         else if (command.type === 'next') onNext?.(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
         else if (command.type === 'cancelNext') onCancelNext?.();
     };

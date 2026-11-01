@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks';
 import type { DesktopMpvTrack } from '@meddl/tv/data-access';
+import type { ChannelListView } from './desktop-channel-list';
 import { TvIcon } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
 
@@ -33,6 +34,8 @@ export interface PlayerBarState {
     subtitleTracks: DesktopMpvTrack[];
     subtitleId: number | null;
     next?: { title: string; countdown: number | null };
+    /** Live: the open channel list (Up / Down in the player). */
+    channels?: ChannelListView;
     /** False while the controls are hidden (no mouse or key for a while). */
     shown: boolean;
 }
@@ -41,7 +44,8 @@ export type PlayerBarCommand =
     | { type: 'back' | 'toggle' | 'mute' | 'audio' | 'subtitles' | 'next' | 'cancelNext' | 'activity' | 'hide' }
     | { type: 'seekBy' | 'seekTo'; seconds: number }
     | { type: 'volume'; value: number }
-    | { type: 'audioTrack' | 'subtitleTrack'; id: number };
+    | { type: 'audioTrack' | 'subtitleTrack'; id: number }
+    | { type: 'pickChannel'; index: number };
 
 /**
  * The meddl player's controls, laid out like a TV player: title, timeline,
@@ -75,7 +79,26 @@ export function PlayerBar({
     const subtitle = subtitleTracks.find((track) => track.id === state.subtitleId);
     const seekable = !state.isLive && !!duration && duration > 0;
     return (
-        <div class="desktop-player-bar" ref={barRef}>
+        <div class={`desktop-player-bar ${state.channels ? 'has-channels' : ''}`} ref={barRef}>
+            {state.channels ? (
+                <div class="dp-channels" role="listbox" aria-label={t('Channels')}>
+                    <strong class="dp-channels-title">{t('Channels')}</strong>
+                    {state.channels.names.map((name, i) => {
+                        const index = state.channels!.start + i;
+                        return (
+                            <button
+                                role="option"
+                                aria-selected={index === state.channels!.at}
+                                class={`${index === state.channels!.at ? 'is-at' : ''} ${index === state.channels!.playing ? 'is-playing' : ''}`}
+                                onClick={() => send({ type: 'pickChannel', index })}
+                            >
+                                <span class="dp-channel-number">{index + 1}</span>
+                                {name}
+                            </button>
+                        );
+                    })}
+                </div>
+            ) : null}
             <div class="dp-head">
                 <div class="dp-title">
                     <strong>{state.title}</strong>

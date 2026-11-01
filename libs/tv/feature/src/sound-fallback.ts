@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { desktopMpvAvailable, type DesktopMpvPlayback } from '@meddl/tv/data-access';
-import { mediaTitle, t } from '@meddl/tv/util';
+import { displayChannelName, mediaTitle, t } from '@meddl/tv/util';
 import type { TvModel } from './use-tv';
 import { alwaysAppPlayer } from './app-player-setting';
 
@@ -83,6 +83,29 @@ export function useSoundFallback(tv: TvModel) {
         return true;
     };
 
+    /**
+     * The channel list of the app's own player (Up / Down open it, OK picks):
+     * the channels of the open category and the one playing.
+     */
+    const channelList = () => {
+        const current = latest.current;
+        const channels = current.catalog.items.filter((m) => m.kind === 'live');
+        return {
+            names: channels.map((m) => displayChannelName(m.title)),
+            index: Math.max(0, channels.findIndex((m) => m.id === current.playing?.id)),
+        };
+    };
+    /** Plays the channel at this place of the list (in the app's own player too). */
+    const zapTo = (index: number) => {
+        const current = latest.current;
+        const next = current.catalog.items.filter((m) => m.kind === 'live')[index];
+        if (!next) return false;
+        sticky.current = true;
+        current.setSelected(next);
+        void current.play(next);
+        return true;
+    };
+
     /** The app's own player continues with the next episode. */
     const desktopContinue = (positionSeconds: number, durationSeconds: number) => {
         latest.current.player.current?.recordExternal(positionSeconds, durationSeconds);
@@ -90,12 +113,21 @@ export function useSoundFallback(tv: TvModel) {
     };
 
     useEffect(() => {
-        const shell = window as unknown as { meddlNativeClosed?: NativeClosed; meddlZap?: (direction: number) => boolean };
+        const shell = window as unknown as {
+            meddlNativeClosed?: NativeClosed;
+            meddlZap?: (direction: number) => boolean;
+            meddlZapTo?: (index: number) => boolean;
+            meddlChannels?: () => string;
+        };
         shell.meddlNativeClosed = closed;
         shell.meddlZap = zap;
+        shell.meddlZapTo = zapTo;
+        shell.meddlChannels = () => JSON.stringify(channelList());
         return () => {
             delete shell.meddlNativeClosed;
             delete shell.meddlZap;
+            delete shell.meddlZapTo;
+            delete shell.meddlChannels;
         };
     }, []);
 
@@ -174,6 +206,7 @@ export function useSoundFallback(tv: TvModel) {
                 startMs: Math.round(start * 1000),
                 live,
                 userAgent: source?.userAgent ?? '',
+                channelsLabel: t('Channels'),
                 ...(!live && nextEpisode.current
                     ? {
                           nextTitle: nextEpisode.current.title,
@@ -196,5 +229,5 @@ export function useSoundFallback(tv: TvModel) {
         !!item &&
         (!!androidBridge()?.playNative || desktopMpvAvailable()) &&
         (phase === 'native' || (phase === 'idle' && takesOver(item)));
-    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap, handingOver };
+    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap, zapTo, channelList, handingOver };
 }
