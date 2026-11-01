@@ -60,7 +60,9 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
         const timer = setTimeout(() => setLate(true), 1500);
         return () => clearTimeout(timer);
     }, [active]);
-    const open = active && (late || !!downloading || phase === 'vpn');
+    // Saved lists never block the screen (they open in the background); only
+    // a real download, a slow connection or waiting for the VPN does.
+    const open = active && (!!downloading || phase === 'vpn' || (phase === 'connecting' && late));
     const panel = useRef<HTMLDivElement>(null);
     const previous = useRef('');
     const [seconds, setSeconds] = useState(0);

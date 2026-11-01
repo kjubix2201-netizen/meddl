@@ -138,7 +138,10 @@ function reportOrigin(origin: ListOrigin) {
 export async function cachedList<T>(key: string, load: () => Promise<T[]>, signal: AbortSignal): Promise<T[]> {
     const cached = await readCachedList(key);
     const hours = catalogRefreshHours();
-    if (cached && hours > 0 && Date.now() - cached.at < hours * 3_600_000) {
+    if (cached && hours > 0) {
+        // Like other IPTV players: the saved list opens at once; an outdated
+        // one is downloaded again in the background for the next start.
+        if (Date.now() - cached.at >= hours * 3_600_000) refreshLater(key, load, signal);
         reportOrigin('device');
         return cached.rows as T[];
     }
@@ -154,4 +157,27 @@ export async function cachedList<T>(key: string, load: () => Promise<T[]>, signa
         if (cached && !signal.aborted) return cached.rows as T[];
         throw error;
     }
+}
+
+const refreshing = new Set<string>();
+
+/** Downloads an outdated list quietly after the start has settled. */
+function refreshLater<T>(key: string, load: () => Promise<T[]>, signal: AbortSignal) {
+    if (refreshing.has(key)) return;
+    refreshing.add(key);
+    const timer = setTimeout(() => {
+        if (signal.aborted) return void refreshing.delete(key);
+        load()
+            .then((fresh) => (fresh.length && !signal.aborted ? writeCachedList(key, fresh) : undefined))
+            .catch(() => undefined)
+            .finally(() => refreshing.delete(key));
+    }, 20000);
+    signal.addEventListener(
+        'abort',
+        () => {
+            clearTimeout(timer);
+            refreshing.delete(key);
+        },
+        { once: true }
+    );
 }

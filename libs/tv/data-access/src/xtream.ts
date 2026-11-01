@@ -22,8 +22,25 @@ import {
     withSeriesContext,
 } from '@meddl/tv/util';
 import type { XtreamVodDetails } from '@meddl/shared/interfaces';
-import { cachedList } from './catalog-cache';
+import { cachedList, readCachedList } from './catalog-cache';
 import { ProviderTransport } from './transport';
+/** The stream formats the account allows, kept for a start without waiting. */
+function savedFormats(key: string): string[] | undefined {
+    try {
+        const value = JSON.parse(localStorage.getItem(`meddl-xtream-formats:${key}`) ?? 'null');
+        return Array.isArray(value) ? value.filter((f): f is string => typeof f === 'string') : undefined;
+    } catch {
+        return undefined;
+    }
+}
+function saveFormats(key: string, formats: string[]) {
+    try {
+        localStorage.setItem(`meddl-xtream-formats:${key}`, JSON.stringify(formats));
+    } catch {
+        // Only the next start waits for the account again.
+    }
+}
+
 /** Xtream category rows from an array or an object map of rows. */
 function categoryRows(payload: unknown): Category[] {
     const list = Array.isArray(payload)
@@ -57,7 +74,19 @@ export class XtreamProvider implements ProviderClient {
         );
     }
     async connect(signal: AbortSignal) {
+        // Lists saved on this device: start with them at once (as other IPTV
+        // players do) and check the account in the background.
+        const formats = savedFormats(this.cacheKey('formats'));
+        if (formats && (await readCachedList(this.cacheKey('get_live_streams')))) {
+            this.client.formats = formats;
+            void this.client
+                .account(signal)
+                .then(() => saveFormats(this.cacheKey('formats'), this.client.formats))
+                .catch(() => undefined);
+            return this.source;
+        }
         await this.client.account(signal);
+        saveFormats(this.cacheKey('formats'), this.client.formats);
         return this.source;
     }
     private media(raw: Record<string, unknown>, kind: Kind): Media {
