@@ -173,7 +173,7 @@
     .country-drawer-tab:hover .country-drawer-arrow,
     .country-drawer-tab:focus .country-drawer-arrow {
         background: #ffffff;
-        color: #0d0b14;
+        color: var(--c-0d0b14);
         opacity: 1;
     }
     .country-drawer-arrow svg {
@@ -243,7 +243,7 @@
 }
 .catalog-title button.round:focus {
     background: #ffffff;
-    color: #0d0b14;
+    color: var(--c-0d0b14);
     outline: none;
 }
 .catalog-title button.round svg {

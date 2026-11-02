@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(12, 11, 18, 0.74);
+    background: rgba(var(--c-0c0b12-rgb), 0.74);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
@@ -98,7 +98,7 @@
 }
 .loading-step.is-done .loading-step-icon {
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
 }
 .loading-step-icon svg {
     width: 2.2vh;

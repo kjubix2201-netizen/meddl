@@ -1,5 +1,6 @@
 import { render } from 'preact';
-import { PlayerOverlayView, TvApp } from '@meddl/tv/feature';
+import { PlayerOverlayView, TvApp, applyTheme } from '@meddl/tv/feature';
+import './themes.css';
 import './theme.css';
 import './live-overlay.css';
 import './programme-guide.css';
@@ -20,6 +21,12 @@ try {
 } catch {
     // Older app versions: keep the full look.
 }
+// The chosen design (Settings → Appearance) before the first picture.
+applyTheme();
+// Another window of the app (the Windows player controls) changed it.
+window.addEventListener('storage', (event) => {
+    if (event.key === 'meddl-theme') applyTheme();
+});
 const root = document.getElementById('app');
 if (!root) throw new Error('Missing TV application root');
 // The Windows app's see-through player controls (player-overlay-window.ts).

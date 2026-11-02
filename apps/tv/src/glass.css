@@ -5,15 +5,15 @@
  * before it. The personal portrait stays on Home (home-portrait.tsx).
  */
 :root {
-    --tv-bg: #1f1d2b;
+    --tv-bg: var(--c-1f1d2b);
     --tv-surface: rgba(255, 255, 255, 0.08);
     --tv-surface-strong: rgba(255, 255, 255, 0.16);
-    --tv-surface-solid: #2d2b3c;
+    --tv-surface-solid: var(--c-2d2b3c);
     --tv-line: rgba(255, 255, 255, 0.14);
     --tv-text: #ffffff;
     --tv-muted: rgba(255, 255, 255, 0.64);
     --tv-accent: #ffffff;
-    --tv-gradient: linear-gradient(180deg, #ffffff 0%, #ecebf2 100%);
+    --tv-gradient: linear-gradient(180deg, #ffffff 0%, var(--c-ecebf2) 100%);
     --tv-focus-glass: rgba(255, 255, 255, 0.26);
     --tv-glass: rgba(255, 255, 255, 0.08);
     --tv-glass-strong: rgba(255, 255, 255, 0.16);
@@ -24,8 +24,8 @@
 .tv-app {
     min-height: 100vh;
     background:
-        radial-gradient(ellipse at 28% 35%, #34314a 0%, rgba(35, 33, 47, 0) 62%),
-        linear-gradient(180deg, #2a2839 0%, #1f1d2b 100%);
+        radial-gradient(ellipse at 28% 35%, var(--c-34314a) 0%, rgba(var(--c-23212f-rgb), 0) 62%),
+        linear-gradient(180deg, var(--c-2a2839) 0%, var(--c-1f1d2b) 100%);
 }
 main {
     padding-left: 5.6vw;
@@ -90,14 +90,14 @@ button[aria-pressed='true'] {
 }
 button.primary {
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
     border-color: #ffffff;
     font-weight: 500;
 }
 button.primary:hover,
 button.primary:focus {
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
 }
 input,
 select,
@@ -131,7 +131,7 @@ progress::-webkit-progress-value {
 .drawer-toolbar button:focus,
 button.round:not(.avatar):focus {
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
     border-color: #ffffff;
     box-shadow: 0 1.2vh 3vh rgba(0, 0, 0, 0.35);
 }
@@ -139,12 +139,12 @@ button.round:not(.avatar):focus {
 /* ---------- Top bar (all screens except Home) ---------- */
 .top-bar:not(.home-bar) {
     padding: 0 4.3vw 0 5.6vw;
-    background: linear-gradient(180deg, rgba(31, 29, 43, 0.92) 0%, rgba(31, 29, 43, 0.65) 65%, rgba(31, 29, 43, 0) 100%);
+    background: linear-gradient(180deg, rgba(var(--c-1f1d2b-rgb), 0.92) 0%, rgba(var(--c-1f1d2b-rgb), 0.65) 65%, rgba(var(--c-1f1d2b-rgb), 0) 100%);
 }
 /* Scrolled (html.page-scrolled, focus.ts): solid, so rows scrolled up
    underneath do not show through the menu. */
 .page-scrolled .top-bar:not(.home-bar) {
-    background: linear-gradient(180deg, #1f1d2b 0%, #1f1d2b 84%, rgba(31, 29, 43, 0) 100%);
+    background: linear-gradient(180deg, var(--c-1f1d2b) 0%, var(--c-1f1d2b) 84%, rgba(var(--c-1f1d2b-rgb), 0) 100%);
 }
 .top-bar:not(.home-bar) .home-wordmark {
     font-size: 4vh;
@@ -322,7 +322,7 @@ header select,
 }
 .live-overlay-panel,
 .phone-modal-backdrop > * {
-    background: rgba(31, 29, 43, 0.94);
+    background: rgba(var(--c-1f1d2b-rgb), 0.94);
     border-color: var(--tv-line);
 }
 .error {
@@ -334,25 +334,25 @@ header select,
 /* ---------- Detail pages: dimmed title art like Home ---------- */
 .detail-page .backdrop-scrim {
     background:
-        linear-gradient(0deg, #1f1d2b 0%, rgba(31, 29, 43, 0.9) 14%, rgba(31, 29, 43, 0) 62%),
-        linear-gradient(90deg, rgba(31, 29, 43, 0.97) 0%, rgba(31, 29, 43, 0.8) 34%, rgba(31, 29, 43, 0.25) 75%),
+        linear-gradient(0deg, var(--c-1f1d2b) 0%, rgba(var(--c-1f1d2b-rgb), 0.9) 14%, rgba(var(--c-1f1d2b-rgb), 0) 62%),
+        linear-gradient(90deg, rgba(var(--c-1f1d2b-rgb), 0.97) 0%, rgba(var(--c-1f1d2b-rgb), 0.8) 34%, rgba(var(--c-1f1d2b-rgb), 0.25) 75%),
         linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35));
 }
 .detail-page > .page-backdrop {
-    background: linear-gradient(180deg, #2a2839 0%, #1f1d2b 100%);
+    background: linear-gradient(180deg, var(--c-2a2839) 0%, var(--c-1f1d2b) 100%);
 }
 
 /* ---------- Player: transport in the Home style ---------- */
 .live-badge {
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
 }
 .now-progress span {
     background: #ffffff;
 }
 .transport-center .play-toggle {
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
 }
 .transport-center .play-toggle:focus {
     box-shadow: 0 0 0 0.6vh rgba(255, 255, 255, 0.35), 0 1.4vh 3vh rgba(0, 0, 0, 0.4);
@@ -379,7 +379,7 @@ header select,
     margin: 1vh 0 0;
     padding: 1.6vh 2.2vh;
     border-radius: 1.2vh;
-    background: rgba(31, 29, 43, 0.94);
+    background: rgba(var(--c-1f1d2b-rgb), 0.94);
     border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 2vh 5vh rgba(0, 0, 0, 0.45);
     -webkit-backdrop-filter: blur(14px);
@@ -423,7 +423,7 @@ header select,
     padding: 28px 22px;
     background:
         radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 60%),
-        linear-gradient(160deg, #3a3550 0%, #232031 100%);
+        linear-gradient(160deg, var(--c-3a3550) 0%, var(--c-232031) 100%);
     color: #ffffff;
 }
 .detail-poster-fallback svg {

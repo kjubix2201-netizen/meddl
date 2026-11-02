@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     padding: 0 56px;
-    background: linear-gradient(180deg, rgba(13, 11, 20, 0.95) 0%, rgba(13, 11, 20, 0.6) 70%, rgba(13, 11, 20, 0) 100%);
+    background: linear-gradient(180deg, rgba(var(--c-0d0b14-rgb), 0.95) 0%, rgba(var(--c-0d0b14-rgb), 0.6) 70%, rgba(var(--c-0d0b14-rgb), 0) 100%);
 }
 .top-bar .wordmark {
     margin: 0 44px 0 0;
@@ -184,7 +184,7 @@ main {
     min-height: 112px;
     padding: 14px 18px 14px 14px;
     border-radius: 14px;
-    background: rgba(26, 23, 38, 0.55);
+    background: rgba(var(--c-1a1726-rgb), 0.55);
     border: 1px solid transparent;
     position: relative;
 }
@@ -224,8 +224,8 @@ main {
     padding: 2px 7px;
     margin-right: 6px;
     border-radius: 4px;
-    color: #0d0b14;
-    background: #d9d4e4;
+    color: var(--c-0d0b14);
+    background: var(--c-d9d4e4);
 }
 .channel-favorite {
     flex: none;
@@ -349,7 +349,7 @@ main {
 .player-subtitle {
     margin: 0 0 18px;
     font-size: 19px;
-    color: #d6d1e0;
+    color: var(--c-d6d1e0);
     min-height: 1em;
 }
 .player-seek {

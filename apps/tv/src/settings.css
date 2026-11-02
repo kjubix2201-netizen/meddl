@@ -47,7 +47,7 @@
     margin-top: 6px;
 }
 .settings-categories [aria-selected='true'] {
-    background: #211a2d;
+    background: var(--c-211a2d);
     color: var(--tv-accent);
 }
 .settings-workspace > [role='tabpanel'] {
@@ -215,4 +215,70 @@
     padding: 14px 18px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.08);
+}
+
+/* Designs (settings-preferences.tsx ThemePicker). */
+.theme-picker {
+    margin: 0 0 20px;
+    padding: 0;
+    border: none;
+}
+.theme-picker legend {
+    margin-bottom: 10px;
+    padding: 0;
+    font-weight: 600;
+}
+.theme-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+}
+.source-form .theme-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 8px;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--tv-text, #ffffff);
+    text-align: center;
+}
+.source-form .theme-swatch.is-current {
+    border-color: rgba(255, 255, 255, 0.85);
+}
+.source-form .theme-swatch:focus,
+.source-form .theme-swatch:hover {
+    background: rgba(255, 255, 255, 0.16);
+    outline: none;
+}
+.theme-swatch-preview {
+    position: relative;
+    display: block;
+    height: 72px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+/* Two little "cards" so the swatch reads as a screen. */
+.theme-swatch-preview i {
+    position: absolute;
+    bottom: 12px;
+    width: 30%;
+    height: 34px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.14);
+}
+.theme-swatch-preview i:first-child {
+    left: 12px;
+}
+.theme-swatch-preview i:last-child {
+    left: calc(12px + 30% + 8px);
+}
+.theme-swatch-name {
+    font-size: 15px;
 }

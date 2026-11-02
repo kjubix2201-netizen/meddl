@@ -73,7 +73,7 @@
     padding: 0.6vh 1.4vh;
     border-radius: 0.8vh;
     background: #ffffff;
-    color: #1d1b29;
+    color: var(--c-1d1b29);
     font-size: 2.2vh;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
@@ -239,7 +239,7 @@
     border: none;
     border-radius: 50%;
     background: #ffffff;
-    color: #0d0b14;
+    color: var(--c-0d0b14);
 }
 .desktop-player-bar button.dp-play:hover,
 .desktop-player-bar button.dp-play:focus {
@@ -444,7 +444,7 @@ html.player-overlay-page #app {
 .player-overlay .desktop-player-bar button.dp-play:hover,
 .player-overlay .desktop-player-bar button.dp-play:focus {
     background: #ffffff;
-    color: #0d0b14;
+    color: var(--c-0d0b14);
     transform: none;
     box-shadow: 0 0 48px rgba(255, 255, 255, 0.45);
 }
@@ -504,7 +504,7 @@ html.player-overlay-page #app {
     overscroll-behavior: contain;
     padding: 10px;
     border-radius: 14px;
-    background: rgba(20, 18, 28, 0.96);
+    background: rgba(var(--c-14121c-rgb), 0.96);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
     display: flex;
     flex-direction: column;

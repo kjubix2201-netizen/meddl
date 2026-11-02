@@ -35,15 +35,15 @@
 }
 :root {
     /* meddl brand: violet night surfaces, pink accent, logo gradient. */
-    --tv-bg: #0d0b14;
-    --tv-surface: #1a1726;
-    --tv-text: #f3f1f7;
-    --tv-muted: #a59fb5;
+    --tv-bg: var(--c-0d0b14);
+    --tv-surface: var(--c-1a1726);
+    --tv-text: var(--c-f3f1f7);
+    --tv-muted: var(--c-a59fb5);
     --tv-accent: #ff5a8a;
     --tv-accent-warm: #ff8a4c;
     --tv-gradient: linear-gradient(120deg, #ff7a3d 0%, #e6245e 52%, #7a2ad6 100%);
     --app-focus-ring-color: #ffffff;
-    --tv-line: #2e2840;
+    --tv-line: var(--c-2e2840);
     color-scheme: dark;
     font-family: 'Poppins', 'Trebuchet MS', sans-serif;
     font-size: 22px;
@@ -77,7 +77,7 @@ button {
     min-height: 56px;
 }
 button:hover {
-    background: #2c2636;
+    background: var(--c-2c2636);
 }
 button:focus,
 input:focus,
@@ -101,9 +101,9 @@ button.primary {
 }
 input,
 select {
-    background: #1b1721;
+    background: var(--c-1b1721);
     color: var(--tv-text);
-    border: 1px solid #483f56;
+    border: 1px solid var(--c-483f56);
     border-radius: 6px;
     min-height: 56px;
     padding: 12px 16px;
@@ -181,7 +181,7 @@ aside {
     bottom: 0;
     width: 230px;
     padding: 52px 22px;
-    background: #100d14;
+    background: var(--c-100d14);
     display: flex;
     flex-direction: column;
 }
@@ -226,7 +226,7 @@ nav button {
 }
 nav button[aria-current='page'] {
     color: var(--tv-accent);
-    background: #211a2d;
+    background: var(--c-211a2d);
 }
 .nav-icon {
     width: 38px;
@@ -238,7 +238,7 @@ nav button[aria-current='page'] {
     margin-top: auto;
     padding: 20px 14px 0;
     font-size: 12px;
-    color: #7c738a;
+    color: var(--c-7c738a);
     line-height: 1.9;
     letter-spacing: 3px;
 }
@@ -289,7 +289,7 @@ header select {
     right: 0;
     height: 880px;
     pointer-events: none;
-    background: linear-gradient(135deg, #261b39, var(--tv-bg) 80%);
+    background: linear-gradient(135deg, var(--c-261b39), var(--tv-bg) 80%);
 }
 .page-backdrop img,
 .backdrop-scrim {
@@ -353,7 +353,7 @@ header select {
 .hero p {
     max-width: 550px;
     font-size: 22px;
-    color: #c3becb;
+    color: var(--c-c3becb);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -401,12 +401,12 @@ header select {
     position: absolute;
     right: 42px;
     bottom: 48px;
-    color: #968aaa;
+    color: var(--c-968aaa);
     font-size: 27px;
     letter-spacing: 2px;
 }
 .hero-number span {
-    color: #bfb9cb;
+    color: var(--c-bfb9cb);
 }
 .hero-number small {
     font-size: 10px;
@@ -452,7 +452,7 @@ header select {
     height: 0;
     padding-top: 150%;
     display: block;
-    background: linear-gradient(145deg, #2f253f, #18141e);
+    background: linear-gradient(145deg, var(--c-2f253f), var(--c-18141e));
     position: relative;
     overflow: hidden;
     border-radius: 6px;
@@ -476,7 +476,7 @@ header select {
         600 26px 'Poppins',
         'Trebuchet MS',
         sans-serif;
-    color: #bfb9cb;
+    color: var(--c-bfb9cb);
 }
 .poster-art small {
     position: absolute;
@@ -487,7 +487,7 @@ header select {
     padding: 3px 6px;
     font-size: 11px;
     letter-spacing: 2px;
-    color: #d0cbd9;
+    color: var(--c-d0cbd9);
 }
 .poster-card > strong {
     font-size: 20px;
@@ -531,7 +531,7 @@ header select {
     align-items: center;
     justify-content: center;
     color: var(--tv-accent);
-    background: #2f253f;
+    background: var(--c-2f253f);
 }
 .resume-art > svg {
     width: 40px;
@@ -609,7 +609,7 @@ header select {
     font-size: 17px;
 }
 .favorite-types button[aria-pressed='true'] {
-    background: #211a2d;
+    background: var(--c-211a2d);
     color: var(--tv-accent);
 }
 .station-grid {
@@ -759,7 +759,7 @@ summary {
     min-width: 240px;
     width: 240px;
     height: 360px;
-    background: #241d30;
+    background: var(--c-241d30);
     margin-right: 55px;
     display: flex;
     align-items: center;
@@ -774,7 +774,7 @@ summary {
     max-width: 880px;
 }
 .detail-hero p {
-    color: #c3becb;
+    color: var(--c-c3becb);
     max-height: 180px;
     overflow: auto;
 }
@@ -881,7 +881,7 @@ main.live-page {
 }
 .channels::-webkit-scrollbar-thumb,
 .programme-list::-webkit-scrollbar-thumb {
-    background: #483f56;
+    background: var(--c-483f56);
 }
 .channel-pane-header {
     flex-shrink: 0;
@@ -925,7 +925,7 @@ main.live-page {
     color: var(--tv-accent);
 }
 .live-category[aria-pressed='true'] {
-    background: #211c2a;
+    background: var(--c-211c2a);
 }
 .channel {
     width: 100%;
@@ -937,11 +937,11 @@ main.live-page {
     min-height: 86px;
 }
 .channel[aria-pressed='true'] {
-    background: #211c2a;
-    border-color: #5a516a;
+    background: var(--c-211c2a);
+    border-color: var(--c-5a516a);
 }
 .channel.is-playing {
-    background: #2f2244;
+    background: var(--c-2f2244);
 }
 .channel-logo {
     width: 48px;
@@ -955,7 +955,7 @@ main.live-page {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #30273f;
+    background: var(--c-30273f);
     color: var(--tv-accent);
 }
 .channel-logo img {
@@ -965,7 +965,7 @@ main.live-page {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #30273f;
+    background: var(--c-30273f);
 }
 .channel-number {
     font-size: 14px;
@@ -1143,7 +1143,7 @@ main.live-page {
     border-radius: 8px;
     font-size: 18px;
     line-height: 1.45;
-    background: rgba(13, 11, 20, 0.85);
+    background: rgba(var(--c-0d0b14-rgb), 0.85);
     border: 1px solid var(--tv-line);
 }
 .seek input {
