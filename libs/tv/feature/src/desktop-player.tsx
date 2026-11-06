@@ -11,6 +11,9 @@ import { PlayerBar, SEEK_SECONDS, type PlayerBarCommand, type PlayerBarState } f
 import { useDesktopChannelList } from './desktop-channel-list';
 import { streamInfoLines } from './stream-info';
 
+/** Live: reloads after a dropped stream, at most this often in this time. */
+const LIVE_DROP_LIMIT = 6;
+const LIVE_DROP_WINDOW_MS = 2 * 60 * 1000;
 const HIDE_AFTER_MS = 4000;
 const BACK_KEYS = ['Escape', 'BrowserBack', 'Backspace', 'GoBack'];
 const PAUSE_KEYS = ['Enter', ' ', 'MediaPlayPause', 'MediaPlay', 'MediaPause', 'k'];
@@ -108,15 +111,64 @@ export function DesktopPlayer({
         hideTimer.current = setTimeout(() => setControls(false), HIDE_AFTER_MS);
     };
 
+    // Live: a stream that drops (the provider ends it, a short network
+    // gap) is loaded again instead of closing the player; only when it
+    // keeps failing does the player give up.
+    const liveDrops = useRef<number[]>([]);
+    const liveStatus = useRef({ previous: '', reloading: false });
+    const liveReload = (mpv: DesktopMpvSession) => {
+        if (!playback.isLive || closed.current) return false;
+        const now = Date.now();
+        liveDrops.current = liveDrops.current.filter((at) => now - at < LIVE_DROP_WINDOW_MS);
+        if (liveDrops.current.length >= LIVE_DROP_LIMIT) return false;
+        liveDrops.current.push(now);
+        setTimeout(() => {
+            mpv.reload(playback);
+            // The next "ended"/"error" counts again, even without "loading" between.
+            liveStatus.current = { previous: 'loading', reloading: false };
+        }, liveDrops.current.length > 1 ? 1500 : 300);
+        return true;
+    };
+
+    /** Play / pause; a live channel that gave up starts again. */
+    const playOrRetry = () => {
+        const mpv = session.current;
+        if (!mpv) return;
+        if (playback.isLive && (failure || mpv.state?.status === 'ended' || mpv.state?.status === 'error')) {
+            setFailure('');
+            liveDrops.current = [];
+            liveStatus.current = { previous: 'loading', reloading: false };
+            setState((current) => (current ? { ...current, status: 'loading' } : current));
+            mpv.reload(playback);
+            return;
+        }
+        mpv.togglePause();
+    };
+    const latestPlayOrRetry = useRef(playOrRetry);
+    latestPlayOrRetry.current = playOrRetry;
+
     useEffect(() => {
         const mpv = new DesktopMpvSession((update) => {
+            const live = liveStatus.current;
+            const changed = update.status !== live.previous;
+            live.previous = update.status;
+            if (update.status === 'playing' || update.status === 'loading') live.reloading = false;
+            const dropped = update.status === 'ended' || update.status === 'error';
+            // Only the change into "ended"/"error" counts; MPV repeats the
+            // state with every property update until the stream loads again.
+            if (dropped && (live.reloading || (changed && liveReload(mpv)))) {
+                liveStatus.current.reloading = true;
+                setState({ ...update, status: 'loading' });
+                return;
+            }
             setState({ ...update });
             if (update.status === 'ended') {
                 const { next: episode, onEnded: ended } = latestNext.current;
                 if (episode && ended) {
                     ended(update.positionSeconds, update.durationSeconds ?? update.positionSeconds);
                     setControls(true);
-                } else close();
+                } else if (playback.isLive) setFailure(t('The channel keeps dropping. Try again or choose another channel.'));
+                else close();
             }
             if (update.status === 'error') setFailure(update.error || t('This stream could not be played.'));
         });
@@ -163,7 +215,7 @@ export function DesktopPlayer({
                 const at = mpv.state;
                 return upcoming.onNext(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
             }
-            if (PAUSE_KEYS.includes(event.key) || [415, 19, 179].includes(event.keyCode)) mpv.togglePause();
+            if (PAUSE_KEYS.includes(event.key) || [415, 19, 179].includes(event.keyCode)) latestPlayOrRetry.current();
             else if ((event.key === 'ArrowLeft' || event.key === 'ArrowRight') && !playback.isLive) {
                 // Held down: an even pace (one 10 s step every 120 ms), not
                 // the keyboard's repeat rate.
@@ -256,7 +308,7 @@ export function DesktopPlayer({
             hiddenAt.current = Date.now();
             setControls(false);
         }
-        else if (command.type === 'toggle') mpv?.togglePause();
+        else if (command.type === 'toggle') playOrRetry();
         else if (command.type === 'seekBy') mpv?.seekBy(command.seconds);
         else if (command.type === 'seekTo') mpv?.seekTo(command.seconds);
         else if (command.type === 'volume') mpv?.setVolume(command.value);

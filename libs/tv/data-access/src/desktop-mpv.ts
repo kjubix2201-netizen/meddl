@@ -115,6 +115,13 @@ export class DesktopMpvSession {
         await b.loadEmbeddedMpvPlayback(created.id, playback);
     }
 
+    /** Loads the same stream again (a live channel whose stream dropped). */
+    reload(playback: DesktopMpvPlayback) {
+        const b = bridge();
+        if (!this.id || this.stopped || !b?.loadEmbeddedMpvPlayback) return;
+        void b.loadEmbeddedMpvPlayback(this.id, playback).catch(() => undefined);
+    }
+
     private apply(result: Promise<DesktopMpvState | null> | undefined) {
         void result
             ?.then((state) => {

@@ -204,6 +204,7 @@ export const DE: Readonly<Record<string, string>> = {
     'Bordeaux': 'Bordeaux',
     'Graphite': 'Graphit',
     'OLED black': 'OLED-Schwarz',
+    'The channel keeps dropping. Try again or choose another channel.': 'Der Sender bricht immer wieder ab. Versuch es nochmal oder wähle einen anderen Sender.',
     'Stream info': 'Stream-Info',
     'AirPlay': 'AirPlay',
     'Waiting for the VPN…': 'Warte auf das VPN …',
