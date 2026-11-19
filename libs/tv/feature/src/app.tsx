@@ -284,6 +284,7 @@ export function TvApp() {
                     onZap={sound.zap}
                     onChannels={sound.channelList}
                     onZapTo={sound.zapTo}
+                    onFreshLink={sound.desktopLink}
                 />
             ) : null}
             <LiveOverlay tv={tv} browse={browse} overlay={overlay} />

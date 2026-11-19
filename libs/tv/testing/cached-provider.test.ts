@@ -101,6 +101,40 @@ test('warming loads each supported section once', async () => {
     assert.equal(fake.calls.at(-1), 'dispose');
 });
 
+test('films and series follow at once unless channels are on screen already', async (t) => {
+    // Not at time zero: "no key pressed yet" must lie far in the past.
+    t.mock.timers.enable({ apis: ['setTimeout', 'Date'], now: 1_000_000 });
+    // Lets everything that is ready run; `setImmediate` is not mocked.
+    const flush = () => new Promise<void>((resolve) => setImmediate(resolve));
+    const run = (liveAnswer: 'channels' | 'empty' | 'fails') => {
+        const calls: string[] = [];
+        const fake = fakeProvider();
+        fake.client.catalog = async (kind, _category, page): Promise<Catalog> => {
+            calls.push(kind);
+            if (kind === 'live' && liveAnswer === 'fails') throw new Error('offline');
+            const items = kind === 'live' && liveAnswer === 'channels' ? [{ id: 'a' } as Media] : [];
+            return { items, total: items.length, page, categories: [{ id: 'c', name: 'C' }] };
+        };
+        const cached = new CachedProvider(fake.client);
+        void cached.warm({ movie: 'recent', series: 'recent' });
+        return { calls, cached };
+    };
+    // Home shows nothing yet and waits for the lists: no pause for the remote.
+    for (const answer of ['empty', 'fails'] as const) {
+        const { calls, cached } = run(answer);
+        await flush();
+        assert.deepEqual(calls, ['live', 'movie'], answer);
+        await cached.warmed('movie');
+    }
+    // Channels came at once: the big list follows a moment later.
+    const { calls } = run('channels');
+    await flush();
+    assert.deepEqual(calls, ['live']);
+    t.mock.timers.tick(2500);
+    await flush();
+    assert.deepEqual(calls, ['live', 'movie']);
+});
+
 test('empty answers are asked again and catalog requests run one at a time', async () => {
     const fake = fakeProvider();
     const cached = new CachedProvider(fake.client);

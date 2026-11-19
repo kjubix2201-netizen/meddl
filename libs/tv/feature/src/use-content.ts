@@ -96,16 +96,21 @@ export function useContent(
                 // background once the remote rests (CachedProvider.warm), and
                 // their rows join Home then instead of slowing the start.
                 const live = await client.catalog('live', '', 0, '', job.signal).catch(() => undefined);
-                if (live && lane.owns(job) && client.warmed) {
+                // Only with channels to show. Without them (none, or the
+                // list failed) Home would stay behind the spinner, or call
+                // the source empty, until the remote rests: it then loads
+                // the other lists itself, at once.
+                const shown = !!live?.items.length && lane.owns(job) && !!client.warmed;
+                if (live && shown) {
                     counts.live = live.total;
                     setHome(live.items.slice(0, 12));
                     setCountState({ key, value: { live: live.total } });
                     setBusy(false);
                     finishFocus();
+                    await Promise.all(
+                        (['movie', 'series'] as Kind[]).map((kind) => client.warmed?.(kind) ?? Promise.resolve())
+                    );
                 }
-                await Promise.all(
-                    (['movie', 'series'] as Kind[]).map((kind) => client.warmed?.(kind) ?? Promise.resolve())
-                );
                 if (!lane.owns(job)) return;
                 const lists = await Promise.all(
                     (['movie', 'series', 'live'] as Kind[]).map((kind) =>

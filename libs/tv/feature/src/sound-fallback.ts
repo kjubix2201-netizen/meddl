@@ -106,6 +106,17 @@ export function useSoundFallback(tv: TvModel) {
         return true;
     };
 
+    /**
+     * The playing title's stream link, asked from the source again: the
+     * desktop player loads a dropped live channel from it (links expire).
+     */
+    const desktopLink = async (signal: AbortSignal) => {
+        const current = latest.current;
+        const media = current.playing;
+        if (!media || !current.guideClient) return undefined;
+        return (await current.guideClient.resolve(media, signal)).url;
+    };
+
     /** The app's own player continues with the next episode. */
     const desktopContinue = (positionSeconds: number, durationSeconds: number) => {
         latest.current.player.current?.recordExternal(positionSeconds, durationSeconds);
@@ -234,5 +245,5 @@ export function useSoundFallback(tv: TvModel) {
         !!item &&
         (!!androidBridge()?.playNative || desktopMpvAvailable()) &&
         (phase === 'native' || (phase === 'idle' && takesOver(item)));
-    return { phase, silent, desktop, desktopClosed, desktopContinue, nextEpisode, zap, zapTo, channelList, handingOver };
+    return { phase, silent, desktop, desktopClosed, desktopContinue, desktopLink, nextEpisode, zap, zapTo, channelList, handingOver };
 }

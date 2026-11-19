@@ -13,6 +13,8 @@ import type {
 const MAX_CATALOGS = 300;
 const MAX_ITEMS = 500;
 const EPG_MS = 5 * 60 * 1000;
+/** Films and series wait for the remote to rest, but no longer than this. */
+const WARM_PATIENCE_MS = 15_000;
 
 /** Resolves with `work`, or rejects as soon as the caller's signal aborts. */
 function race<T>(work: Promise<T>, signal: AbortSignal): Promise<T> {
@@ -184,15 +186,17 @@ export class CachedProvider implements ProviderClient {
             if (!offered.includes(kind)) gate.open();
         });
         let quick = false;
+        let due = 0;
         for (const kind of this.warmKinds()) {
             if (this.owner.signal.aborted) return;
             // Live came from this device at once: films and series follow
             // when the remote rests for a moment, so opening their big lists
             // never makes the first steps in the menus stutter (TVs). A tab
-            // opened before that loads its list itself.
+            // opened before that loads its list itself. A viewer who never
+            // pauses still gets them: the wait ends after WARM_PATIENCE_MS.
             if (quick && kind !== 'live') {
                 await new Promise((resolve) => setTimeout(resolve, 2500));
-                await untilUserIdle(3000, this.owner.signal);
+                await untilUserIdle(3000, this.owner.signal, Math.max(0, due - Date.now()));
             }
             if (this.owner.signal.aborted) return;
             const sort = kind === 'live' ? 'provider' : sorts[kind === 'movie' ? 'movie' : 'series'];
@@ -201,11 +205,14 @@ export class CachedProvider implements ProviderClient {
             try {
                 const result = await this.catalog(kind, '', 0, '', this.owner.signal, sort);
                 onStep(kind, 'done', result.total);
+                // Only channels that came at once are on screen already
+                // (Home); without them Home waits for the next lists.
+                if (kind === 'live') quick = result.items.length > 0 && Date.now() - started < 1500;
             } catch {
                 onStep(kind, 'failed');
             }
             this.warmGates.get(kind)?.open();
-            if (kind === 'live') quick = Date.now() - started < 1500;
+            if (kind === 'live') due = Date.now() + WARM_PATIENCE_MS;
         }
     }
     dispose() {

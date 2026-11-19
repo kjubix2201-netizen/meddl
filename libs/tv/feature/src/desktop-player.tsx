@@ -12,11 +12,9 @@ import {
 import { t } from '@meddl/tv/util';
 import { PlayerBar, SEEK_SECONDS, type PlayerBarCommand, type PlayerBarState } from './desktop-player-bar';
 import { useDesktopChannelList } from './desktop-channel-list';
+import { LiveReload } from './live-reload';
 import { streamInfoLines } from './stream-info';
 
-/** Live: reloads after a dropped stream, at most this often in this time. */
-const LIVE_DROP_LIMIT = 6;
-const LIVE_DROP_WINDOW_MS = 2 * 60 * 1000;
 const HIDE_AFTER_MS = 4000;
 const BACK_KEYS = ['Escape', 'BrowserBack', 'Backspace', 'GoBack'];
 const PAUSE_KEYS = ['Enter', ' ', 'MediaPlayPause', 'MediaPlay', 'MediaPause', 'k'];
@@ -67,6 +65,7 @@ export function DesktopPlayer({
     onZap,
     onChannels,
     onZapTo,
+    onFreshLink,
 }: {
     playback: DesktopMpvPlayback;
     onClose: (positionSeconds: number, durationSeconds: number) => void;
@@ -80,6 +79,8 @@ export function DesktopPlayer({
     /** Live: the category's channels, and playing one of them (channel list). */
     onChannels?: () => { names: string[]; index: number };
     onZapTo?: (index: number) => boolean;
+    /** Live: the channel's stream link, asked from the source again (links expire). */
+    onFreshLink?: (signal: AbortSignal) => Promise<string | undefined>;
 }) {
     const [state, setState] = useState<DesktopMpvState | null>(null);
     const [failure, setFailure] = useState('');
@@ -94,8 +95,8 @@ export function DesktopPlayer({
     const lastSeek = useRef(0);
     const latestClose = useRef(onClose);
     latestClose.current = onClose;
-    const latestNext = useRef({ next, onEnded, onNext, onZap, onChannels, onZapTo });
-    latestNext.current = { next, onEnded, onNext, onZap, onChannels, onZapTo };
+    const latestNext = useRef({ next, onEnded, onNext, onZap, onChannels, onZapTo, onFreshLink });
+    latestNext.current = { next, onEnded, onNext, onZap, onChannels, onZapTo, onFreshLink };
     const channels = useDesktopChannelList(latestNext);
     const latestChannels = useRef(channels);
     latestChannels.current = channels;
@@ -104,6 +105,7 @@ export function DesktopPlayer({
     const close = () => {
         if (closed.current) return;
         closed.current = true;
+        live.current?.stop();
         const current = session.current?.state;
         void session.current?.stop();
         latestClose.current(current?.positionSeconds ?? 0, current?.durationSeconds ?? 0);
@@ -114,35 +116,18 @@ export function DesktopPlayer({
         hideTimer.current = setTimeout(() => setControls(false), HIDE_AFTER_MS);
     };
 
-    // Live: a stream that drops (the provider ends it, a short network
-    // gap) is loaded again instead of closing the player; only when it
-    // keeps failing does the player give up.
-    const liveDrops = useRef<number[]>([]);
-    const liveStatus = useRef({ previous: '', reloading: false });
-    const liveReload = (mpv: DesktopMpvSession) => {
-        if (!playback.isLive || closed.current) return false;
-        const now = Date.now();
-        liveDrops.current = liveDrops.current.filter((at) => now - at < LIVE_DROP_WINDOW_MS);
-        if (liveDrops.current.length >= LIVE_DROP_LIMIT) return false;
-        liveDrops.current.push(now);
-        setTimeout(() => {
-            mpv.reload(playback);
-            // The next "ended"/"error" counts again, even without "loading" between.
-            liveStatus.current = { previous: 'loading', reloading: false };
-        }, liveDrops.current.length > 1 ? 1500 : 300);
-        return true;
-    };
+    // Live: a dropped stream is loaded again instead of closing the player
+    // (live-reload.ts).
+    const live = useRef<LiveReload>();
 
     /** Play / pause; a live channel that gave up starts again. */
     const playOrRetry = () => {
         const mpv = session.current;
         if (!mpv) return;
-        if (playback.isLive && (failure || mpv.state?.status === 'ended' || mpv.state?.status === 'error')) {
+        if (live.current && (failure || mpv.state?.status === 'ended' || mpv.state?.status === 'error')) {
             setFailure('');
-            liveDrops.current = [];
-            liveStatus.current = { previous: 'loading', reloading: false };
             setState((current) => (current ? { ...current, status: 'loading' } : current));
-            mpv.reload(playback);
+            live.current.retry();
             return;
         }
         mpv.togglePause();
@@ -152,15 +137,7 @@ export function DesktopPlayer({
 
     useEffect(() => {
         const mpv = new DesktopMpvSession((update) => {
-            const live = liveStatus.current;
-            const changed = update.status !== live.previous;
-            live.previous = update.status;
-            if (update.status === 'playing' || update.status === 'loading') live.reloading = false;
-            const dropped = update.status === 'ended' || update.status === 'error';
-            // Only the change into "ended"/"error" counts; MPV repeats the
-            // state with every property update until the stream loads again.
-            if (dropped && (live.reloading || (changed && liveReload(mpv)))) {
-                liveStatus.current.reloading = true;
+            if (live.current?.observe(update.status)) {
                 setState({ ...update, status: 'loading' });
                 return;
             }
@@ -176,12 +153,18 @@ export function DesktopPlayer({
             if (update.status === 'error') setFailure(update.error || t('This stream could not be played.'));
         });
         session.current = mpv;
+        if (playback.isLive)
+            live.current = new LiveReload(
+                (link) => mpv.reload(link ? { ...playback, streamUrl: link } : playback),
+                (signal) => latestNext.current.onFreshLink?.(signal) ?? Promise.resolve(undefined)
+            );
         mpv.start(surface(bar.current, true), playback).catch((error: unknown) =>
             setFailure(error instanceof Error ? error.message : String(error))
         );
         reveal();
         return () => {
             clearTimeout(hideTimer.current);
+            live.current?.stop();
             void mpv.stop();
         };
     }, []);

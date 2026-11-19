@@ -20,15 +20,22 @@ function listen() {
 }
 listen();
 
-/** Resolves once nothing was pressed for `quietMs` (and the browser is idle). */
-export function untilUserIdle(quietMs: number, signal?: AbortSignal): Promise<void> {
+/**
+ * Resolves once nothing was pressed for `quietMs` (and the browser is idle),
+ * and after `maxWaitMs` at the latest: work that others wait for must not
+ * depend on the viewer ever pausing.
+ */
+export function untilUserIdle(quietMs: number, signal?: AbortSignal, maxWaitMs = Infinity): Promise<void> {
     listen();
+    const latest = Date.now() + maxWaitMs;
     return new Promise((resolve) => {
         const check = () => {
             if (signal?.aborted) return resolve();
-            const waited = Date.now() - lastInput;
+            const now = Date.now();
+            if (now >= latest) return resolve();
+            const waited = now - lastInput;
             if (waited < quietMs) {
-                setTimeout(check, Math.max(250, quietMs - waited));
+                setTimeout(check, Math.min(Math.max(250, quietMs - waited), latest - now));
                 return;
             }
             if (typeof window === 'undefined') return resolve();
