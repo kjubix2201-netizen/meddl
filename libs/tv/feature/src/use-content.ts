@@ -90,6 +90,21 @@ export function useContent(
             if (route.view === 'home') {
                 let failed = 0;
                 const counts: Partial<Record<Kind, number>> = {};
+                // Live first: the films' and series' big lists open in the
+                // background once the remote rests (CachedProvider.warm), and
+                // their rows join Home then instead of slowing the start.
+                const live = await client.catalog('live', '', 0, '', job.signal).catch(() => undefined);
+                if (live && lane.owns(job) && client.warmed) {
+                    counts.live = live.total;
+                    setHome(live.items.slice(0, 12));
+                    setCountState({ key, value: { live: live.total } });
+                    setBusy(false);
+                    finishFocus();
+                }
+                await Promise.all(
+                    (['movie', 'series'] as Kind[]).map((kind) => client.warmed?.(kind) ?? Promise.resolve())
+                );
+                if (!lane.owns(job)) return;
                 const lists = await Promise.all(
                     (['movie', 'series', 'live'] as Kind[]).map((kind) =>
                         client

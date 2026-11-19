@@ -42,3 +42,4 @@ export { directFetch, iosApp, localServerAvailable, servedByMeddlApp } from './d
 export * from './desktop-mpv';
 export * from './catalog-cache';
 export { desktopFullscreenAvailable, toggleDesktopFullscreen, watchDesktopFullscreen } from './desktop-window';
+export { untilUserIdle } from './user-idle';

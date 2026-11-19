@@ -1,3 +1,4 @@
+import { untilUserIdle } from './user-idle';
 import type {
     Catalog,
     CatalogSort,
@@ -79,7 +80,22 @@ export class CachedProvider implements ProviderClient {
     // Catalog requests reach the provider one at a time: panels often throttle
     // or answer empty when several large lists are requested at once.
     private queue: Promise<unknown> = Promise.resolve();
-    constructor(private inner: ProviderClient) {}
+    private warmGates = new Map<Kind, { done: Promise<void>; open: () => void }>();
+    constructor(private inner: ProviderClient) {
+        for (const kind of ['live', 'movie', 'series'] as Kind[]) {
+            let open = () => undefined as void;
+            const done = new Promise<void>((resolve) => (open = resolve));
+            this.warmGates.set(kind, { done, open });
+        }
+        // Never warmed (or warming stopped): nothing waits for ever.
+        this.owner.signal.addEventListener('abort', () => this.warmGates.forEach((gate) => gate.open()), {
+            once: true,
+        });
+    }
+    /** See ProviderClient.warmed. */
+    warmed(kind: Kind): Promise<void> {
+        return this.warmGates.get(kind)?.done ?? Promise.resolve();
+    }
     private serial<T>(work: () => Promise<T>): Promise<T> {
         const run = this.queue.then(work, work);
         this.queue = run.catch(() => undefined);
@@ -153,13 +169,22 @@ export class CachedProvider implements ProviderClient {
         sorts: { movie: CatalogSort; series: CatalogSort },
         onStep: (kind: Kind, state: 'loading' | 'done' | 'failed', total?: number) => void = () => undefined
     ) {
+        // Sections this source does not offer never hold anyone up.
+        const offered = this.warmKinds();
+        this.warmGates.forEach((gate, kind) => {
+            if (!offered.includes(kind)) gate.open();
+        });
         let quick = false;
         for (const kind of this.warmKinds()) {
             if (this.owner.signal.aborted) return;
-            // Live came from this device at once: films and series follow a
-            // little later, so opening their big lists does not make the first
-            // steps in Live TV stutter (TVs).
-            if (quick && kind !== 'live') await new Promise((resolve) => setTimeout(resolve, 5000));
+            // Live came from this device at once: films and series follow
+            // when the remote rests for a moment, so opening their big lists
+            // never makes the first steps in the menus stutter (TVs). A tab
+            // opened before that loads its list itself.
+            if (quick && kind !== 'live') {
+                await new Promise((resolve) => setTimeout(resolve, 2500));
+                await untilUserIdle(3000, this.owner.signal);
+            }
             if (this.owner.signal.aborted) return;
             const sort = kind === 'live' ? 'provider' : sorts[kind === 'movie' ? 'movie' : 'series'];
             onStep(kind, 'loading');
@@ -170,6 +195,7 @@ export class CachedProvider implements ProviderClient {
             } catch {
                 onStep(kind, 'failed');
             }
+            this.warmGates.get(kind)?.open();
             if (kind === 'live') quick = Date.now() - started < 1500;
         }
     }

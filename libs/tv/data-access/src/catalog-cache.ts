@@ -9,6 +9,7 @@
  * Its own database next to the user data (storage.ts), so a damaged or
  * cleared cache never touches favourites or viewing progress.
  */
+import { untilUserIdle } from './user-idle';
 const DATABASE = 'meddl-tv-catalog-cache';
 const STORE = 'lists';
 const INTERVAL_KEY = 'meddl-catalog-refresh-hours';
@@ -200,7 +201,10 @@ const refreshing = new Set<string>();
 function refreshLater<T>(key: string, load: () => Promise<T[]>, signal: AbortSignal) {
     if (refreshing.has(key)) return;
     refreshing.add(key);
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
+        // Downloading and saving a big list takes the TV's thread for a
+        // moment: only while the remote rests.
+        await untilUserIdle(6000, signal);
         if (signal.aborted) return void refreshing.delete(key);
         load()
             .then((fresh) => (fresh.length && !signal.aborted ? writeCachedList(key, fresh) : undefined))

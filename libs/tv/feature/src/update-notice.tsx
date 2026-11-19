@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { focusKey, restoreFocus } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
-import { directFetch, iosApp, localServerAvailable } from '@meddl/tv/data-access';
+import { directFetch, iosApp, localServerAvailable, untilUserIdle } from '@meddl/tv/data-access';
 import type { TvModel } from './use-tv';
 
 declare const __MEDDL_BUILD__: string;
@@ -58,8 +58,11 @@ function useUpdateCheck() {
         const abort = new AbortController();
         const run = () =>
             void check(target, abort.signal)
-                .then((found) => {
-                    if (found && found.build > build) setUpdate(found);
+                .then(async (found) => {
+                    if (!found || found.build <= build) return;
+                    // Never in the middle of using the menus: once the remote rests.
+                    await untilUserIdle(5000, abort.signal);
+                    if (!abort.signal.aborted) setUpdate(found);
                 })
                 .catch(() => undefined);
         const first = setTimeout(run, FIRST_CHECK_MS);

@@ -57,7 +57,10 @@ export function LoadingOverlay({ tv }: { tv: TvModel }) {
     useEffect(() => {
         setLate(false);
         if (!active) return;
-        const timer = setTimeout(() => setLate(true), 1500);
+        // Saved lists usually open within this; the window only appears for
+        // a slow connection, so a normal start never flashes it (and never
+        // takes the remote away from the menus).
+        const timer = setTimeout(() => setLate(true), 4000);
         return () => clearTimeout(timer);
     }, [active]);
     // Saved lists never block the screen (they open in the background); only

@@ -115,6 +115,12 @@ export interface ProviderClient {
     episodes(item: Media, signal: AbortSignal): Promise<Media[]>;
     epg(item: Media, signal: AbortSignal): Promise<Program[]>;
     resolve(item: Media, signal: AbortSignal): Promise<Playback>;
+    /**
+     * Resolves once this section's list was opened in the background after
+     * the start (CachedProvider.warm); screens that only show a preview of
+     * it (Home) wait for this instead of opening the big list themselves.
+     */
+    warmed?(kind: Kind): Promise<void>;
     dispose(): void;
 }
 export interface Progress {
