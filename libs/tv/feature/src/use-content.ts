@@ -5,7 +5,8 @@ import {
     LatestRequest,
     Media,
     Program,
-    ProviderClient, t } from '@meddl/tv/util';
+    ProviderClient,
+    UserData, t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
 import type { Route } from './navigation';
 import { useCatalog } from './use-catalog';
@@ -20,7 +21,8 @@ export function useContent(
     pendingFocus: { current: string },
     sourceId: string,
     pendingScroll: { current?: number },
-    sorts: CatalogSortPreferences
+    sorts: CatalogSortPreferences,
+    tmdb?: UserData['tmdb']
 ) {
     const key = JSON.stringify([
         sourceId,
@@ -218,7 +220,8 @@ export function useContent(
         route.kind === 'movie' || route.kind === 'series'
             ? sorts[route.kind]
             : 'provider',
-        setError
+        setError,
+        tmdb
     );
     return {
         ...catalog,

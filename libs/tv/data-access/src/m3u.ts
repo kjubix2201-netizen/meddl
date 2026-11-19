@@ -85,6 +85,10 @@ export class M3uProvider implements ProviderClient {
             page,
         };
     }
+    /** See ProviderClient.titles: the playlist is the whole list. */
+    async titles(kind: Kind) {
+        return this.items.filter((i) => i.kind === kind);
+    }
     async details(item: Media) {
         return item;
     }

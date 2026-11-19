@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { TvMetadata } from '@meddl/tv/data-access';
 import {
     Catalog,
     CatalogSort,
@@ -6,6 +7,8 @@ import {
     ProviderClient,
     LatestRequest,
     NO_CATEGORY,
+    TOP_CATEGORY,
+    UserData,
     joinCategories,
     t,
 } from '@meddl/tv/util';
@@ -15,6 +18,7 @@ import {
 } from '@meddl/shared/m3u-utils';
 import { Route } from './navigation';
 import { ALL_COUNTRIES, categoriesOfCountry } from './country-catalog';
+import { topCatalog } from './top-catalog';
 const empty = (): Catalog => ({ items: [], total: 0, page: 0, categories: [] });
 /** One active query survives detail navigation; a new query cancels its append lane. */
 export function useCatalog(
@@ -24,8 +28,14 @@ export function useCatalog(
     source: string,
     finishFocus: () => void,
     sort: CatalogSort,
-    reportConnection: (message: string) => void = () => undefined
+    reportConnection: (message: string) => void = () => undefined,
+    /** TMDB settings, for "Trending this week" (top-catalog.ts). */
+    tmdb?: UserData['tmdb']
 ) {
+    const metadata = useMemo(
+        () => (tmdb ? new TvMetadata(tmdb) : undefined),
+        [tmdb?.enabled, tmdb?.apiKey, tmdb?.language]
+    );
     const active = ['movies', 'series', 'search', 'live'].includes(route.view);
     const key = JSON.stringify([
         source,
@@ -59,6 +69,7 @@ export function useCatalog(
         sort,
         reportConnection,
         source,
+        metadata,
     });
     latest.current = {
         key,
@@ -70,6 +81,7 @@ export function useCatalog(
         sort,
         reportConnection,
         source,
+        metadata,
     };
     async function load(append: boolean) {
         const current = latest.current;
@@ -113,14 +125,26 @@ export function useCatalog(
                         ? joinCategories(ids)
                         : (ids[0] ?? NO_CATEGORY);
             }
-            const result = await client.catalog(
-                kind,
-                category,
-                page,
-                current.route.query,
-                job.signal,
-                current.sort
-            );
+            const top = category === TOP_CATEGORY;
+            const result = top
+                ? await topCatalog(
+                      client,
+                      current.metadata,
+                      current.source,
+                      kind,
+                      current.route.query,
+                      scoped,
+                      job.signal,
+                      current.sort
+                  )
+                : await client.catalog(
+                      kind,
+                      category,
+                      page,
+                      current.route.query,
+                      job.signal,
+                      current.sort
+                  );
             if (!lane.current.owns(job) || current.key !== latest.current.key)
                 return;
             if (!scoped) categoryCache.current.set(cacheKey, result.categories);
@@ -161,14 +185,19 @@ export function useCatalog(
             if (!page) current.finishFocus();
         } catch {
             if (lane.current.owns(job)) {
-                if (!append)
+                // The trending list comes from TMDB: its failure says nothing
+                // about the connection to the source.
+                const top = current.route.category === TOP_CATEGORY;
+                if (!append && !top)
                     current.reportConnection(
                         t('Could not load titles. Check the connection and retry.')
                     );
                 setState((s) => ({
                     ...s,
                     busy: false,
-                    error: t('Could not load titles. Check the connection and retry.'),
+                    error: top
+                        ? t('The trending list could not be loaded. Check the TMDB key and the connection.')
+                        : t('Could not load titles. Check the connection and retry.'),
                 }));
             }
         } finally {

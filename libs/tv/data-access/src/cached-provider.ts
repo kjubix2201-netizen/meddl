@@ -130,6 +130,15 @@ export class CachedProvider implements ProviderClient {
             signal
         );
     }
+    /** See ProviderClient.titles; waits its turn like every catalog request. */
+    titles(kind: Kind, signal: AbortSignal): Promise<Media[] | undefined> {
+        const inner = this.inner;
+        if (!inner.titles) return Promise.resolve(undefined);
+        return race(
+            this.serial(() => inner.titles?.(kind, this.owner.signal) ?? Promise.resolve(undefined)),
+            signal
+        );
+    }
     details(item: Media, signal: AbortSignal): Promise<Media> {
         return race(
             this.details_.get(item.id, () => this.inner.details(item, this.owner.signal)),

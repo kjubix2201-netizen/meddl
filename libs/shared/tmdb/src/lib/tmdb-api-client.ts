@@ -103,15 +103,16 @@ export class TmdbApiClient {
         );
     }
 
-    /** Weekly trending titles for one media type */
+    /** Weekly trending titles for one media type (20 per page) */
     async getTrending(
         mediaType: 'movie' | 'tv',
         language: string,
-        apiKey: string
+        apiKey: string,
+        page = 1
     ): Promise<TmdbSearchResult[]> {
         const response = await this.request<TmdbSearchResponse>(
             `/trending/${mediaType}/week`,
-            { language },
+            { language, ...(page > 1 ? { page: String(page) } : {}) },
             apiKey
         );
         return response.results ?? [];

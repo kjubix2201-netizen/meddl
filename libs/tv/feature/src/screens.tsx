@@ -1,12 +1,13 @@
 import { storedMediaPoster } from '@meddl/tv/data-access';
 import { CatalogOrder, CatalogSortNotice } from './catalog-order';
 import { Empty, VirtualCollection, Poster, ResumeCard } from '@meddl/tv/ui';
-import { Media, Progress, t } from '@meddl/tv/util';
+import { Media, Progress, TOP_CATEGORY, t } from '@meddl/tv/util';
 import { HomeLauncher } from './home-launcher';
 import { HomePortrait } from './home-portrait';
 import { TvModel } from './use-tv';
 import { recentChannels } from './recent-channels';
 import { SearchScreen } from './search-screen';
+import { topListAvailable } from './top-catalog';
 export function Home({ tv, history }: { tv: TvModel; history: Progress[] }) {
     const items = tv.home;
     const sourceId = tv.data.activeId;
@@ -76,6 +77,8 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
     // Search covers films, series and channels together (search-screen.tsx).
     if (r.view === 'search') return <SearchScreen tv={tv} />;
     const list = tv.catalog.items;
+    // TMDB's order, not the source's: the sort choice does not apply.
+    const top = r.category === TOP_CATEGORY;
     return (
         <>
             <div class="catalog-filters">
@@ -107,17 +110,20 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                             })
                         }
                     >
+                        {topListAvailable(r.kind, tv.data.tmdb) ? (
+                            <option value={TOP_CATEGORY}>{t('Trending this week')}</option>
+                        ) : null}
                         <option value="">{t('All categories')}</option>
                         {tv.catalog.categories.map((c) => (
                             <option value={c.id}>{c.name}</option>
                         ))}
                     </select>
                 </label>
-                {r.kind === 'movie' || r.kind === 'series' ? (
+                {(r.kind === 'movie' || r.kind === 'series') && !top ? (
                     <CatalogOrder tv={tv} kind={r.kind} />
                 ) : null}
             </div>
-            <CatalogSortNotice tv={tv} />
+            {top ? null : <CatalogSortNotice tv={tv} />}
             <VirtualCollection
                 key={tv.catalogKey}
                 layout={r.kind === 'live' ? 'stations' : 'posters'}

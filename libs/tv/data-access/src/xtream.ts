@@ -163,6 +163,12 @@ export class XtreamProvider implements ProviderClient {
             categoryCounts: converted.counts,
         };
     }
+    /** See ProviderClient.titles: the section's whole list, loaded if need be. */
+    async titles(kind: Kind, signal: AbortSignal) {
+        const type = kind === 'movie' ? 'vod' : kind;
+        if (!this.converted.has(type)) await this.catalog(kind, '', 0, '', signal, 'provider');
+        return this.converted.get(type)?.all;
+    }
     /** One provider login, one list: the account is part of the key. */
     private cacheKey(action: string) {
         return JSON.stringify([this.source.id, this.source.url, this.source.username ?? '', action]);

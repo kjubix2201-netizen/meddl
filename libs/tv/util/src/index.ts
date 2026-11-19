@@ -121,6 +121,12 @@ export interface ProviderClient {
      * it (Home) wait for this instead of opening the big list themselves.
      */
     warmed?(kind: Kind): Promise<void>;
+    /**
+     * Every title of a section, when the provider holds the whole list on
+     * this device (Xtream, M3U); undefined, or no such method, when it only
+     * answers searches (Stalker).
+     */
+    titles?(kind: Kind, signal: AbortSignal): Promise<Media[] | undefined>;
     dispose(): void;
 }
 export interface Progress {

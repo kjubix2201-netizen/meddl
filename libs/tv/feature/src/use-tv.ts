@@ -96,7 +96,8 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         pendingFocus,
         data.activeId,
         pendingScroll,
-        data.catalogSort
+        data.catalogSort,
+        data.tmdb
     );
     function reportConnection(message: string) {
         setConnectionFailed(!!message);

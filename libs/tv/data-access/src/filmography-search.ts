@@ -24,7 +24,8 @@ function bestMatch(
         : { status: 'choices', items };
 }
 
-function matchScore(
+/** How well a source title fits a TMDB title (3 = same year); null when it is another work. */
+export function matchScore(
     item: Media,
     credit: ActorFilmographyCredit
 ): number | null {

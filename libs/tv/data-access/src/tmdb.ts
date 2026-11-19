@@ -12,6 +12,7 @@ import {
     limitCast,
     topCast,
     unifiedTvCast,
+    type ActorFilmographyCredit,
     type TmdbTvDetails,
     extractYear,
     toTmdbLanguage,
@@ -29,6 +30,9 @@ import {
     UserData,
     withSeriesContext,
 } from '@meddl/tv/util';
+
+/** How long a trending list is shown before TMDB is asked again. */
+const TRENDING_MS = 3 * 60 * 60 * 1000;
 
 /** The caller owns cancellation; the deadline also bounds offline/slow API calls. */
 async function withDeadline<T>(
@@ -68,6 +72,36 @@ export class TvMetadata {
             appLanguage: () => this.settings.language,
             language: () => toTmdbLanguage(this.settings.language),
         };
+    }
+    private trendingLists = new Map<string, { at: number; list: ActorFilmographyCredit[] }>();
+    /**
+     * TMDB's trending titles of the last seven days, most popular first
+     * (two pages, 40 titles); kept for a few hours. Empty without a key.
+     */
+    async trending(kind: 'movie' | 'series', signal: AbortSignal): Promise<ActorFilmographyCredit[]> {
+        if (!this.enabled()) return [];
+        const mediaType = kind === 'movie' ? 'movie' : 'tv';
+        const { language, apiKey } = this.runtime();
+        const key = `${mediaType}|${language()}`;
+        const kept = this.trendingLists.get(key);
+        if (kept && Date.now() - kept.at < TRENDING_MS) return kept.list;
+        const pages = await withDeadline(signal, (abort) => {
+            const api = new TmdbApiClient(abort);
+            return Promise.all([1, 2].map((page) => api.getTrending(mediaType, language(), apiKey(), page)));
+        });
+        const list = pages.flat().map((result) => ({
+            tmdbId: result.id,
+            mediaType,
+            title: result.title ?? result.name ?? '',
+            originalTitle: result.original_title ?? result.original_name,
+            year: extractYear(result.release_date ?? result.first_air_date),
+            posterUrl: null,
+            character: null,
+            crewJob: null,
+        } satisfies ActorFilmographyCredit));
+        const titles = list.filter((credit, index) => credit.title && list.findIndex((c) => c.tmdbId === credit.tmdbId) === index);
+        this.trendingLists.set(key, { at: Date.now(), list: titles });
+        return titles;
     }
     getPerson(personId: number, signal: AbortSignal) {
         return withDeadline(signal, (abort) =>
