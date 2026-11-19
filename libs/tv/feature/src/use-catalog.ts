@@ -18,7 +18,7 @@ import {
 } from '@meddl/shared/m3u-utils';
 import { Route } from './navigation';
 import { ALL_COUNTRIES, categoriesOfCountry } from './country-catalog';
-import { topCatalog } from './top-catalog';
+import { tmdbReady, topCatalog } from './top-catalog';
 const empty = (): Catalog => ({ items: [], total: 0, page: 0, categories: [] });
 /** One active query survives detail navigation; a new query cancels its append lane. */
 export function useCatalog(
@@ -29,11 +29,11 @@ export function useCatalog(
     finishFocus: () => void,
     sort: CatalogSort,
     reportConnection: (message: string) => void = () => undefined,
-    /** TMDB settings, for "Trending this week" (top-catalog.ts). */
+    /** TMDB settings, for the top list (top-catalog.ts). */
     tmdb?: UserData['tmdb']
 ) {
     const metadata = useMemo(
-        () => (tmdb ? new TvMetadata(tmdb) : undefined),
+        () => (tmdb && tmdbReady(tmdb) ? new TvMetadata(tmdb) : undefined),
         [tmdb?.enabled, tmdb?.apiKey, tmdb?.language]
     );
     const active = ['movies', 'series', 'search', 'live'].includes(route.view);
@@ -185,19 +185,14 @@ export function useCatalog(
             if (!page) current.finishFocus();
         } catch {
             if (lane.current.owns(job)) {
-                // The trending list comes from TMDB: its failure says nothing
-                // about the connection to the source.
-                const top = current.route.category === TOP_CATEGORY;
-                if (!append && !top)
+                if (!append)
                     current.reportConnection(
                         t('Could not load titles. Check the connection and retry.')
                     );
                 setState((s) => ({
                     ...s,
                     busy: false,
-                    error: top
-                        ? t('The trending list could not be loaded. Check the TMDB key and the connection.')
-                        : t('Could not load titles. Check the connection and retry.'),
+                    error: t('Could not load titles. Check the connection and retry.'),
                 }));
             }
         } finally {

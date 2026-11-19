@@ -144,7 +144,7 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
             ...firstRoute(),
             view,
             kind,
-            category: catalog ? startCategory(kind, data.tmdb) : '',
+            category: catalog ? startCategory(kind, data) : '',
             // Live TV, Movies and Series open straight in Germany; other
             // countries are one ◀ away in the drawer at the left edge.
             country: catalog ? DEFAULT_COUNTRY : '',

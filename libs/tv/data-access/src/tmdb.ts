@@ -77,7 +77,8 @@ export class TvMetadata {
     private trendingLists = new Map<string, { at: number; list: ActorFilmographyCredit[] }>();
     /**
      * TMDB's trending titles of the last seven days, most popular first
-     * (two pages, 40 titles); kept for a few hours. Empty without a key.
+     * (two pages, 40 titles); kept for a few hours. Empty without a key
+     * (the list then comes from the source itself, top-titles.ts).
      * Sources name their titles in the viewer's language or in the original
      * one, so a title comes once per name: in the metadata language and, when
      * that is another one, in the app's language (same `tmdbId`, in a row).

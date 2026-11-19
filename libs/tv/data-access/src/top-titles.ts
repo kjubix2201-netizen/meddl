@@ -12,7 +12,7 @@ const aborted = () => new DOMException('Aborted', 'AbortError');
 
 /**
  * The titles of TMDB's trending list that this source offers, most popular
- * first (the "Trending this week" category of Movies and Series). One entry
+ * first (the "Top of the last days" category of Movies and Series). One entry
  * per trending title: the best match by title and year, the first of equals.
  * A title may come several times in `trending`, once per language's name.
  * `allowed` narrows the source's titles (the chosen country's categories).
@@ -100,4 +100,79 @@ async function searchEach(
         }
     }
     return found;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+/** "New": added within this many days … */
+const NEW_DAYS = 14;
+/** … or, when the source added less than a list's worth, its newest titles. */
+const NEWEST = 200;
+const TOP_LIMIT = 40;
+
+/** The source's own rating of a title (0 to 10); 0 when it gives none. */
+function sourceRating(item: Media): number {
+    for (const value of [item.raw.rating, item.raw.rating_imdb, item.raw.rating_kinopoisk]) {
+        const rating = Number(value);
+        if (Number.isFinite(rating) && rating > 0) return Math.min(rating, 10);
+    }
+    const ofFive = Number(item.raw.rating_5based);
+    return Number.isFinite(ofFive) && ofFive > 0 ? Math.min(ofFive * 2, 10) : 0;
+}
+
+/** Best rated first; equals stay in their order (explicit: old TVs sort unstably). */
+function bestRated(items: readonly Media[]): Media[] {
+    return items
+        .map((item, index) => ({ item, index, rating: sourceRating(item) }))
+        .sort((a, b) => b.rating - a.rating || a.index - b.index)
+        .map(({ item }) => item);
+}
+
+/**
+ * The same category without TMDB (no key, not reachable, or none of its
+ * titles here): what the source added in the last days, its best rated
+ * first, from the source's own dates and ratings. A source that adds little
+ * shows the best of its newest titles; one without dates the best rated; one
+ * with neither (a plain playlist) nothing.
+ */
+export async function findNewTopTitles(
+    provider: ProviderClient,
+    sourceId: string,
+    kind: 'movie' | 'series',
+    signal: AbortSignal,
+    allowed: (item: Media) => boolean = () => true,
+    now = Date.now()
+): Promise<Media[]> {
+    const mine = (item: Media) => item.sourceId === sourceId && item.kind === kind && allowed(item);
+    const all = await provider.titles?.(kind, signal);
+    if (signal.aborted) throw aborted();
+    let newest: Media[];
+    if (all) {
+        const offered = all.filter(mine);
+        const dated = offered
+            .filter((item) => !!item.addedAt)
+            .map((item, index) => ({ item, index }))
+            .sort((a, b) => (b.item.addedAt ?? 0) - (a.item.addedAt ?? 0) || a.index - b.index)
+            .map(({ item }) => item);
+        const since = now - NEW_DAYS * DAY_MS;
+        const fresh = dated.filter((item) => (item.addedAt ?? 0) >= since);
+        newest =
+            fresh.length >= TOP_LIMIT
+                ? fresh
+                : dated.length
+                  ? dated.slice(0, NEWEST)
+                  : offered.filter((item) => sourceRating(item) > 0);
+    } else {
+        // The portal sorts by date itself: its first pages are its newest titles.
+        newest = [];
+        for (const page of [0, 1]) {
+            const catalog = await provider.catalog(kind, '', page, '', signal, 'recent');
+            if (signal.aborted) throw aborted();
+            newest.push(...catalog.items.filter(mine));
+            if (!catalog.items.length || (page + 1) * (catalog.pageSize || 60) >= catalog.total) break;
+        }
+    }
+    const seen = new Set<string>();
+    return bestRated(newest)
+        .filter((item) => !seen.has(item.id) && !!seen.add(item.id))
+        .slice(0, TOP_LIMIT);
 }

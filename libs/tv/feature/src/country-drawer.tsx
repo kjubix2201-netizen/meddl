@@ -71,7 +71,7 @@ export function CountryDrawer({
             return;
         }
         tv.visit(
-            { ...route, country: code, category: startCategory(route.kind, tv.data.tmdb), page: 0, query: '' },
+            { ...route, country: code, category: startCategory(route.kind, tv.data), page: 0, query: '' },
             focusFallback || focusAfter
         );
     }

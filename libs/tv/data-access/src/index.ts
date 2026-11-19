@@ -28,7 +28,7 @@ export {
     findFilmographyTitle,
     type FilmographyMatch,
 } from './filmography-search';
-export { findTopTitles } from './top-titles';
+export { findNewTopTitles, findTopTitles } from './top-titles';
 export * from './backend';
 export * from './pairing';
 export { storedMediaPoster } from './stored-artwork';

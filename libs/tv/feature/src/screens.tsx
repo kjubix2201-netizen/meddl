@@ -77,7 +77,7 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
     // Search covers films, series and channels together (search-screen.tsx).
     if (r.view === 'search') return <SearchScreen tv={tv} />;
     const list = tv.catalog.items;
-    // TMDB's order, not the source's: the sort choice does not apply.
+    // The top list has its own order: the sort choice does not apply.
     const top = r.category === TOP_CATEGORY;
     return (
         <>
@@ -92,7 +92,7 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                             tv.setRoute({
                                 ...r,
                                 // A search covers the source's titles, not
-                                // only the few of the trending list.
+                                // only the few of the top list.
                                 category: top && e.currentTarget.value ? '' : r.category,
                                 query: e.currentTarget.value,
                                 page: 0,
@@ -113,8 +113,8 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                             })
                         }
                     >
-                        {topListAvailable(r.kind, tv.data.tmdb) ? (
-                            <option value={TOP_CATEGORY}>{t('Trending this week')}</option>
+                        {topListAvailable(r.kind, tv.data) ? (
+                            <option value={TOP_CATEGORY}>{t('Top of the last days')}</option>
                         ) : null}
                         <option value="">{t('All categories')}</option>
                         {tv.catalog.categories.map((c) => (

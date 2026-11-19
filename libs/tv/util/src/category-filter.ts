@@ -8,9 +8,10 @@ export const CATEGORY_LIST_SEPARATOR = '\u001f';
 /** Matches nothing: a country whose categories are all gone. */
 export const NO_CATEGORY = '\u001f\u001f';
 /**
- * "Trending this week" at the top of the Movies and Series categories: not a
- * provider category but TMDB's list, matched with the source's titles
- * (top-catalog.ts). A provider asked for it by mistake answers empty.
+ * "Top of the last days" at the top of the Movies and Series categories: not
+ * a provider category but a list put together from TMDB's trends or the
+ * source's newest titles (top-catalog.ts). A provider asked for it by mistake
+ * answers empty.
  */
 export const TOP_CATEGORY = '\u001etop';
 
