@@ -7,6 +7,7 @@ import {
     countryGroups,
     type CountryGroup,
 } from './country-catalog';
+import { startCategory } from './top-catalog';
 import { categoryKey } from './use-live-browse';
 import type { TvModel } from './use-tv';
 
@@ -70,7 +71,7 @@ export function CountryPicker({ tv }: { tv: TvModel }) {
     }, [groups.length]);
     function choose(code: string) {
         tv.visit(
-            { ...route, country: code, category: '', page: 0, query: '' },
+            { ...route, country: code, category: startCategory(route.kind, tv.data.tmdb), page: 0, query: '' },
             route.view === 'live' ? categoryKey('') : 'catalog:category'
         );
     }

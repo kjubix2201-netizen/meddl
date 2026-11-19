@@ -6,6 +6,7 @@ import {
     Kind,
     Media,
     ProviderClient,
+    TOP_CATEGORY,
     UserData,
     catalogTitleMatcher,
     categoryFilter,
@@ -15,6 +16,11 @@ import {
 /** The list needs the viewer's TMDB key (Settings → TMDB). */
 export function topListAvailable(kind: Kind, tmdb: UserData['tmdb']) {
     return (kind === 'movie' || kind === 'series') && tmdb.enabled && !!tmdb.apiKey.trim();
+}
+
+/** Movies and Series open with the trending list when there is one, else with all categories. */
+export function startCategory(kind: Kind, tmdb: UserData['tmdb']) {
+    return topListAvailable(kind, tmdb) ? TOP_CATEGORY : '';
 }
 
 type Trending = Awaited<ReturnType<TvMetadata['trending']>>;

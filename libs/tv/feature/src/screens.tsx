@@ -91,6 +91,9 @@ export function CatalogScreen({ tv }: { tv: TvModel }) {
                         onInput={(e) =>
                             tv.setRoute({
                                 ...r,
+                                // A search covers the source's titles, not
+                                // only the few of the trending list.
+                                category: top && e.currentTarget.value ? '' : r.category,
                                 query: e.currentTarget.value,
                                 page: 0,
                             })

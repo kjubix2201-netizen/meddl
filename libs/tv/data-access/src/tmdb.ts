@@ -27,6 +27,7 @@ import {
 import {
     artwork,
     Media,
+    tvLanguage,
     UserData,
     withSeriesContext,
 } from '@meddl/tv/util';
@@ -77,31 +78,49 @@ export class TvMetadata {
     /**
      * TMDB's trending titles of the last seven days, most popular first
      * (two pages, 40 titles); kept for a few hours. Empty without a key.
+     * Sources name their titles in the viewer's language or in the original
+     * one, so a title comes once per name: in the metadata language and, when
+     * that is another one, in the app's language (same `tmdbId`, in a row).
      */
     async trending(kind: 'movie' | 'series', signal: AbortSignal): Promise<ActorFilmographyCredit[]> {
         if (!this.enabled()) return [];
         const mediaType = kind === 'movie' ? 'movie' : 'tv';
         const { language, apiKey } = this.runtime();
-        const key = `${mediaType}|${language()}`;
+        const languages = [...new Set([language(), toTmdbLanguage(tvLanguage())])];
+        const key = `${mediaType}|${languages.join('|')}`;
         const kept = this.trendingLists.get(key);
         if (kept && Date.now() - kept.at < TRENDING_MS) return kept.list;
-        const pages = await withDeadline(signal, (abort) => {
+        const lists = await withDeadline(signal, (abort) => {
             const api = new TmdbApiClient(abort);
-            return Promise.all([1, 2].map((page) => api.getTrending(mediaType, language(), apiKey(), page)));
+            return Promise.all(
+                languages.map(async (tag) =>
+                    (await Promise.all([1, 2].map((page) => api.getTrending(mediaType, tag, apiKey(), page)))).flat()
+                )
+            );
         });
-        const list = pages.flat().map((result) => ({
-            tmdbId: result.id,
-            mediaType,
-            title: result.title ?? result.name ?? '',
-            originalTitle: result.original_title ?? result.original_name,
-            year: extractYear(result.release_date ?? result.first_air_date),
-            posterUrl: null,
-            character: null,
-            crewJob: null,
-        } satisfies ActorFilmographyCredit));
-        const titles = list.filter((credit, index) => credit.title && list.findIndex((c) => c.tmdbId === credit.tmdbId) === index);
-        this.trendingLists.set(key, { at: Date.now(), list: titles });
-        return titles;
+        const list: ActorFilmographyCredit[] = [];
+        const ranked = [...new Set(lists[0].map((result) => result.id))];
+        for (const id of ranked) {
+            const names = new Set<string>();
+            for (const results of lists) {
+                const result = results.find((entry) => entry.id === id);
+                const title = result?.title ?? result?.name ?? '';
+                if (!result || !title || names.has(title)) continue;
+                names.add(title);
+                list.push({
+                    tmdbId: id,
+                    mediaType,
+                    title,
+                    originalTitle: result.original_title ?? result.original_name,
+                    year: extractYear(result.release_date ?? result.first_air_date),
+                    posterUrl: null,
+                    character: null,
+                    crewJob: null,
+                });
+            }
+        }
+        this.trendingLists.set(key, { at: Date.now(), list });
+        return list;
     }
     getPerson(personId: number, signal: AbortSignal) {
         return withDeadline(signal, (abort) =>

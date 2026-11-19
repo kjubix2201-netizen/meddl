@@ -3,6 +3,7 @@ import { TvIcon, focusKey, restoreFocus } from '@meddl/tv/ui';
 import { t } from '@meddl/tv/util';
 import { ALL_COUNTRIES, OTHER_COUNTRY, countryGroups, type CountryGroup } from './country-catalog';
 import { CountryFlag, countryKey, countryLabel } from './country-picker';
+import { startCategory } from './top-catalog';
 import type { TvModel } from './use-tv';
 
 const isBack = (event: KeyboardEvent) =>
@@ -69,7 +70,10 @@ export function CountryDrawer({
             restoreFocus(focusAfter, focusFallback);
             return;
         }
-        tv.visit({ ...route, country: code, category: '', page: 0, query: '' }, focusFallback || focusAfter);
+        tv.visit(
+            { ...route, country: code, category: startCategory(route.kind, tv.data.tmdb), page: 0, query: '' },
+            focusFallback || focusAfter
+        );
     }
 
     if (!expanded)

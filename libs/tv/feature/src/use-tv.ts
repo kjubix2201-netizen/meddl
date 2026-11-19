@@ -3,6 +3,7 @@ import { useReconnect } from './use-reconnect';
 import { useLibrary } from './use-library';
 import { useBackend } from './use-backend';
 import { firstRoute, type View } from './navigation';
+import { startCategory } from './top-catalog';
 import { DEFAULT_COUNTRY } from './country-catalog';
 import { categoryKey } from './use-live-browse';
 import { useRouteHistory, type NavigationOrigin } from './use-route-history';
@@ -138,15 +139,12 @@ export function useTv(video: { current: HTMLVideoElement | null }) {
         stack.current = [];
         pendingFocus.current = '';
         const catalog = view === 'live' || view === 'movies' || view === 'series';
+        const kind = view === 'live' ? 'live' : view === 'series' ? 'series' : 'movie';
         setRoute({
             ...firstRoute(),
             view,
-            kind:
-                view === 'live'
-                    ? 'live'
-                    : view === 'series'
-                      ? 'series'
-                      : 'movie',
+            kind,
+            category: catalog ? startCategory(kind, data.tmdb) : '',
             // Live TV, Movies and Series open straight in Germany; other
             // countries are one ◀ away in the drawer at the left edge.
             country: catalog ? DEFAULT_COUNTRY : '',

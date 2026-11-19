@@ -48,6 +48,9 @@ test('trending titles the source offers come in TMDB order, one per title, never
         const german = await findTopTitles(client, source.id, 'movie', trending, signal, (item) => item.category === 'de');
         assert.deepEqual(german.map((item) => item.providerId), ['5', '3', '1']);
         assert.deepEqual(await findTopTitles(client, source.id, 'movie', [], signal), []);
+        // The same title under each language's name is one entry.
+        const named = [credit(12, 'The Wild Robot', 2024), credit(12, 'Der wilde Roboter', 2024, 'The Wild Robot'), credit(14, 'Dune: Part Two', 2024)];
+        assert.deepEqual((await findTopTitles(client, source.id, 'movie', named, signal)).map((item) => item.providerId), ['3', '1']);
         assert.deepEqual(await findTopTitles(client, 'another-source', 'movie', trending, signal), []);
     } finally {
         client.dispose();
@@ -75,5 +78,10 @@ test('a portal that only answers searches is asked once per title and a failed s
     const top = await findTopTitles(portal, 'top', 'movie', trending, signal);
     assert.deepEqual(top.map((item) => item.id), ['g', 'd']);
     assert.ok(queries.includes('Der wilde Roboter'));
+    // Another language's name is searched only while the title is missing.
+    queries.length = 0;
+    const named = [credit(10, 'Gladiator II', 2024), credit(10, 'Gladiator 2', 2024), credit(14, 'Dune: Teil 2', 2024), credit(14, 'Dune: Part Two', 2024)];
+    assert.deepEqual((await findTopTitles(portal, 'top', 'movie', named, signal)).map((item) => item.id), ['g', 'd']);
+    assert.deepEqual(queries, ['Gladiator II', 'Dune: Teil 2', 'Dune: Part Two']);
     await assert.rejects(findTopTitles(portal, 'top', 'movie', trending, AbortSignal.abort()));
 });

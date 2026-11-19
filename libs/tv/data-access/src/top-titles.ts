@@ -14,6 +14,7 @@ const aborted = () => new DOMException('Aborted', 'AbortError');
  * The titles of TMDB's trending list that this source offers, most popular
  * first (the "Trending this week" category of Movies and Series). One entry
  * per trending title: the best match by title and year, the first of equals.
+ * A title may come several times in `trending`, once per language's name.
  * `allowed` narrows the source's titles (the chosen country's categories).
  */
 export async function findTopTitles(
@@ -83,7 +84,10 @@ async function searchEach(
     allowed: (item: Media) => boolean
 ) {
     const found = new Map<number, Media>();
-    for (const credit of trending.slice(0, SEARCH_LIMIT)) {
+    const titles = [...new Set(trending.map((credit) => credit.tmdbId))].slice(0, SEARCH_LIMIT);
+    for (const credit of trending) {
+        // The same title under another language's name: only while it is missing.
+        if (!titles.includes(credit.tmdbId) || found.has(credit.tmdbId)) continue;
         if (signal.aborted) throw aborted();
         try {
             const match = await findFilmographyTitle(provider, sourceId, credit, signal);
