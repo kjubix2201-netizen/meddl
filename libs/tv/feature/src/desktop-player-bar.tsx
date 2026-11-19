@@ -40,6 +40,8 @@ export interface PlayerBarState {
     format?: 'fit' | 'fill';
     /** Stream info lines while shown (I key or the Info button). */
     info?: string[];
+    /** The Windows app's window fills the screen (F, F11, double-click). */
+    fullscreen?: boolean;
     /** False while the controls are hidden (no mouse or key for a while). */
     shown: boolean;
 }
@@ -50,7 +52,7 @@ export type PlayerBarCommand =
     | { type: 'volume'; value: number }
     | { type: 'audioTrack' | 'subtitleTrack'; id: number }
     | { type: 'pickChannel'; index: number }
-    | { type: 'format' | 'info' };
+    | { type: 'format' | 'info' | 'fullscreen' };
 
 /**
  * The meddl player's controls, laid out like a TV player: title, timeline,
@@ -277,6 +279,16 @@ export function PlayerBar({
                         style={{ '--share': `${Math.round(volume * 100)}%` }}
                         onInput={(event) => send({ type: 'volume', value: Number(event.currentTarget.value) / 100 })}
                     />
+                    {state.fullscreen !== undefined ? (
+                        <button
+                            class="dp-icon"
+                            aria-label={state.fullscreen ? t('Exit full screen') : t('Full screen')}
+                            title={(state.fullscreen ? t('Exit full screen') : t('Full screen')) + ' (F)'}
+                            onClick={() => send({ type: 'fullscreen' })}
+                        >
+                            <TvIcon name={state.fullscreen ? 'fullscreen-exit' : 'fullscreen'} />
+                        </button>
+                    ) : null}
                 </div>
             </div>
             {state.next && state.next.countdown !== null ? (
@@ -291,8 +303,8 @@ export function PlayerBar({
             {state.status === 'paused' ? (
                 <p class="desktop-player-keys muted">
                     {state.isLive
-                        ? t('Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · Esc: back')
-                        : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · Esc: back')}
+                        ? t('Space: pause · ↑↓: channel · +/−: volume · A: audio · S: subtitles · F: full screen · Esc: back')
+                        : t('Space: pause · ←→: 10 s · J/L: 1 min · ↑↓: volume · A: audio · S: subtitles · F: full screen · Esc: back')}
                 </p>
             ) : null}
         </div>

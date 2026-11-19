@@ -18,6 +18,8 @@ const paths: Record<string, string> = {
     next: 'M18 5v14 M5 5l10 7-10 7z',
     back: 'M15 5l-7 7 7 7',
     down: 'M5 9l7 7 7-7',
+    fullscreen: 'M4 9V4h5 M15 4h5v5 M20 15v5h-5 M9 20H4v-5',
+    'fullscreen-exit': 'M9 4v5H4 M20 9h-5V4 M15 20v-5h5 M4 15h5v5',
     airplay: 'M6 17H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-2 M12 15l5 6H7z',
     rewind: 'M11 6l-7 6 7 6z M20 6l-7 6 7 6z',
     forward: 'M13 6l7 6-7 6z M4 6l7 6-7 6z',

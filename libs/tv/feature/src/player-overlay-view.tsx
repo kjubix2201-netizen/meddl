@@ -61,6 +61,11 @@ export function PlayerOverlayView() {
                 setHovering(!!(event.target as HTMLElement).closest('button, input, .dp-menu, .dp-timeline'))
             }
             onMouseLeave={() => setHovering(false)}
+            onDblClick={(event) => {
+                // A double-click on the picture: full screen on / off.
+                if ((event.target as HTMLElement).closest('button, input, .next-banner, .dp-menu, .dp-timeline')) return;
+                send({ type: 'fullscreen' });
+            }}
             onClick={(event) => {
                 // Pause and play only with the button in the middle. A click
                 // anywhere else on the picture closes the controls (or

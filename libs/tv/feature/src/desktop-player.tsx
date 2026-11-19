@@ -5,6 +5,9 @@ import {
     type DesktopMpvPlayback,
     type DesktopMpvState,
     type DesktopMpvTrack,
+    desktopFullscreenAvailable,
+    toggleDesktopFullscreen,
+    watchDesktopFullscreen,
 } from '@meddl/tv/data-access';
 import { t } from '@meddl/tv/util';
 import { PlayerBar, SEEK_SECONDS, type PlayerBarCommand, type PlayerBarState } from './desktop-player-bar';
@@ -233,6 +236,7 @@ export function DesktopPlayer({
             else if (event.key === 'a') cycleAudio();
             else if (event.key === 's' || event.key === 'c') cycleSubtitles();
             else if (event.key === 'i') latestInfo.current((open) => !open);
+            else if (event.key === 'f' || event.key === 'F') toggleDesktopFullscreen();
             else if (event.key === 'z') latestFormat.current();
             else if (event.key === 'j' && !playback.isLive) mpv.seekBy(-60);
             else if (event.key === 'l' && !playback.isLive) mpv.seekBy(60);
@@ -263,6 +267,8 @@ export function DesktopPlayer({
 
     const status = state?.status ?? 'loading';
     const [infoOpen, setInfoOpen] = useState(false);
+    const [fullscreen, setFullscreen] = useState(false);
+    useEffect(() => watchDesktopFullscreen(setFullscreen), []);
     const latestInfo = useRef(setInfoOpen);
     // MPV answers "-1" or "no" for "as the film"; a ratio means stretched.
     const [fill, setFill] = useState(false);
@@ -293,6 +299,7 @@ export function DesktopPlayer({
         ...(channels.view ? { channels: channels.view } : {}),
         format: fill ? 'fill' : 'fit',
         ...(infoOpen ? { info: streamInfoLines(state) } : {}),
+        ...(desktopFullscreenAvailable() ? { fullscreen } : {}),
         shown,
     };
     const handle = (command: PlayerBarCommand) => {
@@ -320,6 +327,7 @@ export function DesktopPlayer({
         else if (command.type === 'pickChannel') channels.pick(command.index);
         else if (command.type === 'format') toggleFormat();
         else if (command.type === 'info') setInfoOpen((open) => !open);
+        else if (command.type === 'fullscreen') toggleDesktopFullscreen();
         else if (command.type === 'next') onNext?.(at?.positionSeconds ?? 0, at?.durationSeconds ?? at?.positionSeconds ?? 0);
         else if (command.type === 'cancelNext') onCancelNext?.();
     };

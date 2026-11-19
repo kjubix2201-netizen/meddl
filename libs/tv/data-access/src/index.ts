@@ -41,3 +41,4 @@ export { LocalTransport } from './local-transport';
 export { directFetch, iosApp, localServerAvailable, servedByMeddlApp } from './direct-fetch';
 export * from './desktop-mpv';
 export * from './catalog-cache';
+export { desktopFullscreenAvailable, toggleDesktopFullscreen, watchDesktopFullscreen } from './desktop-window';

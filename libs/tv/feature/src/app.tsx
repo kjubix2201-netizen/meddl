@@ -8,6 +8,7 @@ import { PlayerOverlay } from './player-overlay';
 import { IosPlayerScreen, useIosPlayer } from './ios-player';
 import { useSoundFallback } from './sound-fallback';
 import { DesktopPlayer } from './desktop-player';
+import { desktopFullscreenAvailable, toggleDesktopFullscreen } from '@meddl/tv/data-access';
 import { useNextEpisode } from './next-episode';
 import { TopBar } from './top-bar';
 import { useEffect, useRef } from 'preact/hooks';
@@ -53,6 +54,19 @@ export function TvApp() {
     sound.nextEpisode.current = nextEpisode.next
         ? { title: nextEpisode.next.title, play: nextEpisode.playNext }
         : undefined;
+    // Windows app: F11 switches full screen everywhere (the player also has
+    // F, a button and a double-click on the picture).
+    useEffect(() => {
+        if (!desktopFullscreenAvailable()) return;
+        const key = (event: KeyboardEvent) => {
+            if (event.key !== 'F11') return;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (!event.repeat) toggleDesktopFullscreen();
+        };
+        window.addEventListener('keydown', key, true);
+        return () => window.removeEventListener('keydown', key, true);
+    }, []);
     useEffect(() => {
         const position = () => {
             const rect = document
