@@ -32,8 +32,13 @@ export function registerVpnHandlers(): void {
                   .catch(() => 'failed')
             : 'invalid'
     );
+    // Nothing here may take the app down: a VPN that cannot start shows
+    // its failure in Settings.
+    const quietly = (work: Promise<unknown>) =>
+        void work.catch(() => undefined);
+
     // Connecting takes a moment; its progress arrives as state changes.
-    ipcMain.handle(VPN_CONNECT, () => void vpn.connect());
+    ipcMain.handle(VPN_CONNECT, () => quietly(vpn.connect()));
     ipcMain.handle(VPN_DISCONNECT, () => vpn.disconnect());
     ipcMain.handle(VPN_REMOVE, () => vpn.remove());
     ipcMain.handle(VPN_SET_AUTOSTART, (_event, on: unknown) =>
@@ -44,6 +49,6 @@ export function registerVpnHandlers(): void {
     );
 
     // The tunnel program must not outlive the app.
-    app.once('will-quit', () => void vpn.dispose());
-    void vpn.start();
+    app.once('will-quit', () => quietly(vpn.dispose()));
+    quietly(vpn.start());
 }

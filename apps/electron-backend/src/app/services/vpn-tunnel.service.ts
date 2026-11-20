@@ -186,7 +186,7 @@ export class VpnTunnelService {
         await this.applyRouting();
         await this.runtime.reapStale();
         if (stored.autostart || stored.lock) {
-            void this.connect();
+            this.background(this.connect());
         }
     }
 
@@ -215,7 +215,7 @@ export class VpnTunnelService {
         this.changed();
         // A replaced profile takes over what the old one was doing.
         if (wasActive || this.runtime.read().lock) {
-            void this.connect();
+            this.background(this.connect());
         }
         return '';
     }
@@ -238,7 +238,7 @@ export class VpnTunnelService {
         await this.applyRouting();
         this.changed();
         if (on && this.connection === 'down') {
-            void this.connect();
+            this.background(this.connect());
         }
     }
 
@@ -341,6 +341,11 @@ export class VpnTunnelService {
         await this.bridge.stop();
     }
 
+    /** Work nobody waits for: its failure shows as the VPN's state, not as a crash. */
+    private background(work: Promise<unknown>): void {
+        void work.catch(() => undefined);
+    }
+
     private ensureBridge(): Promise<number> {
         this.bridgeStarting ??= this.bridge.start().then((port) => (this.bridgePort = port));
         return this.bridgeStarting;
@@ -384,11 +389,11 @@ export class VpnTunnelService {
         this.bridge.dropConnections();
         this.error = code;
         this.setConnection('down');
-        void this.applyRouting();
+        this.background(this.applyRouting());
         // The lock brings the tunnel back; without it the viewer decides.
         if (this.runtime.read().lock && !this.stoppedByViewer && !this.disposed) {
             const delay = RETRY_MS[Math.min(this.retries++, RETRY_MS.length - 1)];
-            this.retryTimer = setTimeout(() => void this.connect(), delay);
+            this.retryTimer = setTimeout(() => this.background(this.connect()), delay);
         }
     }
 
@@ -415,7 +420,7 @@ export class VpnTunnelService {
                     this.setConnection(alive ? 'up' : 'connecting');
                 }
                 if (silent >= RESTART_AFTER_SILENT_CHECKS) {
-                    void this.restart();
+                    this.background(this.restart());
                 }
             });
         }, WATCH_MS);
