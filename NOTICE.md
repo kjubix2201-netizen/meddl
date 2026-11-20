@@ -14,3 +14,13 @@ meddl is based on **IPTVnator** by 4gray
 original copyright notice is kept in [LICENSE.md](LICENSE.md). meddl is not
 an official IPTVnator product and is not affiliated with or endorsed by the
 IPTVnator project.
+
+---
+
+The Windows installer contains **wireproxy**
+(<https://github.com/windtf/wireproxy>, ISC License) as
+`resources/vpn-tunnel/meddl-vpn-tunnel.exe`: the userspace WireGuard tunnel
+of the built-in VPN. Its license text (`LICENSE.wireproxy.txt`) and the exact
+versions of the Go modules it was built from (`BUILD-INFO.txt`, among them
+wireguard-go, MIT License) lie next to it. "WireGuard" is a registered
+trademark of Jason A. Donenfeld.

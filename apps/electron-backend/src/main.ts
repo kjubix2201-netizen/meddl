@@ -19,6 +19,7 @@ import { registerStaticHeaderShims } from './app/services/request-header-overrid
 import WindowEvents from './app/events/window.events';
 import { registerTvDirectFetchHandler } from './app/events/tv-direct-fetch.events';
 import { registerHomeNetworkHandlers } from './app/events/home-network.events';
+import { registerVpnHandlers } from './app/events/vpn.events';
 import { registerPlayerOverlayHandlers } from './app/services/player-overlay-window';
 import { bootstrapWindowCloseGuard } from './app/services/window-close-guard.service';
 import { environment } from './environments/environment';
@@ -132,6 +133,9 @@ export default class Main {
         registerStaticHeaderShims();
         WindowEvents.bootstrapWindowEvents();
         PlaylistOpenEvents.bootstrapPlaylistOpenEvents();
+        // Before anything fetches: with the VPN's lock on, traffic is
+        // routed from the first request.
+        registerVpnHandlers();
         registerTvDirectFetchHandler();
         registerHomeNetworkHandlers();
         registerPlayerOverlayHandlers();

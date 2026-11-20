@@ -75,6 +75,17 @@ export const EMBEDDED_MPV_AUTO_RECONNECT = 'EMBEDDED_MPV_AUTO_RECONNECT';
 /** Desktop TV interface: share meddl in the home network (home-network-server.ts). */
 export const HOME_NETWORK_SHARING = 'HOME_NETWORK_SHARING';
 
+/**
+ * Desktop TV interface: the built-in VPN (vpn-tunnel.service.ts). The
+ * profile is the viewer's WireGuard file, sealed with Electron safeStorage
+ * (it holds a private key) and kept as base64; '' when there is none.
+ */
+export const VPN_PROFILE = 'VPN_PROFILE';
+export const VPN_PROFILE_NAME = 'VPN_PROFILE_NAME';
+export const VPN_AUTOSTART = 'VPN_AUTOSTART';
+/** "Only through the VPN": meddl's traffic waits for the tunnel. */
+export const VPN_LOCK = 'VPN_LOCK';
+
 export type StoreType = {
     [WINDOW_BOUNDS]: Electron.Rectangle;
     [ZOOM_LEVEL]: number;
@@ -93,6 +104,10 @@ export type StoreType = {
     [APP_UPDATE_CHANNEL]: AppUpdateChannel;
     [TRUSTED_LOCAL_EPG_SOURCES]: string[];
     [HOME_NETWORK_SHARING]: boolean;
+    [VPN_PROFILE]: string;
+    [VPN_PROFILE_NAME]: string;
+    [VPN_AUTOSTART]: boolean;
+    [VPN_LOCK]: boolean;
 };
 
 // Export singleton store instance

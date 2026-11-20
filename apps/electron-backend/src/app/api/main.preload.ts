@@ -1255,6 +1255,22 @@ contextBridge.exposeInMainWorld('meddlDesktop', {
     homeNetworkStatus: () => ipcRenderer.invoke('meddl:home-network-status'),
     setHomeNetwork: (enabled: boolean) => ipcRenderer.invoke('meddl:home-network-set', enabled === true),
     startPairingServer: (): Promise<string> => ipcRenderer.invoke('meddl:pairing-start'),
+    // Built-in VPN for meddl's own traffic (events/vpn.events.ts).
+    vpn: {
+        state: (): Promise<unknown> => ipcRenderer.invoke('meddl:vpn-state'),
+        importProfile: (text: string, name: string): Promise<string> =>
+            ipcRenderer.invoke('meddl:vpn-import', text, name),
+        connect: (): Promise<void> => ipcRenderer.invoke('meddl:vpn-connect'),
+        disconnect: (): Promise<void> => ipcRenderer.invoke('meddl:vpn-disconnect'),
+        remove: (): Promise<void> => ipcRenderer.invoke('meddl:vpn-remove'),
+        setAutostart: (on: boolean): Promise<void> => ipcRenderer.invoke('meddl:vpn-set-autostart', on === true),
+        setLock: (on: boolean): Promise<void> => ipcRenderer.invoke('meddl:vpn-set-lock', on === true),
+        onChange: (callback: (state: unknown) => void) => {
+            const listener = (_event: unknown, state: unknown) => callback(state);
+            ipcRenderer.on('meddl:vpn-changed', listener);
+            return () => ipcRenderer.removeListener('meddl:vpn-changed', listener);
+        },
+    },
     // See-through player controls (services/player-overlay-window.ts).
     overlay: {
         open: (): Promise<boolean> => ipcRenderer.invoke('meddl:overlay-open'),

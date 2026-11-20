@@ -33,6 +33,7 @@ import {
     embeddedMpvNativeService,
 } from '../services/embedded-mpv-native.service';
 import { readEmbeddedMpvSessionOptions } from '../services/embedded-mpv-session-options';
+import { assertVpnCanCarry } from '../services/vpn-routing';
 import {
     waitForLoginShellPath,
     whenLoginShellPathSettled,
@@ -113,8 +114,11 @@ handleEmbeddedMpv(
 
 handleEmbeddedMpv(
     EMBEDDED_MPV_LOAD_PLAYBACK,
-    (sessionId: string, playback: ResolvedPortalPlayback) =>
-        getService().loadPlayback(sessionId, playback)
+    (sessionId: string, playback: ResolvedPortalPlayback) => {
+        // The built-in VPN carries HTTP(S) only; see vpn-routing.ts.
+        assertVpnCanCarry(playback?.streamUrl ?? '');
+        return getService().loadPlayback(sessionId, playback);
+    }
 );
 
 handleEmbeddedMpv(

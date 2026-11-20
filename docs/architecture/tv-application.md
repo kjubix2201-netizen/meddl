@@ -220,6 +220,44 @@ and a narrowly configured gateway to an existing PWA library without touching it
 service or database. The existing server remains authoritative; the gateway does not
 create a second shared database. Electron still does not activate server storage.
 
+## Built-in VPN
+
+Two apps carry a VPN for meddl's own traffic only: the Android TV / Fire TV
+app (`MeddlVpn.kt`, a WireGuard `VpnService` limited to the app) and the
+Windows app. Both take one WireGuard profile the viewer brings from their own
+provider, report the same state, and are driven by the same settings page
+(`vpn-setting.tsx`) through `vpn-shell.ts`. The start waits for the tunnel
+when "Only through the VPN" is on (`vpnReady` in `use-provider.ts`).
+
+The Windows app cannot open a per-app tunnel without administrator rights.
+Its tunnel is a bundled userspace program, wireproxy, built in CI from a
+pinned release (`.github/workflows/build.yml`) and shipped as
+`resources/vpn-tunnel/meddl-vpn-tunnel.exe`. `vpn-tunnel.service.ts` in the
+main process starts it with the profile and sends meddl's traffic to its
+local SOCKS5 proxy:
+
+- the page (Chromium's default session) and the MPV player (`http-proxy`
+  session option) through the local HTTP bridge `vpn-http-bridge.ts`,
+- the main process's provider requests (`tvDirectFetch`) through
+  `vpn-fetch.ts`.
+
+Contracts:
+
+- While traffic is routed, a request goes through the tunnel or fails. No
+  code path falls back to a direct connection; with the lock, traffic stays
+  routed while the tunnel is down.
+- Host names are resolved through the tunnel, never by the computer.
+- The tunnel carries HTTP and HTTPS. Other stream protocols are refused while
+  routed (`assertVpnCanCarry`). The home network is not routed.
+- The profile holds a private key. It is stored sealed with Electron
+  `safeStorage`, reaches the tunnel program through its environment, and is
+  never logged or sent to the page. A preshared key is written to a
+  configuration file that is removed once the tunnel has started.
+- The app updater and the classic interface (`MEDDL_CLASSIC_UI=1`) are not
+  routed.
+- An installer without the tunnel program is not published (CI checks the
+  package).
+
 ## Playback and local data
 
 One `HTMLVideoElement` exists for preview and fullscreen. Focus movement never

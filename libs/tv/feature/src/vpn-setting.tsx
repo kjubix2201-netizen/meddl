@@ -10,90 +10,34 @@ import {
 } from '@meddl/tv/data-access';
 import { t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
+import { vpnControl, type VpnState } from './vpn-shell';
 
-/** What the Android TV app's built-in VPN reports (MeddlVpn.kt). */
-interface VpnState {
-    available: boolean;
-    configured: boolean;
-    state: 'down' | 'connecting' | 'up';
-    error: string;
-    autostart: boolean;
-    /** Only through the VPN: meddl waits for the tunnel before loading. */
-    lock: boolean;
-    name: string;
-    server?: string;
-}
-type VpnShell = {
-    vpnState?: () => string;
-    vpnImport?: (text: string, name: string) => string;
-    vpnConnect?: () => void;
-    vpnDisconnect?: () => void;
-    vpnRemove?: () => void;
-    vpnSetAutostart?: (on: boolean) => void;
-    vpnSetLock?: (on: boolean) => void;
-};
+export { vpnAvailable, vpnReady } from './vpn-shell';
 
-function shell(): VpnShell | undefined {
-    return (window as unknown as { MeddlAndroid?: VpnShell }).MeddlAndroid;
-}
-
-/** True in the Android TV / Fire TV app with the built-in VPN. */
-export function vpnAvailable(): boolean {
-    return typeof shell()?.vpnState === 'function';
-}
-
-function readState(): VpnState | undefined {
-    try {
-        return JSON.parse(shell()?.vpnState?.() ?? '') as VpnState;
-    } catch {
-        return undefined;
-    }
-}
-
-/**
- * With "only through the VPN" on: resolves once the tunnel is up (and
- * starts it when needed, asking the TV for permission the first time).
- * Resolves at once without the lock, or when the viewer turns it off.
- */
-export async function vpnReady(signal: AbortSignal, waiting: (error: string) => void): Promise<void> {
-    let state = readState();
-    if (!state?.lock || !state.configured || state.state === 'up') return;
-    if (state.state === 'down') shell()?.vpnConnect?.();
-    waiting('');
-    let asked = Date.now();
-    while (!signal.aborted) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        state = readState();
-        if (!state?.lock || !state.configured || state.state === 'up') return;
-        waiting(state.error);
-        // Dropped or refused: try again every 15 s (the viewer may fix it meanwhile).
-        if (state.state === 'down' && Date.now() - asked > 15000) {
-            asked = Date.now();
-            shell()?.vpnConnect?.();
-        }
-    }
-    throw new DOMException('Aborted', 'AbortError');
-}
+/** A WireGuard file is small; more than this is something else. */
+const PROFILE_MAX_LENGTH = 8000;
 
 export function vpnErrorText(code: string): string {
     return errorText(code);
 }
 
 function errorText(code: string): string {
-    if (!code) return '';
     if (code === 'vpn_not_authorized') return t('The TV did not allow the VPN. Connect again and choose “OK”.');
     if (code === 'invalid') return t('This is not a valid WireGuard file.');
     if (code === 'dns_resolution_failure') return t('The VPN server could not be found. Check the internet connection or use a newer profile.');
+    if (code === 'unavailable') return t('This version of meddl has no built-in VPN.');
     return t('The VPN could not connect. Try again or use a new profile from your provider.');
 }
 
 /**
- * Settings → Connection on Android TV: meddl's own traffic through the
- * viewer's WireGuard profile (Proton VPN Free, Mullvad, Surfshark …). The
- * profile arrives from the phone by QR code, like a source.
+ * Settings → Connection: meddl's own traffic through the viewer's
+ * WireGuard profile (Proton VPN Free, Mullvad, Surfshark …). On Android TV
+ * the profile arrives from the phone by QR code, like a source; in the
+ * desktop app it is chosen as a file on the computer.
  */
 export function VpnSetting() {
-    const [vpn, setVpn] = useState<VpnState | undefined>(readState);
+    const control = vpnControl();
+    const [vpn, setVpn] = useState<VpnState | undefined>(() => control?.current());
     const [session, setSession] = useState<PairingSession>();
     const [qr, setQr] = useState('');
     const [incoming, setIncoming] = useState<{ config: string; name: string }>();
@@ -101,14 +45,14 @@ export function VpnSetting() {
     const server = useRef('');
     const sessionRef = useRef<PairingSession>();
     const operation = useRef<AbortController>();
+    const file = useRef<HTMLInputElement>(null);
 
     // Every change of the VPN arrives from the app.
     useEffect(() => {
-        const w = window as unknown as { meddlVpnChanged?: (state: VpnState) => void };
-        w.meddlVpnChanged = (state) => setVpn(state);
-        return () => {
-            delete w.meddlVpnChanged;
-        };
+        if (!control) return;
+        const stop = control.subscribe(setVpn);
+        void control.refresh().then((state) => state && setVpn(state));
+        return stop;
     }, []);
     useEffect(
         () => () => {
@@ -167,21 +111,43 @@ export function VpnSetting() {
         }
     }
 
-    function accept() {
-        if (!incoming) return;
-        const problem = shell()?.vpnImport?.(incoming.config, incoming.name) ?? 'invalid';
+    /** Saves a profile; true when the app took it. */
+    async function save(config: string, name: string) {
+        const problem = (await control?.importProfile(config, name)) ?? 'invalid';
         if (problem) {
             setNotice(errorText(problem));
-            close('rejected');
-            return;
+            return false;
         }
-        close('saved');
-        setVpn(readState());
+        const state = await control?.refresh();
+        if (state) setVpn(state);
         setNotice(t('Profile saved. Connect to use the VPN.'));
         restoreFocus('vpn:toggle');
+        return true;
     }
 
-    if (!vpn) return null;
+    async function accept() {
+        if (!incoming) return;
+        close((await save(incoming.config, incoming.name)) ? 'saved' : 'rejected');
+    }
+
+    /** Desktop: the WireGuard file, chosen on this computer. */
+    async function chooseFile(input: HTMLInputElement) {
+        const picked = input.files?.[0];
+        // The same file can be chosen again after a correction.
+        input.value = '';
+        if (!picked) return;
+        setNotice('');
+        const text = await picked.text().catch(() => '');
+        if (!text || text.length > PROFILE_MAX_LENGTH) {
+            setNotice(errorText('invalid'));
+            return;
+        }
+        await save(text, picked.name.replace(/\.conf$/i, '').slice(0, 60));
+    }
+
+    // The desktop bridge also exists in builds without the tunnel program.
+    if (!control || !vpn || (control.source === 'file' && !vpn.available)) return null;
+    const byFile = control.source === 'file';
     const connected = vpn.state === 'up';
     const status =
         vpn.state === 'up'
@@ -195,7 +161,9 @@ export function VpnSetting() {
         <section class="vpn-setting">
             <h2>{t('VPN')}</h2>
             <p class="muted">
-                {t('meddl’s connection runs encrypted through your own VPN provider (a WireGuard profile, for example from Proton VPN Free). Only meddl uses this VPN; other apps on the TV stay as they are.')}
+                {byFile
+                    ? t('meddl’s connection runs encrypted through your own VPN provider (a WireGuard profile, for example from Proton VPN Free). Only meddl uses this VPN; other programs on this computer stay as they are.')
+                    : t('meddl’s connection runs encrypted through your own VPN provider (a WireGuard profile, for example from Proton VPN Free). Only meddl uses this VPN; other apps on the TV stay as they are.')}
             </p>
             <div class={`vpn-status is-${vpn.state}`} role="status">
                 <span class="vpn-dot" aria-hidden="true" />
@@ -215,7 +183,7 @@ export function VpnSetting() {
                         {t('Use the profile “{name}” from your phone?', { name: incoming.name })}
                     </p>
                     <div class="actions">
-                        <button class="primary" data-focus="vpn:accept" onClick={accept}>
+                        <button class="primary" data-focus="vpn:accept" onClick={() => void accept()}>
                             {t('Use profile')}
                         </button>
                         <button data-focus="vpn:reject" onClick={() => close('rejected')}>
@@ -242,16 +210,31 @@ export function VpnSetting() {
                             class="primary"
                             data-focus="vpn:toggle"
                             disabled={vpn.state === 'connecting'}
-                            onClick={() => (connected ? shell()?.vpnDisconnect?.() : shell()?.vpnConnect?.())}
+                            onClick={() => (connected ? control.disconnect() : control.connect())}
                         >
                             {connected ? t('Disconnect') : t('Connect')}
                         </button>
                     ) : null}
-                    <button data-focus="vpn:phone" onClick={() => void startPhone()}>
-                        {vpn.configured ? t('Replace profile by phone') : t('Add profile by phone')}
-                    </button>
+                    {byFile ? (
+                        <>
+                            <input
+                                ref={file}
+                                type="file"
+                                accept=".conf,text/plain"
+                                hidden
+                                onChange={(event) => void chooseFile(event.currentTarget)}
+                            />
+                            <button data-focus="vpn:file" onClick={() => file.current?.click()}>
+                                {vpn.configured ? t('Replace WireGuard file') : t('Choose WireGuard file')}
+                            </button>
+                        </>
+                    ) : (
+                        <button data-focus="vpn:phone" onClick={() => void startPhone()}>
+                            {vpn.configured ? t('Replace profile by phone') : t('Add profile by phone')}
+                        </button>
+                    )}
                     {vpn.configured ? (
-                        <button data-focus="vpn:remove" onClick={() => shell()?.vpnRemove?.()}>
+                        <button data-focus="vpn:remove" onClick={() => control.remove()}>
                             {t('Remove profile')}
                         </button>
                     ) : null}
@@ -264,7 +247,7 @@ export function VpnSetting() {
                             type="checkbox"
                             data-focus="vpn:lock"
                             checked={vpn.lock}
-                            onChange={(event) => shell()?.vpnSetLock?.(event.currentTarget.checked)}
+                            onChange={(event) => control.setLock(event.currentTarget.checked)}
                         />
                         <span>{t('Only through the VPN (lock)')}</span>
                     </label>
@@ -277,7 +260,7 @@ export function VpnSetting() {
                             data-focus="vpn:autostart"
                             checked={vpn.autostart}
                             disabled={vpn.lock}
-                            onChange={(event) => shell()?.vpnSetAutostart?.(event.currentTarget.checked)}
+                            onChange={(event) => control.setAutostart(event.currentTarget.checked)}
                         />
                         <span>{t('Connect automatically when meddl starts')}</span>
                     </label>

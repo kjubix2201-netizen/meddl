@@ -6,6 +6,8 @@
  * passed through. Addresses carry credentials and are never logged.
  */
 import { ipcMain } from 'electron';
+import { createTunnelFetch } from '../services/vpn-fetch';
+import { vpnProxyUrl, vpnSocksAddress } from '../services/vpn-routing';
 
 export const TV_DIRECT_FETCH = 'meddl:tv-direct-fetch';
 
@@ -15,9 +17,31 @@ export interface TvDirectFetchRequest {
     timeoutMs?: unknown;
 }
 
+/** The part of `fetch` this handler uses. */
+type DirectFetch = (
+    url: string,
+    init: {
+        method: 'GET';
+        headers: Record<string, string>;
+        redirect: 'follow';
+        signal: AbortSignal;
+    }
+) => Promise<{ status: number; text(): Promise<string> }>;
+
+const tunnelFetch = createTunnelFetch(vpnSocksAddress);
+
+/**
+ * Through the built-in VPN while it routes meddl's traffic (also for the
+ * phones served by home-network-server.ts), else directly. Routed requests
+ * fail when the tunnel is down; they never go out beside it.
+ */
+function routedFetch(): DirectFetch {
+    return vpnProxyUrl() !== null ? tunnelFetch : fetch;
+}
+
 export async function tvDirectFetch(
     request: TvDirectFetchRequest,
-    fetchImpl: typeof fetch = fetch
+    fetchImpl: DirectFetch = routedFetch()
 ): Promise<{ status: number; body: string }> {
     const url = typeof request.url === 'string' ? new URL(request.url) : null;
     if (!url || (url.protocol !== 'http:' && url.protocol !== 'https:'))

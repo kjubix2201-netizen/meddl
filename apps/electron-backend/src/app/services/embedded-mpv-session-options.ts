@@ -4,6 +4,7 @@ import {
     EMBEDDED_MPV_EXTRA_OPTIONS,
     store,
 } from './store.service';
+import { vpnProxyUrl } from './vpn-routing';
 
 /**
  * Per-session knobs captured when an embedded MPV session is created. They
@@ -25,10 +26,17 @@ export interface EmbeddedMpvSessionOptions {
 }
 
 export function readEmbeddedMpvSessionOptions(): EmbeddedMpvSessionOptions {
+    // The built-in VPN (vpn-tunnel.service.ts): the player fetches its
+    // streams itself, so it is pointed at the VPN's local proxy. Last, so
+    // it holds against a proxy line among the user's own options.
+    const vpnProxy = vpnProxyUrl();
     return {
-        extraOptions: resolveEmbeddedMpvSessionOptionArguments(
-            store.get(EMBEDDED_MPV_EXTRA_OPTIONS, '')
-        ),
+        extraOptions: [
+            ...resolveEmbeddedMpvSessionOptionArguments(
+                store.get(EMBEDDED_MPV_EXTRA_OPTIONS, '')
+            ),
+            ...(vpnProxy !== null ? [`http-proxy=${vpnProxy}`] : []),
+        ],
         autoReconnect: store.get(EMBEDDED_MPV_AUTO_RECONNECT, true) !== false,
     };
 }

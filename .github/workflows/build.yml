@@ -156,6 +156,35 @@ jobs:
                     fs.writeFileSync('electron-builder.json', JSON.stringify(cfg, null, 4) + '\n');
                   "
 
+            - name: Setup Go (VPN tunnel)
+              uses: actions/setup-go@v6
+              with:
+                  go-version: '1.26.x'
+                  cache: false
+
+            - name: Build the VPN tunnel
+              # The built-in VPN of the Windows app
+              # (apps/electron-backend/src/app/services/vpn-tunnel.service.ts)
+              # runs wireproxy, a userspace WireGuard client that offers a
+              # local SOCKS5 proxy. It is built here from the pinned release's
+              # source; Go checks the downloaded modules against its public
+              # checksum database. electron-builder.json copies the folder
+              # into the installer's resources.
+              shell: bash
+              env:
+                  CGO_ENABLED: '0'
+                  GOFLAGS: -trimpath
+                  VPN_TUNNEL_VERSION: v1.1.3
+              run: |
+                  set -euo pipefail
+                  out="$(pwd -W)/vendor/vpn-tunnel/win32-x64"
+                  mkdir -p "$out"
+                  GOBIN="$out" go install -ldflags="-s -w" "github.com/windtf/wireproxy/cmd/wireproxy@${VPN_TUNNEL_VERSION}"
+                  mv "$out/wireproxy.exe" "$out/meddl-vpn-tunnel.exe"
+                  cp "$(go env GOMODCACHE)/github.com/windtf/wireproxy@${VPN_TUNNEL_VERSION}/LICENSE" "$out/LICENSE.wireproxy.txt"
+                  go version -m "$out/meddl-vpn-tunnel.exe" > "$out/BUILD-INFO.txt"
+                  "$out/meddl-vpn-tunnel.exe" --version
+
             - name: Make Electron app
               env:
                   MEDDL_EMBEDDED_MPV_PLATFORM: win32
@@ -168,6 +197,15 @@ jobs:
               env:
                   MEDDL_REQUIRE_EMBEDDED_MPV: '1'
               run: pnpm run verify:package-layout -- windows x64
+
+            - name: Verify the VPN tunnel is in the package
+              # Viewers who use "only through the VPN" depend on it: an
+              # installer without the tunnel must not be published.
+              shell: bash
+              run: |
+                  found="$(find dist -path '*-unpacked/resources/vpn-tunnel/meddl-vpn-tunnel.exe' | head -1)"
+                  test -n "$found"
+                  echo "VPN tunnel packaged at $found"
 
             - name: Upload installer
               # The artifact storage quota may be full; the release copy below stays.

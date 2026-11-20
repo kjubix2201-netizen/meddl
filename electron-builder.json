@@ -199,7 +199,13 @@
             }
         ],
         "artifactName": "${name}-${version}-windows-${arch}-setup.${ext}",
-        "icon": "apps/web/src/assets/icons/icon.png"
+        "icon": "apps/web/src/assets/icons/icon.png",
+        "extraResources": [
+            {
+                "from": "vendor/vpn-tunnel/win32-x64",
+                "to": "vpn-tunnel"
+            }
+        ]
     },
     "nsis": {
         "artifactName": "${name}-${version}-windows-${arch}-setup.${ext}"
