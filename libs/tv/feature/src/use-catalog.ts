@@ -19,6 +19,7 @@ import {
 import { Route } from './navigation';
 import { ALL_COUNTRIES, categoriesOfCountry } from './country-catalog';
 import { tmdbReady, topCatalog } from './top-catalog';
+import { requestFailureText } from './vpn-setting';
 const empty = (): Catalog => ({ items: [], total: 0, page: 0, categories: [] });
 /** One active query survives detail navigation; a new query cancels its append lane. */
 export function useCatalog(
@@ -185,15 +186,11 @@ export function useCatalog(
             if (!page) current.finishFocus();
         } catch {
             if (lane.current.owns(job)) {
-                if (!append)
-                    current.reportConnection(
-                        t('Could not load titles. Check the connection and retry.')
-                    );
-                setState((s) => ({
-                    ...s,
-                    busy: false,
-                    error: t('Could not load titles. Check the connection and retry.'),
-                }));
+                const message = requestFailureText(
+                    t('Could not load titles. Check the connection and retry.')
+                );
+                if (!append) current.reportConnection(message);
+                setState((s) => ({ ...s, busy: false, error: message }));
             }
         } finally {
             if (lane.current.owns(job)) request.current = false;

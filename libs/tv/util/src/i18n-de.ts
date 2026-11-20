@@ -229,6 +229,7 @@ export const DE: Readonly<Record<string, string>> = {
     'The VPN could not connect. Try again or use a new profile from your provider.': 'Das VPN konnte sich nicht verbinden. Versuche es nochmal oder hol dir ein neues Profil bei deinem Anbieter.',
     'Profile saved. Connect to use the VPN.': 'Profil gespeichert. Verbinde, um das VPN zu nutzen.',
     'meddl’s connection runs encrypted through your own VPN provider (a WireGuard profile, for example from Proton VPN Free). Only meddl uses this VPN; other programs on this computer stay as they are.': 'meddl verbindet sich verschlüsselt über deinen eigenen VPN-Anbieter (ein WireGuard-Profil, z. B. von Proton VPN Free). Nur meddl nutzt dieses VPN, andere Programme auf diesem Computer bleiben unverändert.',
+    'Your provider does not answer through the VPN. Many providers block VPN addresses or tie the account to your home connection. Choose another VPN server, or turn the VPN off (Settings → Connection → VPN).': 'Dein Anbieter antwortet über das VPN nicht. Viele Anbieter sperren VPN-Adressen oder binden den Zugang an deinen Internetanschluss. Wähle einen anderen VPN-Server oder schalte das VPN aus (Einstellungen → Verbindung → VPN).',
     'Choose WireGuard file': 'WireGuard-Datei wählen',
     'Replace WireGuard file': 'WireGuard-Datei ersetzen',
     'This version of meddl has no built-in VPN.': 'Diese Version von meddl hat kein eingebautes VPN.',

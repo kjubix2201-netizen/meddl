@@ -9,7 +9,7 @@ import {
     ProviderTransport,
 } from '@meddl/tv/data-access';
 import type { Kind, ProviderClient, UserData } from '@meddl/tv/util';
-import { vpnReady } from './vpn-setting';
+import { requestFailureText, vpnReady } from './vpn-setting';
 
 export type WarmStep = {
     kind: Kind;
@@ -146,7 +146,7 @@ export function useProvider(
                 if (!abort.signal.aborted) setWarm(IDLE);
                 if (!abort.signal.aborted)
                     callbacks.current.report(
-                        t('The request failed. Check your source and backend, then retry.')
+                        requestFailureText(t('The request failed. Check your source and backend, then retry.'))
                     );
             })
             .finally(() => {

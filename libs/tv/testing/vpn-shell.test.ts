@@ -45,9 +45,11 @@ test('the desktop app\'s VPN: its state, its commands and the wait for the lock 
         },
     };
     t.after(() => delete scope.window);
-    const { vpnAvailable, vpnControl, vpnReady } = await import('../feature/src/vpn-shell');
+    const { vpnAvailable, vpnConnected, vpnControl, vpnReady } = await import('../feature/src/vpn-shell');
 
     assert.equal(vpnAvailable(), true);
+    // Nothing heard from the app yet: a failed request is not blamed on the VPN.
+    assert.equal(vpnConnected(), false);
     const control = vpnControl();
     assert.ok(control);
     // The profile is a file on the computer, not sent from a phone.
@@ -75,11 +77,14 @@ test('the desktop app\'s VPN: its state, its commands and the wait for the lock 
     t.mock.timers.tick(15_000);
     await flush();
     assert.deepEqual(calls, ['connect', 'connect']);
+    assert.equal(vpnConnected(), false);
     report({ state: 'up', error: '' });
     t.mock.timers.tick(500);
     await flush();
     await gate;
     assert.equal(ready, true);
+    // From here on a request that fails failed on its way through the tunnel.
+    assert.equal(vpnConnected(), true);
 
     // Nothing to wait for: no lock, no profile, or a build without the tunnel.
     for (const open of [{ lock: false }, { lock: true, configured: false }, { configured: true, available: false }]) {

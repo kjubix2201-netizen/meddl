@@ -137,6 +137,15 @@ export function vpnAvailable(): boolean {
     return !!vpnControl();
 }
 
+/**
+ * True while the VPN is connected, as far as the page has heard: a request
+ * that fails then failed on the way through the tunnel (vpn-setting.tsx
+ * says so instead of blaming the source).
+ */
+export function vpnConnected(): boolean {
+    return vpnControl()?.current()?.state === 'up';
+}
+
 /** Nothing to wait for: no lock, no profile, no tunnel in this build, or connected. */
 function open(state: VpnState | undefined): boolean {
     return !state?.lock || !state.configured || state.available === false || state.state === 'up';

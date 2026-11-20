@@ -10,6 +10,7 @@ import {
 import { restoreFocus } from '@meddl/tv/ui';
 import type { Route } from './navigation';
 import { useCatalog } from './use-catalog';
+import { requestFailureText } from './vpn-setting';
 export function useContent(
     route: Route,
     provider: { current?: ProviderClient },
@@ -70,7 +71,7 @@ export function useContent(
     };
     const report = () =>
         setError(
-            t('The request failed. Check your source and backend, then retry.')
+            requestFailureText(t('The request failed. Check your source and backend, then retry.'))
         );
     useLayoutEffect(() => {
         const client = provider.current;

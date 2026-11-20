@@ -10,9 +10,22 @@ import {
 } from '@meddl/tv/data-access';
 import { t } from '@meddl/tv/util';
 import { restoreFocus } from '@meddl/tv/ui';
-import { vpnControl, type VpnState } from './vpn-shell';
+import { vpnConnected, vpnControl, type VpnState } from './vpn-shell';
 
 export { vpnAvailable, vpnReady } from './vpn-shell';
+
+/**
+ * What to tell the viewer when a request to the source failed. With the VPN
+ * connected the likely reason is the VPN itself: many providers refuse VPN
+ * addresses, or tie an account to the home connection, and then simply do
+ * not answer through the tunnel. Saying "check your source" would send the
+ * viewer looking in the wrong place.
+ */
+export function requestFailureText(message: string): string {
+    return vpnConnected()
+        ? t('Your provider does not answer through the VPN. Many providers block VPN addresses or tie the account to your home connection. Choose another VPN server, or turn the VPN off (Settings → Connection → VPN).')
+        : message;
+}
 
 /** A WireGuard file is small; more than this is something else. */
 const PROFILE_MAX_LENGTH = 8000;
